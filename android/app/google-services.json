@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "92614011032",
+    "project_id": "ntss-4d415",
+    "storage_bucket": "ntss-4d415.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92614011032:android:c9602a42d59e48985348ed",
+        "android_client_info": {
+          "package_name": "com.example.nts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92614011032-v3k5hkn4gvt1vkrf7gcfk08a42lrcsle.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYOmvbpqZ3qkkxtNFez5H1YLoqKyFtLHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92614011032-v3k5hkn4gvt1vkrf7gcfk08a42lrcsle.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
