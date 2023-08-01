@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,8 +67,6 @@ class BackgroundState extends State<Background> {
         AnimatedBuilder(
           animation: scrollController,
           builder: (context, child) {
-            // AuthPage().checkAuthState();
-
             if (scrollController.offset == 0) {
               return const LoginPage();
             } else if (scrollController.offset == 600) {

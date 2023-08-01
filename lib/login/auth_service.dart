@@ -9,7 +9,6 @@ class AuthService {
     GoogleSignInAccount? gUser = await _googleSignIn.signIn();
 
     if (gUser == null) {
-      // Sign in flow canceled.
       return null;
     }
 
@@ -67,7 +66,6 @@ class AuthService {
 
     //finally, lets sign in
 
-    print("GOOGLE SIGN IN COMPLETED");
-    return userCredential;
+    return FirebaseAuth.instance.currentUser;
   }
 }
