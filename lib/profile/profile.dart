@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nts/profile/settings.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/backgroundController.dart';
@@ -21,7 +23,16 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout))
+          IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout)),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) => ProfileSettings(),
+                );
+              },
+              icon: const Icon(Icons.settings)),
         ],
       ),
       body: Center(

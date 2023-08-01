@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nts/component/loginbutton.dart';
 import 'package:nts/login/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -64,11 +63,8 @@ class _LoginPageState extends State<LoginPage>
 
       if (user != null) {
         // User is logged in, return 600
-        print("moving");
         controller.movePage(600);
       }
-      print("counint: ");
-      print(user);
     }
 
     signUserIn();
