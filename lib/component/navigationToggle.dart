@@ -75,7 +75,7 @@ class NavigationToggle extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 5,),
+            const SizedBox(height: 5,),
             page == 2 ? const Padding(
               padding: EdgeInsets.only(right: 80.0),
               child: Text("홈", style: TextStyle(color: Colors.white, fontSize: 13),),
