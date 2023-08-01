@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nts/component/loginbutton.dart';
 import 'package:nts/login/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +17,7 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _showAnimatedText = true;
+  User? user = FirebaseAuth.instance.currentUser;
 
   //error message popup
   void showErrorMessage(String message) {
@@ -35,13 +33,23 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
+    addListener();
+    _controller.forward();
 
-    // After 1 second, hide AnimatedTextKit and show the regular text
+    if (user != null) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        final BackgroundController controller = Provider.of<BackgroundController>(context, listen: false);
+        controller.movePage(600);
+        controller.changeColor(2);
+      });
+    }
+  }
+
+  addListener() {
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() {
@@ -49,29 +57,17 @@ class _LoginPageState extends State<LoginPage>
         });
       }
     });
+  }
 
-    _controller.forward();
+  @override
+  void dispose() {
+    _controller.dispose(); // 여기에 추가하세요.
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
-
-    void signUserIn() {
-      User? user = FirebaseAuth.instance.currentUser;
-
-      // print(user);
-
-      if (user != null) {
-        // User is logged in, return 600
-        print("moving");
-        controller.movePage(600);
-      }
-      print("counint: ");
-      print(user);
-    }
-
-    signUserIn();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -98,6 +94,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                     child: Visibility(
                       visible: _showAnimatedText,
+                      replacement: const Text('반 딧 불 이'),
                       child: AnimatedTextKit(
                         totalRepeatCount: 1,
                         pause: const Duration(milliseconds: 1000),
@@ -105,31 +102,24 @@ class _LoginPageState extends State<LoginPage>
                         animatedTexts: [
                           FlickerAnimatedText('반 딧 불 이'),
                         ],
-                        onTap: () {
-                          print("Tap Event");
-                        },
+                        // onTap: () {
+                        //   if (kDebugMode) {
+                        //     print("Tap Event");
+                        //   }
+                        // },
                       ),
-                      replacement: Text('반 딧 불 이'),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
+                const SizedBox(
                   child: DefaultTextStyle(
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                     ),
                     child: Text("일기 쓰고 편지 받는 앱"),
-                    // AnimatedTextKit(
-                    //   animatedTexts: [
-                    //     TypewriterAnimatedText('일기 쓰고 편지 받는 앱'),
-                    //   ],
-                    //   onTap: () {
-                    //     print("Tap Event");
-                    //   },
-                    // ),
                   ),
                 ),
                 SizedBox(
@@ -143,9 +133,9 @@ class _LoginPageState extends State<LoginPage>
                     child: ElevatedButton(
                       style: ButtonStyle(
                           overlayColor: MaterialStateProperty.all(
-                              Color.fromARGB(14, 255, 255, 255)),
+                              const Color.fromARGB(14, 255, 255, 255)),
                           backgroundColor:
-                              MaterialStateProperty.all(Color(0xff1A5DCC)),
+                              MaterialStateProperty.all(const Color(0xff1A5DCC)),
                           shadowColor:
                               MaterialStateProperty.all(Colors.transparent),
                           shape:
@@ -155,7 +145,17 @@ class _LoginPageState extends State<LoginPage>
                           ))),
                       onPressed: () {
                         AuthService().signInWithGoogle().then((value) {
-                          signUserIn();
+                          setState(() {
+                            user = value;
+                          });
+                          if (user != null) {
+                            WidgetsBinding.instance?.addPostFrameCallback((_) {
+                              if (controller.scrollController.hasClients) {
+                                controller.movePage(600);
+                                controller.changeColor(2);
+                              }
+                            });
+                          }
                         });
                         // signUserIn();
                       },
@@ -164,10 +164,10 @@ class _LoginPageState extends State<LoginPage>
                         children: [
                           Container(
                               margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
-                              child: Image(
+                              child: const Image(
                                 image: AssetImage("assets/googlelogo.png"),
                               )),
-                          Expanded(
+                          const Expanded(
                             child: Text(
                               "Google로 시작하기",
                               style: TextStyle(
@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 GestureDetector(
@@ -192,7 +192,7 @@ class _LoginPageState extends State<LoginPage>
                     child: ElevatedButton(
                       style: ButtonStyle(
                           overlayColor: MaterialStateProperty.all(
-                              Color.fromARGB(14, 255, 255, 255)),
+                              const Color.fromARGB(14, 255, 255, 255)),
                           backgroundColor:
                               MaterialStateProperty.all(Colors.black),
                           shadowColor:
@@ -209,10 +209,10 @@ class _LoginPageState extends State<LoginPage>
                         children: [
                           Container(
                               margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
-                              child: Image(
+                              child: const Image(
                                 image: AssetImage("assets/applelogo.png"),
                               )),
-                          Expanded(
+                          const Expanded(
                             child: Text(
                               "Apple로 시작하기",
                               style: TextStyle(
@@ -233,27 +233,5 @@ class _LoginPageState extends State<LoginPage>
         ),
       )),
     );
-
-    // Column(
-    //   mainAxisAlignment: MainAxisAlignment.center,
-    //   children: [
-    //     const Text(
-    //       "Login",
-    //       style: TextStyle(color: Colors.white),
-    //     ),
-    //     Padding(
-    //       padding: const EdgeInsets.only(bottom: 40.0),
-    //       child: Align(
-    //         alignment: Alignment.bottomCenter,
-    //         child: ElevatedButton(
-    //           onPressed: () {
-    //             controller.movePage(600);
-    //           },
-    //           child: const Icon(Icons.arrow_forward),
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 }
