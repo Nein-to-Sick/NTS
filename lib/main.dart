@@ -1,15 +1,26 @@
 import 'dart:math';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
+import 'package:nts/login/auth_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'home/home.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -37,7 +48,6 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
-
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
@@ -59,6 +69,8 @@ class BackgroundState extends State<Background> {
         AnimatedBuilder(
           animation: scrollController,
           builder: (context, child) {
+            // AuthPage().checkAuthState();
+
             if (scrollController.offset == 0) {
               return const LoginPage();
             } else if (scrollController.offset == 600) {
