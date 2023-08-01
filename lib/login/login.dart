@@ -68,7 +68,6 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
