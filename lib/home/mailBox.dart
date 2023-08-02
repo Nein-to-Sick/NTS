@@ -16,8 +16,149 @@ class MailBox extends StatefulWidget {
 class _MailBoxState extends State<MailBox> {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
+  late String time = "";
+  late String from = "";
+  late String content = "";
+  late int idx = 1;
+
   @override
   Widget build(BuildContext context) {
+    Widget first = StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection("mailBox")
+          .snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final List<LetterModel> letters = snapshot.data!.docs
+            .map((DocumentSnapshot doc) => LetterModel.fromSnapshot(doc))
+            .toList();
+        return Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.only(top: 30),
+            itemCount: letters.length,
+            itemBuilder: (BuildContext context, int index) {
+              final LetterModel letter = letters[index];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    idx = 2;
+                    time = letter.time;
+                    from = letter.from;
+                    content = letter.content;
+
+                  });
+                },
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                letter.time,
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                              Text(
+                                "form.${letter.from}",
+                                style: const TextStyle(fontSize: 13),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            letter.content,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+    Widget second = Column(
+      children: [
+        const SizedBox(height: 30,),
+        Expanded(
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          time,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                        Text(
+                          "form.$from",
+                          style: const TextStyle(fontSize: 13),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      content,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20,),
+        GestureDetector(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: const Color(0xffFCE181), // 수정
+                  borderRadius: BorderRadius.circular(10)),
+              child: const Padding(
+                padding: EdgeInsets.all(13.0),
+                child: Text(
+                  "감사하기",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+            onTap: () {}),
+        const SizedBox(height: 15,),
+
+      ],
+    );
+
     return Dialog(
       backgroundColor: Colors.white.withOpacity(0.9),
       shape: RoundedRectangleBorder(
@@ -29,78 +170,19 @@ class _MailBoxState extends State<MailBox> {
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 30.0, horizontal: 25.0),
                 child: Center(
                   child: Column(
                     children: [
                       const Text("편지함"),
-                      StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .collection("mailBox")
-                            .snapshots(),
-                        builder:
-                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          final List<LetterModel> letters = snapshot.data!.docs
-                              .map((DocumentSnapshot doc) =>
-                                  LetterModel.fromSnapshot(doc))
-                              .toList();
-                          return Expanded(
-                            child: ListView.builder(
-                              padding: const EdgeInsets.only(top: 30),
-                              itemCount: letters.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final LetterModel letter = letters[index];
-                                return Card(
-                                  elevation: 5,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.7,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                letter.time,
-                                                style: const TextStyle(fontSize: 13),
-                                              ),
-                                              Text(
-                                                "form.${letter.from}",
-                                                style: const TextStyle(fontSize: 13),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            letter.content,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(fontSize: 16),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
+                      idx == 1 ? first : Expanded(child: second),
+                      Button(
+                        function: () {
+                          Navigator.pop(context);
                         },
-                      ),
-                      Button(function: (){Navigator.pop(context);}, title: '닫기',)
+                        title: '닫기',
+                      )
                     ],
                   ),
                 ),
