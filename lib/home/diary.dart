@@ -15,6 +15,18 @@ class Diary extends StatefulWidget {
 class _DiaryState extends State<Diary> {
   int index = 1;
   TextEditingController textEditingController = TextEditingController();
+  late List<List<bool>> isSelected2 = [];
+  late List<List<bool>> isSelected3 = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    isSelected2 = List.generate(Preset().situation.length,
+        (i) => List.generate(Preset().situation[i].length, (j) => false));
+    isSelected3 = List.generate(Preset().emotion.length,
+            (i) => List.generate(Preset().emotion[i].length, (j) => false));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +83,8 @@ class _DiaryState extends State<Diary> {
                       setState(() {
                         index = 2;
                       });
-                    }, title: '다음',
+                    },
+                    title: '다음',
                   )
                 ],
               ),
@@ -95,9 +108,7 @@ class _DiaryState extends State<Diary> {
             "현재 상황과 관련된 키워드를 모두 골라주세요.",
             style: TextStyle(fontSize: 16),
           ),
-          const SizedBox(
-            height: 85
-          ),
+          const SizedBox(height: 30),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -112,24 +123,40 @@ class _DiaryState extends State<Diary> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: SizedBox(
-                            height: 30, // 이 부분을 추가하여 길이를 조절하세요
+                            height: 30,
                             child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: Preset().situation[index1].length,
                               itemBuilder: (BuildContext context, int index2) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 9.0),
-                                  child: Container(
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSelected2[index1][index2] =
+                                          !isSelected2[index1][index2];
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 9.0),
+                                    child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      child:
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
-                                            child: Text(Preset().situation[index1][index2], style: TextStyle(fontSize: 16),),
-                                          )),
+                                        color: isSelected2[index1][index2]
+                                            ? const Color(0xff5E5E5E) // 수정
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Color(0xff5E5E5E)), // 수정
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            12, 5, 12, 5),
+                                        child: Text(
+                                          Preset().situation[index1][index2],
+                                          style: TextStyle(fontSize: 16, color: isSelected2[index1][index2]
+                                              ? Colors.white: Color(0xff393939)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
                             ),
@@ -140,31 +167,43 @@ class _DiaryState extends State<Diary> {
                   ),
                   Row(
                     children: [
-                      Flexible(flex:1,child: GestureDetector(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                color: const Color(0xffC6C6C6), // 수정
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Padding(
-                              padding: EdgeInsets.all(13.0),
-                              child: Text(
-                                "이전",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color(0xff016670), fontSize: 16), //수정
+                      Flexible(
+                          flex: 1,
+                          child: GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffC6C6C6), // 수정
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(13.0),
+                                  child: Text(
+                                    "이전",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff016670),
+                                        fontSize: 16), //수정
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              index = 1;
-                            });
-                          })),
-                      const SizedBox(width: 10,),
-                      Flexible(flex:1,child: Button(function: (){setState(() {
-                        index = 3;
-                      });}, title: '다음',)),
+                              onTap: () {
+                                setState(() {
+                                  index = 1;
+                                });
+                              })),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                          flex: 1,
+                          child: Button(
+                            function: () {
+                              setState(() {
+                                index = 3;
+                              });
+                            },
+                            title: '다음',
+                          )),
                     ],
                   )
                 ],
@@ -189,9 +228,7 @@ class _DiaryState extends State<Diary> {
             "현재 감정과 관련된 키워드를 모두 골라주세요.",
             style: TextStyle(fontSize: 16),
           ),
-          const SizedBox(
-              height: 85
-          ),
+          const SizedBox(height: 30),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -206,24 +243,40 @@ class _DiaryState extends State<Diary> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: SizedBox(
-                            height: 30, // 이 부분을 추가하여 길이를 조절하세요
+                            height: 30,
                             child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: Preset().emotion[index1].length,
                               itemBuilder: (BuildContext context, int index2) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 9.0),
-                                  child: Container(
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSelected3[index1][index2] =
+                                      !isSelected3[index1][index2];
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 9.0),
+                                    child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          border:
-                                          Border.all(color: Colors.black)),
-                                      child:
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
-                                        child: Text(Preset().emotion[index1][index2], style: const TextStyle(fontSize: 16),),
-                                      )),
+                                        color: isSelected3[index1][index2]
+                                            ? const Color(0xff5E5E5E) // 수정
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Color(0xff5E5E5E)), // 수정
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            12, 5, 12, 5),
+                                        child: Text(
+                                          Preset().emotion[index1][index2],
+                                          style: TextStyle(fontSize: 16, color: isSelected3[index1][index2]
+                                              ? Colors.white: Color(0xff393939)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
                             ),
@@ -234,29 +287,41 @@ class _DiaryState extends State<Diary> {
                   ),
                   Row(
                     children: [
-                      Flexible(flex:1,child: GestureDetector(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                color: const Color(0xffC6C6C6), // 수정
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Padding(
-                              padding: EdgeInsets.all(13.0),
-                              child: Text(
-                                "이전",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color(0xff016670), fontSize: 16), //수정
+                      Flexible(
+                          flex: 1,
+                          child: GestureDetector(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffC6C6C6), // 수정
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(13.0),
+                                  child: Text(
+                                    "이전",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff016670),
+                                        fontSize: 16), //수정
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              index = 2;
-                            });
-                          })),
-                      const SizedBox(width: 10,),
-                      Flexible(flex:1,child: Button(function: (){Navigator.pop(context);}, title: '저장 후 나가기',)),
+                              onTap: () {
+                                setState(() {
+                                  index = 2;
+                                });
+                              })),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                          flex: 1,
+                          child: Button(
+                            function: () {
+                              Navigator.pop(context);
+                            },
+                            title: '저장 후 나가기',
+                          )),
                     ],
                   )
                 ],
@@ -277,7 +342,11 @@ class _DiaryState extends State<Diary> {
           height: MediaQuery.of(context).size.height * 0.7,
           child: Stack(
             children: [
-              index == 1 ? first : index == 2 ? second : third,
+              index == 1
+                  ? first
+                  : index == 2
+                      ? second
+                      : third,
               Padding(
                 padding: const EdgeInsets.only(top: 13.0),
                 child: Align(
@@ -286,8 +355,10 @@ class _DiaryState extends State<Diary> {
                     maxSteps: 3,
                     progressType: LinearProgressBar.progressTypeDots,
                     currentStep: index - 1,
-                    progressColor: const Color(0xff016670), // 수정
-                    backgroundColor: const Color(0xffDDDDDD), // 수정
+                    progressColor: const Color(0xff016670),
+                    // 수정
+                    backgroundColor: const Color(0xffDDDDDD),
+                    // 수정
                     dotsSpacing: const EdgeInsets.only(right: 8),
                   ),
                 ),
