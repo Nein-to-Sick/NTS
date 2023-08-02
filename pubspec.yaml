@@ -44,6 +44,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   google_sign_in: ^6.1.4
   animated_toggle_switch: ^0.7.0
+  linear_progress_bar: ^1.1.0
 
 dev_dependencies:
   flutter_test:
