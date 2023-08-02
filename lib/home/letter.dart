@@ -15,6 +15,19 @@ class Letter extends StatefulWidget {
 class _LetterState extends State<Letter> {
   int index = 1;
   TextEditingController textEditingController = TextEditingController();
+  late List<List<bool>> isSelected2 = [];
+  late List<List<bool>> isSelected3 = [];
+  bool isSelfSelected = false;
+  bool isSomeoneSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isSelected2 = List.generate(Preset().situation.length,
+        (i) => List.generate(Preset().situation[i].length, (j) => false));
+    isSelected3 = List.generate(Preset().emotion.length,
+        (i) => List.generate(Preset().emotion[i].length, (j) => false));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,60 +53,95 @@ class _LetterState extends State<Letter> {
                       style: TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 85),
-                    Container(
-                      width: 84,
-                      height: 85,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Color(0xff5E5E5E), width: 1.3)), // 수정
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          HeroIcon(
-                            HeroIcons.user,
-                            style: HeroIconStyle.solid,
-                            color: Color(0xff393939),
-                            size: 25,
-                          ), // 수정
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "나",
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isSelfSelected = !isSelfSelected;
+                          isSomeoneSelected = false;
+                        });
+                      },
+                      child: Container(
+                        width: 84,
+                        height: 85,
+                        decoration: BoxDecoration(
+                            color: isSelfSelected
+                                ? const Color(0xff5E5E5E)
+                                : Colors.white, // 수정
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: const Color(0xff5E5E5E), width: 1.3)),
+                        // 수정
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            HeroIcon(
+                              HeroIcons.user,
+                              style: HeroIconStyle.solid,
+                              color: isSelfSelected
+                                  ? Colors.white
+                                  : const Color(0xff393939), // 수정
+                              size: 25,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "나",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: isSelfSelected
+                                      ? Colors.white
+                                      : const Color(0xff393939)),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
-                    Container(
-                      width: 84,
-                      height: 85,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Color(0xff5E5E5E), width: 1.3)), // 수정
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          HeroIcon(
-                            HeroIcons.userGroup,
-                            style: HeroIconStyle.solid,
-                            color: Color(0xff393939),
-                            size: 25,
-                          ),
-                          // 수정
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "누군가",
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isSelfSelected = false;
+                          isSomeoneSelected = !isSomeoneSelected;
+                        });
+                      },
+                      child: Container(
+                        width: 84,
+                        height: 85,
+                        decoration: BoxDecoration(
+                            color: isSomeoneSelected
+                                ? const Color(0xff5E5E5E)
+                                : Colors.white, // 수정
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: const Color(0xff5E5E5E), width: 1.3)),
+                        // 수정
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            HeroIcon(
+                              HeroIcons.userGroup,
+                              style: HeroIconStyle.solid,
+                              color: isSomeoneSelected
+                                  ? Colors.white
+                                  : const Color(0xff393939), // 수정
+                              size: 25,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "누군가",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: isSomeoneSelected
+                                      ? Colors.white
+                                      : const Color(0xff393939)),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -101,9 +149,11 @@ class _LetterState extends State<Letter> {
               ),
               Button(
                 function: () {
-                  setState(() {
-                    index = 2;
-                  });
+                  isSomeoneSelected == false && isSelfSelected == false
+                      ? null
+                      : setState(() {
+                          index = 2;
+                        });
                 },
                 title: '다음',
               )
@@ -127,7 +177,7 @@ class _LetterState extends State<Letter> {
             "알맞은 상황/감정을 골라주세요.",
             style: TextStyle(fontSize: 16),
           ),
-          const SizedBox(height: 85),
+          const SizedBox(height: 30),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -142,28 +192,44 @@ class _LetterState extends State<Letter> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: SizedBox(
-                            height: 30, // 이 부분을 추가하여 길이를 조절하세요
+                            height: 30,
                             child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: Preset().situation[index1].length,
                               itemBuilder: (BuildContext context, int index2) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 9.0),
-                                  child: Container(
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSelected2[index1][index2] =
+                                          !isSelected2[index1][index2];
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 9.0),
+                                    child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          border:
-                                              Border.all(color: Colors.black)),
+                                        color: isSelected2[index1][index2]
+                                            ? const Color(0xff5E5E5E) // 수정
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                            color: Color(0xff5E5E5E)), // 수정
+                                      ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             12, 5, 12, 5),
                                         child: Text(
                                           Preset().situation[index1][index2],
-                                          style: TextStyle(fontSize: 16),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: isSelected2[index1][index2]
+                                                  ? Colors.white
+                                                  : Color(0xff393939)),
                                         ),
-                                      )),
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
                             ),
@@ -235,7 +301,7 @@ class _LetterState extends State<Letter> {
             "알맞은 상황/감정을 골라주세요.",
             style: TextStyle(fontSize: 16),
           ),
-          const SizedBox(height: 85),
+          const SizedBox(height: 30),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -250,28 +316,44 @@ class _LetterState extends State<Letter> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: SizedBox(
-                            height: 30, // 이 부분을 추가하여 길이를 조절하세요
+                            height: 30,
                             child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: Preset().emotion[index1].length,
                               itemBuilder: (BuildContext context, int index2) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 9.0),
-                                  child: Container(
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSelected3[index1][index2] =
+                                          !isSelected3[index1][index2];
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 9.0),
+                                    child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          border:
-                                              Border.all(color: Colors.black)),
+                                        color: isSelected3[index1][index2]
+                                            ? const Color(0xff5E5E5E) // 수정
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                            color: Color(0xff5E5E5E)), // 수정
+                                      ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             12, 5, 12, 5),
                                         child: Text(
                                           Preset().emotion[index1][index2],
-                                          style: const TextStyle(fontSize: 16),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: isSelected3[index1][index2]
+                                                  ? Colors.white
+                                                  : Color(0xff393939)),
                                         ),
-                                      )),
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
                             ),
