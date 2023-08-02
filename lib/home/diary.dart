@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/model/preset.dart';
 
 import '../component/button.dart';
@@ -13,11 +14,12 @@ class Diary extends StatefulWidget {
 
 class _DiaryState extends State<Diary> {
   int index = 1;
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Widget first = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
+      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
           const Text(
@@ -36,7 +38,7 @@ class _DiaryState extends State<Diary> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 children: [
                   Expanded(
@@ -44,11 +46,12 @@ class _DiaryState extends State<Diary> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white),
-                      child: const Padding(
-                        padding: EdgeInsets.fromLTRB(15, 13, 15, 13),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
                         child: TextField(
-                          style: TextStyle(fontSize: 16),
-                          decoration: InputDecoration(
+                          controller: textEditingController,
+                          style: const TextStyle(fontSize: 16),
+                          decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintStyle: TextStyle(fontSize: 16),
                               hintMaxLines: 7,
@@ -61,7 +64,7 @@ class _DiaryState extends State<Diary> {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 13,
                   ),
                   Button(
                     function: () {
@@ -78,96 +81,184 @@ class _DiaryState extends State<Diary> {
       ),
     );
     Widget second = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
+      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
           const Text(
-            "이런 상태가 맞나요?",
+            "어떤 상황인가요?",
             style: TextStyle(fontSize: 20),
           ),
           const SizedBox(
             height: 6,
           ),
           const Text(
-            "알맞은 상황/감정을 골라주세요",
+            "현재 상황과 관련된 키워드를 모두 골라주세요.",
             style: TextStyle(fontSize: 16),
           ),
           const SizedBox(
-            height: 40,
+            height: 85
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "상황",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   Expanded(
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemCount: Preset().situation.length,
                       itemBuilder: (BuildContext context, int index1) {
-                        return SizedBox(
-                          height: 20, // 이 부분을 추가하여 길이를 조절하세요
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: Preset().situation[index1].length,
-                            itemBuilder: (BuildContext context, int index2) {
-                              return Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border:
-                                          Border.all(color: index1 == 0 ? Color(0xffB0DD79) : index1 == 1 ? Color(0xffFEC125) : Color(0xffF29D8F))),
-                                  child:
-                                      Text(Preset().situation[index1][index2]));
-                            },
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: SizedBox(
+                            height: 30, // 이 부분을 추가하여 길이를 조절하세요
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: Preset().situation[index1].length,
+                              itemBuilder: (BuildContext context, int index2) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 9.0),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      child:
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
+                                            child: Text(Preset().situation[index1][index2], style: TextStyle(fontSize: 16),),
+                                          )),
+                                );
+                              },
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
-                  const Text(
-                    "감정",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  Row(
+                    children: [
+                      Flexible(flex:1,child: GestureDetector(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                color: const Color(0xffC6C6C6), // 수정
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(13.0),
+                              child: Text(
+                                "이전",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color(0xff016670), fontSize: 16), //수정
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              index = 1;
+                            });
+                          })),
+                      const SizedBox(width: 10,),
+                      Flexible(flex:1,child: Button(function: (){setState(() {
+                        index = 3;
+                      });}, title: '다음',)),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    Widget third = Padding(
+      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
+      child: Column(
+        children: [
+          const Text(
+            "어떤 감정인가요?",
+            style: TextStyle(fontSize: 20),
+          ),
+          const SizedBox(
+            height: 6,
+          ),
+          const Text(
+            "현재 감정과 관련된 키워드를 모두 골라주세요.",
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(
+              height: 85
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
                   Expanded(
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
-                      itemCount: Preset().situation.length,
+                      itemCount: Preset().emotion.length,
                       itemBuilder: (BuildContext context, int index1) {
-                        return SizedBox(
-                          height: 20, // 이 부분을 추가하여 길이를 조절하세요
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: Preset().situation[index1].length,
-                            itemBuilder: (BuildContext context, int index2) {
-                              return Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border:
-                                      Border.all(color: index1 == 0 ? Color(0xffB0DD79) : index1 == 1 ? Color(0xffFEC125) : Color(0xffF29D8F))),
-                                  child:
-                                  Text(Preset().situation[index1][index2]));
-                            },
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: SizedBox(
+                            height: 30, // 이 부분을 추가하여 길이를 조절하세요
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: Preset().emotion[index1].length,
+                              itemBuilder: (BuildContext context, int index2) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 9.0),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          border:
+                                          Border.all(color: Colors.black)),
+                                      child:
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
+                                        child: Text(Preset().emotion[index1][index2], style: const TextStyle(fontSize: 16),),
+                                      )),
+                                );
+                              },
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
-                  Button(function: (){Navigator.pop(context);}, title: '저장 후 나가기',)
+                  Row(
+                    children: [
+                      Flexible(flex:1,child: GestureDetector(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                color: const Color(0xffC6C6C6), // 수정
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(13.0),
+                              child: Text(
+                                "이전",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color(0xff016670), fontSize: 16), //수정
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              index = 2;
+                            });
+                          })),
+                      const SizedBox(width: 10,),
+                      Flexible(flex:1,child: Button(function: (){Navigator.pop(context);}, title: '저장 후 나가기',)),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -186,7 +277,21 @@ class _DiaryState extends State<Diary> {
           height: MediaQuery.of(context).size.height * 0.7,
           child: Stack(
             children: [
-              index == 1 ? first : second,
+              index == 1 ? first : index == 2 ? second : third,
+              Padding(
+                padding: const EdgeInsets.only(top: 13.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: LinearProgressBar(
+                    maxSteps: 3,
+                    progressType: LinearProgressBar.progressTypeDots,
+                    currentStep: index - 1,
+                    progressColor: const Color(0xff016670), // 수정
+                    backgroundColor: const Color(0xffDDDDDD), // 수정
+                    dotsSpacing: const EdgeInsets.only(right: 8),
+                  ),
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
