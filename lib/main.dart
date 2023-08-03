@@ -66,6 +66,7 @@ class BackgroundState extends State<Background> {
             ),
           ],
         ),
+        const FireFly(),
         AnimatedBuilder(
           animation: scrollController,
           builder: (context, child) {
@@ -76,7 +77,7 @@ class BackgroundState extends State<Background> {
             } else if (scrollController.offset == 864) {
               return ChangeNotifierProvider.value(
                 value: SearchBarController(),
-                child: ProfilePage(),
+                child: const ProfilePage(),
               );
             } else {
               return const SizedBox.shrink();
@@ -93,7 +94,6 @@ class BackgroundState extends State<Background> {
             }
           },
         ),
-        const FireFly(),
       ],
     );
   }

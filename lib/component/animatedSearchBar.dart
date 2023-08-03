@@ -17,10 +17,7 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
     final controller = Provider.of<SearchBarController>(context);
     bool folded = controller.folded;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      width: !folded ? 35 : MediaQuery.of(context).size.width - 40,
-      // height: 30,
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: MyThemeColors.myGreyscale.shade700.withOpacity(0.5),
@@ -57,8 +54,11 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
                 },
               ),
             ),
-          )
-        ],
+            onTap: () {
+              controller.fold();
+            },
+          ),
+        ),
       ),
     );
   }
