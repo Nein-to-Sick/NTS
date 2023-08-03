@@ -44,6 +44,8 @@ dependencies:
   animated_text_kit: ^4.2.2
   google_sign_in: ^6.1.4
   animated_toggle_switch: ^0.7.0
+  wrapped_korean_text: ^0.0.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
