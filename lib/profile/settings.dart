@@ -7,7 +7,7 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
-import 'package:nts/profile/delete_account.dart';
+import 'package:nts/component/delete_account.dart';
 import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../provider/backgroundController.dart';
@@ -186,29 +186,28 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           MediaQuery.of(context).size.height * 0.03,
           MediaQuery.of(context).size.width * 0.045,
           MediaQuery.of(context).size.height * 0.02),
-      child: Center(
-        child: Column(
-          children: [
-            const Text(
-              "계정 관리",
-              style: TextStyle(fontSize: 20),
+      child: Column(
+        children: [
+          const Text(
+            "계정 관리",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+          Expanded(child: manageAccountView()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.045),
+            child: Button(
+              function: () {
+                setState(() {
+                  index = 1;
+                });
+              },
+              title: '이전',
             ),
-            Expanded(child: manageAccountView()),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.045),
-              child: Button(
-                function: () {
-                  setState(() {
-                    index = 1;
-                  });
-                },
-                title: '이전',
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
 
@@ -966,92 +965,89 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   Widget manageAccountView() {
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          buildCustomContainer(
-            backgroundColor: Colors.white,
-            inside: Row(children: [
-              Expanded(
-                  child: Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Text(
-                        "이메일",
-                        style: TextStyle(fontSize: 16),
-                      ))),
-              Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: AutoSizeText(
-                    "xxxxxxxxx@gmail.com",
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 16, color: Color(0xff868686)),
-                  )),
-            ]),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          buildCustomContainer(
-            backgroundColor: Colors.white,
-            inside: Row(children: [
-              Expanded(
-                  child: Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Text(
-                        "닉네임 변경",
-                        style: TextStyle(fontSize: 16),
-                      ))),
-              Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: Text(
-                    "하루",
-                    style: TextStyle(fontSize: 16, color: Color(0xff868686)),
-                  )),
-            ]),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-          //로그아웃
-          buildCustomButton(
-            backgroundColor: Color(0xffFCE181),
-            onTap: () {
-              print("click");
+      child: Center(
+        child: Column(
+          children: [
+            buildCustomContainer(
+              backgroundColor: Colors.white,
+              inside: Row(children: [
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(left: 20),
+                        child: Text(
+                          "이메일",
+                          style: TextStyle(fontSize: 16),
+                        ))),
+                Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: AutoSizeText(
+                      "xxxxxxxxx@gmail.com",
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 16, color: Color(0xff868686)),
+                    )),
+              ]),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            buildCustomContainer(
+              backgroundColor: Colors.white,
+              inside: Row(children: [
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(left: 20),
+                        child: Text(
+                          "닉네임 변경",
+                          style: TextStyle(fontSize: 16),
+                        ))),
+                Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    child: Text(
+                      "하루",
+                      style: TextStyle(fontSize: 16, color: Color(0xff868686)),
+                    )),
+              ]),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            //로그아웃
+            buildCustomButton(
+              backgroundColor: Color(0xffFCE181),
+              onTap: () {
+                print("click");
 
-              print("controller get");
-              FirebaseAuth.instance.signOut();
-              print("signout");
+                print("controller get");
+                FirebaseAuth.instance.signOut();
+                print("signout");
 
-              Navigator.pop(context);
-              print("pop");
+                Navigator.pop(context);
+                print("pop");
 
-              final controller = Provider.of<BackgroundController>(context);
-              controller.movePage(0);
-              print("move");
-            },
-            inside: Center(
-              child: Text(
-                "로그아웃",
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                final controller = Provider.of<BackgroundController>(context);
+                controller.movePage(0);
+                print("move");
+              },
+              inside: Center(
+                child: Text(
+                  "로그아웃",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          //계정탈퇴
-          buildCustomButton(
-            backgroundColor: Colors.white,
-            onTap: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) => DeleteAccount(),
-              );
-            },
-            inside: Center(
-              child: Text(
-                "계정탈퇴",
-                style: TextStyle(fontSize: 16, color: Color(0xffFCE181)),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            //계정탈퇴
+            buildCustomButton(
+              backgroundColor: Colors.white,
+              onTap: () {
+                DeleteAccount(context);
+              },
+              inside: Center(
+                child: Text(
+                  "계정탈퇴",
+                  style: TextStyle(fontSize: 16, color: Color(0xffFCE181)),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
