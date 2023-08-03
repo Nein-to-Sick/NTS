@@ -76,6 +76,7 @@ class BackgroundState extends State<Background> {
           ),
         ],
       ),
+
       AnimatedBuilder(
         animation: scrollController,
         builder: (context, child) {
