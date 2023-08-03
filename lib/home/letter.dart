@@ -4,6 +4,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/Theme/theme_colors.dart';
 
 import '../component/button.dart';
+import '../database/databaseService.dart';
 import '../model/preset.dart';
 
 class Letter extends StatefulWidget {
@@ -23,7 +24,6 @@ class _LetterState extends State<Letter> {
 
   late PageController _pageController;
 
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +32,6 @@ class _LetterState extends State<Letter> {
     isSelected3 = List.generate(Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
     _pageController = PageController(initialPage: 0);
-
   }
 
   @override
@@ -122,14 +121,20 @@ class _LetterState extends State<Letter> {
                   children: [
                     Text(
                       "누구한테 쓸까요?",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: MyThemeColors.myGreyscale[900]),
                     ),
                     const SizedBox(
                       height: 6,
                     ),
                     Text(
                       "받는 이를 정해주세요",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[600]),
                     ),
                     const SizedBox(height: 85),
                     GestureDetector(
@@ -174,8 +179,7 @@ class _LetterState extends State<Letter> {
                                   color: isSelfSelected
                                       ? Colors.white
                                       : MyThemeColors.myGreyscale.shade900,
-                                  fontWeight: FontWeight.w500
-                              ),
+                                  fontWeight: FontWeight.w500),
                             )
                           ],
                         ),
@@ -226,8 +230,7 @@ class _LetterState extends State<Letter> {
                                   color: isSomeoneSelected
                                       ? Colors.white
                                       : MyThemeColors.myGreyscale.shade900,
-                                  fontWeight: FontWeight.w500
-                              ),
+                                  fontWeight: FontWeight.w500),
                             )
                           ],
                         ),
@@ -241,9 +244,9 @@ class _LetterState extends State<Letter> {
                   isSomeoneSelected == false && isSelfSelected == false
                       ? null
                       : _pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
                 },
                 title: '다음',
               )
@@ -261,14 +264,20 @@ class _LetterState extends State<Letter> {
         children: [
           Text(
             "어떤 상황에 있는 사람한테 쓸까요?",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
           Text(
             "알맞은 상황/감정을 골라주세요.",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -295,7 +304,7 @@ class _LetterState extends State<Letter> {
                                   onTap: () {
                                     setState(() {
                                       isSelected2[index1][index2] =
-                                      !isSelected2[index1][index2];
+                                          !isSelected2[index1][index2];
                                     });
                                   },
                                   child: Padding(
@@ -322,7 +331,7 @@ class _LetterState extends State<Letter> {
                                             color: isSelected2[index1][index2]
                                                 ? Colors.white
                                                 : MyThemeColors
-                                                .myGreyscale.shade900,
+                                                    .myGreyscale.shade900,
                                           ),
                                         ),
                                       ),
@@ -396,15 +405,20 @@ class _LetterState extends State<Letter> {
         children: [
           Text(
             "어떤 감정을 가진 사람한테 쓸까요?",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]
-            ),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
           Text(
             "알맞은 상황/감정을 골라주세요.",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -431,7 +445,7 @@ class _LetterState extends State<Letter> {
                                   onTap: () {
                                     setState(() {
                                       isSelected3[index1][index2] =
-                                      !isSelected3[index1][index2];
+                                          !isSelected3[index1][index2];
                                     });
                                   },
                                   child: Padding(
@@ -458,7 +472,7 @@ class _LetterState extends State<Letter> {
                                             color: isSelected3[index1][index2]
                                                 ? Colors.white
                                                 : MyThemeColors
-                                                .myGreyscale.shade900,
+                                                    .myGreyscale.shade900,
                                           ),
                                         ),
                                       ),
@@ -489,7 +503,8 @@ class _LetterState extends State<Letter> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: MyThemeColors.primaryColor,
-                                        fontSize: 16, fontWeight: FontWeight.w700), //수정
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700), //수정
                                   ),
                                 ),
                               ),
@@ -531,14 +546,20 @@ class _LetterState extends State<Letter> {
         children: [
           Text(
             "편지 쓰기",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
           Text(
             "응원/지지/격려하는 글을 써주세요.",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(
             height: 15,
@@ -560,10 +581,13 @@ class _LetterState extends State<Letter> {
                           style: const TextStyle(fontSize: 16),
                           decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintStyle: TextStyle(fontSize: 16, color: MyThemeColors.myGreyscale[300], fontFamily: "Dodam"),
+                              hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: MyThemeColors.myGreyscale[300],
+                                  fontFamily: "Dodam"),
                               hintMaxLines: 10,
                               hintText:
-                              "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                                  "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                         ),
@@ -575,9 +599,31 @@ class _LetterState extends State<Letter> {
                   ),
                   Button(
                     function: () {
-                      setState(() {
-                        Navigator.pop(context);
-                      });
+                      List<String> sit = [];
+                      for (int i = 0; i < Preset().situation.length; i++) {
+                        for (int j = 0; j < Preset().situation[i].length; j++) {
+                          if (isSelected2[i][j] == true) {
+                            sit.add(Preset().situation[i][j]);
+                          }
+                        }
+                      }
+                      List<String> emo = [];
+                      for (int i = 0; i < Preset().emotion.length; i++) {
+                        for (int j = 0; j < Preset().emotion[i].length; j++) {
+                          if (isSelected3[i][j] == true) {
+                            emo.add(Preset().emotion[i][j]);
+                          }
+                        }
+                      }
+
+                      if (isSelfSelected) {
+                        DatabaseService().selfMessage(textEditingController.text, sit, emo);
+                      } else {
+                        DatabaseService().someoneMessage(textEditingController.text, sit, emo);
+
+                      }
+
+                      Navigator.pop(context);
                     },
                     title: '보낸 후 나가기',
                   )
@@ -589,7 +635,4 @@ class _LetterState extends State<Letter> {
       ),
     );
   }
-
-
-
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:nts/database/databaseService.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
@@ -456,9 +457,7 @@ class DiaryState extends State<Diary> {
                                 }
                               }
 
-                              print(textEditingController.text);
-                              print(sit);
-                              print(emo);
+                              DatabaseService().writeDiary("GPT", textEditingController.text, sit, emo);
 
                               Navigator.pop(context);
                             },
