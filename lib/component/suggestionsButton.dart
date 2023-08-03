@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:nts/Theme/theme_colors.dart';
 
 int selectedIcon = 0;
 
@@ -9,6 +10,9 @@ void myShowBottomSheet(BuildContext context) {
   final opinionController = TextEditingController();
 
   showModalBottomSheet(
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20))),
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
@@ -30,7 +34,7 @@ void myShowBottomSheet(BuildContext context) {
                 width: 60,
                 decoration: BoxDecoration(
                   // color: AppColors.haruPrimary.shade300,
-                  color: Colors.white,
+                  color: MyThemeColors.myGreyscale[50],
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
@@ -232,7 +236,7 @@ class RadioIconButtonDesign extends StatelessWidget {
               // ? Theme.of(context).colorScheme.primary
               // : Theme.of(context).colorScheme.onPrimary,
               ? Colors.black
-              : Color(0xffF3F3F3),
+              : MyThemeColors.myGreyscale[50],
         ),
         child: HeroIcon(
           icon,
@@ -243,7 +247,7 @@ class RadioIconButtonDesign extends StatelessWidget {
               // ? Theme.of(context).colorScheme.primary
               // : Theme.of(context).colorScheme.onPrimary,
               ? Colors.white
-              : Color(0xff9B9B9B),
+              : MyThemeColors.myGreyscale[400],
         ),
       ),
     );
