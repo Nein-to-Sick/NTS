@@ -57,7 +57,7 @@ class NavigationToggle extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        controller.movePage(864);
+                        controller.movePage(855);
                         controller.changeColor(3);
                       },
                       child: Container(

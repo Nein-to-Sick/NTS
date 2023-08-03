@@ -74,7 +74,7 @@ class BackgroundState extends State<Background> {
               return const LoginPage();
             } else if (scrollController.offset == 600) {
               return const HomePage();
-            } else if (scrollController.offset == 864) {
+            } else if (scrollController.offset == 855) {
               return ChangeNotifierProvider.value(
                 value: SearchBarController(),
                 child: const ProfilePage(),
