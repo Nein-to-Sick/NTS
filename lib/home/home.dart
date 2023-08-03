@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
+import 'package:nts/loading/loading_page.dart';
 
 import 'diary.dart';
 import 'letter.dart';
@@ -100,6 +102,34 @@ class HomePage extends StatelessWidget {
                           builder: (BuildContext context) => const Letter(),
                           animationType:
                               DialogTransitionType.slideFromBottomFade);
+                    },
+                  ),
+
+                  //  test
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text(
+                            "로딩 페이지 보기",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                        )),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              RotatingCircularProgressWithGlow(progress: 0.5),
+                        ),
+                      );
                     },
                   ),
                 ],
