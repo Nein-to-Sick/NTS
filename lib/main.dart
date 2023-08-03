@@ -57,69 +57,49 @@ class BackgroundState extends State<Background> {
     final controller = Provider.of<BackgroundController>(context);
     final ScrollController scrollController = controller.scrollController;
 
-    return Stack(
-      children: [
-        ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          controller: scrollController,
-          children: [
-            Image.asset(
-              'assets/back.png',
-              fit: BoxFit.cover,
-            ),
-          ],
-        ),
-
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => UserInfoValueModel(),
-            ),
-          ],
-          child: AnimatedBuilder(
-            animation: scrollController,
-            builder: (context, child) {
-              if (scrollController.offset == 0) {
-                return const LoginPage();
-              } else if (scrollController.offset == 600) {
-                return FutureBuilder(
-                    future: _getNickNameFromFirebase(),
-                    builder: (context, snapshot) {
-                      if (snapshot.data == true) {
-                        return const HomePage();
-                      } else if (snapshot.data == false) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          myNicknameSheet(
-                              context,
-                              Provider.of<UserInfoValueModel>(context,
-                                  listen: false));
-                        });
-
-                        return Container();
-                      } else {
-                        return Container();
-                      }
-                    });
-              } else if (scrollController.offset == 864) {
-                return ChangeNotifierProvider.value(
-                  value: SearchBarController(),
-                  child: const ProfilePage(),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
+    return Stack(children: [
+      ListView(
+        physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        controller: scrollController,
+        children: [
+          Image.asset(
+            'assets/back.png',
+            fit: BoxFit.cover,
           ),
-        const FireFly(),
-        AnimatedBuilder(
+        ],
+      ),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => UserInfoValueModel(),
+          ),
+        ],
+        child: AnimatedBuilder(
           animation: scrollController,
           builder: (context, child) {
             if (scrollController.offset == 0) {
               return const LoginPage();
             } else if (scrollController.offset == 600) {
-              return const HomePage();
-            } else if (scrollController.offset == 855) {
+              return FutureBuilder(
+                  future: _getNickNameFromFirebase(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data == true) {
+                      return const HomePage();
+                    } else if (snapshot.data == false) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        myNicknameSheet(
+                            context,
+                            Provider.of<UserInfoValueModel>(context,
+                                listen: false));
+                      });
+
+                      return Container();
+                    } else {
+                      return Container();
+                    }
+                  });
+            } else if (scrollController.offset == 864) {
               return ChangeNotifierProvider.value(
                 value: SearchBarController(),
                 child: const ProfilePage(),
@@ -129,18 +109,36 @@ class BackgroundState extends State<Background> {
             }
           },
         ),
-        AnimatedBuilder(
-          animation: scrollController,
-          builder: (context, child) {
-            if (scrollController.offset != 0) {
-              return const NavigationToggle();
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ),
-      ],
-    );
+      ),
+      const FireFly(),
+      AnimatedBuilder(
+        animation: scrollController,
+        builder: (context, child) {
+          if (scrollController.offset == 0) {
+            return const LoginPage();
+          } else if (scrollController.offset == 600) {
+            return const HomePage();
+          } else if (scrollController.offset == 864) {
+            return ChangeNotifierProvider.value(
+              value: SearchBarController(),
+              child: const ProfilePage(),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
+      AnimatedBuilder(
+        animation: scrollController,
+        builder: (context, child) {
+          if (scrollController.offset != 0) {
+            return const NavigationToggle();
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
+    ]);
   }
 }
 
