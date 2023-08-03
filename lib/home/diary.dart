@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/preset.dart';
-
+import 'package:nts/database/databaseService.dart';
+import '../Theme/theme_colors.dart';
 import '../component/button.dart';
+import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
-  const Diary({Key? key}) : super(key: key);
+  const Diary({super.key});
 
   @override
-  State<Diary> createState() => _DiaryState();
+  DiaryState createState() => DiaryState();
 }
 
-class _DiaryState extends State<Diary> {
-  int index = 1;
+class DiaryState extends State<Diary> {
+  int index = 0;
   TextEditingController textEditingController = TextEditingController();
   late List<List<bool>> isSelected2 = [];
   late List<List<bool>> isSelected3 = [];
+
+  late PageController _pageController;
 
   @override
   void initState() {
@@ -26,24 +28,102 @@ class _DiaryState extends State<Diary> {
         (i) => List.generate(Preset().situation[i].length, (j) => false));
     isSelected3 = List.generate(Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
+    _pageController = PageController(initialPage: 0);
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget first = Padding(
+    return _buildBody(context);
+  }
+
+  _buildBody(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(10)),
+          width: MediaQuery.of(context).size.width * 0.85,
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: Stack(
+            children: <Widget>[
+              PageView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _pageController,
+                itemBuilder: (BuildContext context, int pageIndex) {
+                  switch (pageIndex) {
+                    case 0:
+                      return _buildPageFirst();
+                    case 1:
+                      return _buildPageSecond();
+                    case 2:
+                      return _buildPageThird();
+                  }
+                },
+                onPageChanged: (ind) {
+                  setState(() {
+                    index = ind;
+                  });
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 13.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: LinearProgressBar(
+                    maxSteps: 3,
+                    progressType: LinearProgressBar.progressTypeDots,
+                    currentStep: index,
+                    progressColor: MyThemeColors.primaryColor,
+                    backgroundColor: MyThemeColors.myGreyscale.shade100,
+                    dotsSpacing: const EdgeInsets.only(right: 8),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Opacity(
+                      opacity: 0.2,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            child: HeroIcon(
+                              HeroIcons.xMark,
+                              size: 23,
+                            )),
+                      )))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildPageFirst() {
+    return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "일기 쓰기",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "나의 상황과 감정에 대해 자세히 말해주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(
             height: 15,
@@ -63,9 +143,12 @@ class _DiaryState extends State<Diary> {
                         child: TextField(
                           controller: textEditingController,
                           style: const TextStyle(fontSize: 16),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintStyle: TextStyle(fontSize: 16),
+                              hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: "Dodam",
+                                  color: MyThemeColors.myGreyscale[300]),
                               hintMaxLines: 7,
                               hintText:
                                   "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
@@ -80,9 +163,10 @@ class _DiaryState extends State<Diary> {
                   ),
                   Button(
                     function: () {
-                      setState(() {
-                        index = 2;
-                      });
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
                     },
                     title: '다음',
                   )
@@ -93,20 +177,29 @@ class _DiaryState extends State<Diary> {
         ],
       ),
     );
-    Widget second = Padding(
+  }
+
+  _buildPageSecond() {
+    return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "어떤 상황인가요?",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "현재 상황과 관련된 키워드를 모두 골라주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -156,12 +249,12 @@ class _DiaryState extends State<Diary> {
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
-                                            fontSize: 16,
-                                            color: isSelected2[index1][index2]
-                                                ? Colors.white
-                                                : MyThemeColors
-                                                    .myGreyscale.shade900,
-                                          ),
+                                              fontSize: 16,
+                                              color: isSelected2[index1][index2]
+                                                  ? Colors.white
+                                                  : MyThemeColors
+                                                      .myGreyscale.shade900,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -192,14 +285,16 @@ class _DiaryState extends State<Diary> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: MyThemeColors.primaryColor,
-                                        fontSize: 16), //수정
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700), //수정
                                   ),
                                 ),
                               ),
                               onTap: () {
-                                setState(() {
-                                  index = 1;
-                                });
+                                _pageController.previousPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.ease,
+                                );
                               })),
                       const SizedBox(
                         width: 10,
@@ -208,9 +303,10 @@ class _DiaryState extends State<Diary> {
                           flex: 1,
                           child: Button(
                             function: () {
-                              setState(() {
-                                index = 3;
-                              });
+                              _pageController.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.ease,
+                              );
                             },
                             title: '다음',
                           )),
@@ -223,20 +319,29 @@ class _DiaryState extends State<Diary> {
         ],
       ),
     );
-    Widget third = Padding(
+  }
+
+  _buildPageThird() {
+    return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "어떤 감정인가요?",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "현재 감정과 관련된 키워드를 모두 골라주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -289,7 +394,8 @@ class _DiaryState extends State<Diary> {
                                               color: isSelected3[index1][index2]
                                                   ? Colors.white
                                                   : MyThemeColors
-                                                      .myGreyscale.shade900),
+                                                      .myGreyscale.shade900,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -319,14 +425,16 @@ class _DiaryState extends State<Diary> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: MyThemeColors.primaryColor,
-                                        fontSize: 16), //수정
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700), //수정
                                   ),
                                 ),
                               ),
                               onTap: () {
-                                setState(() {
-                                  index = 2;
-                                });
+                                _pageController.previousPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.ease,
+                                );
                               })),
                       const SizedBox(
                         width: 10,
@@ -335,6 +443,22 @@ class _DiaryState extends State<Diary> {
                           flex: 1,
                           child: Button(
                             function: () {
+
+                              List<String> sit = [];
+                              for(int i=0;i<Preset().situation.length;i++) {
+                                for(int j=0;j<Preset().situation[i].length; j++) {
+                                  if(isSelected2[i][j] == true) sit.add(Preset().situation[i][j]);
+                                }
+                              }
+                              List<String> emo = [];
+                              for(int i=0;i<Preset().emotion.length;i++) {
+                                for(int j=0;j<Preset().emotion[i].length; j++) {
+                                  if(isSelected3[i][j] == true) emo.add(Preset().emotion[i][j]);
+                                }
+                              }
+
+                              DatabaseService().writeDiary("GPT", textEditingController.text, sit, emo);
+
                               Navigator.pop(context);
                             },
                             title: '저장 후 나가기',
@@ -347,56 +471,6 @@ class _DiaryState extends State<Diary> {
           ),
         ],
       ),
-    );
-
-    return Dialog(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Stack(
-            children: [
-              index == 1
-                  ? first
-                  : index == 2
-                      ? second
-                      : third,
-              Padding(
-                padding: const EdgeInsets.only(top: 13.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: LinearProgressBar(
-                    maxSteps: 3,
-                    progressType: LinearProgressBar.progressTypeDots,
-                    currentStep: index - 1,
-                    progressColor: MyThemeColors.primaryColor,
-                    backgroundColor: MyThemeColors.myGreyscale.shade100,
-                    dotsSpacing: const EdgeInsets.only(right: 8),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Opacity(
-                  opacity: 0.2,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Align(
-                        alignment: Alignment.topRight,
-                        child: HeroIcon(
-                          HeroIcons.xMark,
-                          size: 23,
-                        )),
-                  ),
-                ),
-              )
-            ],
-          )),
     );
   }
 }
