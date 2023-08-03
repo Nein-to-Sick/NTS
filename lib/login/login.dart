@@ -41,8 +41,9 @@ class _LoginPageState extends State<LoginPage>
     _controller.forward();
 
     if (user != null) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        final BackgroundController controller = Provider.of<BackgroundController>(context, listen: false);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final BackgroundController controller =
+            Provider.of<BackgroundController>(context, listen: false);
         controller.movePage(600);
         controller.changeColor(2);
       });
@@ -133,8 +134,8 @@ class _LoginPageState extends State<LoginPage>
                       style: ButtonStyle(
                           overlayColor: MaterialStateProperty.all(
                               const Color.fromARGB(14, 255, 255, 255)),
-                          backgroundColor:
-                              MaterialStateProperty.all(const Color(0xff1A5DCC)),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff1A5DCC)),
                           shadowColor:
                               MaterialStateProperty.all(Colors.transparent),
                           shape:
@@ -143,12 +144,13 @@ class _LoginPageState extends State<LoginPage>
                             borderRadius: BorderRadius.circular(18.0),
                           ))),
                       onPressed: () {
-                        AuthService().signInWithGoogle().then((value) {
+                        AuthService().signInWithGoogle().then((value) async {
                           setState(() {
                             user = value;
                           });
+
                           if (user != null) {
-                            WidgetsBinding.instance?.addPostFrameCallback((_) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (controller.scrollController.hasClients) {
                                 controller.movePage(600);
                                 controller.changeColor(2);
