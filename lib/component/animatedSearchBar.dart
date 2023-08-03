@@ -16,49 +16,42 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
     final controller = Provider.of<SearchBarController>(context);
     bool folded = controller.folded;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      width: !folded ? 35 : MediaQuery.of(context).size.width - 40,
-      // height: 30,
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: const Color(0xff5E5E5E).withOpacity(0.5),
       ),
-      child: Row(
-        children: [
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: folded
-                      ? const TextField(
-                          cursorColor: Colors.white,
-                          autofocus: true,
-                          decoration: InputDecoration(border: InputBorder.none),
-                        )
-                      : null)),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
-            child: Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                child: const Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: HeroIcon(
-                    HeroIcons.magnifyingGlass,
-                    style: HeroIconStyle.outline,
-                    color: Color(0xffB0B0B0),
-                  ),
-                ),
-                onTap: () {
-                  controller.fold();
-                },
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 400),
+        padding: EdgeInsets.only(left: folded ? MediaQuery.of(context).size.width-40 : 0),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: const Padding(
+              padding: EdgeInsets.all(5.0),
+              child: HeroIcon(
+                HeroIcons.magnifyingGlass,
+                style: HeroIconStyle.outline,
+                color: Color(0xffB0B0B0),
               ),
             ),
-          )
-        ],
+            onTap: () {
+              controller.fold();
+            },
+          ),
+        ),
       ),
     );
   }
 }
+// Container(
+//                 padding: const EdgeInsets.only(left: 16),
+//                 child: folded
+//                     ? const TextField(
+//                         cursorColor: Colors.white,
+//                         autofocus: true,
+//                         decoration: InputDecoration(border: InputBorder.none),
+//                       )
+//                     : null),
