@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage>
     _controller.forward();
 
     if (user != null) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         final BackgroundController controller =
             Provider.of<BackgroundController>(context, listen: false);
         controller.movePage(600);
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage>
                           });
 
                           if (user != null) {
-                            WidgetsBinding.instance?.addPostFrameCallback((_) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (controller.scrollController.hasClients) {
                                 controller.movePage(600);
                                 controller.changeColor(2);

@@ -3,17 +3,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
+import 'package:nts/component/new_nickname.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
-import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../provider/backgroundController.dart';
 
 class ProfileSettings extends StatefulWidget {
-  const ProfileSettings({Key? key}) : super(key: key);
+  final BackgroundController provider;
+  const ProfileSettings({Key? key, required this.provider}) : super(key: key);
 
   @override
   State<ProfileSettings> createState() => _ProfileSettingsState();
@@ -25,6 +25,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   @override
   Widget build(BuildContext context) {
+    // final controller = Provider.of<BackgroundController>(context);
+
     Widget mainSettings = Padding(
       padding: EdgeInsets.fromLTRB(
           MediaQuery.of(context).size.width * 0.045,
@@ -193,7 +195,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          Expanded(child: manageAccountView()),
+          Expanded(
+            child: manageAccountView(),
+          ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Padding(
             padding: EdgeInsets.symmetric(
@@ -221,319 +225,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           height: MediaQuery.of(context).size.height * 0.9,
           child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        "설정",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: MyThemeColors.myGreyscale.shade900,
-                        ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Row(children: [
-                          Expanded(
-                              child: Container(
-                                  margin: const EdgeInsets.only(left: 20),
-                                  child: const Text(
-                                    "닉네임 변경",
-                                    style: TextStyle(fontSize: 16),
-                                  ))),
-                          Container(
-                              margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                              child: Text(
-                                "하루",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: MyThemeColors.myGreyscale.shade500,
-                                ),
-                              )),
-                        ]),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Row(children: [
-                          Expanded(
-                              child: Container(
-                                  margin: const EdgeInsets.only(left: 20),
-                                  child: const Text(
-                                    "알림 설정",
-                                    style: TextStyle(fontSize: 16),
-                                  ))),
-                          Container(
-                            margin: const EdgeInsets.only(right: 15),
-                            child: CustomAnimatedToggleSwitch<bool>(
-                              current: positive,
-                              values: [false, true],
-                              dif: 0.0,
-                              indicatorSize: const Size.square(30.0),
-                              animationDuration:
-                                  const Duration(milliseconds: 200),
-                              animationCurve: Curves.linear,
-                              onChanged: (b) => setState(() => positive = b),
-                              iconBuilder: (context, local, global) {
-                                return const SizedBox();
-                              },
-                              defaultCursor: SystemMouseCursors.click,
-                              onTap: () => setState(() => positive = !positive),
-                              iconsTappable: false,
-                              wrapperBuilder: (context, global, child) {
-                                return Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Positioned(
-                                        left: 10.0,
-                                        right: 10.0,
-                                        height: 20.0,
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                              color: MyThemeColors
-                                                  .myGreyscale.shade50,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(50.0)),
-                                              border: Border.all(
-                                                width: 3.0,
-                                                color: MyThemeColors
-                                                    .myGreyscale.shade200,
-                                              )),
-                                        )),
-                                    child,
-                                  ],
-                                );
-                              },
-                              foregroundIndicatorBuilder: (context, global) {
-                                return SizedBox.fromSize(
-                                  size: global.indicatorSize,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: MyThemeColors.myGreyscale.shade200,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(50.0)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: MyThemeColors
-                                                .myGreyscale.shade200,
-                                            spreadRadius: 0.05,
-                                            blurRadius: 1.1,
-                                            offset: const Offset(0.0, 0.8))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ]),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                            color: MyThemeColors.secondaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "로그아웃",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "계정탈퇴",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: MyThemeColors.secondaryColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(children: [
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 20),
-                                child: const Text("이용약관",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
-                              ),
-                            ),
-                            HeroIcon(
-                              HeroIcons.chevronRight,
-                              color: MyThemeColors.myGreyscale.shade300,
-                            ),
-                          ]),
-                        ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(children: [
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 20),
-                                child: const Text("개인정보 처리방침",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
-                              ),
-                            ),
-                            HeroIcon(
-                              HeroIcons.chevronRight,
-                              color: MyThemeColors.myGreyscale.shade300,
-                            ),
-                          ]),
-                        ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(children: [
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 20),
-                                child: const Text("사업자 정보",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
-                              ),
-                            ),
-                            HeroIcon(
-                              HeroIcons.chevronRight,
-                              color: MyThemeColors.myGreyscale.shade300,
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               index == 1
                   ? mainSettings
                   : index == 2
@@ -989,7 +680,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               ]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            buildCustomContainer(
+            buildCustomButton(
+              onTap: () {
+                NewNickName(context);
+              },
               backgroundColor: Colors.white,
               inside: Row(children: [
                 Expanded(
@@ -1000,11 +694,17 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           style: TextStyle(fontSize: 16),
                         ))),
                 Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                     child: Text(
-                      "하루",
-                      style: TextStyle(fontSize: 16, color: Color(0xff868686)),
-                    )),
+                  "하루",
+                  style: TextStyle(fontSize: 16, color: Color(0xff868686)),
+                )),
+                HeroIcon(
+                  HeroIcons.chevronRight,
+                  color: Color(0xffBFBFBF),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.02,
+                )
               ]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -1013,17 +713,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Color(0xffFCE181),
               onTap: () {
                 print("click");
+                // controller.movePage(0);
 
-                print("controller get");
                 FirebaseAuth.instance.signOut();
-                print("signout");
-
+                widget.provider.movePage(0);
                 Navigator.pop(context);
-                print("pop");
-
-                final controller = Provider.of<BackgroundController>(context);
-                controller.movePage(0);
-                print("move");
               },
               inside: Center(
                 child: Text(
@@ -1037,7 +731,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white,
               onTap: () {
-                DeleteAccount(context);
+                DeleteAccount(context, widget.provider);
               },
               inside: Center(
                 child: Text(
