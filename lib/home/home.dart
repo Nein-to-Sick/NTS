@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 
@@ -25,10 +26,12 @@ class HomePage extends StatelessWidget {
                     size: 30,
                   ),
                   onTap: () {
-                    showDialog(
+                    showAnimatedDialog(
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) => const MailBox(),
+                        animationType: DialogTransitionType.slideFromTopFade
+
                     );
                   },
                 )),
@@ -61,11 +64,12 @@ class HomePage extends StatelessWidget {
                           ),
                         )),
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) => const Diary(),
-                      );
+                      showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => const Diary(),
+                          animationType:
+                              DialogTransitionType.slideFromBottomFade);
                     },
                   ),
                   const SizedBox(
@@ -84,11 +88,12 @@ class HomePage extends StatelessWidget {
                           ),
                         )),
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) => const Letter(),
-                      );
+                      showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => const Letter(),
+                          animationType:
+                              DialogTransitionType.slideFromBottomFade);
                     },
                   ),
                 ],

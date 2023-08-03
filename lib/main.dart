@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +6,7 @@ import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -68,14 +68,15 @@ class BackgroundState extends State<Background> {
         AnimatedBuilder(
           animation: scrollController,
           builder: (context, child) {
-            // AuthPage().checkAuthState();
-
             if (scrollController.offset == 0) {
               return const LoginPage();
             } else if (scrollController.offset == 600) {
               return const HomePage();
             } else if (scrollController.offset == 864) {
-              return const ProfilePage();
+              return ChangeNotifierProvider.value(
+                value: SearchBarController(),
+                child: ProfilePage(),
+              );
             } else {
               return const SizedBox.shrink();
             }

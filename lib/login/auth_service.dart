@@ -9,7 +9,6 @@ class AuthService {
     GoogleSignInAccount? gUser = await _googleSignIn.signIn();
 
     if (gUser == null) {
-      // Sign in flow canceled.
       return null;
     }
 
@@ -27,47 +26,37 @@ class AuthService {
 
     final userCollection = FirebaseFirestore.instance.collection("users");
 
-    // String? userId = FirebaseAuth.instance.currentUser?.uid;
-    // String? userEmail = FirebaseAuth.instance.currentUser?.email;
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
-    // final docRef = userCollection.doc(userId);
-    // DocumentSnapshot snapshot = await docRef.get();
+    final docRef = userCollection.doc(userId);
+    DocumentSnapshot snapshot = await docRef.get();
 
-    // if (snapshot.exists) {
-    //   print("google yes!");
-    // } else {
-    //   await docRef.set({
-    //     "nickname": "",
-    //     "gender": 1,
-    //     "age": 0,
-    //     "birthday": null,
-    //     "onBoardingIsDone": false,
-    //     "email": userEmail,
-    //     "created_at": FieldValue.serverTimestamp(),
-    //     "imageURL": FirebaseAuth.instance.currentUser?.photoURL,
-    //   });
-    // }
+    if (snapshot.exists) {
+    } else {
+      await docRef.set({
+        "nickname": "",
+        "nicknameMade": false,
+        "email": userEmail,
+        "created_at": FieldValue.serverTimestamp(),
+      });
+    }
 
-    // DateTime selectedDate =
-    //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    // String todayDate = selectedDate.toString().substring(0, 10);
+    DateTime selectedDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    String todayDate = selectedDate.toString().substring(0, 10);
 
-    // final dateDocRef = docRef.collection("date").doc(todayDate);
+    final dateDocRef = docRef.collection("mailBox").doc(todayDate);
 
-    // DocumentSnapshot snapshotDate = await dateDocRef.get();
+    DocumentSnapshot snapshotDate = await dateDocRef.get();
 
-    // if (snapshot.exists) {
-    //   print("true");
-    // } else {
-    //   await dateDocRef.set({
-    //     "mission": [],
-    //     "completed": [false, false, false],
-    //   });
-    // }
+    if (snapshot.exists) {
+    } else {
+      await dateDocRef.set({"content": "", "from": "", "time": selectedDate});
+    }
 
     //finally, lets sign in
 
-    print("GOOGLE SIGN IN COMPLETED");
-    return userCredential;
+    return FirebaseAuth.instance.currentUser;
   }
 }
