@@ -48,41 +48,55 @@ void myNicknameSheet(
               const SizedBox(
                 height: 35,
               ),
+              //  nickname textfield
               Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Container(
-                  height: 50,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: MyThemeColors.primaryColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                    child: TextField(
-                      autocorrect: false,
-                      controller: userNickNameController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "최대 12글자",
-                        hintStyle: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: MyThemeColors.myGreyscale.shade50,
-                          fontFamily: "SUIT",
+                padding: const EdgeInsets.only(left: 45, right: 45),
+                child: SizedBox(
+                  height: 55,
+                  child: TextField(
+                    controller: userNickNameController,
+                    keyboardType: TextInputType.multiline,
+                    autocorrect: false,
+                    //  enter(엔터) 키 이벤트 처리 with onSubmitted
+                    textInputAction: TextInputAction.go,
+                    onSubmitted: (value) {
+                      FocusScope.of(context).unfocus();
+                    },
+                    onTapOutside: (p) {
+                      FocusScope.of(context).unfocus();
+                    },
+
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                          left: 25, right: 25, top: 20, bottom: 20),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      fillColor: Theme.of(context).colorScheme.background,
+                      filled: true,
+                      hintText: '최대 12글자',
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                      ),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: IconButton(
+                          onPressed: () {
+                            userNickNameController.clear;
+                          },
+                          icon: const Icon(Icons.clear),
                         ),
                       ),
-
-                      //  enter(엔터) 키 이벤트 처리 with onSubmitted
-                      textInputAction: TextInputAction.go,
-                      onSubmitted: (value) {
-                        FocusScope.of(context).unfocus();
-                      },
-                      onTapOutside: (p) {
-                        FocusScope.of(context).unfocus();
-                      },
                     ),
                   ),
                 ),
