@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:provider/provider.dart';
 import '../provider/backgroundController.dart';
 
@@ -27,21 +28,25 @@ class NavigationToggle extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         controller.movePage(600);
                         controller.changeColor(2);
                       },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: page == 2 ? const Color(0xff016670) : Colors.white.withOpacity(0.5), // 수정
+                          color: page == 2
+                              ? MyThemeColors.primaryColor
+                              : Colors.white.withOpacity(0.5), // 수정
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: HeroIcon(
                             HeroIcons.home,
                             style: HeroIconStyle.solid,
-                            color: page == 2 ? Colors.white : const Color(0xff9B9B9B),
+                            color: page == 2
+                                ? Colors.white
+                                : MyThemeColors.myGreyscale.shade900,
                             size: 30,
                           ),
                         ),
@@ -51,21 +56,25 @@ class NavigationToggle extends StatelessWidget {
                       width: 16,
                     ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         controller.movePage(864);
                         controller.changeColor(3);
                       },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: page == 3 ? const Color(0xff016670) : Colors.white.withOpacity(0.5),
+                          color: page == 3
+                              ? MyThemeColors.primaryColor
+                              : Colors.white.withOpacity(0.5),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: HeroIcon(
                             HeroIcons.user,
                             style: HeroIconStyle.solid,
-                            color: page == 3 ? Colors.white : const Color(0xff9B9B9B), // 수정 grayscale 400
+                            color: page == 3
+                                ? Colors.white
+                                : MyThemeColors.myGreyscale.shade400,
                             size: 30,
                           ),
                         ),
@@ -75,15 +84,27 @@ class NavigationToggle extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 5,),
-            page == 2 ? const Padding(
-              padding: EdgeInsets.only(right: 80.0),
-              child: Text("홈", style: TextStyle(color: Colors.white, fontSize: 13),),
-            ) : Container(),
-            page == 3 ? const Padding(
-              padding: EdgeInsets.only(left: 75.0),
-              child: Text("프로필", style: TextStyle(color: Colors.white, fontSize: 13),),
-            ) : Container()
+            const SizedBox(
+              height: 5,
+            ),
+            page == 2
+                ? const Padding(
+                    padding: EdgeInsets.only(right: 80.0),
+                    child: Text(
+                      "홈",
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  )
+                : Container(),
+            page == 3
+                ? const Padding(
+                    padding: EdgeInsets.only(left: 75.0),
+                    child: Text(
+                      "프로필",
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  )
+                : Container()
           ],
         ),
       ),
