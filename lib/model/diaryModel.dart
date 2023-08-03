@@ -3,13 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Diary {
   final String title;
   final String content;
-  final List<dynamic> keyword;
+  final List<dynamic> situation;
+  final List<dynamic> emotion;
   final String date;
 
   Diary({
     required this.title,
     required this.content,
-    required this.keyword,
+    required this.situation,
+    required this.emotion,
     required this.date,
   });
 
@@ -17,7 +19,8 @@ class Diary {
     Diary diary = Diary(
       title: snap['title'],
       content: snap['content'],
-      keyword: snap['keyword'],
+      situation: snap['situation'],
+      emotion: snap['emotion'],
       date: snap['date'],
     );
     return diary;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +22,7 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
       // height: 30,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: MyThemeColors.myGreyscale.shade700.withOpacity(0.5),
+        color: const Color(0xff5E5E5E).withOpacity(0.5),
       ),
       child: Row(
         children: [
@@ -32,10 +31,10 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
                   padding: const EdgeInsets.only(left: 16),
                   child: folded
                       ? const TextField(
-                          cursorColor: Colors.white,
-                          autofocus: true,
-                          decoration: InputDecoration(border: InputBorder.none),
-                        )
+                    cursorColor: Colors.white,
+                    autofocus: true,
+                    decoration: InputDecoration(border: InputBorder.none),
+                  )
                       : null)),
           AnimatedContainer(
             duration: const Duration(milliseconds: 400),
@@ -44,12 +43,12 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
               child: InkWell(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(5.0),
                   child: HeroIcon(
                     HeroIcons.magnifyingGlass,
                     style: HeroIconStyle.outline,
-                    color: MyThemeColors.myGreyscale.shade300,
+                    color: Color(0xffB0B0B0),
                   ),
                 ),
                 onTap: () {

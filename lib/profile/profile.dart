@@ -19,7 +19,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
-
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
@@ -48,7 +47,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (BuildContext context) => const ProfileSettings(),
+                      builder: (BuildContext context) {
+                        return ProfileSettings(provider: controller);
+                      },
                     );
                   },
                   icon: const Icon(
@@ -68,24 +69,24 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 30,
                 ),
-                const AnimatedSearchBar(),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    !folded ? Row(
-                      children: [
-                        FilterButton(title: "날짜", function: () {}),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        FilterButton(title: "감정", function: () {}),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        FilterButton(title: "상황", function: () {}),
-                      ],
-                    ) : Container(),
+                    !folded
+                        ? Row(
+                            children: [
+                              FilterButton(title: "날짜", function: () {}),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              FilterButton(title: "감정", function: () {}),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              FilterButton(title: "상황", function: () {}),
+                            ],
+                          )
+                        : Container(),
                     const AnimatedSearchBar()
                   ],
                 ),

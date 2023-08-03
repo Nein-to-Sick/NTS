@@ -12,7 +12,6 @@ import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
 import 'home/home.dart';
 
@@ -33,6 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: "SUITE"),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: ChangeNotifierProvider.value(
@@ -70,6 +70,7 @@ class BackgroundState extends State<Background> {
             ),
           ],
         ),
+
         MultiProvider(
           providers: [
             ChangeNotifierProvider(
@@ -110,6 +111,23 @@ class BackgroundState extends State<Background> {
               }
             },
           ),
+        const FireFly(),
+        AnimatedBuilder(
+          animation: scrollController,
+          builder: (context, child) {
+            if (scrollController.offset == 0) {
+              return const LoginPage();
+            } else if (scrollController.offset == 600) {
+              return const HomePage();
+            } else if (scrollController.offset == 864) {
+              return ChangeNotifierProvider.value(
+                value: SearchBarController(),
+                child: const ProfilePage(),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
         AnimatedBuilder(
           animation: scrollController,
@@ -121,7 +139,6 @@ class BackgroundState extends State<Background> {
             }
           },
         ),
-        const FireFly(),
       ],
     );
   }
