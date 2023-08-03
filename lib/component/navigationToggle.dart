@@ -57,7 +57,7 @@ class NavigationToggle extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        controller.movePage(855);
+                        controller.movePage(864);
                         controller.changeColor(3);
                       },
                       child: Container(
@@ -92,7 +92,10 @@ class NavigationToggle extends StatelessWidget {
                     padding: EdgeInsets.only(right: 80.0),
                     child: Text(
                       "홈",
-                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700),
                     ),
                   )
                 : Container(),
@@ -101,7 +104,10 @@ class NavigationToggle extends StatelessWidget {
                     padding: EdgeInsets.only(left: 75.0),
                     child: Text(
                       "프로필",
-                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700),
                     ),
                   )
                 : Container()

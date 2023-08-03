@@ -94,14 +94,14 @@ void myNicknameSheet(
                           left: 15, right: 15, top: 10, bottom: 10),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
+                          color: MyThemeColors.myGreyscale.shade600,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 2,
+                        borderSide: const BorderSide(
+                          color: MyThemeColors.primaryColor,
+                          width: 1.5,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
