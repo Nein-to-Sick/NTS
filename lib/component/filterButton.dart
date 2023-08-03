@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nts/Theme/theme_colors.dart';
 
 class FilterButton extends StatelessWidget {
   const FilterButton({Key? key, required this.title, required this.function})
@@ -15,8 +16,9 @@ class FilterButton extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: const Color(0xff5E5E5E).withOpacity(0.5)), // 수정
+          borderRadius: BorderRadius.circular(10),
+          color: MyThemeColors.myGreyscale.shade700.withOpacity(0.5),
+        ), // 수정
         child: Padding(
           padding: const EdgeInsets.fromLTRB(11, 5.0, 11, 5),
           child: Row(
@@ -24,11 +26,14 @@ class FilterButton extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(color: Color(0xffB0B0B0), fontSize: 13),
+                style: TextStyle(
+                  color: MyThemeColors.myGreyscale.shade300,
+                  fontSize: 13,
+                ),
               ), // 수정
-              const Icon(
+              Icon(
                 Icons.keyboard_arrow_down,
-                color: Color(0xffB0B0B0),
+                color: MyThemeColors.myGreyscale.shade300,
               )
             ],
           ),
