@@ -1,14 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:nts/component/nickName_Sheet.dart';
 import 'package:nts/home/mailBox.dart';
+import 'package:nts/model/user_info_model.dart';
+import 'package:nts/while_loading_page.dart';
+import 'package:provider/provider.dart';
 
 import 'diary.dart';
 import 'letter.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
@@ -32,10 +43,10 @@ class HomePage extends StatelessWidget {
                         barrierDismissible: false,
                         builder: (BuildContext context) => const MailBox(),
                         animationType: DialogTransitionType.slideFromTopFade);
+
                   },
-                )),
-            const SizedBox(
-              height: 130,
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(left: 13.0),
@@ -109,6 +120,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

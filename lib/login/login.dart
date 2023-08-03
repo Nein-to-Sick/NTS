@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage>
                             borderRadius: BorderRadius.circular(18.0),
                           ))),
                       onPressed: () {
-                        AuthService().signInWithGoogle().then((value) {
+                        AuthService().signInWithGoogle().then((value) async {
                           setState(() {
                             user = value;
                           });

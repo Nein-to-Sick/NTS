@@ -36,7 +36,6 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
   late AnimationController _blurController6;
   late Animation<double> _blurAnimation6;
 
-
   @override
   void initState() {
     super.initState();
@@ -120,42 +119,47 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
     _controller5.repeat();
     _controller6.repeat();
 
-
     _blurController1 = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
-    _blurAnimation1 = Tween<double>(begin: 3.0, end: 5.0).animate(_blurController1);
+    _blurAnimation1 =
+        Tween<double>(begin: 3.0, end: 5.0).animate(_blurController1);
 
     _blurController2 = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     )..repeat(reverse: true);
-    _blurAnimation2 = Tween<double>(begin: 3.0, end: 6.0).animate(_blurController2);
+    _blurAnimation2 =
+        Tween<double>(begin: 3.0, end: 6.0).animate(_blurController2);
 
     _blurController3 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat(reverse: true);
-    _blurAnimation3 = Tween<double>(begin: 2.0, end: 4.0).animate(_blurController3);
+    _blurAnimation3 =
+        Tween<double>(begin: 2.0, end: 4.0).animate(_blurController3);
 
     _blurController4 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat(reverse: true);
-    _blurAnimation4 = Tween<double>(begin: 3.0, end: 6.0).animate(_blurController4);
+    _blurAnimation4 =
+        Tween<double>(begin: 3.0, end: 6.0).animate(_blurController4);
 
     _blurController5 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     )..repeat(reverse: true);
-    _blurAnimation5 = Tween<double>(begin: 3.0, end: 6.0).animate(_blurController5);
+    _blurAnimation5 =
+        Tween<double>(begin: 3.0, end: 6.0).animate(_blurController5);
 
     _blurController6 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
-    _blurAnimation6 = Tween<double>(begin: 2.5, end: 6.0).animate(_blurController6);
+    _blurAnimation6 =
+        Tween<double>(begin: 2.5, end: 6.0).animate(_blurController6);
   }
 
   @override
@@ -167,12 +171,15 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
             animation: _animation1,
             builder: (context, child) {
               double value = _animation1.value;
-              double newX = MediaQuery.of(context).size.width / 2 - 50 + 100 * sin(value * pi);
+              double newX = MediaQuery.of(context).size.width / 2 -
+                  50 +
+                  100 * sin(value * pi);
               double newY = 10 * sin((value * 2) * pi);
               return Transform.translate(
                 offset: Offset(newX, newY),
                 child: CustomPaint(
-                  foregroundPainter: CircleBlurPainter(circleWidth: 7, blurSigma: _blurAnimation1.value),
+                  foregroundPainter: CircleBlurPainter(
+                      circleWidth: 7, blurSigma: _blurAnimation1.value),
                 ),
               );
             },
@@ -182,11 +189,13 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
             builder: (context, child) {
               double value = _animation2.value;
               double newX = 20 + 100 * sin(value * pi);
-              double newY = MediaQuery.of(context).size.height * 0.17 + 100 * sin((value * 2) * pi);
+              double newY = MediaQuery.of(context).size.height * 0.17 +
+                  100 * sin((value * 2) * pi);
               return Transform.translate(
                 offset: Offset(newX, newY),
                 child: CustomPaint(
-                  foregroundPainter: CircleBlurPainter(circleWidth: 10, blurSigma: _blurAnimation2.value),
+                  foregroundPainter: CircleBlurPainter(
+                      circleWidth: 10, blurSigma: _blurAnimation2.value),
                 ),
               );
             },
@@ -195,12 +204,16 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
             animation: _animation3,
             builder: (context, child) {
               double value = _animation3.value;
-              double newX = MediaQuery.of(context).size.width - 40 + 30 * sin((value * 2) * pi);
-              double newY = MediaQuery.of(context).size.height * 0.23 + 10 * sin((value * 2) * pi);
+              double newX = MediaQuery.of(context).size.width -
+                  40 +
+                  30 * sin((value * 2) * pi);
+              double newY = MediaQuery.of(context).size.height * 0.23 +
+                  10 * sin((value * 2) * pi);
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
-                    foregroundPainter: CircleBlurPainter(circleWidth: 6, blurSigma: _blurAnimation3.value),
+                    foregroundPainter: CircleBlurPainter(
+                        circleWidth: 6, blurSigma: _blurAnimation3.value),
                   ));
             },
           ),
@@ -208,12 +221,15 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
             animation: _animation4,
             builder: (context, child) {
               double value = _animation4.value;
-              double newX = MediaQuery.of(context).size.width * 0.6 + 150 * sin(value * pi);
-              double newY = MediaQuery.of(context).size.height * 0.5 + 80 * sin((value) * pi);
+              double newX = MediaQuery.of(context).size.width * 0.6 +
+                  150 * sin(value * pi);
+              double newY = MediaQuery.of(context).size.height * 0.5 +
+                  80 * sin((value) * pi);
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
-                    foregroundPainter: CircleBlurPainter(circleWidth: 15, blurSigma: _blurAnimation4.value),
+                    foregroundPainter: CircleBlurPainter(
+                        circleWidth: 15, blurSigma: _blurAnimation4.value),
                   ));
             },
           ),
@@ -221,12 +237,14 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
             animation: _animation5,
             builder: (context, child) {
               double value = _animation5.value;
-              double newX = MediaQuery.of(context).size.width * 0.2 + 50 * sin((value) * pi);
+              double newX = MediaQuery.of(context).size.width * 0.2 +
+                  50 * sin((value) * pi);
               double newY = MediaQuery.of(context).size.height * 0.8;
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
-                    foregroundPainter: CircleBlurPainter(circleWidth: 14, blurSigma: _blurAnimation5.value),
+                    foregroundPainter: CircleBlurPainter(
+                        circleWidth: 14, blurSigma: _blurAnimation5.value),
                   ));
             },
           ),
@@ -238,7 +256,8 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
-                    foregroundPainter: CircleBlurPainter(circleWidth: 11, blurSigma: _blurAnimation6.value),
+                    foregroundPainter: CircleBlurPainter(
+                        circleWidth: 11, blurSigma: _blurAnimation6.value),
                   ));
             },
           ),
@@ -255,7 +274,12 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
     _controller4.dispose();
     _controller5.dispose();
     _controller6.dispose();
-
+    _blurController1.dispose();
+    _blurController2.dispose();
+    _blurController3.dispose();
+    _blurController4.dispose();
+    _blurController5.dispose();
+    _blurController6.dispose();
 
     super.dispose();
   }
