@@ -92,7 +92,7 @@ class NavigationToggle extends StatelessWidget {
                     padding: EdgeInsets.only(right: 80.0),
                     child: Text(
                       "홈",
-                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
                     ),
                   )
                 : Container(),
@@ -101,7 +101,7 @@ class NavigationToggle extends StatelessWidget {
                     padding: EdgeInsets.only(left: 75.0),
                     child: Text(
                       "프로필",
-                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
                     ),
                   )
                 : Container()
