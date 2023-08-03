@@ -21,8 +21,8 @@ class AuthService {
       idToken: gAuth.idToken,
     );
 
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    // final userCredential =
+    await FirebaseAuth.instance.signInWithCredential(credential);
 
     final userCollection = FirebaseFirestore.instance.collection("users");
 
@@ -48,7 +48,7 @@ class AuthService {
 
     final dateDocRef = docRef.collection("mailBox").doc(todayDate);
 
-    DocumentSnapshot snapshotDate = await dateDocRef.get();
+    // DocumentSnapshot snapshotDate = await dateDocRef.get();
 
     if (snapshot.exists) {
     } else {

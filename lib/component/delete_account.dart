@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
@@ -15,7 +14,7 @@ void DeleteAccount(BuildContext context, BackgroundController provider) {
           FirebaseAuth.instance.currentUser!.providerData.first;
       // currentUser?.providerData.first;
 
-      if (AppleAuthProvider().providerId == providerData!.providerId) {
+      if (AppleAuthProvider().providerId == providerData.providerId) {
         await FirebaseAuth.instance.currentUser!
             .reauthenticateWithProvider(AppleAuthProvider());
       } else if (GoogleAuthProvider().providerId == providerData.providerId) {
@@ -115,14 +114,14 @@ void DeleteAccount(BuildContext context, BackgroundController provider) {
                   children: [
                     buildCustomButton(
                         backgroundColor: MyThemeColors.myGreyscale[200]!,
-                        textColor: MyThemeColors.primaryColor!,
+                        textColor: MyThemeColors.primaryColor,
                         word: "탈퇴하기",
                         onTap: () async {
                           _reauthenticateAndDelete();
                         }),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.025),
                     buildCustomButton(
-                        backgroundColor: MyThemeColors.primaryColor!,
+                        backgroundColor: MyThemeColors.primaryColor,
                         textColor: MyThemeColors.myGreyscale[0]!,
                         word: "취소",
                         onTap: () {

@@ -3,14 +3,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/new_nickname.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
-import 'package:nts/profile/profile.dart';
-import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../provider/backgroundController.dart';
 
