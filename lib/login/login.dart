@@ -42,7 +42,8 @@ class _LoginPageState extends State<LoginPage>
 
     if (user != null) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        final BackgroundController controller = Provider.of<BackgroundController>(context, listen: false);
+        final BackgroundController controller =
+            Provider.of<BackgroundController>(context, listen: false);
         controller.movePage(600);
         controller.changeColor(2);
       });
@@ -68,6 +69,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -133,8 +135,8 @@ class _LoginPageState extends State<LoginPage>
                       style: ButtonStyle(
                           overlayColor: MaterialStateProperty.all(
                               const Color.fromARGB(14, 255, 255, 255)),
-                          backgroundColor:
-                              MaterialStateProperty.all(const Color(0xff1A5DCC)),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff1A5DCC)),
                           shadowColor:
                               MaterialStateProperty.all(Colors.transparent),
                           shape:
@@ -147,6 +149,7 @@ class _LoginPageState extends State<LoginPage>
                           setState(() {
                             user = value;
                           });
+
                           if (user != null) {
                             WidgetsBinding.instance?.addPostFrameCallback((_) {
                               if (controller.scrollController.hasClients) {
