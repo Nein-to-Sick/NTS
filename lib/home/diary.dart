@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/model/preset.dart';
 
 import '../component/button.dart';
@@ -18,14 +19,13 @@ class _DiaryState extends State<Diary> {
   late List<List<bool>> isSelected2 = [];
   late List<List<bool>> isSelected3 = [];
 
-
   @override
   void initState() {
     super.initState();
     isSelected2 = List.generate(Preset().situation.length,
         (i) => List.generate(Preset().situation[i].length, (j) => false));
     isSelected3 = List.generate(Preset().emotion.length,
-            (i) => List.generate(Preset().emotion[i].length, (j) => false));
+        (i) => List.generate(Preset().emotion[i].length, (j) => false));
   }
 
   @override
@@ -141,18 +141,27 @@ class _DiaryState extends State<Diary> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: isSelected2[index1][index2]
-                                            ? const Color(0xff5E5E5E) // 수정
+                                            ? MyThemeColors
+                                                .myGreyscale.shade700 // 수정
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Color(0xff5E5E5E)), // 수정
+                                        border: Border.all(
+                                          color: MyThemeColors
+                                              .myGreyscale.shade700,
+                                        ), // 수정
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             12, 5, 12, 5),
                                         child: Text(
                                           Preset().situation[index1][index2],
-                                          style: TextStyle(fontSize: 16, color: isSelected2[index1][index2]
-                                              ? Colors.white: Color(0xff393939)),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: isSelected2[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade900,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -173,7 +182,8 @@ class _DiaryState extends State<Diary> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xffC6C6C6), // 수정
+                                    color: MyThemeColors
+                                        .myGreyscale.shade200, // 수정
                                     borderRadius: BorderRadius.circular(10)),
                                 child: const Padding(
                                   padding: EdgeInsets.all(13.0),
@@ -181,7 +191,7 @@ class _DiaryState extends State<Diary> {
                                     "이전",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Color(0xff016670),
+                                        color: MyThemeColors.primaryColor,
                                         fontSize: 16), //수정
                                   ),
                                 ),
@@ -253,7 +263,7 @@ class _DiaryState extends State<Diary> {
                                   onTap: () {
                                     setState(() {
                                       isSelected3[index1][index2] =
-                                      !isSelected3[index1][index2];
+                                          !isSelected3[index1][index2];
                                     });
                                   },
                                   child: Padding(
@@ -261,18 +271,25 @@ class _DiaryState extends State<Diary> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: isSelected3[index1][index2]
-                                            ? const Color(0xff5E5E5E) // 수정
+                                            ? MyThemeColors.myGreyscale.shade700
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Color(0xff5E5E5E)), // 수정
+                                        border: Border.all(
+                                          color: MyThemeColors
+                                              .myGreyscale.shade700,
+                                        ), // 수정
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             12, 5, 12, 5),
                                         child: Text(
                                           Preset().emotion[index1][index2],
-                                          style: TextStyle(fontSize: 16, color: isSelected3[index1][index2]
-                                              ? Colors.white: Color(0xff393939)),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: isSelected3[index1][index2]
+                                                  ? Colors.white
+                                                  : MyThemeColors
+                                                      .myGreyscale.shade900),
                                         ),
                                       ),
                                     ),
@@ -293,7 +310,7 @@ class _DiaryState extends State<Diary> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xffC6C6C6), // 수정
+                                    color: MyThemeColors.myGreyscale.shade200,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: const Padding(
                                   padding: EdgeInsets.all(13.0),
@@ -301,7 +318,7 @@ class _DiaryState extends State<Diary> {
                                     "이전",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Color(0xff016670),
+                                        color: MyThemeColors.primaryColor,
                                         fontSize: 16), //수정
                                   ),
                                 ),
@@ -355,10 +372,8 @@ class _DiaryState extends State<Diary> {
                     maxSteps: 3,
                     progressType: LinearProgressBar.progressTypeDots,
                     currentStep: index - 1,
-                    progressColor: const Color(0xff016670),
-                    // 수정
-                    backgroundColor: const Color(0xffDDDDDD),
-                    // 수정
+                    progressColor: MyThemeColors.primaryColor,
+                    backgroundColor: MyThemeColors.myGreyscale.shade100,
                     dotsSpacing: const EdgeInsets.only(right: 8),
                   ),
                 ),

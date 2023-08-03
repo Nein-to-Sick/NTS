@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:nts/Theme/theme_colors.dart';
 
 import '../component/button.dart';
 import '../model/preset.dart';
@@ -64,12 +65,15 @@ class _LetterState extends State<Letter> {
                         width: 84,
                         height: 85,
                         decoration: BoxDecoration(
-                            color: isSelfSelected
-                                ? const Color(0xff5E5E5E)
-                                : Colors.white, // 수정
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color(0xff5E5E5E), width: 1.3)),
+                          color: isSelfSelected
+                              ? MyThemeColors.myGreyscale.shade700
+                              : Colors.white, // 수정
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: MyThemeColors.myGreyscale.shade700,
+                            width: 1.3,
+                          ),
+                        ),
                         // 수정
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +83,7 @@ class _LetterState extends State<Letter> {
                               style: HeroIconStyle.solid,
                               color: isSelfSelected
                                   ? Colors.white
-                                  : const Color(0xff393939), // 수정
+                                  : MyThemeColors.myGreyscale.shade900,
                               size: 25,
                             ),
                             const SizedBox(
@@ -88,10 +92,11 @@ class _LetterState extends State<Letter> {
                             Text(
                               "나",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: isSelfSelected
-                                      ? Colors.white
-                                      : const Color(0xff393939)),
+                                fontSize: 16,
+                                color: isSelfSelected
+                                    ? Colors.white
+                                    : MyThemeColors.myGreyscale.shade900,
+                              ),
                             )
                           ],
                         ),
@@ -111,12 +116,15 @@ class _LetterState extends State<Letter> {
                         width: 84,
                         height: 85,
                         decoration: BoxDecoration(
-                            color: isSomeoneSelected
-                                ? const Color(0xff5E5E5E)
-                                : Colors.white, // 수정
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color(0xff5E5E5E), width: 1.3)),
+                          color: isSomeoneSelected
+                              ? MyThemeColors.myGreyscale.shade700
+                              : Colors.white, // 수정
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: MyThemeColors.myGreyscale.shade700,
+                            width: 1.3,
+                          ),
+                        ),
                         // 수정
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +134,7 @@ class _LetterState extends State<Letter> {
                               style: HeroIconStyle.solid,
                               color: isSomeoneSelected
                                   ? Colors.white
-                                  : const Color(0xff393939), // 수정
+                                  : MyThemeColors.myGreyscale.shade900,
                               size: 25,
                             ),
                             const SizedBox(
@@ -135,10 +143,11 @@ class _LetterState extends State<Letter> {
                             Text(
                               "누군가",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: isSomeoneSelected
-                                      ? Colors.white
-                                      : const Color(0xff393939)),
+                                fontSize: 16,
+                                color: isSomeoneSelected
+                                    ? Colors.white
+                                    : MyThemeColors.myGreyscale.shade900,
+                              ),
                             )
                           ],
                         ),
@@ -210,11 +219,13 @@ class _LetterState extends State<Letter> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: isSelected2[index1][index2]
-                                            ? const Color(0xff5E5E5E) // 수정
+                                            ? MyThemeColors.myGreyscale.shade700
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Color(0xff5E5E5E)), // 수정
+                                          color: MyThemeColors
+                                              .myGreyscale.shade700,
+                                        ), // 수정
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -222,10 +233,12 @@ class _LetterState extends State<Letter> {
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              color: isSelected2[index1][index2]
-                                                  ? Colors.white
-                                                  : Color(0xff393939)),
+                                            fontSize: 16,
+                                            color: isSelected2[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade900,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -246,7 +259,7 @@ class _LetterState extends State<Letter> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xffC6C6C6), // 수정
+                                    color: MyThemeColors.myGreyscale.shade200,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: const Padding(
                                   padding: EdgeInsets.all(13.0),
@@ -254,7 +267,7 @@ class _LetterState extends State<Letter> {
                                     "이전",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Color(0xff016670),
+                                        color: MyThemeColors.primaryColor,
                                         fontSize: 16), //수정
                                   ),
                                 ),
@@ -334,11 +347,13 @@ class _LetterState extends State<Letter> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: isSelected3[index1][index2]
-                                            ? const Color(0xff5E5E5E) // 수정
+                                            ? MyThemeColors.myGreyscale.shade700
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Color(0xff5E5E5E)), // 수정
+                                          color: MyThemeColors
+                                              .myGreyscale.shade700,
+                                        ), // 수정
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -346,10 +361,12 @@ class _LetterState extends State<Letter> {
                                         child: Text(
                                           Preset().emotion[index1][index2],
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              color: isSelected3[index1][index2]
-                                                  ? Colors.white
-                                                  : Color(0xff393939)),
+                                            fontSize: 16,
+                                            color: isSelected3[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade900,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -370,7 +387,7 @@ class _LetterState extends State<Letter> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xffC6C6C6), // 수정
+                                    color: MyThemeColors.myGreyscale.shade200,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: const Padding(
                                   padding: EdgeInsets.all(13.0),
@@ -378,7 +395,7 @@ class _LetterState extends State<Letter> {
                                     "이전",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Color(0xff016670),
+                                        color: MyThemeColors.primaryColor,
                                         fontSize: 16), //수정
                                   ),
                                 ),
@@ -499,10 +516,8 @@ class _LetterState extends State<Letter> {
                     maxSteps: 4,
                     progressType: LinearProgressBar.progressTypeDots,
                     currentStep: index - 1,
-                    progressColor: const Color(0xff016670),
-                    // 수정
-                    backgroundColor: const Color(0xffDDDDDD),
-                    // 수정
+                    progressColor: MyThemeColors.primaryColor,
+                    backgroundColor: MyThemeColors.myGreyscale.shade100,
                     dotsSpacing: const EdgeInsets.only(right: 8),
                   ),
                 ),

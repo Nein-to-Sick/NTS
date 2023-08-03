@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/model/letterModel.dart';
 
 import '../component/button.dart';
@@ -49,7 +50,6 @@ class _MailBoxState extends State<MailBox> {
                     time = letter.time;
                     from = letter.from;
                     content = letter.content;
-
                   });
                 },
                 child: Card(
@@ -98,7 +98,9 @@ class _MailBoxState extends State<MailBox> {
     );
     Widget second = Column(
       children: [
-        const SizedBox(height: 30,),
+        const SizedBox(
+          height: 30,
+        ),
         Expanded(
           child: Card(
             elevation: 5,
@@ -137,12 +139,14 @@ class _MailBoxState extends State<MailBox> {
             ),
           ),
         ),
-        const SizedBox(height: 20,),
+        const SizedBox(
+          height: 20,
+        ),
         GestureDetector(
             child: Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: const Color(0xffFCE181), // 수정
+                  color: MyThemeColors.secondaryColor,
                   borderRadius: BorderRadius.circular(10)),
               child: const Padding(
                 padding: EdgeInsets.all(13.0),
@@ -154,8 +158,9 @@ class _MailBoxState extends State<MailBox> {
               ),
             ),
             onTap: () {}),
-        const SizedBox(height: 15,),
-
+        const SizedBox(
+          height: 15,
+        ),
       ],
     );
 
