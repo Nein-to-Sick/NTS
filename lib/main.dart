@@ -99,7 +99,7 @@ class BackgroundState extends State<Background> {
                       return Container();
                     }
                   });
-            } else if (scrollController.offset == 864) {
+            } else if (scrollController.offset == 855) {
               return ChangeNotifierProvider.value(
                 value: SearchBarController(),
                 child: const ProfilePage(),
@@ -111,23 +111,6 @@ class BackgroundState extends State<Background> {
         ),
       ),
       const FireFly(),
-      AnimatedBuilder(
-        animation: scrollController,
-        builder: (context, child) {
-          if (scrollController.offset == 0) {
-            return const LoginPage();
-          } else if (scrollController.offset == 600) {
-            return const HomePage();
-          } else if (scrollController.offset == 864) {
-            return ChangeNotifierProvider.value(
-              value: SearchBarController(),
-              child: const ProfilePage(),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ),
       AnimatedBuilder(
         animation: scrollController,
         builder: (context, child) {
