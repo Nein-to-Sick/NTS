@@ -34,16 +34,22 @@ class _DiaryState extends State<Diary> {
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "일기 쓰기",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "나의 상황과 감정에 대해 자세히 말해주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(
             height: 15,
@@ -63,9 +69,10 @@ class _DiaryState extends State<Diary> {
                         child: TextField(
                           controller: textEditingController,
                           style: const TextStyle(fontSize: 16),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintStyle: TextStyle(fontSize: 16),
+                              hintStyle:
+                                  TextStyle(fontSize: 16, fontFamily: "Dodam", color: MyThemeColors.myGreyscale[300]),
                               hintMaxLines: 7,
                               hintText:
                                   "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
@@ -97,16 +104,22 @@ class _DiaryState extends State<Diary> {
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "어떤 상황인가요?",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "현재 상황과 관련된 키워드를 모두 골라주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -156,12 +169,12 @@ class _DiaryState extends State<Diary> {
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
-                                            fontSize: 16,
-                                            color: isSelected2[index1][index2]
-                                                ? Colors.white
-                                                : MyThemeColors
-                                                    .myGreyscale.shade900,
-                                          ),
+                                              fontSize: 16,
+                                              color: isSelected2[index1][index2]
+                                                  ? Colors.white
+                                                  : MyThemeColors
+                                                      .myGreyscale.shade900,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -192,7 +205,8 @@ class _DiaryState extends State<Diary> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: MyThemeColors.primaryColor,
-                                        fontSize: 16), //수정
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700), //수정
                                   ),
                                 ),
                               ),
@@ -227,16 +241,22 @@ class _DiaryState extends State<Diary> {
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "어떤 감정인가요?",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "현재 감정과 관련된 키워드를 모두 골라주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -289,7 +309,8 @@ class _DiaryState extends State<Diary> {
                                               color: isSelected3[index1][index2]
                                                   ? Colors.white
                                                   : MyThemeColors
-                                                      .myGreyscale.shade900),
+                                                      .myGreyscale.shade900,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ),
                                     ),
@@ -319,7 +340,8 @@ class _DiaryState extends State<Diary> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: MyThemeColors.primaryColor,
-                                        fontSize: 16), //수정
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700), //수정
                                   ),
                                 ),
                               ),

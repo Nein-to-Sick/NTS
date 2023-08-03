@@ -68,11 +68,17 @@ class _MailBoxState extends State<MailBox> {
                             children: [
                               Text(
                                 letter.time,
-                                style: const TextStyle(fontSize: 13),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: MyThemeColors.myGreyscale[700],
+                                    fontFamily: "Dodam"),
                               ),
                               Text(
-                                "form.${letter.from}",
-                                style: const TextStyle(fontSize: 13),
+                                "from.${letter.from}",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "Dodam",
+                                    color: MyThemeColors.myGreyscale[100]),
                               )
                             ],
                           ),
@@ -83,7 +89,10 @@ class _MailBoxState extends State<MailBox> {
                             letter.content,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 16),
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: MyThemeColors.myGreyscale[800],
+                                fontFamily: "Dodam"),
                           ),
                         ],
                       ),
@@ -111,28 +120,42 @@ class _MailBoxState extends State<MailBox> {
               padding: const EdgeInsets.all(18.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
-                child: Column(
+                child: Stack(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
                       children: [
-                        Text(
-                          time,
-                          style: const TextStyle(fontSize: 13),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              time,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: MyThemeColors.myGreyscale[700],
+                                  fontFamily: "Dodam"),
+                            ),
+                            Text(
+                              "form.$from",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: MyThemeColors.myGreyscale[100],
+                                  fontFamily: "Dodam"),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
                         ),
                         Text(
-                          "form.$from",
-                          style: const TextStyle(fontSize: 13),
-                        )
+                          content,
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: MyThemeColors.myGreyscale[800],
+                              fontFamily: "Dodam"),
+                        ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      content,
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                    Align(alignment: Alignment.bottomRight,child: HeroIcon(HeroIcons.heart, style: HeroIconStyle.outline, color: MyThemeColors.myGreyscale[700],))
                   ],
                 ),
               ),
@@ -140,27 +163,16 @@ class _MailBoxState extends State<MailBox> {
           ),
         ),
         const SizedBox(
-          height: 20,
-        ),
-        GestureDetector(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: MyThemeColors.secondaryColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: const Padding(
-                padding: EdgeInsets.all(13.0),
-                child: Text(
-                  "감사하기",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ),
-            onTap: () {}),
-        const SizedBox(
           height: 15,
         ),
+        Button(
+          function: () {
+            setState(() {
+              idx = 1;
+            });
+          },
+          title: '이전',
+        )
       ],
     );
 
@@ -180,14 +192,22 @@ class _MailBoxState extends State<MailBox> {
                 child: Center(
                   child: Column(
                     children: [
-                      const Text("편지함"),
+                      Text(
+                        "편지함",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: MyThemeColors.myGreyscale[900]),
+                      ),
                       idx == 1 ? first : Expanded(child: second),
-                      Button(
-                        function: () {
-                          Navigator.pop(context);
-                        },
-                        title: '닫기',
-                      )
+                      idx != 2
+                          ? Button(
+                              function: () {
+                                Navigator.pop(context);
+                              },
+                              title: '닫기',
+                            )
+                          : Container()
                     ],
                   ),
                 ),

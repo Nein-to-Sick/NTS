@@ -44,10 +44,10 @@ class HomePage extends StatelessWidget {
                 children: [
                   const Text(
                     "안녕하세요 OO님,",
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
                   ),
                   const Text("오늘 하루 어떠셨나요?",
-                      style: TextStyle(fontSize: 25, color: Colors.white)),
+                      style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: "Dodam")),
                   const SizedBox(
                     height: 30,
                   ),
@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
                           padding: EdgeInsets.all(15.0),
                           child: Text(
                             "일기 쓰기",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                           ),
                         )),
                     onTap: () {
@@ -84,7 +84,7 @@ class HomePage extends StatelessWidget {
                           padding: EdgeInsets.all(15.0),
                           child: Text(
                             "편지 쓰기",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                           ),
                         )),
                     onTap: () {

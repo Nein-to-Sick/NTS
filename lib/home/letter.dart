@@ -42,16 +42,16 @@ class _LetterState extends State<Letter> {
               Expanded(
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       "누구한테 쓸까요?",
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]),
                     ),
                     const SizedBox(
                       height: 6,
                     ),
-                    const Text(
+                    Text(
                       "받는 이를 정해주세요",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
                     ),
                     const SizedBox(height: 85),
                     GestureDetector(
@@ -96,6 +96,7 @@ class _LetterState extends State<Letter> {
                                 color: isSelfSelected
                                     ? Colors.white
                                     : MyThemeColors.myGreyscale.shade900,
+                                  fontWeight: FontWeight.w500
                               ),
                             )
                           ],
@@ -147,6 +148,7 @@ class _LetterState extends State<Letter> {
                                 color: isSomeoneSelected
                                     ? Colors.white
                                     : MyThemeColors.myGreyscale.shade900,
+                                  fontWeight: FontWeight.w500
                               ),
                             )
                           ],
@@ -175,16 +177,16 @@ class _LetterState extends State<Letter> {
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "어떤 상황에 있는 사람한테 쓸까요?",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "알맞은 상황/감정을 골라주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -233,6 +235,7 @@ class _LetterState extends State<Letter> {
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
+                                            fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                             color: isSelected2[index1][index2]
                                                 ? Colors.white
@@ -267,6 +270,7 @@ class _LetterState extends State<Letter> {
                                     "이전",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
+                                        fontWeight: FontWeight.w700,
                                         color: MyThemeColors.primaryColor,
                                         fontSize: 16), //수정
                                   ),
@@ -303,16 +307,17 @@ class _LetterState extends State<Letter> {
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "어떤 감정을 가진 사람한테 쓸까요?",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]
+            ),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "알맞은 상황/감정을 골라주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -361,6 +366,7 @@ class _LetterState extends State<Letter> {
                                         child: Text(
                                           Preset().emotion[index1][index2],
                                           style: TextStyle(
+                                          fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                             color: isSelected3[index1][index2]
                                                 ? Colors.white
@@ -396,7 +402,7 @@ class _LetterState extends State<Letter> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: MyThemeColors.primaryColor,
-                                        fontSize: 16), //수정
+                                        fontSize: 16, fontWeight: FontWeight.w700), //수정
                                   ),
                                 ),
                               ),
@@ -431,16 +437,16 @@ class _LetterState extends State<Letter> {
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
         children: [
-          const Text(
+          Text(
             "편지 쓰기",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: MyThemeColors.myGreyscale[900]),
           ),
           const SizedBox(
             height: 6,
           ),
-          const Text(
+          Text(
             "응원/지지/격려하는 글을 써주세요.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(
             height: 15,
@@ -460,9 +466,9 @@ class _LetterState extends State<Letter> {
                         child: TextField(
                           controller: textEditingController,
                           style: const TextStyle(fontSize: 16),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintStyle: TextStyle(fontSize: 16),
+                              hintStyle: TextStyle(fontSize: 16, color: MyThemeColors.myGreyscale[300], fontFamily: "Dodam"),
                               hintMaxLines: 10,
                               hintText:
                                   "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
