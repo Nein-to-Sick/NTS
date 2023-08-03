@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/home/home.dart';
 import 'package:nts/main.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/backgroundController.dart';
@@ -11,6 +10,9 @@ import 'package:provider/provider.dart';
 void myNicknameSheet(
     BuildContext context, UserInfoValueModel userInfoProvider) {
   final userNickNameController = TextEditingController();
+  userNickNameController.text = (userInfoProvider.userNickName.isEmpty)
+      ? ""
+      : userInfoProvider.userNickName;
 
   showModalBottomSheet(
     context: context,
@@ -31,7 +33,7 @@ void myNicknameSheet(
           decoration: BoxDecoration(
               color: MyThemeColors.whiteColor,
               borderRadius: BorderRadius.circular(25)),
-          height: 300,
+          height: 320,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -40,11 +42,23 @@ void myNicknameSheet(
               const SizedBox(
                 height: 35,
               ),
-              Text("사용할 닉네임을 정해주세요"),
+              const Text(
+                "사용할 닉네임을 정해주세요",
+                style: TextStyle(
+                    color: MyThemeColors.blackColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
               const SizedBox(
                 height: 5,
               ),
-              Text("나중에 언제든지 바꿀 수 있어요"),
+              Text(
+                "나중에 언제든지 바꿀 수 있어요",
+                style: TextStyle(
+                  color: MyThemeColors.myGreyscale.shade600,
+                  fontSize: 15,
+                ),
+              ),
               const SizedBox(
                 height: 35,
               ),
@@ -52,13 +66,22 @@ void myNicknameSheet(
               Padding(
                 padding: const EdgeInsets.only(left: 45, right: 45),
                 child: SizedBox(
-                  height: 55,
+                  height: 80,
                   child: TextField(
                     controller: userNickNameController,
                     keyboardType: TextInputType.multiline,
                     autocorrect: false,
+                    maxLength: 12,
                     //  enter(엔터) 키 이벤트 처리 with onSubmitted
                     textInputAction: TextInputAction.go,
+
+                    onChanged: (value) {
+                      if (userNickNameController.text.trim().isNotEmpty) {
+                        userInfoProvider.valueUpdate();
+                      } else {
+                        userInfoProvider.valueDeUpdate();
+                      }
+                    },
                     onSubmitted: (value) {
                       FocusScope.of(context).unfocus();
                     },
@@ -68,7 +91,7 @@ void myNicknameSheet(
 
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.only(
-                          left: 25, right: 25, top: 20, bottom: 20),
+                          left: 15, right: 15, top: 10, bottom: 10),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Theme.of(context).colorScheme.outline,
@@ -82,32 +105,23 @@ void myNicknameSheet(
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      fillColor: Theme.of(context).colorScheme.background,
+                      fillColor: MyThemeColors.myGreyscale.shade50,
                       filled: true,
                       hintText: '최대 12글자',
                       hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.outlineVariant,
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: IconButton(
-                          onPressed: () {
-                            userNickNameController.clear;
-                          },
-                          icon: const Icon(Icons.clear),
-                        ),
+                        color: MyThemeColors.myGreyscale.shade600,
                       ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               ElevatedButton(
-                onPressed: (userNickNameController.text.trim().isNotEmpty)
+                onPressed: (userInfoProvider.isValueEntered)
                     ? () {
-                        userNickNameUpdate(
+                        userNickNameFirebaseUpdate(
                             context, userNickNameController.text.trim());
                         userInfoProvider.userNickNameUpdate(
                             userNickNameController.text.trim());
@@ -129,22 +143,20 @@ void myNicknameSheet(
                     : null,
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  foregroundColor:
-                      (userNickNameController.text.trim().isNotEmpty)
-                          ? MyThemeColors.whiteColor
-                          : MyThemeColors.myGreyscale.shade900,
-                  backgroundColor:
-                      (userNickNameController.text.trim().isNotEmpty)
-                          ? MyThemeColors.primaryColor
-                          : MyThemeColors.myGreyscale.shade100,
+                  foregroundColor: (userInfoProvider.isValueEntered)
+                      ? MyThemeColors.whiteColor
+                      : MyThemeColors.myGreyscale.shade900,
+                  backgroundColor: (userInfoProvider.isValueEntered)
+                      ? MyThemeColors.primaryColor
+                      : MyThemeColors.myGreyscale.shade100,
                   surfaceTintColor: MyThemeColors.myGreyscale.shade100,
-                  padding: const EdgeInsets.fromLTRB(45, 10, 45, 10),
+                  padding: const EdgeInsets.fromLTRB(140, 15, 140, 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: const Text(
-                  '전송',
+                  '저장',
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
@@ -160,7 +172,7 @@ void myNicknameSheet(
 }
 
 //  user nickname firebase update
-Future<void> userNickNameUpdate(
+Future<void> userNickNameFirebaseUpdate(
     BuildContext context, String newNickName) async {
   final userCollection = FirebaseFirestore.instance.collection("users");
   String? userId = FirebaseAuth.instance.currentUser?.uid;

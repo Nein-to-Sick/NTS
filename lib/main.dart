@@ -87,12 +87,15 @@ class BackgroundState extends State<Background> {
                     if (snapshot.data == true) {
                       return const HomePage();
                     } else if (snapshot.data == false) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        myNicknameSheet(
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) {
+                          myNicknameSheet(
                             context,
                             Provider.of<UserInfoValueModel>(context,
-                                listen: false));
-                      });
+                                listen: false),
+                          );
+                        },
+                      );
 
                       return Container();
                     } else {
