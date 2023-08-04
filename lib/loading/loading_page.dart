@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nts/Theme/theme_colors.dart';
@@ -27,11 +26,11 @@ class MyLoadingPage extends StatelessWidget {
   }
 }
 
-class RotatingCircularProgressWithGlowAndDotPainter extends CustomPainter {
+class MyFireFlyProgressbarAndDotPainter extends CustomPainter {
   final double rotationAngle;
   final double progress;
 
-  RotatingCircularProgressWithGlowAndDotPainter({
+  MyFireFlyProgressbarAndDotPainter({
     required this.rotationAngle,
     required this.progress,
   });
@@ -48,7 +47,7 @@ class RotatingCircularProgressWithGlowAndDotPainter extends CustomPainter {
       ..strokeWidth = 6.0;
 
     final Paint arcPaint = Paint()
-      ..color = Colors.yellow.withOpacity(0.05)
+      ..color = Colors.yellow.withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 4.0
@@ -111,18 +110,16 @@ class RotatingCircularProgressWithGlowAndDotPainter extends CustomPainter {
   }
 }
 
-class RotatingCircularProgressWithGlow extends StatefulWidget {
+class MyFireFlyProgressbar extends StatefulWidget {
   final double progress;
 
-  const RotatingCircularProgressWithGlow({super.key, required this.progress});
+  const MyFireFlyProgressbar({super.key, required this.progress});
 
   @override
-  RotatingCircularProgressWithGlowState createState() =>
-      RotatingCircularProgressWithGlowState();
+  MyFireFlyProgressbarState createState() => MyFireFlyProgressbarState();
 }
 
-class RotatingCircularProgressWithGlowState
-    extends State<RotatingCircularProgressWithGlow>
+class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -150,7 +147,7 @@ class RotatingCircularProgressWithGlowState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyThemeColors.myGreyscale.shade400,
+      backgroundColor: MyThemeColors.blackColor,
       appBar: AppBar(
         title: const Text('로딩 테스트'),
       ),
@@ -167,7 +164,7 @@ class RotatingCircularProgressWithGlowState
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: CustomPaint(
-                      painter: RotatingCircularProgressWithGlowAndDotPainter(
+                      painter: MyFireFlyProgressbarAndDotPainter(
                         rotationAngle: _animation.value * 360,
                         progress: widget.progress,
                       ),
@@ -180,12 +177,14 @@ class RotatingCircularProgressWithGlowState
             const SizedBox(
               height: 30,
             ),
-            const Text('로딩 중...',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                )),
+            const Text(
+              '로딩 중...',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
           ],
         ),
       ),

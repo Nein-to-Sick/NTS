@@ -443,21 +443,31 @@ class DiaryState extends State<Diary> {
                           flex: 1,
                           child: Button(
                             function: () {
-
                               List<String> sit = [];
-                              for(int i=0;i<Preset().situation.length;i++) {
-                                for(int j=0;j<Preset().situation[i].length; j++) {
-                                  if(isSelected2[i][j] == true) sit.add(Preset().situation[i][j]);
+                              for (int i = 0;
+                                  i < Preset().situation.length;
+                                  i++) {
+                                for (int j = 0;
+                                    j < Preset().situation[i].length;
+                                    j++) {
+                                  if (isSelected2[i][j] == true)
+                                    sit.add(Preset().situation[i][j]);
                                 }
                               }
                               List<String> emo = [];
-                              for(int i=0;i<Preset().emotion.length;i++) {
-                                for(int j=0;j<Preset().emotion[i].length; j++) {
-                                  if(isSelected3[i][j] == true) emo.add(Preset().emotion[i][j]);
+                              for (int i = 0;
+                                  i < Preset().emotion.length;
+                                  i++) {
+                                for (int j = 0;
+                                    j < Preset().emotion[i].length;
+                                    j++) {
+                                  if (isSelected3[i][j] == true)
+                                    emo.add(Preset().emotion[i][j]);
                                 }
                               }
 
-                              DatabaseService().writeDiary("GPT", textEditingController.text, sit, emo);
+                              DatabaseService().writeDiary(
+                                  "GPT", textEditingController.text, sit, emo);
 
                               Navigator.pop(context);
                             },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/loading/loading_page.dart';
@@ -18,23 +17,25 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
-            Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  child: const HeroIcon(
-                    HeroIcons.envelope,
-                    color: Colors.white,
-                    style: HeroIconStyle.solid,
-                    size: 30,
-                  ),
-                  onTap: () {
-                    showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) => const MailBox(),
-                        animationType: DialogTransitionType.slideFromTopFade);
-                  },
-                )),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    child: const HeroIcon(
+                      HeroIcons.envelope,
+                      color: Colors.white,
+                      style: HeroIconStyle.solid,
+                    ),
+                    onTap: () {
+                      showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => const MailBox(),
+                          animationType: DialogTransitionType.slideFromTopFade);
+                    },
+                  )),
+            ),
             const SizedBox(
               height: 130,
             ),
@@ -127,7 +128,7 @@ class HomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              RotatingCircularProgressWithGlow(progress: 0.5),
+                              const MyFireFlyProgressbar(progress: 0.45),
                         ),
                       );
                     },

@@ -11,6 +11,7 @@ class BackgroundController with ChangeNotifier {
     );
     notifyListeners();
   }
+
   int page = 2;
   void changeColor(int index) {
     page = index;

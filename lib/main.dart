@@ -63,14 +63,16 @@ class BackgroundState extends State<Background> {
         scrollDirection: Axis.horizontal,
         controller: scrollController,
         children: [
-          Image.asset(
-            'assets/back.png',
-            fit: BoxFit.cover,
+          Container(
+            width: 1300,
+            child: Image.asset(
+              'assets/back.png',
+              fit: BoxFit.cover,
+            ),
           ),
         ],
       ),
       const FireFly(),
-
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
