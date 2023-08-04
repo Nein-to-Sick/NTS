@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/database/databaseService.dart';
+import 'package:nts/loading/loading_page.dart';
+import 'package:nts/provider/gpt_model.dart';
+import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
@@ -40,6 +43,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildBody(BuildContext context) {
+    final gptModel = Provider.of<GPTModel>(context);
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -59,7 +63,22 @@ class DiaryState extends State<Diary> {
                     case 0:
                       return _buildPageFirst();
                     case 1:
-                      return _buildPageSecond();
+                      return
+                          //  AI analyzation result
+                          FutureBuilder<bool>(
+                        future: gptModel.watiFetchDiaryData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(child: MyFireFlyProgressbar());
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            return _buildPageSecond();
+                          }
+                        },
+                      );
+
                     case 2:
                       return _buildPageThird();
                   }
@@ -111,6 +130,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageFirst() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
     return Padding(
         padding: const EdgeInsets.only(bottom: 30.0, top: 50),
         child: Column(
@@ -168,6 +188,7 @@ class DiaryState extends State<Diary> {
                                         FocusScope.of(context).unfocus();
                                       },
                                       onChanged: (value) {
+                                        gptModel.updateDiaryMainText(value);
                                         setState(() {
                                           contents = value;
                                         });
@@ -208,13 +229,14 @@ class DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Button(
                 function: () {
+                  gptModel.tryAnalyzeDiary(gptModel.diaryMainText.trim());
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.ease,
                   );
                 },
                 title: '다음',
-                condition: contents.length > 0 ? 'not null' : "null",
+                condition: contents.isNotEmpty ? 'not null' : "null",
               ),
             )
           ],
@@ -222,6 +244,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageSecond() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
@@ -244,6 +267,15 @@ class DiaryState extends State<Diary> {
                 color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (int i = 0; i < gptModel.situationSummerization.length; i++)
+                Text(
+                  gptModel.situationSummerization[i],
+                ),
+            ],
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -370,6 +402,8 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageThird() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
@@ -392,6 +426,15 @@ class DiaryState extends State<Diary> {
                 color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (int i = 0; i < gptModel.emotionSummerization.length; i++)
+                Text(
+                  gptModel.emotionSummerization[i],
+                ),
+            ],
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -533,7 +576,7 @@ class DiaryState extends State<Diary> {
                                   '내 일기가 저장되었습니다!',
                                   style: TextStyle(color: Colors.black),
                                 ),
-                                duration: Duration(seconds: 5), //올라와있는 시간
+                                duration: const Duration(seconds: 5), //올라와있는 시간
                                 action: SnackBarAction(
                                   textColor: MyThemeColors
                                       .primaryColor, //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.

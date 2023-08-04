@@ -111,9 +111,7 @@ class MyFireFlyProgressbarAndDotPainter extends CustomPainter {
 }
 
 class MyFireFlyProgressbar extends StatefulWidget {
-  final double progress;
-
-  const MyFireFlyProgressbar({super.key, required this.progress});
+  const MyFireFlyProgressbar({super.key});
 
   @override
   MyFireFlyProgressbarState createState() => MyFireFlyProgressbarState();
@@ -146,6 +144,7 @@ class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
 
   @override
   Widget build(BuildContext context) {
+    const double progress = 0.45;
     return Scaffold(
       backgroundColor: MyThemeColors.blackColor,
       appBar: AppBar(
@@ -166,7 +165,7 @@ class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
                     child: CustomPaint(
                       painter: MyFireFlyProgressbarAndDotPainter(
                         rotationAngle: _animation.value * 360,
-                        progress: widget.progress,
+                        progress: progress,
                       ),
                       child: Container(),
                     ),

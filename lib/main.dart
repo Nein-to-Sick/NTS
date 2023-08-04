@@ -11,6 +11,7 @@ import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "SUITE"),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: MultiProvider(
           providers: [
             ChangeNotifierProvider(
