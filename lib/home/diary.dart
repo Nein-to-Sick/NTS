@@ -129,7 +129,7 @@ class DiaryState extends State<Diary> {
             Text(
               "나의 상황과 감정에 대해 자세히 말해주세요.",
               style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: MyThemeColors.myGreyscale[600]),
             ),
@@ -213,12 +213,12 @@ class DiaryState extends State<Diary> {
                     curve: Curves.ease,
                   );
                 },
-                title: '다음', condition: contents.length > 0 ? 'not null' : "null",
+                title: '다음',
+                condition: contents.length > 0 ? 'not null' : "null",
               ),
             )
           ],
-        )
-        );
+        ));
   }
 
   _buildPageSecond() {
@@ -269,7 +269,7 @@ class DiaryState extends State<Diary> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
-                                      if(isSelected2[index1][index2]) {
+                                      if (isSelected2[index1][index2]) {
                                         count2++;
                                       } else {
                                         count2--;
@@ -417,7 +417,7 @@ class DiaryState extends State<Diary> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
-                                      if(isSelected3[index1][index2]) {
+                                      if (isSelected3[index1][index2]) {
                                         count3++;
                                       } else {
                                         count3--;
