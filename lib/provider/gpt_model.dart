@@ -128,6 +128,7 @@ class GPTModel with ChangeNotifier {
         }
         startAnalyzeDiary();
       } catch (e) {
+        print('Error happen!');
         situationSummerization.add('error');
         emotionSummerization.add('error');
         diaryTitle = "직접 추가하기";

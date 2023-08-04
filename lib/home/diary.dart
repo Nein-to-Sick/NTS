@@ -70,7 +70,7 @@ class DiaryState extends State<Diary> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(child: MyFireFlyProgressbar());
+                            return const MyFireFlyProgressbar();
                           } else if (snapshot.hasError) {
                             return Text('Error: ${snapshot.error}');
                           } else {
@@ -159,59 +159,63 @@ class DiaryState extends State<Diary> {
             //  diary textfield
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom * 0.4),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: TextField(
-                                      controller: textEditingController,
-                                      style: const TextStyle(fontSize: 16),
-                                      onSubmitted: (value) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      onTapOutside: (p) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      onChanged: (value) {
-                                        gptModel.updateDiaryMainText(value);
-                                        setState(() {
-                                          contents = value;
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: "Dodam",
-                                              color: MyThemeColors
-                                                  .myGreyscale[300]),
-                                          hintMaxLines: 7,
-                                          hintText:
-                                              "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
-                                      maxLines: null,
-                                      cursorColor: MyThemeColors.primaryColor,
-                                      keyboardType: TextInputType.multiline,
-                                    ),
-                                  ),
+                        padding: EdgeInsets.only(
+                            bottom:
+                                MediaQuery.of(context).viewInsets.bottom * 0.4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                            child: Padding(
+                              //  아래 padding으로 대체시 텍스트 필드만 밀림
+                              padding: const EdgeInsets.all(0),
+                              /*
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom *
+                                          0.4),
+                                          */
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: TextField(
+                                  controller: textEditingController,
+                                  style: const TextStyle(fontSize: 16),
+                                  onSubmitted: (value) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  onTapOutside: (p) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  onChanged: (value) {
+                                    gptModel.updateDiaryMainText(value);
+                                    setState(() {
+                                      contents = value;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: "Dodam",
+                                          color:
+                                              MyThemeColors.myGreyscale[300]),
+                                      hintMaxLines: 7,
+                                      hintText:
+                                          "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
+                                  maxLines: null,
+                                  cursorColor: MyThemeColors.primaryColor,
+                                  keyboardType: TextInputType.multiline,
                                 ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
