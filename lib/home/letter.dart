@@ -8,7 +8,8 @@ import '../database/databaseService.dart';
 import '../model/preset.dart';
 
 class Letter extends StatefulWidget {
-  const Letter({Key? key}) : super(key: key);
+  const Letter({Key? key, required this.controller}) : super(key: key);
+  final controller;
 
   @override
   State<Letter> createState() => _LetterState();
@@ -19,8 +20,11 @@ class _LetterState extends State<Letter> {
   TextEditingController textEditingController = TextEditingController();
   late List<List<bool>> isSelected2 = [];
   late List<List<bool>> isSelected3 = [];
+  int count2 = 0;
+  int count3 = 0;
   bool isSelfSelected = false;
   bool isSomeoneSelected = false;
+  String contents = "";
 
   late PageController _pageController;
 
@@ -249,6 +253,9 @@ class _LetterState extends State<Letter> {
                         );
                 },
                 title: '다음',
+                condition: isSomeoneSelected == false && isSelfSelected == false
+                    ? 'null'
+                    : 'not null',
               )
             ],
           ),
@@ -305,6 +312,7 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
+                                      count2++;
                                     });
                                   },
                                   child: Padding(
@@ -386,6 +394,7 @@ class _LetterState extends State<Letter> {
                               );
                             },
                             title: '다음',
+                            condition: count2 > 0 ? 'not null' : 'null',
                           )),
                     ],
                   )
@@ -446,6 +455,7 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
+                                      count3++;
                                     });
                                   },
                                   child: Padding(
@@ -527,6 +537,7 @@ class _LetterState extends State<Letter> {
                               );
                             },
                             title: '다음',
+                            condition: count3 > 0 ? 'not null' : 'null',
                           )),
                     ],
                   )
@@ -577,6 +588,11 @@ class _LetterState extends State<Letter> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
                         child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              contents = value;
+                            });
+                          },
                           controller: textEditingController,
                           style: const TextStyle(fontSize: 16),
                           decoration: InputDecoration(
@@ -617,15 +633,37 @@ class _LetterState extends State<Letter> {
                       }
 
                       if (isSelfSelected) {
-                        DatabaseService().selfMessage(textEditingController.text, sit, emo);
+                        DatabaseService()
+                            .selfMessage(textEditingController.text, sit, emo);
                       } else {
-                        DatabaseService().someoneMessage(textEditingController.text, sit, emo);
-
+                        DatabaseService().someoneMessage(
+                            textEditingController.text, sit, emo);
                       }
 
                       Navigator.pop(context);
+
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.white,
+                        content: const Text(
+                          '내 편지를 보냈습니다!',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        duration: Duration(seconds: 5),
+                        //올라와있는 시간
+                        action: SnackBarAction(
+                          textColor: MyThemeColors.primaryColor,
+                          //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                          label: '취소하기',
+                          //버튼이름
+                          onPressed: () {},
+                        ),
+                      ));
                     },
                     title: '보낸 후 나가기',
+                    condition: contents.isNotEmpty
+                        ? 'not null'
+                        : 'null',
                   )
                 ],
               ),

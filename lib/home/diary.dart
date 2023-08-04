@@ -7,7 +7,8 @@ import '../component/button.dart';
 import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
-  const Diary({super.key});
+  const Diary({super.key, required this.controller});
+  final controller;
 
   @override
   DiaryState createState() => DiaryState();
@@ -18,8 +19,10 @@ class DiaryState extends State<Diary> {
   TextEditingController textEditingController = TextEditingController();
   late List<List<bool>> isSelected2 = [];
   late List<List<bool>> isSelected3 = [];
-
+  int count2 = 0;
+  int count3 = 0;
   late PageController _pageController;
+  String contents = "";
 
   @override
   void initState() {
@@ -33,6 +36,7 @@ class DiaryState extends State<Diary> {
 
   @override
   Widget build(BuildContext context) {
+
     return _buildBody(context);
   }
 
@@ -141,6 +145,11 @@ class DiaryState extends State<Diary> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
                         child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              contents = value;
+                            });
+                          },
                           controller: textEditingController,
                           style: const TextStyle(fontSize: 16),
                           decoration: InputDecoration(
@@ -168,7 +177,7 @@ class DiaryState extends State<Diary> {
                         curve: Curves.ease,
                       );
                     },
-                    title: '다음',
+                    title: '다음', condition: contents.length > 0 ? 'not null' : "null",
                   )
                 ],
               ),
@@ -227,6 +236,7 @@ class DiaryState extends State<Diary> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
+                                      count2++;
                                     });
                                   },
                                   child: Padding(
@@ -292,7 +302,7 @@ class DiaryState extends State<Diary> {
                               ),
                               onTap: () {
                                 _pageController.previousPage(
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   curve: Curves.ease,
                                 );
                               })),
@@ -304,11 +314,11 @@ class DiaryState extends State<Diary> {
                           child: Button(
                             function: () {
                               _pageController.nextPage(
-                                duration: Duration(milliseconds: 300),
+                                duration: const Duration(milliseconds: 300),
                                 curve: Curves.ease,
                               );
                             },
-                            title: '다음',
+                            title: '다음', condition: count2 > 0 ? 'not null' : 'null',
                           )),
                     ],
                   )
@@ -322,6 +332,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageThird() {
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
@@ -369,6 +380,7 @@ class DiaryState extends State<Diary> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
+                                      count3++;
                                     });
                                   },
                                   child: Padding(
@@ -432,7 +444,7 @@ class DiaryState extends State<Diary> {
                               ),
                               onTap: () {
                                 _pageController.previousPage(
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   curve: Curves.ease,
                                 );
                               })),
@@ -450,8 +462,9 @@ class DiaryState extends State<Diary> {
                                 for (int j = 0;
                                     j < Preset().situation[i].length;
                                     j++) {
-                                  if (isSelected2[i][j] == true)
+                                  if (isSelected2[i][j] == true) {
                                     sit.add(Preset().situation[i][j]);
+                                  }
                                 }
                               }
                               List<String> emo = [];
@@ -461,8 +474,9 @@ class DiaryState extends State<Diary> {
                                 for (int j = 0;
                                     j < Preset().emotion[i].length;
                                     j++) {
-                                  if (isSelected3[i][j] == true)
+                                  if (isSelected3[i][j] == true) {
                                     emo.add(Preset().emotion[i][j]);
+                                  }
                                 }
                               }
 
@@ -470,8 +484,24 @@ class DiaryState extends State<Diary> {
                                   "GPT", textEditingController.text, sit, emo);
 
                               Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Colors.white,
+                                    content: const Text('내 일기가 저장되었습니다!', style: TextStyle(color: Colors.black),),
+                                    duration: Duration(seconds: 5), //올라와있는 시간
+                                    action: SnackBarAction(
+                                      textColor: MyThemeColors.primaryColor,//추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                      label: '보러가기', //버튼이름
+                                      onPressed: (){
+                                        widget.controller.movePage(855.0);
+                                        widget.controller.changeColor(3);
+                                      },
+                                    ),
+                                  )
+                              );
                             },
-                            title: '저장 후 나가기',
+                            title: '저장 후 나가기', condition: count3 > 0 ? 'not null' : 'null',
                           )),
                     ],
                   )
