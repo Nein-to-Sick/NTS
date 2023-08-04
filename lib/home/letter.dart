@@ -312,7 +312,11 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
-                                      count2++;
+                                      if(isSelected2[index1][index2]) {
+                                        count2++;
+                                      } else {
+                                        count2--;
+                                      }
                                     });
                                   },
                                   child: Padding(
@@ -455,7 +459,11 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
-                                      count3++;
+                                      if(isSelected3[index1][index2]) {
+                                        count3++;
+                                      } else {
+                                        count3--;
+                                      }
                                     });
                                   },
                                   child: Padding(
