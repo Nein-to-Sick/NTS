@@ -124,7 +124,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
     _blurAnimation1 =
-        Tween<double>(begin: 3.0, end: 5.0).animate(_blurController1);
+        Tween<double>(begin: 2.0, end: 3.0).animate(_blurController1);
 
     _blurController2 = AnimationController(
       vsync: this,
@@ -178,6 +178,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                 offset: Offset(newX, newY),
                 child: CustomPaint(
+                  size: Size(7, 7),
                   foregroundPainter: CircleBlurPainter(
                       circleWidth: 7, blurSigma: _blurAnimation1.value),
                 ),
@@ -194,6 +195,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                 offset: Offset(newX, newY),
                 child: CustomPaint(
+                  size: Size(10, 10),
                   foregroundPainter: CircleBlurPainter(
                       circleWidth: 10, blurSigma: _blurAnimation2.value),
                 ),
@@ -212,6 +214,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
+                    size: Size(6, 6),
                     foregroundPainter: CircleBlurPainter(
                         circleWidth: 6, blurSigma: _blurAnimation3.value),
                   ));
@@ -228,6 +231,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
+                    size: Size(15, 15),
                     foregroundPainter: CircleBlurPainter(
                         circleWidth: 15, blurSigma: _blurAnimation4.value),
                   ));
@@ -243,6 +247,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
+                    size: Size(14, 14),
                     foregroundPainter: CircleBlurPainter(
                         circleWidth: 14, blurSigma: _blurAnimation5.value),
                   ));
@@ -256,6 +261,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
               return Transform.translate(
                   offset: Offset(newX, newY),
                   child: CustomPaint(
+                    size: Size(11, 11),
                     foregroundPainter: CircleBlurPainter(
                         circleWidth: 11, blurSigma: _blurAnimation6.value),
                   ));
@@ -296,7 +302,7 @@ class CircleBlurPainter extends CustomPainter {
     Paint line = Paint()
       ..color = Colors.yellow
       ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
+      ..style = PaintingStyle.fill
       ..strokeWidth = circleWidth
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, blurSigma);
     Offset center = Offset(size.width / 2, size.height / 2);
