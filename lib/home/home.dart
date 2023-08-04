@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/loading/loading_page.dart';
@@ -127,7 +126,7 @@ class HomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              RotatingCircularProgressWithGlow(progress: 0.5),
+                              const MyFireFlyProgressbar(progress: 0.45),
                         ),
                       );
                     },
