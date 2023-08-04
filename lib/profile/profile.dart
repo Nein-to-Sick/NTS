@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/component/animatedSearchBar.dart';
 import 'package:nts/component/filterButton.dart';
+import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/settings.dart';
 import 'package:provider/provider.dart';
 import '../model/diaryModel.dart';
@@ -19,10 +20,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
+
   @override
   Widget build(BuildContext context) {
+
     final controller = Provider.of<BackgroundController>(context);
     final searchController = Provider.of<SearchBarController>(context);
+    final userInfo = Provider.of<UserInfoValueModel>(context);
+    final userName = userInfo.userNickName;
+    print(userName);
+
     bool folded = searchController.folded;
 
     void signUserOut() {
@@ -62,9 +69,14 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
             child: Column(
               children: [
-                const Text(
-                  "OO님의 일기",
-                  style: TextStyle(fontSize: 25, color: Colors.white),
+                Row(
+                  children: [
+                    Text(userName),
+                    const Text(
+                      "OO님의 일기",
+                      style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 30,
