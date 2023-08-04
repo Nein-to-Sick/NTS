@@ -3,6 +3,8 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/loading/loading_page.dart';
+import 'package:nts/provider/backgroundController.dart';
+import 'package:provider/provider.dart';
 
 import 'diary.dart';
 import 'letter.dart';
@@ -12,6 +14,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<BackgroundController>(context);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -75,7 +79,10 @@ class HomePage extends StatelessWidget {
                         barrierDismissible: false,
                         animationType: DialogTransitionType.slideFromBottomFade,
                         builder: (BuildContext context) {
-                          return const Diary();
+                          return ChangeNotifierProvider.value(
+                            value: BackgroundController(),
+                            child: Diary(controller: controller,),
+                          );;
                         },
                       );
                     },
@@ -100,7 +107,7 @@ class HomePage extends StatelessWidget {
                       showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext context) => const Letter(),
+                          builder: (BuildContext context) => Letter(controller: controller),
                           animationType:
                               DialogTransitionType.slideFromBottomFade);
                     },
