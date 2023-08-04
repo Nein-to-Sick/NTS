@@ -213,96 +213,11 @@ class DiaryState extends State<Diary> {
                     curve: Curves.ease,
                   );
                 },
-                title: '다음',
+                title: '다음', condition: contents.length > 0 ? 'not null' : "null",
               ),
             )
           ],
         )
-
-        /*
-      Column(
-        children: [
-          Text(
-            "일기 쓰기",
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: MyThemeColors.myGreyscale[900]),
-          ),
-          const SizedBox(
-            height: 6,
-          ),
-          Text(
-            "나의 상황과 감정에 대해 자세히 말해주세요.",
-            style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[600]),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                        child: TextField(
-                          onChanged: (value) {
-                            setState(() {
-                              contents = value;
-                            });
-                          },
-                          controller: textEditingController,
-                          style: const TextStyle(fontSize: 16),
-                          onSubmitted: (value) {
-                              FocusScope.of(context).unfocus();
-                            },
-                            onTapOutside: (p) {
-                              FocusScope.of(context).unfocus();
-                            },
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Dodam",
-                                  color: MyThemeColors.myGreyscale[300]),
-                              hintMaxLines: 7,
-                              hintText:
-                                  "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
-                          maxLines: null,
-                          cursorColor: MyThemeColors.primaryColor,
-                          keyboardType: TextInputType.multiline,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 13,
-                  ),
-                  Button(
-                    function: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease,
-                      );
-                    },
-                    title: '다음', condition: contents.length > 0 ? 'not null' : "null",
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-*/
         );
   }
 
@@ -354,7 +269,11 @@ class DiaryState extends State<Diary> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
-                                      count2++;
+                                      if(isSelected2[index1][index2]) {
+                                        count2++;
+                                      } else {
+                                        count2--;
+                                      }
                                     });
                                   },
                                   child: Padding(
@@ -498,7 +417,11 @@ class DiaryState extends State<Diary> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
-                                      count3++;
+                                      if(isSelected3[index1][index2]) {
+                                        count3++;
+                                      } else {
+                                        count3--;
+                                      }
                                     });
                                   },
                                   child: Padding(
