@@ -167,6 +167,11 @@ class DiaryState extends State<Diary> {
                                       onTapOutside: (p) {
                                         FocusScope.of(context).unfocus();
                                       },
+                                      onChanged: (value) {
+                                        setState(() {
+                                          contents = value;
+                                        });
+                                      },
                                       decoration: InputDecoration(
                                           border: InputBorder.none,
                                           hintStyle: TextStyle(
