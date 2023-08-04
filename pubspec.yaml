@@ -50,6 +50,7 @@ dependencies:
   flutter_animated_dialog: ^2.0.1
   intl: ^0.18.0
   flutter_spinkit: ^5.2.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:

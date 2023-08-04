@@ -35,9 +35,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "SUITE"),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: ChangeNotifierProvider.value(
-          value: BackgroundController(),
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (context) => BackgroundController(),
+            ),
+            ChangeNotifierProvider(
+              create: (context) => UserInfoValueModel(),
+            ),
+          ],
           child: const Background(),
         ),
       ),
@@ -73,48 +79,45 @@ class BackgroundState extends State<Background> {
           ),
         ],
       ),
-      const FireFly(),
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => UserInfoValueModel(),
-          ),
-        ],
-        child: AnimatedBuilder(
-          animation: scrollController,
-          builder: (context, child) {
-            if (scrollController.offset == 0) {
-              return const LoginPage();
-            } else if (scrollController.offset == 600) {
-              return FutureBuilder(
-                  future: _getNickNameFromFirebase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.data == true) {
-                      return const HomePage();
-                    } else if (snapshot.data == false) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        myNicknameSheet(
-                            context,
-                            Provider.of<UserInfoValueModel>(context,
-                                listen: false));
-                      });
+      AnimatedBuilder(
+        animation: scrollController,
+        builder: (context, child) {
+          if (scrollController.offset == 0) {
+            return const LoginPage();
+          } else if (scrollController.offset == 600) {
+            return FutureBuilder(
+              future: _getNickNameFromFirebase(
+                  Provider.of<UserInfoValueModel>(context, listen: false)),
+              builder: (context, snapshot) {
+                if (snapshot.data == true) {
+                  return const HomePage();
+                } else if (snapshot.data == false) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) {
+                      myNicknameSheet(
+                        context,
+                        Provider.of<UserInfoValueModel>(context, listen: false),
+                      );
+                    },
+                  );
 
-                      return Container();
-                    } else {
-                      return Container();
-                    }
-                  });
-            } else if (scrollController.offset == 855) {
-              return ChangeNotifierProvider.value(
-                value: SearchBarController(),
-                child: const ProfilePage(),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ),
+                  return Container();
+                } else {
+                  return Container();
+                }
+              },
+            );
+          } else if (scrollController.offset == 855) {
+            return ChangeNotifierProvider.value(
+              value: SearchBarController(),
+              child: const ProfilePage(),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
+      const FireFly(),
       AnimatedBuilder(
         animation: scrollController,
         builder: (context, child) {
@@ -129,27 +132,31 @@ class BackgroundState extends State<Background> {
   }
 }
 
-Future<bool> _getNickNameFromFirebase() async {
-  bool userNickNameIsMade = false;
-  final userCollection = FirebaseFirestore.instance.collection("users");
-  String? userId = FirebaseAuth.instance.currentUser?.uid;
+Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
+  if (model.userNickName.isEmpty) {
+    bool userNickNameIsMade = false;
+    final userCollection = FirebaseFirestore.instance.collection("users");
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
 
-  if (userId != null) {
-    DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
-    if (userSnapshot.exists) {
-      Map<String, dynamic> userData =
-          userSnapshot.data() as Map<String, dynamic>;
-      if (userData.containsKey('nicknameMade')) {
-        userNickNameIsMade = userData['nicknameMade'];
+    if (userId != null) {
+      DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        if (userData.containsKey('nicknameMade')) {
+          userNickNameIsMade = userData['nicknameMade'];
+          model.userNickName = userData['nickname'];
+        } else {
+          print('No field');
+        }
       } else {
-        print('No field');
+        print('No document');
       }
     } else {
-      print('No document');
+      print('User ID is null');
     }
-  } else {
-    print('User ID is null');
-  }
 
-  return userNickNameIsMade;
+    return userNickNameIsMade;
+  }
+  return true;
 }
