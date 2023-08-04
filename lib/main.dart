@@ -69,6 +69,8 @@ class BackgroundState extends State<Background> {
           ),
         ],
       ),
+      const FireFly(),
+
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -110,7 +112,6 @@ class BackgroundState extends State<Background> {
           },
         ),
       ),
-      const FireFly(),
       AnimatedBuilder(
         animation: scrollController,
         builder: (context, child) {
