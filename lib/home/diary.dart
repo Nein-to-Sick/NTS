@@ -36,7 +36,6 @@ class DiaryState extends State<Diary> {
 
   @override
   Widget build(BuildContext context) {
-
     return _buildBody(context);
   }
 
@@ -64,6 +63,7 @@ class DiaryState extends State<Diary> {
                     case 2:
                       return _buildPageThird();
                   }
+                  return null;
                 },
                 onPageChanged: (ind) {
                   setState(() {
@@ -86,20 +86,23 @@ class DiaryState extends State<Diary> {
                 ),
               ),
               GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Opacity(
-                      opacity: 0.2,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: HeroIcon(
-                              HeroIcons.xMark,
-                              size: 23,
-                            )),
-                      )))
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Opacity(
+                  opacity: 0.2,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: HeroIcon(
+                        HeroIcons.xMark,
+                        size: 23,
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -109,8 +112,110 @@ class DiaryState extends State<Diary> {
 
   _buildPageFirst() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
-      child: Column(
+        padding: const EdgeInsets.only(bottom: 30.0, top: 50),
+        child: Column(
+          children: [
+            //  title
+            Text(
+              "일기 쓰기",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: MyThemeColors.myGreyscale[900]),
+            ),
+            const SizedBox(
+              height: 6,
+            ),
+            Text(
+              "나의 상황과 감정에 대해 자세히 말해주세요.",
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: MyThemeColors.myGreyscale[600]),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            //  diary textfield
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom * 0.4),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: TextField(
+                                      controller: textEditingController,
+                                      style: const TextStyle(fontSize: 16),
+                                      onSubmitted: (value) {
+                                        FocusScope.of(context).unfocus();
+                                      },
+                                      onTapOutside: (p) {
+                                        FocusScope.of(context).unfocus();
+                                      },
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: "Dodam",
+                                              color: MyThemeColors
+                                                  .myGreyscale[300]),
+                                          hintMaxLines: 7,
+                                          hintText:
+                                              "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
+                                      maxLines: null,
+                                      cursorColor: MyThemeColors.primaryColor,
+                                      keyboardType: TextInputType.multiline,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: 13,
+            ),
+
+            //  next button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Button(
+                function: () {
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease,
+                  );
+                },
+                title: '다음',
+              ),
+            )
+          ],
+        )
+
+        /*
+      Column(
         children: [
           Text(
             "일기 쓰기",
@@ -125,7 +230,7 @@ class DiaryState extends State<Diary> {
           Text(
             "나의 상황과 감정에 대해 자세히 말해주세요.",
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: MyThemeColors.myGreyscale[600]),
           ),
@@ -152,6 +257,12 @@ class DiaryState extends State<Diary> {
                           },
                           controller: textEditingController,
                           style: const TextStyle(fontSize: 16),
+                          onSubmitted: (value) {
+                              FocusScope.of(context).unfocus();
+                            },
+                            onTapOutside: (p) {
+                              FocusScope.of(context).unfocus();
+                            },
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintStyle: TextStyle(
@@ -162,6 +273,7 @@ class DiaryState extends State<Diary> {
                               hintText:
                                   "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
                           maxLines: null,
+                          cursorColor: MyThemeColors.primaryColor,
                           keyboardType: TextInputType.multiline,
                         ),
                       ),
@@ -185,7 +297,8 @@ class DiaryState extends State<Diary> {
           ),
         ],
       ),
-    );
+*/
+        );
   }
 
   _buildPageSecond() {
@@ -318,7 +431,8 @@ class DiaryState extends State<Diary> {
                                 curve: Curves.ease,
                               );
                             },
-                            title: '다음', condition: count2 > 0 ? 'not null' : 'null',
+                            title: '다음',
+                            condition: count2 > 0 ? 'not null' : 'null',
                           )),
                     ],
                   )
@@ -332,7 +446,6 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageThird() {
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
@@ -484,24 +597,28 @@ class DiaryState extends State<Diary> {
                                   "GPT", textEditingController.text, sit, emo);
 
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.white,
-                                    content: const Text('내 일기가 저장되었습니다!', style: TextStyle(color: Colors.black),),
-                                    duration: Duration(seconds: 5), //올라와있는 시간
-                                    action: SnackBarAction(
-                                      textColor: MyThemeColors.primaryColor,//추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                                      label: '보러가기', //버튼이름
-                                      onPressed: (){
-                                        widget.controller.movePage(855.0);
-                                        widget.controller.changeColor(3);
-                                      },
-                                    ),
-                                  )
-                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.white,
+                                content: const Text(
+                                  '내 일기가 저장되었습니다!',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                duration: Duration(seconds: 5), //올라와있는 시간
+                                action: SnackBarAction(
+                                  textColor: MyThemeColors
+                                      .primaryColor, //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                  label: '보러가기', //버튼이름
+                                  onPressed: () {
+                                    widget.controller.movePage(855.0);
+                                    widget.controller.changeColor(3);
+                                  },
+                                ),
+                              ));
                             },
-                            title: '저장 후 나가기', condition: count3 > 0 ? 'not null' : 'null',
+                            title: '저장 후 나가기',
+                            condition: count3 > 0 ? 'not null' : 'null',
                           )),
                     ],
                   )
