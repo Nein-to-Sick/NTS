@@ -6,6 +6,7 @@ import 'package:nts/loading/loading_page.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:provider/provider.dart';
 
+import '../model/user_info_model.dart';
 import 'diary.dart';
 import 'letter.dart';
 
@@ -15,6 +16,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
+    final userInfo = Provider.of<UserInfoValueModel>(context);
+    final userName = userInfo.userNickName;
 
     return SafeArea(
       child: Padding(
@@ -47,9 +50,9 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 13.0),
               child: Column(
                 children: [
-                  const Text(
-                    "안녕하세요 OO님,",
-                    style: TextStyle(
+                  Text(
+                    "안녕하세요 $userName님,",
+                    style: const TextStyle(
                         fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
                   ),
                   const Text("오늘 하루 어떠셨나요?",

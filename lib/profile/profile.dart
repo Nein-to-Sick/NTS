@@ -28,7 +28,6 @@ class _ProfilePageState extends State<ProfilePage> {
     final searchController = Provider.of<SearchBarController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final userName = userInfo.userNickName;
-    print(userName);
 
     bool folded = searchController.folded;
 
@@ -69,14 +68,9 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Text(userName),
-                    const Text(
-                      "OO님의 일기",
-                      style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
-                    ),
-                  ],
+                Text(
+                  "$userName님의 일기",
+                  style: const TextStyle(fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
                 ),
                 const SizedBox(
                   height: 30,
