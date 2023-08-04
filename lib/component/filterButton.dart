@@ -27,6 +27,7 @@ class FilterButton extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
+                  fontWeight: FontWeight.w500,
                   color: MyThemeColors.myGreyscale.shade300,
                   fontSize: 13,
                 ),

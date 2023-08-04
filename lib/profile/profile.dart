@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/animatedSearchBar.dart';
 import 'package:nts/component/filterButton.dart';
 import 'package:nts/model/user_info_model.dart';
@@ -19,17 +20,16 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
-
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
     final controller = Provider.of<BackgroundController>(context);
     final searchController = Provider.of<SearchBarController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final userName = userInfo.userNickName;
 
-    bool folded = searchController.folded;
+    int folded = searchController.folded;
 
     void signUserOut() {
       FirebaseAuth.instance.signOut();
@@ -70,15 +70,31 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Text(
                   "$userName님의 일기",
-                  style: const TextStyle(fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
+                  style: const TextStyle(
+                      fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
                 ),
                 const SizedBox(
                   height: 30,
                 ),
+                AnimSearchBar(
+                  autoFocus: true,
+                  textFieldIconColor:  MyThemeColors.myGreyscale[300],
+                  textFieldColor: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
+                  color: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
+                  searchIconColor: MyThemeColors.myGreyscale[300],
+                  rtl: true,
+                  width: 400,
+                  textController: textEditingController,
+                  onSuffixTap: () {
+                    setState(() {
+                      textEditingController.clear();
+                    });
+                  }, onSubmitted: (String ) {  },
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    !folded
+                    folded == 0
                         ? Row(
                             children: [
                               FilterButton(title: "날짜", function: () {}),
@@ -93,7 +109,22 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           )
                         : Container(),
-                    const AnimatedSearchBar()
+                    AnimSearchBar(
+                      autoFocus: true,
+                      textFieldIconColor:  MyThemeColors.myGreyscale[300],
+                      textFieldColor: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
+                      color: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
+                      searchIconColor: MyThemeColors.myGreyscale[300],
+                      rtl: true,
+                      width: 400,
+                      textController: textEditingController,
+                      onSuffixTap: () {
+                        setState(() {
+                          textEditingController.clear();
+                        });
+                      }, onSubmitted: (String ) {  },
+                    ),
+
                   ],
                 ),
                 SizedBox(
@@ -134,7 +165,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(diary.date),
+                                    Text(
+                                      diary.date,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                          color:
+                                              MyThemeColors.myGreyscale[400]),
+                                    ),
                                     const SizedBox(
                                       height: 13,
                                     ),
@@ -142,6 +180,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                       diary.title,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: "Dodam",
+                                          color:
+                                              MyThemeColors.myGreyscale[800]),
                                     ),
                                   ],
                                 ),
