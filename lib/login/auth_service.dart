@@ -52,7 +52,7 @@ class AuthService {
 
     if (snapshot.exists) {
     } else {
-      await dateDocRef.set({"content": "", "from": "", "time": selectedDate});
+      await dateDocRef.set({"content": "", "from": "", "time": ""});
     }
 
     //finally, lets sign in

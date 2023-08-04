@@ -17,23 +17,25 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
-            Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  child: const HeroIcon(
-                    HeroIcons.envelope,
-                    color: Colors.white,
-                    style: HeroIconStyle.solid,
-                    size: 30,
-                  ),
-                  onTap: () {
-                    showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) => const MailBox(),
-                        animationType: DialogTransitionType.slideFromTopFade);
-                  },
-                )),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    child: const HeroIcon(
+                      HeroIcons.envelope,
+                      color: Colors.white,
+                      style: HeroIconStyle.solid,
+                    ),
+                    onTap: () {
+                      showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => const MailBox(),
+                          animationType: DialogTransitionType.slideFromTopFade);
+                    },
+                  )),
+            ),
             const SizedBox(
               height: 130,
             ),
