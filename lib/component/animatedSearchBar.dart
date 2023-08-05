@@ -237,17 +237,16 @@ class _AnimSearchBarState extends State<AnimSearchBar>
             ),
             AnimatedPositioned(
               duration: Duration(milliseconds: widget.animationDurationInMilli),
-              left: (toggle == 0) ? 20.0 : 40.0,
+              left: (toggle == 0) ? 20.0 : 15.0,
               curve: Curves.easeOut,
-              top: 11.0,
+              top: 9.0,
 
               ///Using Animated opacity to change the opacity of th textField while expanding
               child: AnimatedOpacity(
                 opacity: (toggle == 0) ? 0.0 : 1.0,
                 duration: Duration(milliseconds: 200),
                 child: Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.topLeft,
                   width: widget.width / 1.7,
                   child: TextField(
                     ///Text Controller. you can manipulate the text inside this textField by calling this controller.
@@ -302,7 +301,7 @@ class _AnimSearchBarState extends State<AnimSearchBar>
             ),
 
             ///Using material widget here to get the ripple effect on the prefix icon
-            Material(
+            toggle == 0 ? Material(
               /// can add custom color or the color will be white
               /// toggle button color based on toggle state
               color: toggle == 0 ? widget.color : Colors.transparent,
@@ -320,7 +319,7 @@ class _AnimSearchBarState extends State<AnimSearchBar>
                           )
                         : widget.prefixIcon!
                     : Icon(
-                        Icons.search,
+                  toggle == 0 ? Icons.search : null,
                         // search icon color when closed
                         color: toggle == 0
                             ? widget.searchIconColor
@@ -357,7 +356,7 @@ class _AnimSearchBarState extends State<AnimSearchBar>
                   );
                 },
               ),
-            ),
+            ) : Container(),
           ],
         ),
       ),

@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/animatedSearchBar.dart';
 import 'package:nts/component/filterButton.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/settings.dart';
+import 'package:nts/provider/calendarController.dart';
 import 'package:provider/provider.dart';
+import 'calendar.dart';
 import '../model/diaryModel.dart';
 import '../provider/backgroundController.dart';
 import '../provider/searchBarController.dart';
@@ -22,6 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
   TextEditingController textEditingController = TextEditingController();
 
+  bool calendar = false;
+
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
@@ -31,11 +36,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
     int folded = searchController.folded;
 
+    final calendarController = Provider.of<CalendarController>(context);
+
     void signUserOut() {
       FirebaseAuth.instance.signOut();
       controller.movePage(0);
     }
 
+    int flag = 0;
     return SafeArea(
       child: Column(
         children: [
@@ -76,43 +84,124 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 30,
                 ),
-                AnimSearchBar(
-                  autoFocus: true,
-                  textFieldIconColor:  MyThemeColors.myGreyscale[300],
-                  textFieldColor: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
-                  color: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
-                  searchIconColor: MyThemeColors.myGreyscale[300],
-                  rtl: true,
-                  width: 400,
-                  textController: textEditingController,
-                  onSuffixTap: () {
-                    setState(() {
-                      textEditingController.clear();
-                    });
-                  }, onSubmitted: (String ) {  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Stack(
                   children: [
                     folded == 0
                         ? Row(
                             children: [
-                              FilterButton(title: "날짜", function: () {}),
-                              const SizedBox(
-                                width: 10,
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      calendarController.count == 2
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: MyThemeColors
+                                                      .primaryColor),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Wrap(
+                                                      spacing:
+                                                          4, // gap between adjacent chips
+                                                      children: (calendarController
+                                                              .selected.keys
+                                                              .where((key) =>
+                                                                  calendarController
+                                                                          .selected[
+                                                                      key]!)
+                                                              .toList()
+                                                            ..sort((a, b) =>
+                                                                a.compareTo(
+                                                                    b))) // 정렬 추가
+                                                          .map<Widget>((date) {
+                                                            setState(() {
+                                                              flag++;
+                                                            });
+                                                        int year = int.parse(
+                                                            date.substring(
+                                                                0, 4));
+                                                        int month = int.parse(
+                                                            date.substring(4,
+                                                                6)); // 숫자로 변환해 0 제거
+                                                        int day = int.parse(
+                                                            date.substring(6,
+                                                                8)); // 숫자로 변환해 0 제거
+
+                                                        return Text(flag == 1 ?
+                                                          '$year년 $month월 $day일  ~' :  '$year년 $month월 $day일',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 13,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .white),
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            calendarController
+                                                                .setSelected(
+                                                                    {});
+                                                            calendarController
+                                                                .setCount(0);
+                                                          });
+                                                        },
+                                                        child: HeroIcon(
+                                                          HeroIcons.xCircle,
+                                                          style: HeroIconStyle
+                                                              .mini,
+                                                          color: MyThemeColors
+                                                              .myGreyscale[0]
+                                                              ?.withOpacity(
+                                                                  0.5),
+                                                          size: 18,
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          : FilterButton(
+                                              title: "날짜",
+                                              function: () {
+                                                setState(() {
+                                                  calendar = !calendar;
+                                                });
+                                              }),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      FilterButton(
+                                          title: "감정", function: () {}),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      FilterButton(
+                                          title: "상황", function: () {}),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              FilterButton(title: "감정", function: () {}),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              FilterButton(title: "상황", function: () {}),
                             ],
                           )
                         : Container(),
                     AnimSearchBar(
                       autoFocus: true,
-                      textFieldIconColor:  MyThemeColors.myGreyscale[300],
-                      textFieldColor: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
+                      textFieldIconColor: MyThemeColors.myGreyscale[300],
+                      textFieldColor:
+                          MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
                       color: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
                       searchIconColor: MyThemeColors.myGreyscale[300],
                       rtl: true,
@@ -122,11 +211,25 @@ class _ProfilePageState extends State<ProfilePage> {
                         setState(() {
                           textEditingController.clear();
                         });
-                      }, onSubmitted: (String ) {  },
+                      },
+                      onSubmitted: (String) {},
                     ),
-
                   ],
                 ),
+                // AnimatedContainer(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: calendar ? MediaQuery.of(context).size.height * 0.4 : 0.0,
+                //   duration: Duration(milliseconds: 300),
+                //   curve: Curves.easeInOut,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     color: calendar ? Colors.white : Colors.transparent,
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(10.0),
+                //     child: Text(calendar ? "d" : ""),
+                //   ),
+                // ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.505,
                   child: StreamBuilder(
@@ -148,50 +251,72 @@ class _ProfilePageState extends State<ProfilePage> {
                           .map(
                               (DocumentSnapshot doc) => Diary.fromSnapshot(doc))
                           .toList();
-                      return ListView.builder(
-                        padding: const EdgeInsets.only(top: 13),
-                        itemCount: diaries.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final Diary diary = diaries[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      diary.date,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color:
-                                              MyThemeColors.myGreyscale[400]),
-                                    ),
-                                    const SizedBox(
-                                      height: 13,
-                                    ),
-                                    Text(
-                                      diary.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: "Dodam",
-                                          color:
-                                              MyThemeColors.myGreyscale[800]),
-                                    ),
-                                  ],
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            calendar
+                                ? const Padding(
+                                    padding: EdgeInsets.only(top: 10.0),
+                                    child: Calendar(),
+                                  )
+                                : Container(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: List.generate(
+                                  diaries.length,
+                                  (index) {
+                                    final Diary diary = diaries[index];
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10.0),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white.withOpacity(0.9),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                diary.date,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 13,
+                                                    color: MyThemeColors
+                                                        .myGreyscale[400]),
+                                              ),
+                                              const SizedBox(
+                                                height: 13,
+                                              ),
+                                              Text(
+                                                diary.title,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontFamily: "Dodam",
+                                                    color: MyThemeColors
+                                                        .myGreyscale[800]),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
-                          );
-                        },
+                          ],
+                        ),
                       );
                     },
                   ),
