@@ -225,8 +225,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                             : Container(),
                         AnimSearchBar(
-                          style: TextStyle(color: Colors.white),
                           autoFocus: true,
+                          style: TextStyle(color: Colors.white),
                           textFieldIconColor: MyThemeColors.myGreyscale[300],
                           textFieldColor:
                               MyThemeColors.myGreyscale[700]?.withOpacity(0.5),

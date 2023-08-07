@@ -250,7 +250,6 @@ class _AnimSearchBarState extends State<AnimSearchBar>
                   width: widget.width / 1.7,
                   child: TextField(
                     ///Text Controller. you can manipulate the text inside this textField by calling this controller.
-                    autofocus: true,
                     controller: widget.textController,
                     inputFormatters: widget.inputFormatters,
                     focusNode: focusNode,
