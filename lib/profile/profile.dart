@@ -60,26 +60,31 @@ class _ProfilePageState extends State<ProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  //  logout button
                   IconButton(
-                      onPressed: signUserOut,
-                      icon: const Icon(
-                        Icons.logout,
-                        color: Colors.white,
-                      )),
+                    onPressed: signUserOut,
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  //  setting button
                   IconButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return ProfileSettings(provider: controller);
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                      )),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return ProfileSettings(provider: controller);
+                        },
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.settings,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
               Padding(
@@ -174,33 +179,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           width: 5,
                                                         ),
                                                         GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                calendarController
-                                                                    .setSelected(
-                                                                        {});
-                                                                calendarController
-                                                                    .setCount(
-                                                                        0);
-                                                              });
-                                                            },
-                                                            child: HeroIcon(
-                                                              HeroIcons.xCircle,
-                                                              style:
-                                                                  HeroIconStyle
-                                                                      .mini,
-                                                              color: MyThemeColors
-                                                                  .myGreyscale[
-                                                                      0]
-                                                                  ?.withOpacity(
-                                                                      0.5),
-                                                              size: 18,
-                                                            ))
+                                                          onTap: () {
+                                                            setState(() {
+                                                              calendarController
+                                                                  .setSelected(
+                                                                      {});
+                                                              calendarController
+                                                                  .setCount(0);
+                                                            });
+                                                          },
+                                                          child: HeroIcon(
+                                                            HeroIcons.xCircle,
+                                                            style: HeroIconStyle
+                                                                .mini,
+                                                            color: MyThemeColors
+                                                                .myGreyscale[0]
+                                                                ?.withOpacity(
+                                                                    0.5),
+                                                            size: 18,
+                                                          ),
+                                                        )
                                                       ],
                                                     ),
                                                   ),
                                                 )
-                                              : FilterButton(
+                                              :
+                                              // 날짜
+                                              FilterButton(
                                                   title: "날짜",
                                                   function: () {
                                                     setState(() {
@@ -214,6 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(
                                             width: 10,
                                           ),
+                                          // 상황
                                           FilterButton(
                                             title: "상황",
                                             function: () {
@@ -228,6 +234,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(
                                             width: 10,
                                           ),
+
+                                          // 감정
                                           FilterButton(
                                             title: "감정",
                                             function: () {
@@ -246,6 +254,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               )
                             : Container(),
+                        //  검색창
                         AnimSearchBar(
                           autoFocus: true,
                           style: TextStyle(color: Colors.white),
@@ -285,8 +294,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     //     child: Text(calendar ? "d" : ""),
                     //   ),
                     // ),
+
+                    //  일기 목록
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.505,
+                      height: MediaQuery.of(context).size.height * 0.5,
                       child: StreamBuilder(
                         stream: calendarController.count == 2
                             ? FirebaseFirestore.instance

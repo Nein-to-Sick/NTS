@@ -3,6 +3,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/loading/loading_page.dart';
+import 'package:nts/profile/new_profile.dart';
 import 'package:nts/profile/notification.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
@@ -198,6 +199,34 @@ class _HomePageState extends State<HomePage> {
                           userName: userName,
                         ),
                         animationType: DialogTransitionType.slideFromBottomFade,
+                      );
+                    },
+                  ),
+
+                  //  프로필 페이지 테스트
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                          "프로필 페이지 테스트",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyProfilePage(),
+                        ),
                       );
                     },
                   ),

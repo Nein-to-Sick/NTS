@@ -1,26 +1,22 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:nts/Theme/theme_colors.dart';
 
-class MyLoadingPage extends StatelessWidget {
-  const MyLoadingPage({super.key});
+class MyCatLoadingPage extends StatelessWidget {
+  const MyCatLoadingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: SpinKitSpinningCircle(
-          itemBuilder: (context, index) {
-            return const Center(
-              child: Text(
-                "🐶",
-                style: TextStyle(fontSize: 40),
-              ),
-            );
-          },
-        ),
+    return Center(
+      child: SpinKitSpinningCircle(
+        itemBuilder: (context, index) {
+          return const Center(
+            child: Text(
+              "😺",
+              style: TextStyle(fontSize: 40),
+            ),
+          );
+        },
       ),
     );
   }
