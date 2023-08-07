@@ -556,9 +556,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         defaultCursor: SystemMouseCursors.click,
         onTap: () {
           setState(() => positive = !positive);
-          if (positive) {
-            alarmsettings();
-          }
+          // if (positive) {
+          //   alarmsettings();
+          // }
           // else {
           //   FlutterLocalNotification.requestNotificationPermissionOff();
           //   print("notification is turned offed");
