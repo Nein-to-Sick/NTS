@@ -108,8 +108,7 @@ class GPTModel with ChangeNotifier {
           presencePenalty: 0,
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
-              content:
-                  "너는 글요약 전문가야 다음 일기의 내용을 보고 적절한 요약의 제목을 만들어줘 <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[정리한 내용]>",
+              content: "다음 일기의 내용을 보고 적절한 제목을 만들어줘 <$prompt>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
