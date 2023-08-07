@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickName_Sheet.dart';
@@ -34,7 +35,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "SUITE"),
+      theme: ThemeData(
+        fontFamily: "SUITE",
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: MyThemeColors.primaryColor,
+          selectionColor: MyThemeColors.primaryColor,
+          selectionHandleColor: MyThemeColors.primaryColor,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -73,7 +81,7 @@ class BackgroundState extends State<Background> {
         scrollDirection: Axis.horizontal,
         controller: scrollController,
         children: [
-          Container(
+          SizedBox(
             width: 1300,
             child: Image.asset(
               'assets/back.png',

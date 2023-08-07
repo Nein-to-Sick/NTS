@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/Theme/theme_colors.dart';
 
@@ -231,11 +232,12 @@ class _LetterState extends State<Letter> {
                             Text(
                               "누군가",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: isSomeoneSelected
-                                      ? Colors.white
-                                      : MyThemeColors.myGreyscale.shade900,
-                                  fontWeight: FontWeight.w500),
+                                fontSize: 16,
+                                color: isSomeoneSelected
+                                    ? Colors.white
+                                    : MyThemeColors.myGreyscale.shade900,
+                                fontWeight: FontWeight.w500,
+                              ),
                             )
                           ],
                         ),
@@ -335,7 +337,7 @@ class _LetterState extends State<Letter> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
@@ -482,7 +484,7 @@ class _LetterState extends State<Letter> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().emotion[index1][index2],
                                           style: TextStyle(
@@ -590,38 +592,55 @@ class _LetterState extends State<Letter> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                        child: TextField(
-                          onChanged: (value) {
-                            setState(() {
-                              contents = value;
-                            });
-                          },
-                          controller: textEditingController,
-                          style: const TextStyle(fontSize: 16),
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  fontSize: 16,
-                                  color: MyThemeColors.myGreyscale[300],
-                                  fontFamily: "Dodam"),
-                              hintMaxLines: 10,
-                              hintText:
-                                  "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom * 0.4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: TextField(
+                              onSubmitted: (value) {
+                                FocusScope.of(context).unfocus();
+                              },
+                              onTapOutside: (p) {
+                                FocusScope.of(context).unfocus();
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  contents = value;
+                                });
+                              },
+                              controller: textEditingController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      fontSize: 16,
+                                      color: MyThemeColors.myGreyscale[300],
+                                      fontFamily: "Dodam"),
+                                  hintMaxLines: 10,
+                                  hintText:
+                                      "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(
                     height: 13,
                   ),
+
+                  //  submmit button
                   Button(
                     function: () {
                       List<String> sit = [];
@@ -641,12 +660,15 @@ class _LetterState extends State<Letter> {
                         }
                       }
 
+                      DateTime now = DateTime.now();
+                      String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
+
                       if (isSelfSelected) {
-                        DatabaseService()
-                            .selfMessage(textEditingController.text, sit, emo);
+                        DatabaseService().selfMessage(
+                            textEditingController.text, sit, emo, time);
                       } else {
                         DatabaseService().someoneMessage(
-                            textEditingController.text, sit, emo);
+                            textEditingController.text, sit, emo, time);
                       }
 
                       Navigator.pop(context);
@@ -658,7 +680,7 @@ class _LetterState extends State<Letter> {
                           '내 편지를 보냈습니다!',
                           style: TextStyle(color: Colors.black),
                         ),
-                        duration: Duration(seconds: 5),
+                        duration: const Duration(seconds: 5),
                         //올라와있는 시간
                         action: SnackBarAction(
                           textColor: MyThemeColors.primaryColor,

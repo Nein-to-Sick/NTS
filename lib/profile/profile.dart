@@ -51,9 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Container(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height
-          ),
+          constraints:
+              BoxConstraints(minHeight: MediaQuery.of(context).size.height),
           child: Column(
             children: [
               Row(
@@ -88,7 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(
                       "$userName님의 일기",
                       style: const TextStyle(
-                          fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontFamily: "Dodam"),
                     ),
                     const SizedBox(
                       height: 30,
@@ -108,12 +109,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ? Container(
                                                   decoration: BoxDecoration(
                                                       borderRadius:
-                                                          BorderRadius.circular(10),
+                                                          BorderRadius.circular(
+                                                              10),
                                                       color: MyThemeColors
                                                           .primaryColor),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Row(
                                                       children: [
                                                         Wrap(
@@ -129,33 +132,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 ..sort((a, b) =>
                                                                     a.compareTo(
                                                                         b))) // 정렬 추가
-                                                              .map<Widget>((date) {
+                                                              .map<Widget>(
+                                                                  (date) {
                                                             setState(() {
                                                               flag++;
                                                             });
-                                                            int year = int.parse(
-                                                                date.substring(
-                                                                    0, 4));
+                                                            int year =
+                                                                int.parse(date
+                                                                    .substring(
+                                                                        0, 4));
                                                             int month = int.parse(
-                                                                date.substring(4,
+                                                                date.substring(
+                                                                    4,
                                                                     6)); // 숫자로 변환해 0 제거
                                                             int day = int.parse(
-                                                                date.substring(6,
+                                                                date.substring(
+                                                                    6,
                                                                     8)); // 숫자로 변환해 0 제거
 
                                                             return Text(
-                                                              calendarController.count == 1 ? '$year.$month.$day' :
-                                                              flag == 1
-                                                                  ? '$year.$month.$day ~'
-                                                                  : '$year.$month.$day',
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize: 13,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      color: Colors
-                                                                          .white),
+                                                              calendarController
+                                                                          .count ==
+                                                                      1
+                                                                  ? '$year.$month.$day'
+                                                                  : flag == 1
+                                                                      ? '$year.$month.$day ~'
+                                                                      : '$year.$month.$day',
+                                                              style: const TextStyle(
+                                                                  fontSize: 13,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .white),
                                                             );
                                                           }).toList(),
                                                         ),
@@ -169,15 +178,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                     .setSelected(
                                                                         {});
                                                                 calendarController
-                                                                    .setCount(0);
+                                                                    .setCount(
+                                                                        0);
                                                               });
                                                             },
                                                             child: HeroIcon(
                                                               HeroIcons.xCircle,
-                                                              style: HeroIconStyle
-                                                                  .mini,
+                                                              style:
+                                                                  HeroIconStyle
+                                                                      .mini,
                                                               color: MyThemeColors
-                                                                  .myGreyscale[0]
+                                                                  .myGreyscale[
+                                                                      0]
                                                                   ?.withOpacity(
                                                                       0.5),
                                                               size: 18,
@@ -194,29 +206,37 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       situation = false;
                                                       emotion = false;
                                                     });
-                                                  }, isExpanded: calendar,),
+                                                  },
+                                                  isExpanded: calendar,
+                                                ),
                                           const SizedBox(
                                             width: 10,
                                           ),
                                           FilterButton(
-                                              title: "상황", function: () {
-                                                setState(() {
-                                                  situation = !situation;
-                                                  calendar = false;
-                                                  emotion = false;
-                                                });
-                                          }, isExpanded: situation,),
+                                            title: "상황",
+                                            function: () {
+                                              setState(() {
+                                                situation = !situation;
+                                                calendar = false;
+                                                emotion = false;
+                                              });
+                                            },
+                                            isExpanded: situation,
+                                          ),
                                           const SizedBox(
                                             width: 10,
                                           ),
                                           FilterButton(
-                                              title: "감정", function: () {
-                                            setState(() {
-                                              emotion = !emotion;
-                                              calendar = false;
-                                              situation = false;
-                                            });
-                                          }, isExpanded: emotion,),
+                                            title: "감정",
+                                            function: () {
+                                              setState(() {
+                                                emotion = !emotion;
+                                                calendar = false;
+                                                situation = false;
+                                              });
+                                            },
+                                            isExpanded: emotion,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -230,7 +250,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           textFieldIconColor: MyThemeColors.myGreyscale[300],
                           textFieldColor:
                               MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
-                          color: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
+                          color:
+                              MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
                           searchIconColor: MyThemeColors.myGreyscale[300],
                           rtl: true,
                           width: 400,
@@ -285,7 +306,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     .orderBy("date", descending: true)
                                     .where("date",
                                         isGreaterThanOrEqualTo:
-                                            calendarController.formatStartDate(),
+                                            calendarController
+                                                .formatStartDate(),
                                         isLessThanOrEqualTo: calendarController
                                             .formatOneDayEndDate())
                                     .snapshots()
@@ -295,63 +317,83 @@ class _ProfilePageState extends State<ProfilePage> {
                                     .collection("diary")
                                     .orderBy("date", descending: true)
                                     .snapshots(),
-                        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasError) {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
                           final List<Diary> diaries = snapshot.data!.docs
-                              .map(
-                                  (DocumentSnapshot doc) => Diary.fromSnapshot(doc))
+                              .map((DocumentSnapshot doc) =>
+                                  Diary.fromSnapshot(doc))
                               .toList();
 
                           // Filter the diaries based on the entered text in the search bar
-                          final String searchText = textEditingController.text.toLowerCase();
+                          final String searchText =
+                              textEditingController.text.toLowerCase();
                           final List<Diary> filteredDiaries = diaries
-                              .where(
-                                  (diary) => diary.title.toLowerCase().contains(searchText))
+                              .where((diary) => diary.title
+                                  .toLowerCase()
+                                  .contains(searchText))
                               .toList();
                           return SingleChildScrollView(
                             child: Column(
                               children: [
                                 calendar
                                     ? const Padding(
-                                        padding: EdgeInsets.only(top: 10.0),
+                                        padding: EdgeInsets.only(top: 20.0),
                                         child: Calendar(),
                                       )
                                     : Container(),
-                                situation ? Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Keyword(title: Preset().situation,),
-                                ) : Container(),
-                                emotion ? Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Keyword(title: Preset().emotion,),
-                                ) : Container(),
+                                situation
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 20.0),
+                                        child: Keyword(
+                                          title: Preset().situation,
+                                        ),
+                                      )
+                                    : Container(),
+                                emotion
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 20.0),
+                                        child: Keyword(
+                                          title: Preset().emotion,
+                                        ),
+                                      )
+                                    : Container(),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: List.generate(
-                                    filteredDiaries.length,
-                                    (index) {
-                                    final Diary diary = filteredDiaries[index];
+                                      filteredDiaries.length,
+                                      (index) {
+                                        final Diary diary =
+                                            filteredDiaries[index];
                                         return Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 10.0),
+                                          padding: const EdgeInsets.only(
+                                              bottom: 10.0),
                                           child: Container(
-                                            width:
-                                                MediaQuery.of(context).size.width,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              color: Colors.white.withOpacity(0.9),
+                                              color:
+                                                  Colors.white.withOpacity(0.9),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(20.0),
+                                              padding:
+                                                  const EdgeInsets.all(20.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -359,7 +401,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   Text(
                                                     diary.date,
                                                     style: TextStyle(
-                                                        fontWeight: FontWeight.w500,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                         fontSize: 13,
                                                         color: MyThemeColors
                                                             .myGreyscale[400]),
@@ -370,7 +413,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   Text(
                                                     diary.title,
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         fontFamily: "Dodam",
