@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "SUITE"),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: MultiProvider(
           providers: [
             ChangeNotifierProvider(

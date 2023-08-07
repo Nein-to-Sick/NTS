@@ -261,11 +261,11 @@ class _AnimSearchBarState extends State<AnimSearchBar>
                     },
                     onSubmitted: (value) => {
                       widget.onSubmitted(value),
-                      unfocusKeyboard(),
-                      setState(() {
-                        controller.fold(0);
-                      }),
-                      widget.textController.clear(),
+                      // unfocusKeyboard(),
+                      // setState(() {
+                      //   controller.fold(0);
+                      // }),
+                      // widget.textController.clear(),
                     },
                     onEditingComplete: () {
                       /// on editing complete the keyboard will be closed and the search bar will be closed
