@@ -3,6 +3,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/Theme/theme_colors.dart';
+import 'package:nts/component/confirm_dialog.dart';
 
 import '../component/button.dart';
 import '../database/databaseService.dart';
@@ -45,69 +46,95 @@ class _LetterState extends State<Letter> {
   }
 
   _buildBody(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(10)),
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Stack(
-            children: <Widget>[
-              PageView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _pageController,
-                itemBuilder: (BuildContext context, int pageIndex) {
-                  switch (pageIndex) {
-                    case 0:
-                      return _buildPageFirst();
-                    case 1:
-                      return _buildPageSecond();
-                    case 2:
-                      return _buildPageThird();
-                    case 3:
-                      return _buildPageFourth();
-                  }
-                  return null;
-                },
-                onPageChanged: (ind) {
-                  setState(() {
-                    index = ind;
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 13.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: LinearProgressBar(
-                    maxSteps: 4,
-                    progressType: LinearProgressBar.progressTypeDots,
-                    currentStep: index,
-                    progressColor: MyThemeColors.primaryColor,
-                    backgroundColor: MyThemeColors.myGreyscale.shade100,
-                    dotsSpacing: const EdgeInsets.only(right: 8),
+    onBackKeyCall() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return dialogWithYesOrNo(
+            context,
+            '편지 쓰기 종료',
+            '창을 닫으시겠나요?\n내용은 저장되지 않습니다',
+            //  on Yes
+            () {
+              Navigator.pop(context);
+            },
+            //  on No
+            () {},
+          );
+        },
+      );
+    }
+
+    return WillPopScope(
+      //뒤로가기 막음
+      onWillPop: () {
+        onBackKeyCall();
+        return Future(() => false);
+      },
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(10)),
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Stack(
+              children: <Widget>[
+                PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  itemBuilder: (BuildContext context, int pageIndex) {
+                    switch (pageIndex) {
+                      case 0:
+                        return _buildPageFirst();
+                      case 1:
+                        return _buildPageSecond();
+                      case 2:
+                        return _buildPageThird();
+                      case 3:
+                        return _buildPageFourth();
+                    }
+                    return null;
+                  },
+                  onPageChanged: (ind) {
+                    setState(() {
+                      index = ind;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 13.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: LinearProgressBar(
+                      maxSteps: 4,
+                      progressType: LinearProgressBar.progressTypeDots,
+                      currentStep: index,
+                      progressColor: MyThemeColors.primaryColor,
+                      backgroundColor: MyThemeColors.myGreyscale.shade100,
+                      dotsSpacing: const EdgeInsets.only(right: 8),
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Opacity(
-                      opacity: 0.2,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: HeroIcon(
-                              HeroIcons.xMark,
-                              size: 23,
-                            )),
-                      )))
-            ],
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Opacity(
+                        opacity: 0.2,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                              alignment: Alignment.topRight,
+                              child: HeroIcon(
+                                HeroIcons.xMark,
+                                size: 23,
+                              )),
+                        )))
+              ],
+            ),
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/provider/gpt_model.dart';
@@ -45,117 +46,146 @@ class DiaryState extends State<Diary> {
 
   _buildBody(BuildContext context) {
     final gptModel = Provider.of<GPTModel>(context);
+    onBackKeyCall() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return dialogWithYesOrNo(
+            context,
+            '일기 쓰기 종료',
+            '창을 닫으시겠나요?\n내용은 저장되지 않습니다',
+            //  on Yes
+            () {
+              gptModel.endAnalyzeDiary();
+              Navigator.pop(context);
+            },
+            //  on No
+            () {},
+          );
+        },
+      );
+    }
 
-    return Material(
-      type: MaterialType.transparency,
-      child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(10)),
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Stack(
-            children: <Widget>[
-              PageView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _pageController,
-                itemBuilder: (BuildContext context, int pageIndex) {
-                  switch (pageIndex) {
-                    case 0:
-                      return _buildPageFirst();
-                    case 1:
-                      return
+    return WillPopScope(
+      //뒤로가기 막음
+      onWillPop: () {
+        onBackKeyCall();
+        return Future(() => false);
+      },
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(10)),
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Stack(
+              children: <Widget>[
+                PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  itemBuilder: (BuildContext context, int pageIndex) {
+                    switch (pageIndex) {
+                      case 0:
+                        //  일기 쓰기 화면
+                        return _buildPageFirst();
+                      case 1:
+                        return
 
-                          //  AI analyzation result
-                          FutureBuilder<bool>(
-                        future: gptModel.watiFetchDiaryData(),
-                        builder: (context, snapshot) {
-                          //  최초 분석의 경우
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting &&
-                              gptModel.isAnalyzed == false) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              gptModel.whileLoadingStart();
-                            });
-                            return const MyFireFlyProgressbar(
-                              loadingText: '반딧불이가 일기를 가져가는 중...',
-                            );
-                          }
-                          //  Future 데이터 가져오기
-                          else if (snapshot.data == false) {
-                            return const MyFireFlyProgressbar(
-                              loadingText: '정리 중...',
-                            );
-                          }
-                          //  오류 발생 시
-                          else if (snapshot.hasError) {
-                            return const Center(child: Text('오류 발생'));
-                          }
-                          //  분석 완료
-                          else {
-                            if (gptModel.isOnLoading) {
+                            //  AI analyzation result
+                            FutureBuilder<bool>(
+                          future: gptModel.watiFetchDiaryData(),
+                          builder: (context, snapshot) {
+                            //  최초 분석의 경우
+                            if (snapshot.connectionState ==
+                                    ConnectionState.waiting &&
+                                gptModel.isAnalyzed == false) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                gptModel.whileLoadingDone();
+                                gptModel.whileLoadingStart();
                               });
-                              updateIsSelectedSituation();
-                              updateIsSelectedEmotion();
+                              return const MyFireFlyProgressbar(
+                                loadingText: '반딧불이가 일기를 가져가는 중...',
+                              );
                             }
+                            //  Future 데이터 가져오기
+                            else if (snapshot.data == false) {
+                              return const MyFireFlyProgressbar(
+                                loadingText: '정리 중...',
+                              );
+                            }
+                            //  오류 발생 시
+                            else if (snapshot.hasError) {
+                              return const Center(child: Text('오류 발생'));
+                            }
+                            //  분석 완료
+                            else {
+                              if (gptModel.isOnLoading) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  gptModel.whileLoadingDone();
+                                });
+                                updateIsSelectedSituation();
+                                updateIsSelectedEmotion();
+                              }
 
-                            return _buildPageSecond();
-                          }
-                        },
-                      );
+                              //  상황 분석
+                              return _buildPageSecond();
+                            }
+                          },
+                        );
 
-                    case 2:
-                      return _buildPageThird();
-                  }
-                  return null;
-                },
-                onPageChanged: (ind) {
-                  setState(() {
-                    index = ind;
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 13.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: LinearProgressBar(
-                    maxSteps: 3,
-                    progressType: LinearProgressBar.progressTypeDots,
-                    currentStep: index,
-                    progressColor: MyThemeColors.primaryColor,
-                    backgroundColor: MyThemeColors.myGreyscale.shade100,
-                    dotsSpacing: const EdgeInsets.only(right: 8),
+                      case 2:
+                        //  감정 분석
+                        return _buildPageThird();
+                    }
+                    return null;
+                  },
+                  onPageChanged: (ind) {
+                    setState(() {
+                      index = ind;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 13.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: LinearProgressBar(
+                      maxSteps: 3,
+                      progressType: LinearProgressBar.progressTypeDots,
+                      currentStep: index,
+                      progressColor: MyThemeColors.primaryColor,
+                      backgroundColor: MyThemeColors.myGreyscale.shade100,
+                      dotsSpacing: const EdgeInsets.only(right: 8),
+                    ),
                   ),
                 ),
-              ),
 
-              // 로딩 중에는 버튼 비활성화
-              (gptModel.isOnLoading)
-                  ? Container()
-                  : GestureDetector(
-                      onTap: () {
-                        gptModel.endAnalyzeDiary();
-                        Navigator.pop(context);
-                      },
-                      child: const Opacity(
-                        opacity: 0.2,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: HeroIcon(
-                              HeroIcons.xMark,
-                              size: 23,
+                // 로딩 중에는 버튼 비활성화
+                (gptModel.isOnLoading)
+                    ? Container()
+                    : GestureDetector(
+                        onTap: () {
+                          onBackKeyCall();
+                        },
+                        child: const Opacity(
+                          opacity: 0.2,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: HeroIcon(
+                                HeroIcons.xMark,
+                                size: 23,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -588,8 +618,13 @@ class DiaryState extends State<Diary> {
                                 DateFormat('yyyy/MM/dd HH:mm').format(now);
 
                             //  diray firebase upload
-                            DatabaseService().writeDiary(gptModel.diaryTitle,
-                                textEditingController.text, sit, emo, time);
+                            DatabaseService().writeDiary(
+                              gptModel.diaryTitle,
+                              textEditingController.text.trim(),
+                              sit,
+                              emo,
+                              time,
+                            );
 
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -612,6 +647,7 @@ class DiaryState extends State<Diary> {
                                 ),
                               ),
                             );
+                            gptModel.endAnalyzeDiary();
                           },
                           title: '저장 후 나가기',
                           condition: count3 > 0 ? 'not null' : 'null',

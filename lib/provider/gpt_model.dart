@@ -32,13 +32,13 @@ class GPTModel with ChangeNotifier {
     notifyListeners();
   }
 
-  //  기록할 경우 파베 업로드 및 변수 초기화
+  //  기록할 경우 변수 초기화
   void endAnalyzeDiary() {
     isAnalyzed = false;
     situationSummerization.clear();
     emotionSummerization.clear();
     diaryMainText = '';
-    diaryMainText = '';
+    diaryTitle = '';
     notifyListeners();
   }
 
