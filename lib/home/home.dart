@@ -19,9 +19,7 @@ class HomePage extends StatelessWidget {
     final controller = Provider.of<BackgroundController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final userName = userInfo.userNickName;
-
     final messageController = Provider.of<MessageController>(context);
-
 
     return SafeArea(
       child: Padding(
@@ -29,43 +27,49 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: messageController.newMessage ? const EdgeInsets.only(top: 17, left: 7) : const EdgeInsets.only(top: 20),
+              padding: messageController.newMessage
+                  ? const EdgeInsets.only(top: 17, left: 7)
+                  : const EdgeInsets.only(top: 20),
               child: Align(
                   alignment: Alignment.topRight,
                   child: GestureDetector(
-                    child: messageController.newMessage ? Stack(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(3),
-                          child: const Align(
-                            alignment: Alignment.topRight,
+                    child: messageController.newMessage
+                        ? Stack(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(3),
+                                child: const Align(
+                                  alignment: Alignment.topRight,
+                                  child: HeroIcon(
+                                    HeroIcons.envelope,
+                                    color: Colors.white,
+                                    style: HeroIconStyle.solid,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Color(0xffFCE181)),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : const Opacity(
+                            opacity: 0.4,
                             child: HeroIcon(
                               HeroIcons.envelope,
                               color: Colors.white,
                               style: HeroIconStyle.solid,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Color(0xffFCE181)),
-                            ),
-                          ),
-                        )
-                      ],
-                    ) : const Opacity(
-                      opacity: 0.4,
-                      child: HeroIcon(
-                        HeroIcons.envelope,
-                        color: Colors.white,
-                        style: HeroIconStyle.solid,
-                      ),
-                    ),
                     onTap: () {
                       showAnimatedDialog(
                           context: context,
@@ -126,7 +130,8 @@ class HomePage extends StatelessWidget {
                               ),
                             ],
                             child: Diary(
-                              controller: controller, messageController: messageController,
+                              controller: controller,
+                              messageController: messageController,
                             ),
                           );
                         },
@@ -154,11 +159,10 @@ class HomePage extends StatelessWidget {
                       showAnimatedDialog(
                         context: context,
                         barrierDismissible: false,
-                        builder: (BuildContext context) =>
-                            Letter(
-                                controller: controller,
-                                userName: userName,
-                              ),
+                        builder: (BuildContext context) => Letter(
+                          controller: controller,
+                          userName: userName,
+                        ),
                         animationType: DialogTransitionType.slideFromBottomFade,
                       );
                     },

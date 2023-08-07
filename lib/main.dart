@@ -90,7 +90,7 @@ class BackgroundState extends State<Background> {
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
     final ScrollController scrollController = controller.scrollController;
-    onBackKeyCall() {
+    onBackKeyCallOnMain() {
       showDialog(
         context: context,
         builder: (context) {
@@ -109,10 +109,19 @@ class BackgroundState extends State<Background> {
       );
     }
 
+    onBackKeyCallOnMyPage() {
+      controller.movePage(600);
+      controller.changeColor(2);
+    }
+
     return WillPopScope(
       //뒤로가기 막음
       onWillPop: () {
-        onBackKeyCall();
+        if (scrollController.offset == 600) {
+          onBackKeyCallOnMain();
+        } else if (scrollController.offset == 855) {
+          onBackKeyCallOnMyPage();
+        }
         return Future(() => false);
       },
       child: Stack(
@@ -153,7 +162,7 @@ class BackgroundState extends State<Background> {
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
-                      return HomePage();
+                      return const HomePage();
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {
