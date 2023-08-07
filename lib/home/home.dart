@@ -126,33 +126,6 @@ class HomePage extends StatelessWidget {
                               DialogTransitionType.slideFromBottomFade);
                     },
                   ),
-
-                  //  test
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            "로딩 페이지 보기",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                        )),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyFireFlyProgressbar(),
-                        ),
-                      );
-                    },
-                  ),
                 ],
               ),
             )

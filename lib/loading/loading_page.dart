@@ -111,7 +111,8 @@ class MyFireFlyProgressbarAndDotPainter extends CustomPainter {
 }
 
 class MyFireFlyProgressbar extends StatefulWidget {
-  const MyFireFlyProgressbar({super.key});
+  final String loadingText;
+  const MyFireFlyProgressbar({super.key, required this.loadingText});
 
   @override
   MyFireFlyProgressbarState createState() => MyFireFlyProgressbarState();
@@ -145,47 +146,41 @@ class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
   @override
   Widget build(BuildContext context) {
     const double progress = 0.45;
-    return Scaffold(
-      backgroundColor: MyThemeColors.blackColor,
-      appBar: AppBar(
-        title: const Text('로딩 테스트'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return SizedBox(
-                  height: 135,
-                  width: 135,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: CustomPaint(
-                      painter: MyFireFlyProgressbarAndDotPainter(
-                        rotationAngle: _animation.value * 360,
-                        progress: progress,
-                      ),
-                      child: Container(),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return SizedBox(
+                height: 135,
+                width: 135,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: CustomPaint(
+                    painter: MyFireFlyProgressbarAndDotPainter(
+                      rotationAngle: _animation.value * 360,
+                      progress: progress,
                     ),
+                    child: Container(),
                   ),
-                );
-              },
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            widget.loadingText,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Text(
-              '로딩 중...',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

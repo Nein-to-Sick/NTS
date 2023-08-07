@@ -3,14 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GPTModel with ChangeNotifier {
+  bool isOnLoading = false;
   bool isAnalyzed = false;
   String diaryMainText = '';
   String diaryTitle = '';
   List<String> situationSummerization = List<String>.empty(growable: true);
   List<String> emotionSummerization = List<String>.empty(growable: true);
 
+  //  일기 내용 저장
   void updateDiaryMainText(value) {
     diaryMainText = value.toString().trim();
+    notifyListeners();
+  }
+
+  void whileLoadingStart() {
+    isOnLoading = true;
+    notifyListeners();
+  }
+
+  void whileLoadingDone() {
+    isOnLoading = false;
     notifyListeners();
   }
 
@@ -23,6 +35,10 @@ class GPTModel with ChangeNotifier {
   //  기록할 경우 파베 업로드 및 변수 초기화
   void endAnalyzeDiary() {
     isAnalyzed = false;
+    situationSummerization.clear();
+    emotionSummerization.clear();
+    diaryMainText = '';
+    diaryMainText = '';
     notifyListeners();
   }
 
@@ -31,7 +47,6 @@ class GPTModel with ChangeNotifier {
       String emotionsTemp = '';
       String situationTemp = '';
       OpenAI.apiKey = dotenv.env['OpenAI_apiKey']!;
-      print('1번버버너버넌법ㄴㅂ넌번법넌번버ㅓㄴ버법너ㅓ번버ㅓㅂ넙너버넙넌법너');
       try {
         //  situation analysis
         final situationGPT = await OpenAI.instance.chat.create(
@@ -55,7 +70,6 @@ class GPTModel with ChangeNotifier {
             ),
           ],
         );
-        print('2222222번버버너버넌법ㄴㅂ넌번법넌번버ㅓㄴ버법너ㅓ번버ㅓㅂ넙너버넙넌법너');
         //  emotion analysis
         final emotionGPT = await OpenAI.instance.chat.create(
           //  사용하는 모델
@@ -78,7 +92,6 @@ class GPTModel with ChangeNotifier {
             ),
           ],
         );
-        print('33333번버버너버넌법ㄴㅂ넌번법넌번버ㅓㄴ버법너ㅓ번버ㅓㅂ넙너버넙넌법너');
         // diary title
         final titleGPT = await OpenAI.instance.chat.create(
           //  사용하는 모델
@@ -118,6 +131,7 @@ class GPTModel with ChangeNotifier {
             .split(', ')
             .map((value) => value.trim())
             .toList();
+        /*
         print(situationGPT.choices.first.message.content);
         print(emotionGPT.choices.first.message.content);
         for (int i = 0; i < emotionSummerization.length; i++) {
@@ -126,6 +140,7 @@ class GPTModel with ChangeNotifier {
         for (int i = 0; i < situationSummerization.length; i++) {
           print(situationSummerization[i]);
         }
+        */
         startAnalyzeDiary();
       } catch (e) {
         print('Error happen!');
@@ -140,9 +155,20 @@ class GPTModel with ChangeNotifier {
   }
 
   Future<bool> watiFetchDiaryData() async {
-    if (situationSummerization.isNotEmpty && emotionSummerization.isNotEmpty) {
+    if (isAnalyzed) {
       return true;
     }
-    return false;
+
+    //  delay for loading page
+    return Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        if (situationSummerization.isNotEmpty &&
+            emotionSummerization.isNotEmpty) {
+          return true;
+        }
+        return false;
+      },
+    );
   }
 }

@@ -44,6 +44,7 @@ class DiaryState extends State<Diary> {
 
   _buildBody(BuildContext context) {
     final gptModel = Provider.of<GPTModel>(context);
+
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -64,16 +65,42 @@ class DiaryState extends State<Diary> {
                       return _buildPageFirst();
                     case 1:
                       return
+
                           //  AI analyzation result
                           FutureBuilder<bool>(
                         future: gptModel.watiFetchDiaryData(),
                         builder: (context, snapshot) {
+                          //  최초 분석의 경우
                           if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const MyFireFlyProgressbar();
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
+                                  ConnectionState.waiting &&
+                              gptModel.isAnalyzed == false) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              gptModel.whileLoadingStart();
+                            });
+                            return const MyFireFlyProgressbar(
+                              loadingText: '반딧불이가 일기를 가져가는 중...',
+                            );
+                          }
+                          //  Future 데이터 가져오기
+                          else if (snapshot.data == false) {
+                            return const MyFireFlyProgressbar(
+                              loadingText: '정리 중...',
+                            );
+                          }
+                          //  오류 발생 시
+                          else if (snapshot.hasError) {
+                            return const Center(child: Text('오류 발생'));
+                          }
+                          //  분석 완료
+                          else {
+                            if (gptModel.isOnLoading) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                gptModel.whileLoadingDone();
+                              });
+                              updateIsSelectedSituation();
+                              updateIsSelectedEmotion();
+                            }
+
                             return _buildPageSecond();
                           }
                         },
@@ -104,24 +131,29 @@ class DiaryState extends State<Diary> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Opacity(
-                  opacity: 0.2,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: HeroIcon(
-                        HeroIcons.xMark,
-                        size: 23,
+
+              // 로딩 중에는 버튼 비활성화
+              (gptModel.isOnLoading)
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        gptModel.endAnalyzeDiary();
+                        Navigator.pop(context);
+                      },
+                      child: const Opacity(
+                        opacity: 0.2,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: HeroIcon(
+                              HeroIcons.xMark,
+                              size: 23,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              )
             ],
           ),
         ),
@@ -248,7 +280,6 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageSecond() {
-    final gptModel = Provider.of<GPTModel>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
@@ -266,20 +297,12 @@ class DiaryState extends State<Diary> {
           Text(
             "현재 상황과 관련된 키워드를 모두 골라주세요.",
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[600]),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: MyThemeColors.myGreyscale[600],
+            ),
           ),
           const SizedBox(height: 30),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < gptModel.situationSummerization.length; i++)
-                Text(
-                  gptModel.situationSummerization[i],
-                ),
-            ],
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -317,27 +340,27 @@ class DiaryState extends State<Diary> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: isSelected2[index1][index2]
-                                            ? MyThemeColors
-                                                .myGreyscale.shade700 // 수정
+                                            ? MyThemeColors.myGreyscale.shade700
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
                                           color: MyThemeColors
                                               .myGreyscale.shade700,
-                                        ), // 수정
+                                        ),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              color: isSelected2[index1][index2]
-                                                  ? Colors.white
-                                                  : MyThemeColors
-                                                      .myGreyscale.shade900,
-                                              fontWeight: FontWeight.w500),
+                                            fontSize: 16,
+                                            color: isSelected2[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade900,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -430,15 +453,6 @@ class DiaryState extends State<Diary> {
                 color: MyThemeColors.myGreyscale[600]),
           ),
           const SizedBox(height: 30),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < gptModel.emotionSummerization.length; i++)
-                Text(
-                  gptModel.emotionSummerization[i],
-                ),
-            ],
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -486,7 +500,7 @@ class DiaryState extends State<Diary> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().emotion[index1][index2],
                                           style: TextStyle(
@@ -568,8 +582,8 @@ class DiaryState extends State<Diary> {
                                 }
                               }
 
-                              DatabaseService().writeDiary(
-                                  "GPT", textEditingController.text, sit, emo);
+                              DatabaseService().writeDiary(gptModel.diaryTitle,
+                                  textEditingController.text, sit, emo);
 
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context)
@@ -604,5 +618,31 @@ class DiaryState extends State<Diary> {
         ],
       ),
     );
+  }
+
+  void updateIsSelectedSituation() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+    for (var value in gptModel.situationSummerization) {
+      for (int i = 0; i < Preset().situation.length; i++) {
+        if (Preset().situation[i].contains(value)) {
+          int indexInInnerList = Preset().situation[i].indexOf(value);
+          isSelected2[i][indexInInnerList] = true;
+          count2++;
+        }
+      }
+    }
+  }
+
+  void updateIsSelectedEmotion() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+    for (var value in gptModel.emotionSummerization) {
+      for (int i = 0; i < Preset().emotion.length; i++) {
+        if (Preset().emotion[i].contains(value)) {
+          int indexInInnerList = Preset().emotion[i].indexOf(value);
+          isSelected3[i][indexInInnerList] = true;
+          count3++;
+        }
+      }
+    }
   }
 }
