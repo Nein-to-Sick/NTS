@@ -6,7 +6,6 @@ import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/provider/gpt_model.dart';
-import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';

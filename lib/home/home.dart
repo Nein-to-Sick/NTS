@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/loading/loading_page.dart';
 import 'package:nts/profile/new_profile.dart';
 import 'package:nts/profile/notification.dart';
 import 'package:nts/provider/backgroundController.dart';
@@ -80,7 +79,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 2, left: 20),
+                                    padding:
+                                        const EdgeInsets.only(top: 2, left: 20),
                                     child: Align(
                                       alignment: Alignment.topRight,
                                       child: Container(
@@ -110,9 +110,9 @@ class _HomePageState extends State<HomePage> {
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) => MailBox(
-                            controller: controller,
-                            userName: userName,
-                          ),
+                                controller: controller,
+                                userName: userName,
+                              ),
                           animationType: DialogTransitionType.slideFromTopFade);
                       messageController.confirm();
                     },
@@ -202,34 +202,6 @@ class _HomePageState extends State<HomePage> {
                           userName: userName,
                         ),
                         animationType: DialogTransitionType.slideFromBottomFade,
-                      );
-                    },
-                  ),
-
-                  //  프로필 페이지 테스트
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Text(
-                          "프로필 페이지 테스트",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyProfilePage(),
-                        ),
                       );
                     },
                   ),

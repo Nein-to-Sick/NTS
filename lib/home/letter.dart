@@ -123,7 +123,7 @@ class _LetterState extends State<Letter> {
                 ),
                 GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      onBackKeyCall();
                     },
                     child: const Opacity(
                         opacity: 0.2,
