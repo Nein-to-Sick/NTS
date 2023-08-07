@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/loading/loading_page.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:provider/provider.dart';
@@ -66,34 +65,35 @@ class HomePage extends StatelessWidget {
                   ),
                   GestureDetector(
                     child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            "일기 쓰기",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                        )),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                          "일기 쓰기",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
                     onTap: () {
                       showAnimatedDialog(
                         context: context,
                         barrierDismissible: false,
                         animationType: DialogTransitionType.slideFromBottomFade,
                         builder: (BuildContext context) {
-                          return ChangeNotifierProvider.value(
-                            value: BackgroundController(),
-                            child: MultiProvider(
-                              providers: [
-                                ChangeNotifierProvider(
-                                  create: (context) => GPTModel(),
-                                )
-                              ],
-                              child: Diary(
-                                controller: controller,
+                          return MultiProvider(
+                            providers: [
+                              ChangeNotifierProvider(
+                                create: (context) => GPTModel(),
                               ),
+                              ChangeNotifierProvider(
+                                create: (context) => BackgroundController(),
+                              ),
+                            ],
+                            child: Diary(
+                              controller: controller,
                             ),
                           );
                         },
@@ -105,25 +105,26 @@ class HomePage extends StatelessWidget {
                   ),
                   GestureDetector(
                     child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            "편지 쓰기",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                        )),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                          "편지 쓰기",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
                     onTap: () {
                       showAnimatedDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) =>
-                              Letter(controller: controller),
-                          animationType:
-                              DialogTransitionType.slideFromBottomFade);
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) =>
+                            Letter(controller: controller),
+                        animationType: DialogTransitionType.slideFromBottomFade,
+                      );
                     },
                   ),
                 ],

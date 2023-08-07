@@ -8,11 +8,13 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickName_Sheet.dart';
+import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
+import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -37,10 +39,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         fontFamily: "SUITE",
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: MyThemeColors.primaryColor,
-          selectionColor: MyThemeColors.primaryColor,
-          selectionHandleColor: MyThemeColors.primaryColor,
+        textSelectionTheme: TextSelectionThemeData(
+          //  커서 색상 수정
+          cursorColor: MyThemeColors.primaryColor.withOpacity(0.6),
+          selectionColor: MyThemeColors.primaryColor.withOpacity(0.2),
+          selectionHandleColor: MyThemeColors.primaryColor.withOpacity(0.6),
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -101,9 +104,21 @@ class BackgroundState extends State<Background> {
               future: _getNickNameFromFirebase(
                   Provider.of<UserInfoValueModel>(context, listen: false)),
               builder: (context, snapshot) {
-                if (snapshot.data == true) {
-                  return const HomePage();
-                } else if (snapshot.data == false) {
+                //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
+                if (Provider.of<UserInfoValueModel>(context, listen: false)
+                        .userNickName
+                        .isEmpty &&
+                    snapshot.connectionState == ConnectionState.waiting) {
+                  return const MyFireFlyProgressbar(
+                    loadingText: '로그인하는 중...',
+                  );
+                }
+                //  계정이 존재하고 닉네임이 있는 경우
+                else if (snapshot.data == true) {
+                  return HomePage();
+                }
+                //  계정이 존재하고 닉네임이 없는 경우
+                else if (snapshot.data == false) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) {
                       myNicknameSheet(
@@ -126,7 +141,7 @@ class BackgroundState extends State<Background> {
                       create: (BuildContext context) =>
                           SearchBarController()), // count_provider.dart
                   ChangeNotifierProvider(
-                      create: (BuildContext context) => CalendarController())
+                      create: (BuildContext context) => CalendarController()),
                 ],
                 child:
                     const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
@@ -173,8 +188,11 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
     } else {
       print('User ID is null');
     }
-
-    return userNickNameIsMade;
+    //  delay for loading page
+    return Future.delayed(const Duration(seconds: 1), () {
+      return userNickNameIsMade;
+    });
   }
+
   return true;
 }
