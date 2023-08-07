@@ -8,10 +8,13 @@ import 'package:nts/component/new_nickname.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
+import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../provider/backgroundController.dart';
+
+import 'notification.dart';
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
@@ -24,6 +27,11 @@ class ProfileSettings extends StatefulWidget {
 class _ProfileSettingsState extends State<ProfileSettings> {
   bool positive = false;
   int index = 1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집
+
+  // static Future<List<String>> loadLicenses() async {
+  // final ossKeys = ossLicenses.keys.toList();
+  // return ossKeys..sort();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -427,65 +435,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           "알림 설정",
                           style: TextStyle(fontSize: 16),
                         ))),
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  child: CustomAnimatedToggleSwitch<bool>(
-                    current: positive,
-                    values: [false, true],
-                    dif: 0.0,
-                    indicatorSize: Size.square(30.0),
-                    animationDuration: const Duration(milliseconds: 200),
-                    animationCurve: Curves.linear,
-                    onChanged: (b) => setState(() => positive = b),
-                    iconBuilder: (context, local, global) {
-                      return const SizedBox();
-                    },
-                    defaultCursor: SystemMouseCursors.click,
-                    onTap: () => setState(() => positive = !positive),
-                    iconsTappable: false,
-                    wrapperBuilder: (context, global, child) {
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                              left: 10.0,
-                              right: 10.0,
-                              height: 20.0,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF2F2F2),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(50.0)),
-                                    border: Border.all(
-                                      width: 3.0,
-                                      color: Color(0xffC6C6C6),
-                                    )),
-                              )),
-                          child,
-                        ],
-                      );
-                    },
-                    foregroundIndicatorBuilder: (context, global) {
-                      return SizedBox.fromSize(
-                        size: global.indicatorSize,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Color(0xffC6C6C6),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Color(0xffC6C6C6),
-                                  spreadRadius: 0.05,
-                                  blurRadius: 1.1,
-                                  offset: Offset(0.0, 0.8))
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                alarmButton(),
               ]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -585,6 +535,77 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             suggestions(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget alarmButton() {
+    return Container(
+      margin: EdgeInsets.only(right: 15),
+      child: CustomAnimatedToggleSwitch<bool>(
+        current: positive,
+        values: [false, true],
+        dif: 0.0,
+        indicatorSize: Size.square(30.0),
+        animationDuration: const Duration(milliseconds: 200),
+        animationCurve: Curves.linear,
+        onChanged: (b) => setState(() => positive = b),
+        iconBuilder: (context, local, global) {
+          return const SizedBox();
+        },
+        defaultCursor: SystemMouseCursors.click,
+        onTap: () {
+          setState(() => positive = !positive);
+          if (positive) {
+            alarmsettings();
+          }
+          // else {
+          //   FlutterLocalNotification.requestNotificationPermissionOff();
+          //   print("notification is turned offed");
+          //   FlutterLocalNotification.showNotification();
+          // }
+        },
+        iconsTappable: false,
+        wrapperBuilder: (context, global, child) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                  left: 10.0,
+                  right: 10.0,
+                  height: 20.0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: Color(0xffF2F2F2),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50.0)),
+                        border: Border.all(
+                          width: 3.0,
+                          color: Color(0xffC6C6C6),
+                        )),
+                  )),
+              child,
+            ],
+          );
+        },
+        foregroundIndicatorBuilder: (context, global) {
+          return SizedBox.fromSize(
+            size: global.indicatorSize,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Color(0xffC6C6C6),
+                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Color(0xffC6C6C6),
+                      spreadRadius: 0.05,
+                      blurRadius: 1.1,
+                      offset: Offset(0.0, 0.8))
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
