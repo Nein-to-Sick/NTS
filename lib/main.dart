@@ -15,6 +15,7 @@ import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
+import 'profile/notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -113,12 +114,14 @@ class BackgroundState extends State<Background> {
             return MultiProvider(
                 providers: [
                   ChangeNotifierProvider(
-                      create: (BuildContext context) => SearchBarController()), // count_provider.dart
+                      create: (BuildContext context) =>
+                          SearchBarController()), // count_provider.dart
                   ChangeNotifierProvider(
                       create: (BuildContext context) => CalendarController())
                 ],
-                child: const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
-            );
+                child:
+                    const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
+                );
           } else {
             return const SizedBox.shrink();
           }

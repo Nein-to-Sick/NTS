@@ -3,6 +3,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/loading/loading_page.dart';
+import 'package:nts/profile/notification.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:provider/provider.dart';
 
@@ -10,8 +11,24 @@ import '../model/user_info_model.dart';
 import 'diary.dart';
 import 'letter.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    // 초기화
+    FlutterLocalNotification.init();
+
+    // 3초 후 권한 요청
+    Future.delayed(const Duration(seconds: 3),
+        FlutterLocalNotification.requestNotificationPermission());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +101,11 @@ class HomePage extends StatelessWidget {
                         builder: (BuildContext context) {
                           return ChangeNotifierProvider.value(
                             value: BackgroundController(),
-                            child: Diary(controller: controller,),
-                          );;
+                            child: Diary(
+                              controller: controller,
+                            ),
+                          );
+                          ;
                         },
                       );
                     },
@@ -110,7 +130,8 @@ class HomePage extends StatelessWidget {
                       showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext context) => Letter(controller: controller),
+                          builder: (BuildContext context) =>
+                              Letter(controller: controller),
                           animationType:
                               DialogTransitionType.slideFromBottomFade);
                     },
