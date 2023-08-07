@@ -6,13 +6,15 @@ import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/provider/gpt_model.dart';
+import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
-  const Diary({super.key, required this.controller, required this.messageController});
+  const Diary(
+      {super.key, required this.controller, required this.messageController});
 
   final controller;
   final messageController;
@@ -625,6 +627,7 @@ class DiaryState extends State<Diary> {
                               textEditingController.text.trim(),
                               sit,
                               emo,
+                              widget.messageController,
                               time,
                             );
 

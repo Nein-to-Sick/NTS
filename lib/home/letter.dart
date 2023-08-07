@@ -10,7 +10,8 @@ import '../database/databaseService.dart';
 import '../model/preset.dart';
 
 class Letter extends StatefulWidget {
-  const Letter({Key? key, required this.controller, required this.userName}) : super(key: key);
+  const Letter({Key? key, required this.controller, required this.userName})
+      : super(key: key);
   final controller;
   final userName;
 
@@ -696,7 +697,12 @@ class _LetterState extends State<Letter> {
                             textEditingController.text, sit, emo, time);
                       } else {
                         DatabaseService().someoneMessage(
-                            textEditingController.text, sit, emo, widget.userName);
+                          textEditingController.text,
+                          sit,
+                          emo,
+                          widget.userName,
+                          time,
+                        );
                       }
 
                       Navigator.pop(context);
