@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 2),
+                                    padding: const EdgeInsets.only(top: 2, left: 20),
                                     child: Align(
                                       alignment: Alignment.topRight,
                                       child: Container(
@@ -109,7 +109,10 @@ class _HomePageState extends State<HomePage> {
                       showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext context) => const MailBox(),
+                          builder: (BuildContext context) => MailBox(
+                            controller: controller,
+                            userName: userName,
+                          ),
                           animationType: DialogTransitionType.slideFromTopFade);
                       messageController.confirm();
                     },
