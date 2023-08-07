@@ -1,19 +1,14 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 import '../component/notification.dart';
 import '../model/preset.dart';
-
-DateTime now = DateTime.now();
-String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
 
 String userId = FirebaseAuth.instance.currentUser!.uid;
 
 class DatabaseService {
-
   Future<void> writeDiary(String title, String content, List<String> situation,
-      List<String> emotion, messageController) async {
+      List<String> emotion, messageController, String time) async {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -41,9 +36,10 @@ class DatabaseService {
 
     // message pull
     final matchingDocuments =
-        await getDocumentsWithMatchingSituationsAndEmotions(situation, selectedEmotion);
+        await getDocumentsWithMatchingSituationsAndEmotions(
+            situation, selectedEmotion);
 
-    if(matchingDocuments.isEmpty) {
+    if (matchingDocuments.isEmpty) {
       print("일치하는 편지가 없습니다.");
       return;
     }
@@ -102,9 +98,8 @@ class DatabaseService {
     return filteredDocuments;
   }
 
-
-  void selfMessage(
-      String content, List<String> situation, List<String> emotion) {
+  void selfMessage(String content, List<String> situation, List<String> emotion,
+      String time) {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -118,9 +113,8 @@ class DatabaseService {
     });
   }
 
-  void someoneMessage(
-      String content, List<String> situation, List<String> emotion, String userName) {
-
+  void someoneMessage(String content, List<String> situation,
+      List<String> emotion, String userName, String time) {
     CollectionReference dr = FirebaseFirestore.instance.collection('everyMail');
 
     dr.add({

@@ -76,7 +76,6 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
-
   void initState() {
     // 초기화
     FlutterLocalNotification.init();
@@ -116,92 +115,94 @@ class BackgroundState extends State<Background> {
         onBackKeyCall();
         return Future(() => false);
       },
-      child: Stack(children: [
-        ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          controller: scrollController,
-          children: [
-            SizedBox(
-              width: 1300,
-              child: Image.asset(
-                'assets/back.png',
-                fit: BoxFit.cover,
+      child: Stack(
+        children: [
+          ListView(
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            controller: scrollController,
+            children: [
+              SizedBox(
+                width: 1300,
+                child: Image.asset(
+                  'assets/back.png',
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
+            ],
+          ),
+          const FireFly(),
+          AnimatedBuilder(
+            animation: scrollController,
+            builder: (context, child) {
+              if (scrollController.offset == 0) {
+                return const LoginPage();
+              } else if (scrollController.offset == 600) {
+                return FutureBuilder(
+                  future: _getNickNameFromFirebase(
+                      Provider.of<UserInfoValueModel>(context, listen: false)),
+                  builder: (context, snapshot) {
+                    //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
+                    if (Provider.of<UserInfoValueModel>(context, listen: false)
+                            .userNickName
+                            .isEmpty &&
+                        snapshot.connectionState == ConnectionState.waiting) {
+                      return const MyFireFlyProgressbar(
+                        loadingText: '로그인하는 중...',
+                      );
+                    }
+                    //  계정이 존재하고 닉네임이 있는 경우
+                    else if (snapshot.data == true) {
+                      return HomePage();
+                    }
+                    //  계정이 존재하고 닉네임이 없는 경우
+                    else if (snapshot.data == false) {
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) {
+                          myNicknameSheet(
+                            context,
+                            Provider.of<UserInfoValueModel>(context,
+                                listen: false),
+                          );
+                        },
+                      );
 
-          ],
-        ),
-        const FireFly(),
-        AnimatedBuilder(
-          animation: scrollController,
-          builder: (context, child) {
-            if (scrollController.offset == 0) {
-              return const LoginPage();
-            } else if (scrollController.offset == 600) {
-              return FutureBuilder(
-                future: _getNickNameFromFirebase(
-                    Provider.of<UserInfoValueModel>(context, listen: false)),
-                builder: (context, snapshot) {
-                  //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
-                  if (Provider.of<UserInfoValueModel>(context, listen: false)
-                          .userNickName
-                          .isEmpty &&
-                      snapshot.connectionState == ConnectionState.waiting) {
-                    return const MyFireFlyProgressbar(
-                      loadingText: '로그인하는 중...',
+                      return Container();
+                    } else {
+                      return Container();
+                    }
+                  },
+                );
+              } else if (scrollController.offset == 855) {
+                return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              SearchBarController()), // count_provider.dart
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              CalendarController()),
+                    ],
+                    child:
+                        const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );
-                  }
-                  //  계정이 존재하고 닉네임이 있는 경우
-                  else if (snapshot.data == true) {
-                    return HomePage();
-                  }
-                  //  계정이 존재하고 닉네임이 없는 경우
-                  else if (snapshot.data == false) {
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) {
-                        myNicknameSheet(
-                          context,
-                          Provider.of<UserInfoValueModel>(context,
-                              listen: false),
-                        );
-                      },
-                    );
-
-                    return Container();
-                  } else {
-                    return Container();
-                  }
-                },
-              );
-            } else if (scrollController.offset == 855) {
-              return MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider(
-                        create: (BuildContext context) =>
-                            SearchBarController()), // count_provider.dart
-                    ChangeNotifierProvider(
-                        create: (BuildContext context) => CalendarController()),
-                  ],
-                  child:
-                      const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
-                  );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ),
-        AnimatedBuilder(
-          animation: scrollController,
-          builder: (context, child) {
-            if (scrollController.offset != 0) {
-              return const NavigationToggle();
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ),
-      ]),
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+          AnimatedBuilder(
+            animation: scrollController,
+            builder: (context, child) {
+              if (scrollController.offset != 0) {
+                return const NavigationToggle();
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
