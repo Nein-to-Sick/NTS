@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
 
 class FilterButton extends StatefulWidget {
-  const FilterButton({Key? key, required this.title, required this.function})
+  const FilterButton({Key? key, required this.title, required this.function, required this.isExpanded})
       : super(key: key);
 
   final String title;
   final Function function;
+  final bool isExpanded;
+
+
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -14,7 +17,6 @@ class FilterButton extends StatefulWidget {
 
 class _FilterButtonState extends State<FilterButton>
     with SingleTickerProviderStateMixin {
-  bool _isExpanded = false;
 
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -38,10 +40,6 @@ class _FilterButtonState extends State<FilterButton>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _isExpanded = !_isExpanded;
-        });
-
         if (_animationController.isCompleted) {
           _animationController.reverse();
         } else {
@@ -52,7 +50,7 @@ class _FilterButtonState extends State<FilterButton>
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: _isExpanded ? Colors.white.withOpacity(0.9) : MyThemeColors.myGreyscale.shade700.withOpacity(0.5),
+          color: widget.isExpanded ? Colors.white.withOpacity(0.9) : MyThemeColors.myGreyscale.shade700.withOpacity(0.5),
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(9, 5.0, 3, 5),
@@ -63,7 +61,7 @@ class _FilterButtonState extends State<FilterButton>
                 widget.title,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: _isExpanded ? MyThemeColors.myGreyscale[900] : MyThemeColors.myGreyscale.shade300,
+                  color: widget.isExpanded ? MyThemeColors.myGreyscale[900] : MyThemeColors.myGreyscale.shade300,
                   fontSize: 13,
                 ),
               ),
@@ -71,7 +69,7 @@ class _FilterButtonState extends State<FilterButton>
                 turns: _animation,
                 child: Icon(
                   Icons.keyboard_arrow_down,
-                  color: _isExpanded ? MyThemeColors.myGreyscale[900] : MyThemeColors.myGreyscale.shade300,
+                  color: widget.isExpanded ? MyThemeColors.myGreyscale[900] : MyThemeColors.myGreyscale.shade300,
                 ),
               ),
             ],
