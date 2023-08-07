@@ -53,6 +53,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   dart_openai: ^4.0.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

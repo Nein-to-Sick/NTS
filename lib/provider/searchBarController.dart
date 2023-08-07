@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
 class SearchBarController with ChangeNotifier {
-  bool folded = false;
+  int folded = 0;
 
-  void fold() {
-    folded = !folded;
+  void fold(int index) {
+    folded = index;
     notifyListeners();
   }
 }

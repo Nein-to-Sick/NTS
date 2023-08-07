@@ -12,6 +12,7 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/gpt_model.dart';
+import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -82,6 +83,7 @@ class BackgroundState extends State<Background> {
           ),
         ],
       ),
+      const FireFly(),
       AnimatedBuilder(
         animation: scrollController,
         builder: (context, child) {
@@ -111,16 +113,22 @@ class BackgroundState extends State<Background> {
               },
             );
           } else if (scrollController.offset == 855) {
-            return ChangeNotifierProvider.value(
-              value: SearchBarController(),
-              child: const ProfilePage(),
-            );
+            return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                      create: (BuildContext context) =>
+                          SearchBarController()), // count_provider.dart
+                  ChangeNotifierProvider(
+                      create: (BuildContext context) => CalendarController())
+                ],
+                child:
+                    const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
+                );
           } else {
             return const SizedBox.shrink();
           }
         },
       ),
-      const FireFly(),
       AnimatedBuilder(
         animation: scrollController,
         builder: (context, child) {
