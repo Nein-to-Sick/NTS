@@ -13,21 +13,20 @@ class Keyword extends StatefulWidget {
 }
 
 class _KeywordState extends State<Keyword> {
-
   late List<List<bool>> isSelected2 = [];
 
   @override
   void initState() {
     super.initState();
     isSelected2 = List.generate(widget.title.length,
-            (i) => List.generate(widget.title[i].length, (j) => false));
+        (i) => List.generate(widget.title[i].length, (j) => false));
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: widget.title.length == Preset().situation.length ? MediaQuery.of(context).size.height * 0.24 : MediaQuery.of(context).size.height * 0.19,
+      height: widget.title.length == Preset().situation.length ? 200 : 160,
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
@@ -46,7 +45,7 @@ class _KeywordState extends State<Keyword> {
                     onTap: () {
                       setState(() {
                         isSelected2[index1][index2] =
-                        !isSelected2[index1][index2];
+                            !isSelected2[index1][index2];
                         // if (isSelected2[index1][index2]) {
                         //   count2++;
                         // } else {
@@ -59,26 +58,22 @@ class _KeywordState extends State<Keyword> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: isSelected2[index1][index2]
-                              ? MyThemeColors
-                              .primaryColor // 수정
+                              ? MyThemeColors.primaryColor // 수정
                               : Colors.white,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: MyThemeColors
-                                .myGreyscale.shade700,
+                            color: MyThemeColors.myGreyscale.shade700,
                           ), // 수정
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                              12, 5, 12, 5),
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                           child: Text(
                             widget.title[index1][index2],
                             style: TextStyle(
                                 fontSize: 16,
                                 color: isSelected2[index1][index2]
                                     ? Colors.white
-                                    : MyThemeColors
-                                    .myGreyscale.shade900,
+                                    : MyThemeColors.myGreyscale.shade900,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -89,7 +84,6 @@ class _KeywordState extends State<Keyword> {
               ),
             ),
           );
-
         },
       ),
     );

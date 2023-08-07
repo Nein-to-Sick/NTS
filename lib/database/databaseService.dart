@@ -120,6 +120,7 @@ class DatabaseService {
 
   void someoneMessage(
       String content, List<String> situation, List<String> emotion, String userName) {
+
     CollectionReference dr = FirebaseFirestore.instance.collection('everyMail');
 
     dr.add({
