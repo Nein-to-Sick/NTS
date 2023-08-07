@@ -11,8 +11,10 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
+import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
+import 'component/notification.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
 
@@ -61,6 +63,17 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
+
+  void initState() {
+    // 초기화
+    FlutterLocalNotification.init();
+
+    // 3초 후 권한 요청
+    Future.delayed(const Duration(seconds: 1),
+        FlutterLocalNotification.requestNotificationPermission());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
@@ -93,7 +106,10 @@ class BackgroundState extends State<Background> {
                   Provider.of<UserInfoValueModel>(context, listen: false)),
               builder: (context, snapshot) {
                 if (snapshot.data == true) {
-                  return const HomePage();
+                  return ChangeNotifierProvider.value(
+                    value: MessageController(),
+                    child: const HomePage(),
+                  );
                 } else if (snapshot.data == false) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) {
