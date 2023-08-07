@@ -94,7 +94,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     children: [
-                                      calendarController.count == 2
+                                      calendarController.count == 2 ||
+                                              calendarController.count == 1
                                           ? Container(
                                               decoration: BoxDecoration(
                                                   borderRadius:
@@ -108,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   children: [
                                                     Wrap(
                                                       spacing:
-                                                          4, // gap between adjacent chips
+                                                          3, // gap between adjacent chips
                                                       children: (calendarController
                                                               .selected.keys
                                                               .where((key) =>
@@ -120,9 +121,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 a.compareTo(
                                                                     b))) // 정렬 추가
                                                           .map<Widget>((date) {
-                                                            setState(() {
-                                                              flag++;
-                                                            });
+                                                        setState(() {
+                                                          flag++;
+                                                        });
                                                         int year = int.parse(
                                                             date.substring(
                                                                 0, 4));
@@ -133,8 +134,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             date.substring(6,
                                                                 8)); // 숫자로 변환해 0 제거
 
-                                                        return Text(flag == 1 ?
-                                                          '$year년 $month월 $day일  ~' :  '$year년 $month월 $day일',
+                                                        return Text(
+                                                          calendarController.count == 1 ? '$year.$month.$day' :
+                                                          flag == 1
+                                                              ? '$year.$month.$day ~'
+                                                              : '$year.$month.$day',
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 13,
@@ -233,12 +237,36 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.505,
                   child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(userId)
-                        .collection("diary")
-                        .orderBy("date", descending: true)
-                        .snapshots(),
+                    stream: calendarController.count == 2
+                        ? FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(userId)
+                            .collection("diary")
+                            .orderBy("date", descending: true)
+                            .where("date",
+                                isGreaterThanOrEqualTo:
+                                    calendarController.formatStartDate(),
+                                isLessThanOrEqualTo:
+                                    calendarController.formatEndDate())
+                            .snapshots()
+                        : calendarController.count == 1
+                            ? FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(userId)
+                                .collection("diary")
+                                .orderBy("date", descending: true)
+                                .where("date",
+                                    isGreaterThanOrEqualTo:
+                                        calendarController.formatStartDate(),
+                                    isLessThanOrEqualTo: calendarController
+                                        .formatOneDayEndDate())
+                                .snapshots()
+                            : FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(userId)
+                                .collection("diary")
+                                .orderBy("date", descending: true)
+                                .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasError) {
                         return const Center(

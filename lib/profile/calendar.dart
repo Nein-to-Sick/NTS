@@ -82,7 +82,7 @@ class _CalendarState extends State<Calendar> {
                 selected = {};
                 count = 0;
               }
-              if(count == 2) {
+              if(count == 2 || count == 1) {
                 calendarController.setSelected(selected);
                 calendarController.setCount(count);
               }

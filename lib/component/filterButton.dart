@@ -55,7 +55,7 @@ class _FilterButtonState extends State<FilterButton>
           color: _isExpanded ? Colors.white.withOpacity(0.9) : MyThemeColors.myGreyscale.shade700.withOpacity(0.5),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(11, 5.0, 11, 5),
+          padding: const EdgeInsets.fromLTRB(9, 5.0, 3, 5),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
