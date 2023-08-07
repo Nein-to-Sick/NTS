@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickName_Sheet.dart';
@@ -10,6 +11,7 @@ import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +25,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  await dotenv.load(fileName: "assets/.env");
   runApp(const MyApp());
 }
 
@@ -114,12 +116,14 @@ class BackgroundState extends State<Background> {
             return MultiProvider(
                 providers: [
                   ChangeNotifierProvider(
-                      create: (BuildContext context) => SearchBarController()), // count_provider.dart
+                      create: (BuildContext context) =>
+                          SearchBarController()), // count_provider.dart
                   ChangeNotifierProvider(
                       create: (BuildContext context) => CalendarController())
                 ],
-                child: const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
-            );
+                child:
+                    const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
+                );
           } else {
             return const SizedBox.shrink();
           }

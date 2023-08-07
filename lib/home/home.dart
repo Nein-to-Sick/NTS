@@ -4,6 +4,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/provider/gpt_model.dart';
 import 'package:provider/provider.dart';
 
 import '../model/user_info_model.dart';
@@ -84,8 +85,17 @@ class HomePage extends StatelessWidget {
                         builder: (BuildContext context) {
                           return ChangeNotifierProvider.value(
                             value: BackgroundController(),
-                            child: Diary(controller: controller,),
-                          );;
+                            child: MultiProvider(
+                              providers: [
+                                ChangeNotifierProvider(
+                                  create: (context) => GPTModel(),
+                                )
+                              ],
+                              child: Diary(
+                                controller: controller,
+                              ),
+                            ),
+                          );
                         },
                       );
                     },
@@ -110,37 +120,10 @@ class HomePage extends StatelessWidget {
                       showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext context) => Letter(controller: controller),
+                          builder: (BuildContext context) =>
+                              Letter(controller: controller),
                           animationType:
                               DialogTransitionType.slideFromBottomFade);
-                    },
-                  ),
-
-                  //  test
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            "로딩 페이지 보기",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                        )),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const MyFireFlyProgressbar(progress: 0.45),
-                        ),
-                      );
                     },
                   ),
                 ],

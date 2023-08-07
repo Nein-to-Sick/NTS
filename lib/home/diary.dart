@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/database/databaseService.dart';
+import 'package:nts/loading/loading_page.dart';
+import 'package:nts/provider/gpt_model.dart';
+import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
@@ -40,6 +43,8 @@ class DiaryState extends State<Diary> {
   }
 
   _buildBody(BuildContext context) {
+    final gptModel = Provider.of<GPTModel>(context);
+
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -59,7 +64,48 @@ class DiaryState extends State<Diary> {
                     case 0:
                       return _buildPageFirst();
                     case 1:
-                      return _buildPageSecond();
+                      return
+
+                          //  AI analyzation result
+                          FutureBuilder<bool>(
+                        future: gptModel.watiFetchDiaryData(),
+                        builder: (context, snapshot) {
+                          //  최초 분석의 경우
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting &&
+                              gptModel.isAnalyzed == false) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              gptModel.whileLoadingStart();
+                            });
+                            return const MyFireFlyProgressbar(
+                              loadingText: '반딧불이가 일기를 가져가는 중...',
+                            );
+                          }
+                          //  Future 데이터 가져오기
+                          else if (snapshot.data == false) {
+                            return const MyFireFlyProgressbar(
+                              loadingText: '정리 중...',
+                            );
+                          }
+                          //  오류 발생 시
+                          else if (snapshot.hasError) {
+                            return const Center(child: Text('오류 발생'));
+                          }
+                          //  분석 완료
+                          else {
+                            if (gptModel.isOnLoading) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                gptModel.whileLoadingDone();
+                              });
+                              updateIsSelectedSituation();
+                              updateIsSelectedEmotion();
+                            }
+
+                            return _buildPageSecond();
+                          }
+                        },
+                      );
+
                     case 2:
                       return _buildPageThird();
                   }
@@ -85,24 +131,29 @@ class DiaryState extends State<Diary> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Opacity(
-                  opacity: 0.2,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: HeroIcon(
-                        HeroIcons.xMark,
-                        size: 23,
+
+              // 로딩 중에는 버튼 비활성화
+              (gptModel.isOnLoading)
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        gptModel.endAnalyzeDiary();
+                        Navigator.pop(context);
+                      },
+                      child: const Opacity(
+                        opacity: 0.2,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: HeroIcon(
+                              HeroIcons.xMark,
+                              size: 23,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              )
             ],
           ),
         ),
@@ -111,6 +162,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageFirst() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
     return Padding(
         padding: const EdgeInsets.only(bottom: 30.0, top: 50),
         child: Column(
@@ -139,58 +191,63 @@ class DiaryState extends State<Diary> {
             //  diary textfield
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom * 0.4),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: TextField(
-                                      controller: textEditingController,
-                                      style: const TextStyle(fontSize: 16),
-                                      onSubmitted: (value) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      onTapOutside: (p) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      onChanged: (value) {
-                                        setState(() {
-                                          contents = value;
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: "Dodam",
-                                              color: MyThemeColors
-                                                  .myGreyscale[300]),
-                                          hintMaxLines: 7,
-                                          hintText:
-                                              "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
-                                      maxLines: null,
-                                      cursorColor: MyThemeColors.primaryColor,
-                                      keyboardType: TextInputType.multiline,
-                                    ),
-                                  ),
+                        padding: EdgeInsets.only(
+                            bottom:
+                                MediaQuery.of(context).viewInsets.bottom * 0.4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                            child: Padding(
+                              //  아래 padding으로 대체시 텍스트 필드만 밀림
+                              padding: const EdgeInsets.all(0),
+                              /*
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom *
+                                          0.4),
+                                          */
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: TextField(
+                                  controller: textEditingController,
+                                  style: const TextStyle(fontSize: 16),
+                                  onSubmitted: (value) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  onTapOutside: (p) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  onChanged: (value) {
+                                    gptModel.updateDiaryMainText(value);
+                                    setState(() {
+                                      contents = value;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: "Dodam",
+                                          color:
+                                              MyThemeColors.myGreyscale[300]),
+                                      hintMaxLines: 7,
+                                      hintText:
+                                          "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
+                                  maxLines: null,
+                                  cursorColor: MyThemeColors.primaryColor,
+                                  keyboardType: TextInputType.multiline,
                                 ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -208,13 +265,14 @@ class DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Button(
                 function: () {
+                  gptModel.tryAnalyzeDiary(gptModel.diaryMainText.trim());
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.ease,
                   );
                 },
                 title: '다음',
-                condition: contents.length > 0 ? 'not null' : "null",
+                condition: contents.isNotEmpty ? 'not null' : "null",
               ),
             )
           ],
@@ -239,9 +297,10 @@ class DiaryState extends State<Diary> {
           Text(
             "현재 상황과 관련된 키워드를 모두 골라주세요.",
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[600]),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: MyThemeColors.myGreyscale[600],
+            ),
           ),
           const SizedBox(height: 30),
           Expanded(
@@ -281,27 +340,27 @@ class DiaryState extends State<Diary> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: isSelected2[index1][index2]
-                                            ? MyThemeColors
-                                                .myGreyscale.shade700 // 수정
+                                            ? MyThemeColors.myGreyscale.shade700
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
                                           color: MyThemeColors
                                               .myGreyscale.shade700,
-                                        ), // 수정
+                                        ),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              color: isSelected2[index1][index2]
-                                                  ? Colors.white
-                                                  : MyThemeColors
-                                                      .myGreyscale.shade900,
-                                              fontWeight: FontWeight.w500),
+                                            fontSize: 16,
+                                            color: isSelected2[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade900,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -370,6 +429,8 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageThird() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0, top: 50),
       child: Column(
@@ -439,7 +500,7 @@ class DiaryState extends State<Diary> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().emotion[index1][index2],
                                           style: TextStyle(
@@ -521,8 +582,8 @@ class DiaryState extends State<Diary> {
                                 }
                               }
 
-                              DatabaseService().writeDiary(
-                                  "GPT", textEditingController.text, sit, emo);
+                              DatabaseService().writeDiary(gptModel.diaryTitle,
+                                  textEditingController.text, sit, emo);
 
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context)
@@ -533,7 +594,7 @@ class DiaryState extends State<Diary> {
                                   '내 일기가 저장되었습니다!',
                                   style: TextStyle(color: Colors.black),
                                 ),
-                                duration: Duration(seconds: 5), //올라와있는 시간
+                                duration: const Duration(seconds: 5), //올라와있는 시간
                                 action: SnackBarAction(
                                   textColor: MyThemeColors
                                       .primaryColor, //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
@@ -557,5 +618,31 @@ class DiaryState extends State<Diary> {
         ],
       ),
     );
+  }
+
+  void updateIsSelectedSituation() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+    for (var value in gptModel.situationSummerization) {
+      for (int i = 0; i < Preset().situation.length; i++) {
+        if (Preset().situation[i].contains(value)) {
+          int indexInInnerList = Preset().situation[i].indexOf(value);
+          isSelected2[i][indexInInnerList] = true;
+          count2++;
+        }
+      }
+    }
+  }
+
+  void updateIsSelectedEmotion() {
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+    for (var value in gptModel.emotionSummerization) {
+      for (int i = 0; i < Preset().emotion.length; i++) {
+        if (Preset().emotion[i].contains(value)) {
+          int indexInInnerList = Preset().emotion[i].indexOf(value);
+          isSelected3[i][indexInInnerList] = true;
+          count3++;
+        }
+      }
+    }
   }
 }

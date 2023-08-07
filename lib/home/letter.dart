@@ -69,6 +69,7 @@ class _LetterState extends State<Letter> {
                     case 3:
                       return _buildPageFourth();
                   }
+                  return null;
                 },
                 onPageChanged: (ind) {
                   setState(() {
@@ -312,7 +313,7 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
-                                      if(isSelected2[index1][index2]) {
+                                      if (isSelected2[index1][index2]) {
                                         count2++;
                                       } else {
                                         count2--;
@@ -459,7 +460,7 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
-                                      if(isSelected3[index1][index2]) {
+                                      if (isSelected3[index1][index2]) {
                                         count3++;
                                       } else {
                                         count3--;
@@ -669,9 +670,7 @@ class _LetterState extends State<Letter> {
                       ));
                     },
                     title: '보낸 후 나가기',
-                    condition: contents.isNotEmpty
-                        ? 'not null'
-                        : 'null',
+                    condition: contents.isNotEmpty ? 'not null' : 'null',
                   )
                 ],
               ),
