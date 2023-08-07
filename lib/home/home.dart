@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/loading/loading_page.dart';
 import 'package:nts/profile/notification.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
@@ -108,7 +107,10 @@ class _HomePageState extends State<HomePage> {
                       showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (BuildContext context) => const MailBox(),
+                          builder: (BuildContext context) => MailBox(
+                            controller: controller,
+                            userName: userName,
+                          ),
                           animationType: DialogTransitionType.slideFromTopFade);
                       messageController.confirm();
                     },
