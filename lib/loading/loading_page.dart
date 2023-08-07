@@ -1,26 +1,22 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:nts/Theme/theme_colors.dart';
 
-class MyLoadingPage extends StatelessWidget {
-  const MyLoadingPage({super.key});
+class MyCatLoadingPage extends StatelessWidget {
+  const MyCatLoadingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: SpinKitSpinningCircle(
-          itemBuilder: (context, index) {
-            return const Center(
-              child: Text(
-                "🐶",
-                style: TextStyle(fontSize: 40),
-              ),
-            );
-          },
-        ),
+    return Center(
+      child: SpinKitSpinningCircle(
+        itemBuilder: (context, index) {
+          return const Center(
+            child: Text(
+              "😺",
+              style: TextStyle(fontSize: 40),
+            ),
+          );
+        },
       ),
     );
   }
@@ -111,9 +107,8 @@ class MyFireFlyProgressbarAndDotPainter extends CustomPainter {
 }
 
 class MyFireFlyProgressbar extends StatefulWidget {
-  final double progress;
-
-  const MyFireFlyProgressbar({super.key, required this.progress});
+  final String loadingText;
+  const MyFireFlyProgressbar({super.key, required this.loadingText});
 
   @override
   MyFireFlyProgressbarState createState() => MyFireFlyProgressbarState();
@@ -146,47 +141,42 @@ class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyThemeColors.blackColor,
-      appBar: AppBar(
-        title: const Text('로딩 테스트'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return SizedBox(
-                  height: 135,
-                  width: 135,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: CustomPaint(
-                      painter: MyFireFlyProgressbarAndDotPainter(
-                        rotationAngle: _animation.value * 360,
-                        progress: widget.progress,
-                      ),
-                      child: Container(),
+    const double progress = 0.45;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return SizedBox(
+                height: 135,
+                width: 135,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: CustomPaint(
+                    painter: MyFireFlyProgressbarAndDotPainter(
+                      rotationAngle: _animation.value * 360,
+                      progress: progress,
                     ),
+                    child: Container(),
                   ),
-                );
-              },
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            widget.loadingText,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Text(
-              '로딩 중...',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

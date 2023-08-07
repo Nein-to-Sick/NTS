@@ -12,6 +12,8 @@ import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
 import 'package:nts/oss_licenses.dart';
+import 'package:nts/model/user_info_model.dart';
+import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../provider/backgroundController.dart';
 
@@ -768,7 +770,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               onTap: () {
                 print("click");
                 // controller.movePage(0);
-
+                Provider.of<UserInfoValueModel>(context, listen: false)
+                    .userNickNameClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
                 Navigator.pop(context);
@@ -785,6 +788,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white,
               onTap: () {
+                Provider.of<UserInfoValueModel>(context, listen: false)
+                    .userNickNameClear();
                 DeleteAccount(context, widget.provider);
               },
               inside: Center(

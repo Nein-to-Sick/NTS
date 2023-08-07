@@ -10,6 +10,11 @@ class UserInfoValueModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void userNickNameClear() {
+    userNickName = '';
+    notifyListeners();
+  }
+
   void valueUpdate() {
     isValueEntered = true;
     notifyListeners();

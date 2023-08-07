@@ -13,7 +13,7 @@ class NavigationToggle extends StatelessWidget {
     final int page = controller.page;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 50.0),
+      padding: const EdgeInsets.only(bottom: 25.0),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

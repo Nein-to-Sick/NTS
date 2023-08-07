@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/Theme/theme_colors.dart';
+import 'package:nts/component/confirm_dialog.dart';
 
 import '../component/button.dart';
 import '../database/databaseService.dart';
 import '../model/preset.dart';
 
 class Letter extends StatefulWidget {
-  const Letter({Key? key, required this.controller}) : super(key: key);
+  const Letter({Key? key, required this.controller, required this.userName})
+      : super(key: key);
   final controller;
+  final userName;
 
   @override
   State<Letter> createState() => _LetterState();
@@ -44,68 +48,96 @@ class _LetterState extends State<Letter> {
   }
 
   _buildBody(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(10)),
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Stack(
-            children: <Widget>[
-              PageView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _pageController,
-                itemBuilder: (BuildContext context, int pageIndex) {
-                  switch (pageIndex) {
-                    case 0:
-                      return _buildPageFirst();
-                    case 1:
-                      return _buildPageSecond();
-                    case 2:
-                      return _buildPageThird();
-                    case 3:
-                      return _buildPageFourth();
-                  }
-                },
-                onPageChanged: (ind) {
-                  setState(() {
-                    index = ind;
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 13.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: LinearProgressBar(
-                    maxSteps: 4,
-                    progressType: LinearProgressBar.progressTypeDots,
-                    currentStep: index,
-                    progressColor: MyThemeColors.primaryColor,
-                    backgroundColor: MyThemeColors.myGreyscale.shade100,
-                    dotsSpacing: const EdgeInsets.only(right: 8),
+    onBackKeyCall() {
+      FocusScope.of(context).unfocus();
+      showDialog(
+        context: context,
+        builder: (context) {
+          return dialogWithYesOrNo(
+            context,
+            '편지 쓰기 종료',
+            '창을 닫으시겠나요?\n내용은 저장되지 않습니다',
+            //  on Yes
+            () {
+              Navigator.pop(context);
+            },
+            //  on No
+            () {},
+          );
+        },
+      );
+    }
+
+    return WillPopScope(
+      //뒤로가기 막음
+      onWillPop: () {
+        onBackKeyCall();
+        return Future(() => false);
+      },
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(10)),
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Stack(
+              children: <Widget>[
+                PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  itemBuilder: (BuildContext context, int pageIndex) {
+                    switch (pageIndex) {
+                      case 0:
+                        return _buildPageFirst();
+                      case 1:
+                        return _buildPageSecond();
+                      case 2:
+                        return _buildPageThird();
+                      case 3:
+                        return _buildPageFourth();
+                    }
+                    return null;
+                  },
+                  onPageChanged: (ind) {
+                    setState(() {
+                      index = ind;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 13.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: LinearProgressBar(
+                      maxSteps: 4,
+                      progressType: LinearProgressBar.progressTypeDots,
+                      currentStep: index,
+                      progressColor: MyThemeColors.primaryColor,
+                      backgroundColor: MyThemeColors.myGreyscale.shade100,
+                      dotsSpacing: const EdgeInsets.only(right: 8),
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Opacity(
-                      opacity: 0.2,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: HeroIcon(
-                              HeroIcons.xMark,
-                              size: 23,
-                            )),
-                      )))
-            ],
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Opacity(
+                        opacity: 0.2,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                              alignment: Alignment.topRight,
+                              child: HeroIcon(
+                                HeroIcons.xMark,
+                                size: 23,
+                              )),
+                        )))
+              ],
+            ),
           ),
         ),
       ),
@@ -230,11 +262,12 @@ class _LetterState extends State<Letter> {
                             Text(
                               "누군가",
                               style: TextStyle(
-                                  fontSize: 16,
-                                  color: isSomeoneSelected
-                                      ? Colors.white
-                                      : MyThemeColors.myGreyscale.shade900,
-                                  fontWeight: FontWeight.w500),
+                                fontSize: 16,
+                                color: isSomeoneSelected
+                                    ? Colors.white
+                                    : MyThemeColors.myGreyscale.shade900,
+                                fontWeight: FontWeight.w500,
+                              ),
                             )
                           ],
                         ),
@@ -312,7 +345,7 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected2[index1][index2] =
                                           !isSelected2[index1][index2];
-                                      if(isSelected2[index1][index2]) {
+                                      if (isSelected2[index1][index2]) {
                                         count2++;
                                       } else {
                                         count2--;
@@ -334,7 +367,7 @@ class _LetterState extends State<Letter> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().situation[index1][index2],
                                           style: TextStyle(
@@ -459,7 +492,7 @@ class _LetterState extends State<Letter> {
                                     setState(() {
                                       isSelected3[index1][index2] =
                                           !isSelected3[index1][index2];
-                                      if(isSelected3[index1][index2]) {
+                                      if (isSelected3[index1][index2]) {
                                         count3++;
                                       } else {
                                         count3--;
@@ -481,7 +514,7 @@ class _LetterState extends State<Letter> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            12, 5, 12, 5),
+                                            12, 0, 12, 0),
                                         child: Text(
                                           Preset().emotion[index1][index2],
                                           style: TextStyle(
@@ -589,38 +622,56 @@ class _LetterState extends State<Letter> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                        child: TextField(
-                          onChanged: (value) {
-                            setState(() {
-                              contents = value;
-                            });
-                          },
-                          controller: textEditingController,
-                          style: const TextStyle(fontSize: 16),
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  fontSize: 16,
-                                  color: MyThemeColors.myGreyscale[300],
-                                  fontFamily: "Dodam"),
-                              hintMaxLines: 10,
-                              hintText:
-                                  "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom * 0.4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: TextField(
+                              onSubmitted: (value) {
+                                FocusScope.of(context).unfocus();
+                              },
+                              onTapOutside: (p) {
+                                FocusScope.of(context).unfocus();
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  contents = value;
+                                });
+                              },
+                              controller: textEditingController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      fontSize: 16,
+                                      color: MyThemeColors.myGreyscale[300],
+                                      fontFamily: "Dodam"),
+                                  hintMaxLines: 10,
+                                  hintText:
+                                      "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                              maxLines: null,
+                              maxLength: 300,
+                              keyboardType: TextInputType.multiline,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(
                     height: 13,
                   ),
+
+                  //  submmit button
                   Button(
                     function: () {
                       List<String> sit = [];
@@ -640,12 +691,20 @@ class _LetterState extends State<Letter> {
                         }
                       }
 
+                      DateTime now = DateTime.now();
+                      String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
+
                       if (isSelfSelected) {
-                        DatabaseService()
-                            .selfMessage(textEditingController.text, sit, emo);
+                        DatabaseService().selfMessage(
+                            textEditingController.text, sit, emo, time);
                       } else {
                         DatabaseService().someoneMessage(
-                            textEditingController.text, sit, emo);
+                          textEditingController.text,
+                          sit,
+                          emo,
+                          widget.userName,
+                          time,
+                        );
                       }
 
                       Navigator.pop(context);
@@ -657,7 +716,7 @@ class _LetterState extends State<Letter> {
                           '내 편지를 보냈습니다!',
                           style: TextStyle(color: Colors.black),
                         ),
-                        duration: Duration(seconds: 5),
+                        duration: const Duration(seconds: 5),
                         //올라와있는 시간
                         action: SnackBarAction(
                           textColor: MyThemeColors.primaryColor,
@@ -669,9 +728,7 @@ class _LetterState extends State<Letter> {
                       ));
                     },
                     title: '보낸 후 나가기',
-                    condition: contents.isNotEmpty
-                        ? 'not null'
-                        : 'null',
+                    condition: contents.isNotEmpty ? 'not null' : 'null',
                   )
                 ],
               ),
