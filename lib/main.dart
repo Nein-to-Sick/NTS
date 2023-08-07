@@ -12,6 +12,7 @@ import 'package:nts/component/nickName_Sheet.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
+import 'package:nts/profile/new_profile.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
@@ -188,17 +189,14 @@ class BackgroundState extends State<Background> {
                   },
                 );
               } else if (scrollController.offset == 855) {
-                return MultiProvider(
-                    providers: [
-                      ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              SearchBarController()), // count_provider.dart
-                      ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              CalendarController()),
-                    ],
-                    child:
-                        const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
+                return MultiProvider(providers: [
+                  ChangeNotifierProvider(
+                      create: (BuildContext context) =>
+                          SearchBarController()), // count_provider.dart
+                  ChangeNotifierProvider(
+                      create: (BuildContext context) => CalendarController()),
+                ], child: const MyProfilePage()
+                    //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );
               } else {
                 return const SizedBox.shrink();
