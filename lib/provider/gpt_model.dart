@@ -160,7 +160,7 @@ class GPTModel with ChangeNotifier {
 
     //  delay for loading page
     return Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(milliseconds: 1500),
       () {
         if (situationSummerization.isNotEmpty &&
             emotionSummerization.isNotEmpty) {

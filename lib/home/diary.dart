@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
@@ -217,8 +218,6 @@ class DiaryState extends State<Diary> {
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
                                 child: TextField(
-                                  controller: textEditingController,
-                                  style: const TextStyle(fontSize: 16),
                                   onSubmitted: (value) {
                                     FocusScope.of(context).unfocus();
                                   },
@@ -231,18 +230,19 @@ class DiaryState extends State<Diary> {
                                       contents = value;
                                     });
                                   },
+                                  controller: textEditingController,
+                                  style: const TextStyle(fontSize: 16),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: "Dodam",
-                                          color:
-                                              MyThemeColors.myGreyscale[300]),
+                                        fontSize: 16,
+                                        fontFamily: "Dodam",
+                                        color: MyThemeColors.myGreyscale[300],
+                                      ),
                                       hintMaxLines: 7,
                                       hintText:
                                           "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다."),
                                   maxLines: null,
-                                  cursorColor: MyThemeColors.primaryColor,
                                   keyboardType: TextInputType.multiline,
                                 ),
                               ),
@@ -496,7 +496,7 @@ class DiaryState extends State<Diary> {
                                         border: Border.all(
                                           color: MyThemeColors
                                               .myGreyscale.shade700,
-                                        ), // 수정
+                                        ),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -525,69 +525,75 @@ class DiaryState extends State<Diary> {
                   Row(
                     children: [
                       Flexible(
-                          flex: 1,
-                          child: GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    color: MyThemeColors.myGreyscale.shade200,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(13.0),
-                                  child: Text(
-                                    "이전",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: MyThemeColors.primaryColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700), //수정
-                                  ),
+                        flex: 1,
+                        child: GestureDetector(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                color: MyThemeColors.myGreyscale.shade200,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(13.0),
+                              child: Text(
+                                "이전",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: MyThemeColors.primaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              onTap: () {
-                                _pageController.previousPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.ease,
-                                );
-                              })),
+                            ),
+                          ),
+                          onTap: () {
+                            _pageController.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                            );
+                          },
+                        ),
+                      ),
                       const SizedBox(
                         width: 10,
                       ),
                       Flexible(
-                          flex: 1,
-                          child: Button(
-                            function: () {
-                              List<String> sit = [];
-                              for (int i = 0;
-                                  i < Preset().situation.length;
-                                  i++) {
-                                for (int j = 0;
-                                    j < Preset().situation[i].length;
-                                    j++) {
-                                  if (isSelected2[i][j] == true) {
-                                    sit.add(Preset().situation[i][j]);
-                                  }
+                        flex: 1,
+                        child: Button(
+                          function: () {
+                            List<String> sit = [];
+                            for (int i = 0;
+                                i < Preset().situation.length;
+                                i++) {
+                              for (int j = 0;
+                                  j < Preset().situation[i].length;
+                                  j++) {
+                                if (isSelected2[i][j] == true) {
+                                  sit.add(Preset().situation[i][j]);
                                 }
                               }
-                              List<String> emo = [];
-                              for (int i = 0;
-                                  i < Preset().emotion.length;
-                                  i++) {
-                                for (int j = 0;
-                                    j < Preset().emotion[i].length;
-                                    j++) {
-                                  if (isSelected3[i][j] == true) {
-                                    emo.add(Preset().emotion[i][j]);
-                                  }
+                            }
+                            List<String> emo = [];
+                            for (int i = 0; i < Preset().emotion.length; i++) {
+                              for (int j = 0;
+                                  j < Preset().emotion[i].length;
+                                  j++) {
+                                if (isSelected3[i][j] == true) {
+                                  emo.add(Preset().emotion[i][j]);
                                 }
                               }
+                            }
 
-                              DatabaseService().writeDiary(gptModel.diaryTitle,
-                                  textEditingController.text, sit, emo);
+                            DateTime now = DateTime.now();
+                            String time =
+                                DateFormat('yyyy/MM/dd HH:mm').format(now);
 
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
+                            //  diray firebase upload
+                            DatabaseService().writeDiary(gptModel.diaryTitle,
+                                textEditingController.text, sit, emo, time);
+
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: Colors.white,
                                 content: const Text(
@@ -604,11 +610,13 @@ class DiaryState extends State<Diary> {
                                     widget.controller.changeColor(3);
                                   },
                                 ),
-                              ));
-                            },
-                            title: '저장 후 나가기',
-                            condition: count3 > 0 ? 'not null' : 'null',
-                          )),
+                              ),
+                            );
+                          },
+                          title: '저장 후 나가기',
+                          condition: count3 > 0 ? 'not null' : 'null',
+                        ),
+                      ),
                     ],
                   )
                 ],
