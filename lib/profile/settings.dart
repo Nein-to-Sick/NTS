@@ -1,8 +1,11 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/new_nickname.dart';
 import 'package:nts/component/suggestionsButton.dart';
@@ -24,12 +27,8 @@ class ProfileSettings extends StatefulWidget {
 
 class _ProfileSettingsState extends State<ProfileSettings> {
   bool positive = false;
-  int index = 1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집
-
-  // static Future<List<String>> loadLicenses() async {
-  // final ossKeys = ossLicenses.keys.toList();
-  // return ossKeys..sort();
-  // }
+  int index =
+      1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +221,38 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         ],
       ),
     );
+    Widget oss_licenses = Padding(
+      padding: EdgeInsets.fromLTRB(
+          MediaQuery.of(context).size.width * 0.045,
+          MediaQuery.of(context).size.height * 0.03,
+          MediaQuery.of(context).size.width * 0.045,
+          MediaQuery.of(context).size.height * 0.02),
+      child: Column(
+        children: [
+          const Text(
+            "오픈 라이센스",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+          Expanded(
+            child: ossLicensesView(),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.045),
+            child: Button(
+              function: () {
+                setState(() {
+                  index = 1;
+                });
+              },
+              title: '이전',
+            ),
+          ),
+        ],
+      ),
+    );
 
     return Dialog(
       backgroundColor: Colors.white.withOpacity(0.9),
@@ -243,7 +274,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               ? companyInfo
                               : index == 5
                                   ? openLicense
-                                  : manageAccount,
+                                  : index == 6
+                                      ? manageAccount
+                                      : oss_licenses,
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -442,7 +475,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Colors.white.withOpacity(0.9),
               onTap: () {
                 setState(() {
-                  index = 5;
+                  index = 7;
                 });
               },
               inside: Row(children: [
@@ -554,9 +587,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         defaultCursor: SystemMouseCursors.click,
         onTap: () {
           setState(() => positive = !positive);
-          if (positive) {
-            alarmsettings();
-          }
+          // if (positive) {
+          //   alarmsettings();
+          // }
           // else {
           //   FlutterLocalNotification.requestNotificationPermissionOff();
           //   print("notification is turned offed");
@@ -763,6 +796,51 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget ossLicensesView() {
+    return Container(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: ossLicenses.length,
+        itemBuilder: (_, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ExpansionTile(
+              backgroundColor: MyThemeColors.whiteColor,
+              textColor: MyThemeColors.primaryColor,
+              collapsedBackgroundColor: MyThemeColors.whiteColor,
+              collapsedShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              title: Text(ossLicenses[index].name[0].toUpperCase() +
+                  ossLicenses[index].name.substring(1)),
+              subtitle: Text(ossLicenses[index].description),
+              children: [
+                ListTile(
+                  title: Text(ossLicenses[index].license!),
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget LicenceDetailPage(String title, String licence) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          Text(
+            licence,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ],
       ),
     );
   }
