@@ -47,7 +47,7 @@ class _MailBoxState extends State<MailBox> {
                 onTap: () {
                   setState(() {
                     idx = 2;
-                    time = letter.time;
+                    time = letter.date;
                     from = letter.from;
                     content = letter.content;
                   });
@@ -67,7 +67,7 @@ class _MailBoxState extends State<MailBox> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                letter.time,
+                                letter.date,
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: MyThemeColors.myGreyscale[700],
