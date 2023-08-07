@@ -53,6 +53,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_local_notifications: ^15.1.0+1
   dart_openai: ^4.0.0
+  shimmer: ^3.0.0
 
 
 dev_dependencies:
