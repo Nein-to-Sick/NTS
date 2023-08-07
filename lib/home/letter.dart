@@ -49,6 +49,7 @@ class _LetterState extends State<Letter> {
 
   _buildBody(BuildContext context) {
     onBackKeyCall() {
+      FocusScope.of(context).unfocus();
       showDialog(
         context: context,
         builder: (context) {
@@ -655,8 +656,9 @@ class _LetterState extends State<Letter> {
                                       fontFamily: "Dodam"),
                                   hintMaxLines: 10,
                                   hintText:
-                                      "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네가 성공할 때의 기쁨과 행복을 함께 나누고 싶어요. 네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                                      "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
                               maxLines: null,
+                              maxLength: 300,
                               keyboardType: TextInputType.multiline,
                             ),
                           ),
