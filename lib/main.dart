@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'component/notification.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
+import 'profile/notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -129,7 +130,6 @@ class BackgroundState extends State<Background> {
                 fit: BoxFit.cover,
               ),
             ),
-
           ],
         ),
         const FireFly(),
