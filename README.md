@@ -11,8 +11,10 @@ Nein to Sick
 
 ## 반딧불이
 
-The spiritual meaning of a firefly or lightning bug sighting.\n
-Fireflies remind us that it's the small, simple things in life that matter the most. They inspire us to take a moment to slow down, ground ourselves in the moment, and appreciate all that surrounds us.\n
+The spiritual meaning of a firefly or lightning bug sighting
+
+Fireflies remind us that it's the small, simple things in life that matter the most. They inspire us to take a moment to slow down, ground ourselves in the moment, and appreciate all that surrounds us.
+
 (WELL + GOOD, 2022)
 
 우울감을 가지고 있는 모든 사람들이 핵심적으로 필요한 것: 공감 + 응원 + 지지
