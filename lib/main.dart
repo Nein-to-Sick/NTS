@@ -16,7 +16,6 @@ import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
-import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'component/notification.dart';
@@ -76,6 +75,7 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
+  @override
   void initState() {
     // 초기화
     FlutterLocalNotification.init();
@@ -162,7 +162,11 @@ class BackgroundState extends State<Background> {
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
-                      return const HomePage();
+                      return MultiProvider(providers: [
+                        ChangeNotifierProvider(
+                          create: (BuildContext context) => MessageController(),
+                        ),
+                      ], child: const HomePage());
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {
