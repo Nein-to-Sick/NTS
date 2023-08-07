@@ -12,8 +12,10 @@ import '../component/button.dart';
 import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
-  const Diary({super.key, required this.controller});
+  const Diary({super.key, required this.controller, required this.messageController});
+
   final controller;
+  final messageController;
 
   @override
   DiaryState createState() => DiaryState();
@@ -637,9 +639,10 @@ class DiaryState extends State<Diary> {
                                 ),
                                 duration: const Duration(seconds: 5), //올라와있는 시간
                                 action: SnackBarAction(
-                                  textColor: MyThemeColors
-                                      .primaryColor, //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                                  label: '보러가기', //버튼이름
+                                  textColor: MyThemeColors.primaryColor,
+                                  //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                  label: '보러가기',
+                                  //버튼이름
                                   onPressed: () {
                                     widget.controller.movePage(855.0);
                                     widget.controller.changeColor(3);

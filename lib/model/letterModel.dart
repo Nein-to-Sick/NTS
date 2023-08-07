@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LetterModel {
   final String content;
-  final String time;
+  final String date;
   final String from;
 
   LetterModel({
     required this.content,
-    required this.time,
+    required this.date,
     required this.from,
   });
 
   static LetterModel fromSnapshot(DocumentSnapshot snap) {
     LetterModel letterModel = LetterModel(
-      time: snap['time'],
+      date: snap['date'],
       content: snap['content'],
       from: snap['from'],
     );

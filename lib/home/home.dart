@@ -3,6 +3,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:provider/provider.dart';
 
@@ -19,20 +20,51 @@ class HomePage extends StatelessWidget {
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final userName = userInfo.userNickName;
 
+    final messageController = Provider.of<MessageController>(context);
+
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: messageController.newMessage ? const EdgeInsets.only(top: 17, left: 7) : const EdgeInsets.only(top: 20),
               child: Align(
                   alignment: Alignment.topRight,
                   child: GestureDetector(
-                    child: const HeroIcon(
-                      HeroIcons.envelope,
-                      color: Colors.white,
-                      style: HeroIconStyle.solid,
+                    child: messageController.newMessage ? Stack(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(3),
+                          child: const Align(
+                            alignment: Alignment.topRight,
+                            child: HeroIcon(
+                              HeroIcons.envelope,
+                              color: Colors.white,
+                              style: HeroIconStyle.solid,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Color(0xffFCE181)),
+                            ),
+                          ),
+                        )
+                      ],
+                    ) : const Opacity(
+                      opacity: 0.4,
+                      child: HeroIcon(
+                        HeroIcons.envelope,
+                        color: Colors.white,
+                        style: HeroIconStyle.solid,
+                      ),
                     ),
                     onTap: () {
                       showAnimatedDialog(
@@ -40,6 +72,7 @@ class HomePage extends StatelessWidget {
                           barrierDismissible: false,
                           builder: (BuildContext context) => const MailBox(),
                           animationType: DialogTransitionType.slideFromTopFade);
+                      messageController.confirm();
                     },
                   )),
             ),
@@ -93,7 +126,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ],
                             child: Diary(
-                              controller: controller,
+                              controller: controller, messageController: messageController,
                             ),
                           );
                         },
@@ -122,7 +155,10 @@ class HomePage extends StatelessWidget {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) =>
-                            Letter(controller: controller),
+                            Letter(
+                                controller: controller,
+                                userName: userName,
+                              ),
                         animationType: DialogTransitionType.slideFromBottomFade,
                       );
                     },

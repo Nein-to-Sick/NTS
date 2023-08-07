@@ -121,6 +121,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+
   dart_openai:
     dependency: "direct main"
     description:
@@ -601,6 +602,7 @@ packages:
       sha256: "5c2f730018264d276c20e4f1503fd1308dfbbae39ec8ee63c5236311ac06954b"
       url: "https://pub.dev"
     source: hosted
+
     version: "0.6.1"
   timezone:
     dependency: transitive
