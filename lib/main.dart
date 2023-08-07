@@ -76,16 +76,16 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
-  @override
-  void initState() {
-    // 초기화
-    FlutterLocalNotification.init();
+  // @override
+  // void initState() {
+  //   // 초기화
+  //   FlutterLocalNotification.init();
 
-    // 3초 후 권한 요청
-    Future.delayed(const Duration(seconds: 1),
-        FlutterLocalNotification.requestNotificationPermission());
-    super.initState();
-  }
+  //   // 3초 후 권한 요청
+  //   Future.delayed(const Duration(seconds: 1),
+  //       FlutterLocalNotification.requestNotificationPermission());
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
