@@ -11,7 +11,6 @@ import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
-import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
