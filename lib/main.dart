@@ -182,9 +182,9 @@ class BackgroundState extends State<Background> {
                           //       ''
                           // );
                           myNicknameSheet(
-                            context,
-                            Provider.of<UserInfoValueModel>(context,
-                                listen: false),
+                              context,
+                              Provider.of<UserInfoValueModel>(context,
+                                  listen: false),
                           );
                         },
                       );

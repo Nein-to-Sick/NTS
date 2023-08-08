@@ -8,7 +8,7 @@ import 'package:nts/provider/backgroundController.dart';
 import 'package:provider/provider.dart';
 
 void myNicknameSheet(
-    BuildContext context, UserInfoValueModel userInfoProvider, int type) {
+    BuildContext context, UserInfoValueModel userInfoProvider) {
   String printitle = "사용할 닉네임을 정해주세요";
   final userNickNameController = TextEditingController();
   userNickNameController.text = (userInfoProvider.userNickName.isEmpty)
