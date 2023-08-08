@@ -8,22 +8,18 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
-import 'package:nts/component/nickName_Sheet.dart';
 import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
-import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
-import 'component/notification.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
-import 'profile/notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
