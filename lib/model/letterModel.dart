@@ -5,12 +5,16 @@ class LetterModel {
   final String date;
   final String from;
   final bool notMatch;
+  final bool heart;
+  final String id;
 
   LetterModel(
       {required this.content,
       required this.date,
       required this.from,
-      required this.notMatch});
+      required this.notMatch,
+      required this.heart,
+      required this.id});
 
   static LetterModel fromSnapshot(DocumentSnapshot snap) {
     LetterModel letterModel = LetterModel(
@@ -18,6 +22,8 @@ class LetterModel {
       content: snap['content'],
       from: snap['from'],
       notMatch: snap['notMatch'],
+      heart: snap['heart'],
+      id: snap['docId']
     );
     return letterModel;
   }

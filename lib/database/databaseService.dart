@@ -37,8 +37,8 @@ class DatabaseService {
 
     // message pull
     final matchingDocuments =
-        await getDocumentsWithMatchingSituationsAndEmotions(
-            situation, selectedEmotion);
+    await getDocumentsWithMatchingSituationsAndEmotions(
+        situation, selectedEmotion);
 
     if (matchingDocuments.isEmpty) {
       notMatch(messageController);
@@ -55,8 +55,8 @@ class DatabaseService {
     int min = 5;
     int max = 10;
     int randomNumber = min + rand.nextInt(max - min + 1);
-    await Future.delayed(Duration(minutes: randomNumber)); // 5~10분 랜덤 딜레이
-    // await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
+    // await Future.delayed(Duration(minutes: randomNumber)); // 5~10분 랜덤 딜레이
+    await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
 
     await FirebaseFirestore.instance // 저장
         .collection('users')
@@ -67,7 +67,7 @@ class DatabaseService {
 
     DocumentReference doc = FirebaseFirestore.instance
         .collection('users')
-    .doc(userId)
+        .doc(userId)
         .collection('mailBox')
         .doc(randomDoc.id);
 
@@ -77,6 +77,7 @@ class DatabaseService {
 
     doc.update({
       'date': formattedNow,
+      'docId': doc.id
     });
 
     messageController.getMessage();
@@ -139,11 +140,13 @@ class DatabaseService {
         .doc(userId)
         .collection('mailBox')
         .doc("notMatch")
-    .set({
+        .set({
       'content': '나와 같은 상황에 있는 사람들을 위해 편지를 써보는것은 어떨까?',
       'date': formattedNow,
       'from': '반딧불이',
-      'notMatch': true
+      'notMatch': true,
+      'heart': false,
+      'docId': "notMatch",
     });
     messageController.getMessage();
     FlutterLocalNotification.showNotification(); // 알림
@@ -174,7 +177,19 @@ class DatabaseService {
       'emotion': emotion,
       'date': time,
       'from': userName,
-      'notMatch': false
+      'notMatch': false,
+      'heart': false
+    });
+  }
+
+  void clickHeart(String id, bool heart) {
+    DocumentReference dr = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('mailBox').doc(id);
+
+    dr.update({
+      'heart': heart
     });
   }
 }
