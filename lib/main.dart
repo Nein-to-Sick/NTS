@@ -174,6 +174,13 @@ class BackgroundState extends State<Background> {
                     else if (snapshot.data == false) {
                       WidgetsBinding.instance.addPostFrameCallback(
                         (_) {
+                          // String printitle = "사용할 닉네임을 정해주세요";
+                          // myNicknameSheet(
+                          //   context,
+                          //   Provider.of<UserInfoValueModel>(context,
+                          //       listen: false),
+                          //       ''
+                          // );
                           myNicknameSheet(
                             context,
                             Provider.of<UserInfoValueModel>(context,
@@ -233,6 +240,7 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
         if (userData.containsKey('nicknameMade')) {
           userNickNameIsMade = userData['nicknameMade'];
           model.userNickName = userData['nickname'];
+          model.userEmail = userData['email'];
         } else {
           print('No field');
         }

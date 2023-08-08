@@ -21,7 +21,13 @@ import 'notification.dart';
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
-  const ProfileSettings({Key? key, required this.provider}) : super(key: key);
+  final UserInfoValueModel user;
+
+  // final controller = Provider.of<BackgroundController>(context);
+  // final userInfo = Provider.of<UserInfoValueModel>(context);
+  // final userName = userInfo.userNickName;
+  const ProfileSettings({Key? key, required this.provider, required this.user})
+      : super(key: key);
 
   @override
   State<ProfileSettings> createState() => _ProfileSettingsState();
@@ -729,7 +735,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: AutoSizeText(
-                      "xxxxxxxxx@gmail.com",
+                      widget.user.userEmail,
                       maxLines: 1,
                       style: TextStyle(fontSize: 16, color: Color(0xff868686)),
                     )),
@@ -751,7 +757,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         ))),
                 Container(
                     child: Text(
-                  "하루",
+                  widget.user.userNickName,
                   style: TextStyle(fontSize: 16, color: Color(0xff868686)),
                 )),
                 HeroIcon(
@@ -832,20 +838,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget LicenceDetailPage(String title, String licence) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Text(
-            licence,
-            style: const TextStyle(fontSize: 15),
-          ),
-        ],
       ),
     );
   }
