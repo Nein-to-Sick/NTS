@@ -9,6 +9,7 @@ import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickName_Sheet.dart';
+import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
@@ -181,10 +182,10 @@ class BackgroundState extends State<Background> {
                           //       listen: false),
                           //       ''
                           // );
-                          myNicknameSheet(
+                          NickName().myNicknameSheet(
                               context,
                               Provider.of<UserInfoValueModel>(context,
-                                  listen: false),
+                                  listen: false,), 1
                           );
                         },
                       );
