@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
@@ -43,7 +45,7 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
         final endDate = values.length > 1
             ? values[1].toString().replaceAll('00:00:00.000', '')
             : 'null';
-        valueText = '$startDate @ $endDate';
+        valueText = '$startDate@ $endDate';
       } else {
         return 'null';
       }
@@ -164,21 +166,21 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
     //  calendar button
     return GestureDetector(
       onTap: () async {
-        final values = await showCalendarDatePicker2Dialog(
+        final values = await showCalendarDatePicker2DialogCustom(
           context: context,
           config: config,
-          dialogSize: const Size(325, 400),
-          borderRadius: BorderRadius.circular(15),
+          dialogSize: const Size(325, 350),
+          borderRadius: BorderRadius.circular(10),
+          barrierDismissible: false,
           value: _dialogCalendarPickerValue,
-          dialogBackgroundColor: Colors.white,
+          dialogBackgroundColor: MyThemeColors.myGreyscale.shade50,
         );
         if (values != null) {
           String temp = '';
-          // ignore: avoid_print
-          print(_getValueText(
-            config.calendarType,
-            values,
-          ));
+          // print(_getValueText(
+          //   config.calendarType,
+          //   values,
+          // ));
           setState(() {
             _dialogCalendarPickerValue = values;
           });
@@ -186,7 +188,7 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
           temp = _getValueText(config.calendarType, values);
 
           timeResult = temp
-              .substring(1, temp.length - 1)
+              .substring(0, temp.length)
               .split('@ ')
               .map((value) => value.trim())
               .toList();
@@ -207,7 +209,9 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
             ),
             child: Center(
                 child: Text(
-              (timeResult.isNotEmpty) ? timeResult[0] : '시작 날짜',
+              (timeResult.isEmpty || timeResult[0].compareTo('null') == 0)
+                  ? '시작 날짜'
+                  : timeResult[0],
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: MyThemeColors.myGreyscale.shade600,
@@ -233,16 +237,275 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
               ),
             ),
             child: Center(
-                child: Text(
-              (timeResult.isNotEmpty) ? timeResult[1] : '마지막 날짜',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: MyThemeColors.myGreyscale.shade600,
+              child: Text(
+                (timeResult.isEmpty)
+                    ? '마지막 날짜'
+                    : (timeResult[1].compareTo('null') == 0)
+                        ? timeResult[0]
+                        : timeResult[1],
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: MyThemeColors.myGreyscale.shade600,
+                ),
               ),
-            )),
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+Future<List<DateTime?>?> showCalendarDatePicker2DialogCustom({
+  required BuildContext context,
+  required CalendarDatePicker2WithActionButtonsConfig config,
+  required Size dialogSize,
+  List<DateTime?> value = const [],
+  BorderRadius? borderRadius,
+  bool useRootNavigator = true,
+  bool barrierDismissible = true,
+  Color? barrierColor = Colors.black54,
+  bool useSafeArea = true,
+  Color? dialogBackgroundColor,
+  RouteSettings? routeSettings,
+  String? barrierLabel,
+  TransitionBuilder? builder,
+}) {
+  var dialog = Dialog(
+    insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+    backgroundColor: dialogBackgroundColor ?? Theme.of(context).canvasColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: borderRadius ?? BorderRadius.circular(10),
+    ),
+    clipBehavior: Clip.antiAlias,
+    child: SizedBox(
+      width: dialogSize.width,
+      height: max(dialogSize.height, 410),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CalendarDatePicker2WithActionButtonsCustom(
+            value: value,
+            config: config.copyWith(openedFromDialog: true),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  return showDialog<List<DateTime?>>(
+    context: context,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+    builder: (BuildContext context) {
+      return builder == null ? dialog : builder(context, dialog);
+    },
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    barrierLabel: barrierLabel,
+    useSafeArea: useSafeArea,
+  );
+}
+
+class CalendarDatePicker2WithActionButtonsCustom extends StatefulWidget {
+  const CalendarDatePicker2WithActionButtonsCustom({
+    required this.value,
+    required this.config,
+    this.onValueChanged,
+    this.onDisplayedMonthChanged,
+    this.onCancelTapped,
+    this.onOkTapped,
+    Key? key,
+  }) : super(key: key);
+
+  final List<DateTime?> value;
+
+  /// Called when the user taps 'OK' button
+  final ValueChanged<List<DateTime?>>? onValueChanged;
+
+  /// Called when the user navigates to a new month/year in the picker.
+  final ValueChanged<DateTime>? onDisplayedMonthChanged;
+
+  /// The calendar configurations including action buttons
+  final CalendarDatePicker2WithActionButtonsConfig config;
+
+  /// The callback when cancel button is tapped
+  final Function? onCancelTapped;
+
+  /// The callback when ok button is tapped
+  final Function? onOkTapped;
+
+  @override
+  State<CalendarDatePicker2WithActionButtonsCustom> createState() =>
+      _CalendarDatePicker2WithActionButtonsCustomState();
+}
+
+class _CalendarDatePicker2WithActionButtonsCustomState
+    extends State<CalendarDatePicker2WithActionButtonsCustom> {
+  List<DateTime?> _values = [];
+  List<DateTime?> _editCache = [];
+
+  @override
+  void initState() {
+    _values = widget.value;
+    _editCache = widget.value;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(
+      covariant CalendarDatePicker2WithActionButtonsCustom oldWidget) {
+    var isValueSame = oldWidget.value.length == widget.value.length;
+
+    if (isValueSame) {
+      for (var i = 0; i < oldWidget.value.length; i++) {
+        var isSame = (oldWidget.value[i] == null && widget.value[i] == null) ||
+            DateUtils.isSameDay(oldWidget.value[i], widget.value[i]);
+        if (!isSame) {
+          isValueSame = false;
+          break;
+        }
+      }
+    }
+
+    if (!isValueSame) {
+      _values = widget.value;
+      _editCache = widget.value;
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MediaQuery.removePadding(
+          context: context,
+          child: CalendarDatePicker2(
+            value: [..._editCache],
+            config: widget.config,
+            onValueChanged: (values) => _editCache = values,
+            onDisplayedMonthChanged: widget.onDisplayedMonthChanged,
+          ),
+        ),
+        //SizedBox(height: widget.config.gapBetweenCalendarAndButtons ?? 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildCancelButton(Theme.of(context).colorScheme, localizations),
+            const SizedBox(width: 20),
+            // if ((widget.config.gapBetweenCalendarAndButtons ?? 0) > 0)
+            //   SizedBox(width: widget.config.gapBetweenCalendarAndButtons),
+            _buildOkButton(Theme.of(context).colorScheme, localizations),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCancelButton(
+      ColorScheme colorScheme, MaterialLocalizations localizations) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(5),
+      onTap: () => setState(() {
+        _editCache = _values;
+        widget.onCancelTapped?.call();
+        if ((widget.config.openedFromDialog ?? false) &&
+            (widget.config.closeDialogOnCancelTapped ?? true)) {
+          Navigator.pop(context);
+        }
+      }),
+      child: Container(
+        width: 90,
+        height: 40,
+        decoration: BoxDecoration(
+            color: MyThemeColors.myGreyscale.shade200,
+            borderRadius: BorderRadius.circular(10)),
+        child: const Center(
+          child: Text(
+            "닫기",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: MyThemeColors.primaryColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+      /*
+      Container(
+        padding: widget.config.buttonPadding ??
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        child: widget.config.cancelButton ??
+            Text(
+              localizations.cancelButtonLabel.toUpperCase(),
+              style: widget.config.cancelButtonTextStyle ??
+                  TextStyle(
+                    color: widget.config.selectedDayHighlightColor ??
+                        colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+            ),
+      ),
+      */
+    );
+  }
+
+  Widget _buildOkButton(
+      ColorScheme colorScheme, MaterialLocalizations localizations) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(5),
+      onTap: () => setState(() {
+        _values = _editCache;
+        widget.onValueChanged?.call(_values);
+        widget.onOkTapped?.call();
+        if ((widget.config.openedFromDialog ?? false) &&
+            (widget.config.closeDialogOnOkTapped ?? true)) {
+          Navigator.pop(context, _values);
+        }
+      }),
+      child: Container(
+        width: 90,
+        height: 40,
+        decoration: BoxDecoration(
+            color: MyThemeColors.primaryColor,
+            borderRadius: BorderRadius.circular(10)),
+        child: const Center(
+          child: Text(
+            "확인",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: MyThemeColors.whiteColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+
+      /*
+      Container(
+        padding: widget.config.buttonPadding ??
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        child: widget.config.okButton ??
+            Text(
+              localizations.okButtonLabel.toUpperCase(),
+              style: widget.config.okButtonTextStyle ??
+                  TextStyle(
+                    color: widget.config.selectedDayHighlightColor ??
+                        colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+            ),
+      ),
+      */
     );
   }
 }

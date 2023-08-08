@@ -1,20 +1,13 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/model/preset.dart';
-import 'package:nts/profile/calendar.dart';
 import 'package:nts/profile/new_calendar.dart';
-import 'package:nts/provider/calendarController.dart';
-import 'package:provider/provider.dart';
 
 class SearchFilterDialog extends StatefulWidget {
-  final CalendarController calendarController;
   const SearchFilterDialog({
     super.key,
-    required this.calendarController,
   });
 
   @override
@@ -99,7 +92,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                           height: 15,
                         ),
 
-                        //  calendar
+                        //  calendar date picker
                         const MyNewCalendar(),
 
                         // GestureDetector(
@@ -372,14 +365,18 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                           ),
                                         ),
                                       ),
-                                      onTap: () {})),
+                                      onTap: () {
+                                        //  초기화 기능
+                                      })),
                               const SizedBox(
                                 width: 10,
                               ),
                               Flexible(
                                 flex: 1,
                                 child: Button(
-                                  function: () {},
+                                  function: () {
+                                    //  검색 함수
+                                  },
                                   title: '검색하기',
                                   condition: (count2 > 0 || count3 > 0)
                                       ? 'not null'

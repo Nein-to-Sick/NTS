@@ -11,6 +11,7 @@ import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickName_Sheet.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
+import 'package:nts/model/search_model.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
 import 'package:nts/provider/backgroundController.dart';
@@ -201,6 +202,8 @@ class BackgroundState extends State<Background> {
                           SearchBarController()), // count_provider.dart
                   ChangeNotifierProvider(
                       create: (BuildContext context) => CalendarController()),
+                  ChangeNotifierProvider(
+                      create: (BuildContext context) => ProfileSearchModel()),
                 ], child: const MyProfilePage()
                     //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );

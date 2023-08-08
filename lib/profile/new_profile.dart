@@ -6,6 +6,7 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/diary_filter.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/model/diaryModel.dart';
+import 'package:nts/model/search_model.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/settings.dart';
 import 'package:nts/provider/backgroundController.dart';
@@ -27,6 +28,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     final controller = Provider.of<BackgroundController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final calendarController = Provider.of<CalendarController>(context);
+    final searchModel = Provider.of<ProfileSearchModel>(context);
 
     return SafeArea(
       child: Padding(
@@ -162,8 +164,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 animationType:
                                     DialogTransitionType.slideFromBottomFade,
                                 builder: (BuildContext context) {
-                                  return SearchFilterDialog(
-                                      calendarController: calendarController);
+                                  return SearchFilterDialog();
                                 },
                               );
                             },
