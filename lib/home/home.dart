@@ -205,34 +205,6 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
-
-                  //  test
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Text(
-                          "Test",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyNewCalendar(
-                                    title: 'test',
-                                  )));
-                    },
-                  ),
                 ],
               ),
             )

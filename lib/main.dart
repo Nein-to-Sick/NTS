@@ -13,16 +13,14 @@ import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
-import 'package:nts/profile/profile.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
-import 'component/notification.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
-import 'profile/notification.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,6 +48,14 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: MyThemeColors.primaryColor.withOpacity(0.6),
         ),
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko', ''),
+        Locale('en', ''),
+      ],
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: false,

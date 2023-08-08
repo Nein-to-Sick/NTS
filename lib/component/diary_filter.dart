@@ -1,3 +1,4 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
@@ -5,6 +6,7 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/model/preset.dart';
 import 'package:nts/profile/calendar.dart';
+import 'package:nts/profile/new_calendar.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:provider/provider.dart';
 
@@ -97,72 +99,63 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                           height: 15,
                         ),
 
-                        GestureDetector(
-                          onTap: () {
-                            showAnimatedDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              animationType:
-                                  DialogTransitionType.slideFromBottomFade,
-                              builder: (BuildContext context) {
-                                return Calendar(
-                                  calendarController: widget.calendarController,
-                                );
-                              },
-                            );
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 120,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: MyThemeColors.myGreyscale.shade200,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Center(
-                                    child: Text(
-                                  '0000:00:00',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: MyThemeColors.myGreyscale.shade600,
-                                  ),
-                                )),
-                              ),
-                              Text(
-                                '~',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: MyThemeColors.myGreyscale.shade600,
-                                ),
-                              ),
-                              Container(
-                                width: 120,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: MyThemeColors.myGreyscale.shade200,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Center(
-                                    child: Text(
-                                  '0000:00:00',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: MyThemeColors.myGreyscale.shade600,
-                                  ),
-                                )),
-                              ),
-                            ],
-                          ),
-                        ),
+                        //  calendar
+                        const MyNewCalendar(),
+
+                        // GestureDetector(
+                        //   onTap: () {},
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Container(
+                        //         width: 120,
+                        //         height: 50,
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(10),
+                        //           border: Border.all(
+                        //             color: MyThemeColors.myGreyscale.shade200,
+                        //             width: 2,
+                        //           ),
+                        //         ),
+                        //         child: Center(
+                        //             child: Text(
+                        //           '0000:00:00',
+                        //           style: TextStyle(
+                        //             fontWeight: FontWeight.bold,
+                        //             color: MyThemeColors.myGreyscale.shade600,
+                        //           ),
+                        //         )),
+                        //       ),
+                        //       Text(
+                        //         '~',
+                        //         style: TextStyle(
+                        //           fontSize: 20,
+                        //           fontWeight: FontWeight.bold,
+                        //           color: MyThemeColors.myGreyscale.shade600,
+                        //         ),
+                        //       ),
+                        //       Container(
+                        //         width: 120,
+                        //         height: 50,
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(10),
+                        //           border: Border.all(
+                        //             color: MyThemeColors.myGreyscale.shade200,
+                        //             width: 2,
+                        //           ),
+                        //         ),
+                        //         child: Center(
+                        //             child: Text(
+                        //           '0000:00:00',
+                        //           style: TextStyle(
+                        //             fontWeight: FontWeight.bold,
+                        //             color: MyThemeColors.myGreyscale.shade600,
+                        //           ),
+                        //         )),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
 
                         const SizedBox(
                           height: 25,
@@ -182,7 +175,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                         //  situation keyword selection
                         SizedBox(
                           height: 220,
-                          width: MediaQuery.of(context).size.width * 0.85,
+                          width: MediaQuery.of(context).size.width * 0.8,
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.vertical,
@@ -193,6 +186,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                 child: SizedBox(
                                   height: 30,
                                   child: ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     itemCount:
@@ -274,7 +269,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                         //  emotion keyword selection
                         SizedBox(
                           height: 200,
-                          width: MediaQuery.of(context).size.width * 0.85,
+                          width: MediaQuery.of(context).size.width * 0.8,
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.vertical,
