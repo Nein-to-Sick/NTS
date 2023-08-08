@@ -358,9 +358,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               children: [
                                 calendar
-                                    ? const Padding(
+                                    ? Padding(
                                         padding: EdgeInsets.only(top: 20.0),
-                                        child: Calendar(),
+                                        child: Calendar(
+                                          calendarController:
+                                              calendarController,
+                                        ),
                                       )
                                     : Container(),
                                 situation

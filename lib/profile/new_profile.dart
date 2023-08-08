@@ -162,7 +162,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 animationType:
                                     DialogTransitionType.slideFromBottomFade,
                                 builder: (BuildContext context) {
-                                  return const SearchFilterDialog();
+                                  return SearchFilterDialog(
+                                      calendarController: calendarController);
                                 },
                               );
                             },

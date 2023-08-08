@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/profile/new_profile.dart';
+import 'package:nts/profile/new_calendar.dart';
 import 'package:nts/profile/notification.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
@@ -203,6 +203,34 @@ class _HomePageState extends State<HomePage> {
                         ),
                         animationType: DialogTransitionType.slideFromBottomFade,
                       );
+                    },
+                  ),
+
+                  //  test
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                          "Test",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyNewCalendar(
+                                    title: 'test',
+                                  )));
                     },
                   ),
                 ],

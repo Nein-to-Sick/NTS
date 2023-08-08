@@ -55,6 +55,7 @@ dependencies:
   expansion_tile_card: ^3.0.0
   dart_openai: ^4.0.0
   shimmer: ^3.0.0
+  calendar_date_picker2: ^0.5.2
 
 dev_dependencies:
   flutter_test:
