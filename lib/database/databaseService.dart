@@ -88,7 +88,7 @@ class DatabaseService {
       List<dynamic> situations, List<String> selectedEmotion) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('filterMail')
-        .where('situation', arrayContainsAny: situations)
+        .where('situation', isEqualTo: situations)
         .get();
 
     List<DocumentSnapshot> filteredDocuments = [];
@@ -147,6 +147,7 @@ class DatabaseService {
       'notMatch': true,
       'heart': false,
       'docId': "notMatch",
+      'from_uid': 'notMatch',
     });
     messageController.getMessage();
     FlutterLocalNotification.showNotification(); // 알림
@@ -177,19 +178,42 @@ class DatabaseService {
       'emotion': emotion,
       'date': time,
       'from': userName,
+      'from_uid': userId,
       'notMatch': false,
-      'heart': false
+      'heart': false,
+      'heart_count': 0
     });
   }
 
-  void clickHeart(String id, bool heart) {
+  Future<void> clickHeart(String id, bool heart, String fromUid) async {
     DocumentReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('mailBox').doc(id);
 
+    var data = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('mailBox').doc(id).get();
+    int heartCount = data['heart_count'];
+    heartCount++;
     dr.update({
-      'heart': heart
+      'heart': heart,
+      'heart_count': heartCount
     });
+
+    greenFireFly(heartCount, fromUid);
+  }
+
+  Future<void> greenFireFly(int heartCount, String fromUid) async {
+    if(heartCount == 1) {
+      DocumentReference data = FirebaseFirestore.instance.collection('users').doc(fromUid);
+      var doc = await FirebaseFirestore.instance.collection('users').doc(fromUid).get();
+      int green = doc['green'];
+      green++;
+      data.update({
+        'green': green
+      });
+    }
   }
 }

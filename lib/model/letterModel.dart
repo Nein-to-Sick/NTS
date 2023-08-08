@@ -7,6 +7,7 @@ class LetterModel {
   final bool notMatch;
   final bool heart;
   final String id;
+  final String fromUid;
 
   LetterModel(
       {required this.content,
@@ -14,17 +15,18 @@ class LetterModel {
       required this.from,
       required this.notMatch,
       required this.heart,
-      required this.id});
+      required this.id,
+      required this.fromUid});
 
   static LetterModel fromSnapshot(DocumentSnapshot snap) {
     LetterModel letterModel = LetterModel(
-      date: snap['date'],
-      content: snap['content'],
-      from: snap['from'],
-      notMatch: snap['notMatch'],
-      heart: snap['heart'],
-      id: snap['docId']
-    );
+        date: snap['date'],
+        content: snap['content'],
+        from: snap['from'],
+        notMatch: snap['notMatch'],
+        heart: snap['heart'],
+        id: snap['docId'],
+        fromUid: snap['from_uid']);
     return letterModel;
   }
 }

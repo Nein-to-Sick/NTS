@@ -31,6 +31,7 @@ class _MailBoxState extends State<MailBox> {
   late bool notMatch = false;
   late bool heart = false;
   late String id = "";
+  late String fromUid = "";
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,7 @@ class _MailBoxState extends State<MailBox> {
                     notMatch = letter.notMatch;
                     heart = letter.heart;
                     id = letter.id;
+                    fromUid = letter.fromUid;
                   });
                 },
                 child: Card(
@@ -161,7 +163,7 @@ class _MailBoxState extends State<MailBox> {
                                       setState(() {
                                         heart = !heart;
                                       });
-                                      DatabaseService().clickHeart(id, heart);
+                                      DatabaseService().clickHeart(id, heart, fromUid);
                                     },
                                     child: heart
                                         ? const HeroIcon(
