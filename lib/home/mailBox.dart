@@ -40,6 +40,7 @@ class _MailBoxState extends State<MailBox> {
           .collection('users')
           .doc(uid)
           .collection("mailBox")
+          .orderBy('date', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {

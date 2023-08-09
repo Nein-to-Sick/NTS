@@ -199,8 +199,9 @@ class DatabaseService {
     FlutterLocalNotification.showNotification(); // 알림
   }
 
-  void selfMessage(String content, List<String> situation, List<String> emotion,
-      String time, String userName) {
+  // 수정된 selfMessage
+  Future<String> selfMessage(String content, List<String> situation, List<String> emotion,
+      String time, String userName) async {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -209,7 +210,8 @@ class DatabaseService {
     // 1달을 추가한 날짜 및 시간
     DateTime oneMonthLater = initialDateTime.add(const Duration(days: 31));
     String endDate = DateFormat("yyyy/MM/dd 00:00").format(oneMonthLater);
-    dr.add({
+
+    DocumentReference docRef = await dr.add({
       'content': content,
       'situation': situation,
       'emotion': emotion,
@@ -220,13 +222,15 @@ class DatabaseService {
       'notMatch': true,
       'heart': false
     });
+    return docRef.id;
   }
 
-  void someoneMessage(String content, List<String> situation,
-      List<String> emotion, String userName, String time) {
+// 수정된 someoneMessage
+  Future<String> someoneMessage(String content, List<String> situation,
+      List<String> emotion, String userName, String time) async {
     CollectionReference dr = FirebaseFirestore.instance.collection('everyMail');
 
-    dr.add({
+    DocumentReference docRef = await dr.add({
       'content': content,
       'situation': situation,
       'emotion': emotion,
@@ -237,7 +241,9 @@ class DatabaseService {
       'heart': false,
       'heart_count': 0
     });
+    return docRef.id;
   }
+
 
   Future<void> clickHeart(String id, bool heart, String fromUid) async {
     DocumentReference dr = FirebaseFirestore.instance
