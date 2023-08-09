@@ -7,15 +7,15 @@ class UserInfoValueModel with ChangeNotifier {
   bool isValueEntered = false;
   //  whether the diary exist
   bool isDiaryExist = false;
-  //  when thers is no diary and pressed the 'write diary button'
 
   void userNickNameUpdate(value) {
     userNickName = value;
     notifyListeners();
   }
 
-  void userNickNameClear() {
+  void userInfoClear() {
     userNickName = '';
+    isValueEntered = false;
     notifyListeners();
   }
 

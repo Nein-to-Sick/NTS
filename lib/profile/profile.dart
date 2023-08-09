@@ -43,8 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final calendarController = Provider.of<CalendarController>(context);
 
     void signUserOut() {
-      Provider.of<UserInfoValueModel>(context, listen: false)
-          .userNickNameClear();
+      Provider.of<UserInfoValueModel>(context, listen: false).userInfoClear();
       FirebaseAuth.instance.signOut();
       controller.movePage(0);
     }

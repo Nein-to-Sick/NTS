@@ -771,7 +771,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 print("click");
                 // controller.movePage(0);
                 Provider.of<UserInfoValueModel>(context, listen: false)
-                    .userNickNameClear();
+                    .userInfoClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
                 Navigator.pop(context);
@@ -789,7 +789,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Colors.white,
               onTap: () {
                 Provider.of<UserInfoValueModel>(context, listen: false)
-                    .userNickNameClear();
+                    .userInfoClear();
                 DeleteAccount(context, widget.provider);
               },
               inside: Center(

@@ -130,3 +130,121 @@
                     // const SizedBox(
                     //   height: 20,
                     // ),
+
+// ------------------------------------------------------------------------------------------------
+
+/*
+              //  diary list view
+              Expanded(
+                child: StreamBuilder(
+                  //  searching condition
+                  stream: calendarController.count == 2
+                      ? FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId)
+                          .collection("diary")
+                          .orderBy("date", descending: true)
+                          .where("date",
+                              isGreaterThanOrEqualTo:
+                                  calendarController.formatStartDate(),
+                              isLessThanOrEqualTo:
+                                  calendarController.formatEndDate())
+                          .snapshots()
+                      : calendarController.count == 1
+                          ? FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userId)
+                              .collection("diary")
+                              .orderBy("date", descending: true)
+                              .where("date",
+                                  isGreaterThanOrEqualTo:
+                                      calendarController.formatStartDate(),
+                                  isLessThanOrEqualTo:
+                                      calendarController.formatOneDayEndDate())
+                              .snapshots()
+                          :
+                          //  without condition
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userId)
+                              .collection("diary")
+                              .orderBy("date", descending: true)
+                              .snapshots(),
+    
+                  //  show list of diary
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(child: Text('Something went wrong'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final List<Diary> diaries = snapshot.data!.docs
+                        .map((DocumentSnapshot doc) => Diary.fromSnapshot(doc))
+                        .toList();
+    
+                    //  Filter the diaries based on the entered text in the search bar
+                    final String searchText =
+                        searchBarController.text.toLowerCase();
+                    final List<Diary> filteredDiaries = diaries
+                        .where((diary) =>
+                            diary.title.toLowerCase().contains(searchText))
+                        .toList();
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                            filteredDiaries.length,
+                            (index) {
+                              final Diary diary = filteredDiaries[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white.withOpacity(0.9),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          diary.date,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: MyThemeColors.myGreyscale[400],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          diary.title,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: "Dodam",
+                                            color: MyThemeColors.myGreyscale[800],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              */

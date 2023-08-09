@@ -9,9 +9,14 @@ import 'package:provider/provider.dart';
 
 class SearchFilterDialog extends StatefulWidget {
   final ProfileSearchModel searchModel;
+  final Function newSearchFunction;
+  final Function resetSearchFunction;
+
   const SearchFilterDialog({
     super.key,
     required this.searchModel,
+    required this.newSearchFunction,
+    required this.resetSearchFunction,
   });
 
   @override
@@ -334,6 +339,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                     ),
                                   ),
                                   onTap: () {
+                                    widget.resetSearchFunction();
                                     widget.searchModel.clearAllValue();
                                     setState(
                                       () {
@@ -362,6 +368,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                 child: Button(
                                   function: () {
                                     //  검색 실행 함수
+                                    widget.newSearchFunction();
                                     Navigator.pop(context);
                                   },
                                   title: '검색하기',

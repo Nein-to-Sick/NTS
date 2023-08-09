@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ProfileSearchModel with ChangeNotifier {
@@ -9,14 +10,7 @@ class ProfileSearchModel with ChangeNotifier {
   List<String> emotionResult = List<String>.empty(growable: true);
   String dirayTitle = '';
 
-  String temp = 'none';
-
-  //  테스트용 함수
-  void temptemp() {
-    temp = (temp.compareTo('none') == 0) ? 'wow' : 'none';
-    notifyListeners();
-  }
-
+  //  필터 적용 여부 확인
   bool isFiltered() {
     if (timeResult.isNotEmpty ||
         situationResult.isNotEmpty ||
@@ -26,6 +20,21 @@ class ProfileSearchModel with ChangeNotifier {
       return false;
     }
   }
+
+  //  필터에 따른 서로 다른 query 리턴
+  // Future<QuerySnapshot> newFilterQuery() {
+  //   Future<QuerySnapshot> newQuery;
+
+  //   if () {
+
+  //   }
+
+  //   else {
+
+  //   }
+
+  //   return newQuery;
+  // }
 
   //  검색창의 검색어 저장 함수
   void updateTitleValue(value) {

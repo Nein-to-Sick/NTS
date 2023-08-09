@@ -189,7 +189,7 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
           borderRadius: BorderRadius.circular(10),
           barrierDismissible: false,
           value: widget.searchModel.dialogCalendarPickerValue,
-          dialogBackgroundColor: MyThemeColors.myGreyscale.shade50,
+          dialogBackgroundColor: MyThemeColors.whiteColor,
         );
         if (values != null) {
           String temp = '';

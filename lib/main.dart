@@ -255,11 +255,7 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
 
         //  check whether the diary exist
         if (querySnapshot.docs.isNotEmpty) {
-          print('nononono');
-
           model.userDiaryExist();
-        } else {
-          print('wowowowo');
         }
       } else {
         print('No document');
