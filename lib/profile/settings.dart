@@ -803,11 +803,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Color(0xffFCE181),
               onTap: () {
                 print("click");
-                // controller.movePage(0);
                 widget.user.userNickNameClear();
                 widget.user.userEmailClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
+                widget.provider.fireFlyOff();
                 Navigator.pop(context);
               },
               inside: Center(
