@@ -17,4 +17,10 @@ class BackgroundController with ChangeNotifier {
     page = index;
     notifyListeners();
   }
+
+  bool fireFly = false;
+  void fireFlyOn() {
+    fireFly = true;
+    notifyListeners();
+  }
 }
