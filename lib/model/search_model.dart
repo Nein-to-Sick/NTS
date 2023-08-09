@@ -9,7 +9,6 @@ class ProfileSearchModel with ChangeNotifier {
   List<String> situationResult = List<String>.empty(growable: true);
   List<String> emotionResult = List<String>.empty(growable: true);
   String diraySearchTitle = '';
-  String diaryContent = '';
 
   //  필터 적용 여부 확인
   bool isFiltered() {
@@ -69,12 +68,6 @@ class ProfileSearchModel with ChangeNotifier {
   //  검색창의 검색어 저장 함수
   void updateTitleValue(value) {
     diraySearchTitle = value;
-    notifyListeners();
-  }
-
-  //  일기 수정창의 수정 함수
-  void updateDiaryContent(value) {
-    diaryContent = value;
     notifyListeners();
   }
 

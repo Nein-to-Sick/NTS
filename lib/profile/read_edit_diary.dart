@@ -22,7 +22,6 @@ class ReadDiaryDialog extends StatefulWidget {
 
 class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
   TextEditingController diaryTextController = TextEditingController();
-
   bool editMode = false;
   final FocusNode _focusNode = FocusNode();
 
@@ -40,6 +39,8 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final String firstContent = widget.diaryContent.content;
+
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -133,10 +134,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                       onTapOutside: (p) {
                                         FocusScope.of(context).unfocus();
                                       },
-                                      onChanged: (value) {
-                                        widget.searchModel
-                                            .updateDiaryContent(value.trim());
-                                      },
+                                      onChanged: (value) {},
                                       readOnly: !editMode,
                                       controller: diaryTextController,
                                       style: const TextStyle(fontSize: 16),
@@ -229,17 +227,22 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                     }
                                     //  update diary content
                                     else {
-                                      String? userId = FirebaseAuth
-                                          .instance.currentUser?.uid;
-                                      FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(userId)
-                                          .collection("diary")
-                                          .doc(widget.diaryContent.path)
-                                          .update({
-                                        "content":
-                                            widget.searchModel.diaryContent
-                                      });
+                                      //  실제로 수정된 경우만 파이어베이스 쓰기
+                                      if (firstContent.compareTo(
+                                              diaryTextController.text) !=
+                                          0) {
+                                        String? userId = FirebaseAuth
+                                            .instance.currentUser?.uid;
+                                        FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(userId)
+                                            .collection("diary")
+                                            .doc(widget.diaryContent.path)
+                                            .update({
+                                          "content":
+                                              diaryTextController.text.trim()
+                                        });
+                                      }
                                       setState(() {
                                         editMode = !editMode;
                                       });
@@ -251,7 +254,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                           behavior: SnackBarBehavior.floating,
                                           backgroundColor: Colors.white,
                                           content: Text(
-                                            '일기가 수정되었습니다!',
+                                            '일기가 저장되었습니다!',
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
