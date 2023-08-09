@@ -99,8 +99,9 @@ class BackgroundState extends State<Background> {
         builder: (context) {
           return dialogWithYesOrNo(
             context,
-            '앱 종료',
-            '앱을 종료하시겠나요?',
+            '정말로 종료하시는 건가요?',
+            "",
+            "종료",
             //  on Yes
             () {
               SystemNavigator.pop();
