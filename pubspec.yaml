@@ -56,6 +56,8 @@ dependencies:
   dart_openai: ^4.0.0
   shimmer: ^3.0.0
   flutter_email_sender: ^6.0.1
+  flutter_native_splash: ^2.3.1
+
 
 dev_dependencies:
   flutter_test:
