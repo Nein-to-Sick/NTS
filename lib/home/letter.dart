@@ -276,6 +276,9 @@ class _LetterState extends State<Letter> {
                   ],
                 ),
               ),
+              isSelfSelected ? Text("주의사항: 나에게 보내면 최소 한달 뒤에 확인 가능합니다.", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[400]
+              ),) : Container(),
+              const SizedBox(height: 10,),
               Button(
                 function: () {
                   isSomeoneSelected == false && isSelfSelected == false
@@ -658,7 +661,6 @@ class _LetterState extends State<Letter> {
                                   hintText:
                                       "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
                               maxLines: null,
-                              maxLength: 300,
                               keyboardType: TextInputType.multiline,
                             ),
                           ),
@@ -696,7 +698,7 @@ class _LetterState extends State<Letter> {
 
                       if (isSelfSelected) {
                         DatabaseService().selfMessage(
-                            textEditingController.text, sit, emo, time);
+                            textEditingController.text, sit, emo, time, widget.userName);
                       } else {
                         DatabaseService().someoneMessage(
                           textEditingController.text,
@@ -723,7 +725,9 @@ class _LetterState extends State<Letter> {
                           //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
                           label: '취소하기',
                           //버튼이름
-                          onPressed: () {},
+                          onPressed: () {
+
+                          },
                         ),
                       ));
                     },

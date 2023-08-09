@@ -35,16 +35,27 @@ class DatabaseService {
       }
     }
 
-    // message pull
-    final matchingDocuments =
-    await getDocumentsWithMatchingSituationsAndEmotions(
-        situation, selectedEmotion);
+    // 내가 보낸 일기에서 찾기
+    final documents = await getSelfMailBox(situation, selectedEmotion);
 
-    if (matchingDocuments.isEmpty) {
-      notMatch(messageController);
-      return;
+    if(documents.isNotEmpty) {
+      sendAlert(documents, messageController);
+    } else {
+      // 내가 보낸 일기에서 없을때 filterMail에서 찾기
+      final matchingDocuments =
+      await getDocumentsWithMatchingSituationsAndEmotions(
+          situation, selectedEmotion);
+
+      if (matchingDocuments.isEmpty) {
+        notMatch(messageController);
+        return;
+      }
+
+      sendAlert(matchingDocuments, messageController);
     }
+  }
 
+  Future<void> sendAlert(matchingDocuments, messageController) async {
     final random = Random();
     final randomIndex = random.nextInt(matchingDocuments.length);
     final randomDoc = matchingDocuments[randomIndex];
@@ -82,6 +93,10 @@ class DatabaseService {
 
     messageController.getMessage();
     FlutterLocalNotification.showNotification(); // 알림
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('selfMailBox').doc(randomDoc.id).delete();
   }
 
   Future<List<DocumentSnapshot>> getDocumentsWithMatchingSituationsAndEmotions(
@@ -113,6 +128,37 @@ class DatabaseService {
             .get();
 
         if (!userDoc.exists) {
+          filteredDocuments.add(document);
+        }
+      }
+    }
+
+    return filteredDocuments;
+  }
+
+  Future<List<DocumentSnapshot>> getSelfMailBox(List<dynamic> situations,
+      List<String> selectedEmotion) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('selfMailBox')
+        .where('situation', isEqualTo: situations)
+        .get();
+
+    List<DocumentSnapshot> filteredDocuments = [];
+
+    for (DocumentSnapshot document in querySnapshot.docs) {
+      bool emotionMatches = false;
+
+      for (String emotion in selectedEmotion) {
+        if (document['emotion'].contains(emotion)) {
+          emotionMatches = true;
+          break;
+        }
+      }
+      if (emotionMatches) {
+        String endDateString = document['endDate'].replaceAll('/', '-');
+        if (DateTime.parse(endDateString).compareTo(DateTime.now()) <= 0) {
           filteredDocuments.add(document);
         }
       }
@@ -154,17 +200,25 @@ class DatabaseService {
   }
 
   void selfMessage(String content, List<String> situation, List<String> emotion,
-      String time) {
+      String time, String userName) {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection("selfMailBox");
-
+    DateTime initialDateTime = DateTime.parse(time.replaceAll('/', '-'));
+    // 1달을 추가한 날짜 및 시간
+    DateTime oneMonthLater = initialDateTime.add(const Duration(days: 31));
+    String endDate = DateFormat("yyyy/MM/dd 00:00").format(oneMonthLater);
     dr.add({
       'content': content,
       'situation': situation,
       'emotion': emotion,
-      'date': time
+      'date': time,
+      'endDate': endDate,
+      'from': "Me",
+      'from_uid': userId,
+      'notMatch': true,
+      'heart': false
     });
   }
 
@@ -206,9 +260,11 @@ class DatabaseService {
   }
 
   Future<void> greenFireFly(int heartCount, String fromUid) async {
-    if(heartCount == 1) {
-      DocumentReference data = FirebaseFirestore.instance.collection('users').doc(fromUid);
-      var doc = await FirebaseFirestore.instance.collection('users').doc(fromUid).get();
+    if (heartCount == 1) {
+      DocumentReference data = FirebaseFirestore.instance.collection('users')
+          .doc(fromUid);
+      var doc = await FirebaseFirestore.instance.collection('users').doc(
+          fromUid).get();
       int green = doc['green'];
       green++;
       data.update({
