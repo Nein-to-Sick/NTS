@@ -201,7 +201,7 @@ class BackgroundState extends State<Background> {
                                 context,
                                 listen: false,
                               ),
-                              1);
+                              0);
                         },
                       );
 

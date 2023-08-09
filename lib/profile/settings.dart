@@ -4,10 +4,12 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/new_nickname.dart';
+import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
@@ -41,6 +43,31 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     // final controller = Provider.of<BackgroundController>(context);
+    void _sendEmail() async {
+      final Email email = Email(
+        body: '',
+        subject: '[양파가족 문의]',
+        recipients: ['onionfamily.official@gmail.com'],
+        cc: [],
+        bcc: [],
+        attachmentPaths: [],
+        isHTML: false,
+      );
+
+      try {
+        await FlutterEmailSender.send(email);
+      } catch (error) {
+        String title =
+            "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)\n\nonionfamily.official@gmail.com";
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(title),
+              );
+            });
+      }
+    }
 
     Widget mainSettings = Padding(
       padding: EdgeInsets.fromLTRB(
@@ -145,7 +172,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         child: Column(
           children: [
             const Text(
-              "개인정보 처리방침",
+              "사업자 정보",
               style: TextStyle(fontSize: 20),
             ),
             Expanded(child: companyInfoView()),
@@ -744,7 +771,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             buildCustomButton(
               onTap: () {
-                NewNickName(context);
+                // NewNickName(context);
+                NickName().myNicknameSheet(context, widget.user, 1);
               },
               backgroundColor: Colors.white,
               inside: Row(children: [
@@ -776,8 +804,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               onTap: () {
                 print("click");
                 // controller.movePage(0);
-                Provider.of<UserInfoValueModel>(context, listen: false)
-                    .userNickNameClear();
+                widget.user.userNickNameClear();
+                widget.user.userEmailClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
                 Navigator.pop(context);
@@ -794,8 +822,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white,
               onTap: () {
-                Provider.of<UserInfoValueModel>(context, listen: false)
-                    .userNickNameClear();
+                widget.user.userNickNameClear();
+                widget.user.userEmailClear();
                 DeleteAccount(context, widget.provider);
               },
               inside: Center(
