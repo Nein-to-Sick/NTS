@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 
 class NickName {
   void myNicknameSheet(
-      BuildContext context, UserInfoValueModel userInfoProvider, int i) {
-    String printitle = "사용할 닉네임을 정해주세요";
+      BuildContext context, UserInfoValueModel userInfoProvider, int type) {
+    String printitle = (type == 1) ? "새로운 닉네임을 입력해주세요" : "사용할 닉네임을 정해주세요";
     final userNickNameController = TextEditingController();
     userNickNameController.text = (userInfoProvider.userNickName.isEmpty)
         ? ""
@@ -19,8 +19,8 @@ class NickName {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      isDismissible: false,
-      enableDrag: false,
+      isDismissible: (type == 1) ? true : false,
+      enableDrag: (type == 1) ? true : false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(25),
@@ -30,7 +30,7 @@ class NickName {
       builder: (BuildContext context) {
         return Padding(
           padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Container(
             decoration: BoxDecoration(
                 color: MyThemeColors.whiteColor,
@@ -123,25 +123,28 @@ class NickName {
                 ElevatedButton(
                   onPressed: (userInfoProvider.isValueEntered)
                       ? () {
-                    userNickNameFirebaseUpdate(
-                        context, userNickNameController.text.trim());
-                    userInfoProvider.userNickNameUpdate(
-                        userNickNameController.text.trim());
+                          userNickNameFirebaseUpdate(
+                              context, userNickNameController.text.trim());
+                          userInfoProvider.userNickNameUpdate(
+                              userNickNameController.text.trim());
 
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MultiProvider(
-                            providers: [
-                              ChangeNotifierProvider(
-                                create: (context) => BackgroundController(),
-                              ),
-                            ],
-                            child: const MyApp(),
-                          ),
-                        ),
-                            (route) => false);
-                  }
+                          (type == 1)
+                              ? Navigator.pop(context)
+                              : Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MultiProvider(
+                                      providers: [
+                                        ChangeNotifierProvider(
+                                          create: (context) =>
+                                              BackgroundController(),
+                                        ),
+                                      ],
+                                      child: const MyApp(),
+                                    ),
+                                  ),
+                                  (route) => false);
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
@@ -186,5 +189,4 @@ class NickName {
       },
     );
   }
-
 }
