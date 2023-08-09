@@ -55,6 +55,7 @@ dependencies:
   expansion_tile_card: ^3.0.0
   dart_openai: ^4.0.0
   shimmer: ^3.0.0
+  flutter_email_sender: ^6.0.1
 
 dev_dependencies:
   flutter_test:
