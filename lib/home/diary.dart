@@ -38,6 +38,7 @@ class DiaryState extends State<Diary> {
   int count3 = 0;
   late PageController _pageController;
   String contents = "";
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -47,6 +48,12 @@ class DiaryState extends State<Diary> {
     isSelected3 = List.generate(Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
     _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -205,6 +212,7 @@ class DiaryState extends State<Diary> {
 
   _buildPageFirst() {
     final gptModel = Provider.of<GPTModel>(context, listen: false);
+
     return Padding(
         padding: const EdgeInsets.only(bottom: 30.0, top: 50),
         child: Column(
@@ -241,51 +249,58 @@ class DiaryState extends State<Diary> {
                         padding: EdgeInsets.only(
                             bottom:
                                 MediaQuery.of(context).viewInsets.bottom * 0.4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                        child: GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(_focusNode);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
                             child: Padding(
-                              //  아래 padding으로 대체시 텍스트 필드만 밀림
-                              padding: const EdgeInsets.all(0),
-                              /*
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom *
-                                          0.4),
-                                          */
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: TextField(
-                                  onSubmitted: (value) {
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  onTapOutside: (p) {
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  onChanged: (value) {
-                                    gptModel.updateDiaryMainText(value);
-                                    setState(() {
-                                      contents = value;
-                                    });
-                                  },
-                                  controller: textEditingController,
-                                  style: const TextStyle(fontSize: 16),
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: "Dodam",
-                                        color: MyThemeColors.myGreyscale[300],
-                                      ),
-                                      hintMaxLines: 7,
-                                      hintText:
-                                          "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다.\n\n\n\n\n\n\n\n\n"),
-                                  maxLines: null,
-                                  maxLength: 300,
-                                  keyboardType: TextInputType.multiline,
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                              child: Padding(
+                                //  아래 padding으로 대체시 텍스트 필드만 밀림
+                                padding: const EdgeInsets.all(0),
+                                /*
+                                padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(context).viewInsets.bottom *
+                                            0.4),
+                                            */
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: TextField(
+                                    focusNode: _focusNode,
+                                    onSubmitted: (value) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    onTapOutside: (p) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    onChanged: (value) {
+                                      gptModel.updateDiaryMainText(value);
+                                      setState(() {
+                                        contents = value;
+                                      });
+                                    },
+                                    controller: textEditingController,
+                                    style: const TextStyle(fontSize: 16),
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: "Dodam",
+                                          color: MyThemeColors.myGreyscale[300],
+                                        ),
+                                        hintMaxLines: 7,
+                                        hintText:
+                                            "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다.\n\n\n\n\n\n\n\n\n"),
+                                    maxLines: null,
+                                    maxLength: 300,
+                                    keyboardType: TextInputType.multiline,
+                                  ),
                                 ),
                               ),
                             ),

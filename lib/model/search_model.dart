@@ -8,7 +8,8 @@ class ProfileSearchModel with ChangeNotifier {
   List<String> timeResult = List<String>.empty(growable: true);
   List<String> situationResult = List<String>.empty(growable: true);
   List<String> emotionResult = List<String>.empty(growable: true);
-  String dirayTitle = '';
+  String diraySearchTitle = '';
+  String diaryContent = '';
 
   //  필터 적용 여부 확인
   bool isFiltered() {
@@ -22,23 +23,58 @@ class ProfileSearchModel with ChangeNotifier {
   }
 
   //  필터에 따른 서로 다른 query 리턴
-  // Future<QuerySnapshot> newFilterQuery() {
-  //   Future<QuerySnapshot> newQuery;
+  Query newFilterQuery(userId) {
+    final diaryPath = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection("diary")
+        .orderBy("date", descending: true);
 
-  //   if () {
+    Query newQuery = diaryPath;
 
-  //   }
+    try {
+      if (timeResult.isNotEmpty) {
+        //  서로 다른 기간
+        if (timeResult[1].isNotEmpty) {
+          newQuery = newQuery.where("date",
+              isGreaterThanOrEqualTo: parseFormedTime(timeResult[0], "0:0:0"),
+              isLessThanOrEqualTo: parseFormedTime(timeResult[1], "23:59:59"));
+        }
+        //  하루만 일때
+        else {
+          newQuery = newQuery.where("date",
+              isGreaterThanOrEqualTo: parseFormedTime(timeResult[0], "0:0:0"),
+              isLessThanOrEqualTo: parseFormedTime(timeResult[0], "23:59:59"));
+        }
+      }
 
-  //   else {
+      if (situationResult.isNotEmpty) {
+        for (String situation in situationResult) {
+          newQuery = newQuery.where('situation', isEqualTo: situation);
+        }
+      }
 
-  //   }
+      if (emotionResult.isNotEmpty) {
+        for (String emotion in emotionResult) {
+          newQuery = newQuery.where('emotion', isEqualTo: emotion);
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
 
-  //   return newQuery;
-  // }
+    return newQuery;
+  }
 
   //  검색창의 검색어 저장 함수
   void updateTitleValue(value) {
-    dirayTitle = value;
+    diraySearchTitle = value;
+    notifyListeners();
+  }
+
+  //  일기 수정창의 수정 함수
+  void updateDiaryContent(value) {
+    diaryContent = value;
     notifyListeners();
   }
 
@@ -110,5 +146,13 @@ class ProfileSearchModel with ChangeNotifier {
     dialogCalendarPickerValue.clear();
     dialogCalendarPickerValue = [DateTime.now()];
     notifyListeners();
+  }
+
+  //  date format translate
+  String parseFormedTime(String timeString, String endValue) {
+    String formattedTime =
+        "${timeString.substring(0, 4)}/${timeString.substring(5, 7)}/${timeString.substring(8, 10)} $endValue";
+
+    return formattedTime;
   }
 }

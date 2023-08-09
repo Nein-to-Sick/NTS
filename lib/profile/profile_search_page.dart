@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
@@ -8,6 +9,7 @@ import 'package:nts/loading/loading_page.dart';
 import 'package:nts/model/diaryModel.dart';
 import 'package:nts/model/search_model.dart';
 import 'package:nts/profile/diary_filter.dart';
+import 'package:nts/profile/read_edit_diary.dart';
 
 class MyProfileSearchPage extends StatefulWidget {
   final ProfileSearchModel searchModel;
@@ -24,7 +26,8 @@ class MyProfileSearchPage extends StatefulWidget {
 final diaryPath = FirebaseFirestore.instance
     .collection('users')
     .doc(userId)
-    .collection("diary");
+    .collection("diary")
+    .orderBy("date", descending: true);
 
 class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
   final searchBarController = TextEditingController();
@@ -32,30 +35,33 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
   bool isBasicQuery = true;
 
   //  basic query state
-  Future<QuerySnapshot> futureSearchResults =
-      (diaryPath.orderBy("date", descending: true).get());
+  Future<QuerySnapshot> futureSearchResults = (diaryPath.get());
 
   //  new filter
-  changeSearchFilter() {
-    Future<QuerySnapshot> newSearchResults =
-        (diaryPath.orderBy("date", descending: true).get());
+  changeSearchFilter() async {
     setState(() {
-      futureSearchResults = newSearchResults;
+      futureSearchResults = widget.searchModel.newFilterQuery(userId).get();
       isBasicQuery = false;
-      print('new search!');
     });
   }
 
   //  reset filter
   resetSearchFilter() {
-    Future<QuerySnapshot> newSearchResults =
-        (diaryPath.orderBy("date", descending: true).get());
     if (!isBasicQuery) {
       setState(() {
-        futureSearchResults = newSearchResults;
-        print('reset search!');
+        futureSearchResults = (diaryPath.get());
+        isBasicQuery = true;
       });
     }
+  }
+
+  //  just for refresh future builder
+  refreshBuilder() {
+    Future<QuerySnapshot> temp = futureSearchResults;
+    setState(() {
+      futureSearchResults = temp;
+      print('refresh!');
+    });
   }
 
   @override
@@ -106,9 +112,9 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
             final List<DiaryModel> diaries = snapshot.data!.docs
                 .map((DocumentSnapshot doc) => DiaryModel.fromSnapshot(doc))
                 .toList();
-
             //  Filter the diaries based on the entered text in the search bar
-            final String searchText = searchBarController.text.toLowerCase();
+            final String searchText =
+                searchBarController.text.trim().toLowerCase();
             final List<DiaryModel> filteredDiaries = diaries
                 .where(
                     (diary) => diary.title.toLowerCase().contains(searchText))
@@ -124,40 +130,59 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                           final DiaryModel diary = filteredDiaries[index];
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color:
-                                    MyThemeColors.whiteColor.withOpacity(0.9),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      diary.date,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13,
-                                        color: MyThemeColors.myGreyscale[400],
+                            child: GestureDetector(
+                              onTap: () {
+                                //  read a diary
+                                showAnimatedDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  animationType:
+                                      DialogTransitionType.slideFromBottomFade,
+                                  builder: (BuildContext context) {
+                                    return ReadDiaryDialog(
+                                      diaryContent: diary,
+                                      searchModel: widget.searchModel,
+                                      refreshFunction: refreshBuilder,
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color:
+                                      MyThemeColors.whiteColor.withOpacity(0.9),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        diary.date,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                          color: MyThemeColors.myGreyscale[400],
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      diary.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: "Dodam",
-                                        color: MyThemeColors.myGreyscale[800],
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        diary.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: "Dodam",
+                                          color: MyThemeColors.myGreyscale[800],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -190,7 +215,6 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                   widget.searchModel.updateTitleValue(value.trim());
                 },
                 onSubmitted: (value) {
-                  //  검색 실행 함수
                   changeSearchFilter();
                   FocusScope.of(context).unfocus();
                 },
@@ -222,22 +246,24 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                   hintStyle: TextStyle(
                     color: MyThemeColors.myGreyscale[300],
                   ),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: IconButton(
-                      onPressed: () {
-                        // 검색 실행 함수
-                        changeSearchFilter();
-                      },
-                      icon: HeroIcon(
-                        HeroIcons.magnifyingGlass,
-                        style: HeroIconStyle.mini,
-                        color: (widget.searchModel.dirayTitle.isNotEmpty)
-                            ? MyThemeColors.whiteColor
-                            : MyThemeColors.myGreyscale[300],
-                      ),
-                    ),
-                  ),
+                  suffixIcon: (widget.searchModel.diraySearchTitle.isNotEmpty)
+                      ? IconButton(
+                          onPressed: () {
+                            if (widget
+                                .searchModel.diraySearchTitle.isNotEmpty) {
+                              setState(() {
+                                searchBarController.clear();
+                              });
+                              widget.searchModel.updateTitleValue('');
+                            }
+                          },
+                          icon: HeroIcon(
+                            HeroIcons.xCircle,
+                            style: HeroIconStyle.mini,
+                            color: MyThemeColors.myGreyscale[600],
+                          ),
+                        )
+                      : null,
                 ),
               ),
             ),
@@ -314,3 +340,5 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
     );
   }
 }
+
+//  read diary page

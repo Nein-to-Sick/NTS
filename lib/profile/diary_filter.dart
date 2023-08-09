@@ -26,9 +26,9 @@ class SearchFilterDialog extends StatefulWidget {
 class _SearchFilterDialogState extends State<SearchFilterDialog> {
   late List<List<bool>> isSelected2 = [];
   late List<List<bool>> isSelected3 = [];
-  int count2 = 0;
-  int count3 = 0;
-  int flag = 0;
+  int countSituation = 0;
+  int countEmotion = 0;
+  int countDate = 0;
 
   @override
   void initState() {
@@ -48,7 +48,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              color: MyThemeColors.myGreyscale.shade50,
+              borderRadius: BorderRadius.circular(10)),
           width: MediaQuery.of(context).size.width * 0.85,
           height: MediaQuery.of(context).size.height * 0.9,
           child: SingleChildScrollView(
@@ -67,7 +68,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                         child: const Opacity(
                           opacity: 0.2,
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.only(right: 8.0),
                             child: Align(
                               alignment: Alignment.topRight,
                               child: HeroIcon(
@@ -155,12 +156,12 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                             isSelected2[index1][index2] =
                                                 !isSelected2[index1][index2];
                                             if (isSelected2[index1][index2]) {
-                                              count2++;
+                                              countSituation++;
                                               widget.searchModel.addSituation(
                                                   Preset().situation[index1]
                                                       [index2]);
                                             } else {
-                                              count2--;
+                                              countSituation--;
                                               widget.searchModel
                                                   .removeSituation(
                                                       Preset().situation[index1]
@@ -253,12 +254,12 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                             isSelected3[index1][index2] =
                                                 !isSelected3[index1][index2];
                                             if (isSelected3[index1][index2]) {
-                                              count3++;
+                                              countEmotion++;
                                               widget.searchModel.addEmotion(
                                                   Preset().emotion[index1]
                                                       [index2]);
                                             } else {
-                                              count3--;
+                                              countEmotion--;
                                               widget.searchModel.removeEmotion(
                                                   Preset().emotion[index1]
                                                       [index2]);
@@ -353,8 +354,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                             (i) => List.generate(
                                                 Preset().emotion[i].length,
                                                 (j) => false));
-                                        count2 = 0;
-                                        count3 = 0;
+                                        countSituation = 0;
+                                        countEmotion = 0;
                                       },
                                     );
                                   },
@@ -367,12 +368,14 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                 flex: 1,
                                 child: Button(
                                   function: () {
-                                    //  검색 실행 함수
                                     widget.newSearchFunction();
                                     Navigator.pop(context);
                                   },
                                   title: '검색하기',
-                                  condition: (count2 > 0 || count3 > 0)
+                                  condition: (countSituation > 0 ||
+                                          countEmotion > 0 ||
+                                          widget.searchModel.timeResult
+                                              .isNotEmpty)
                                       ? 'not null'
                                       : 'null',
                                 ),
@@ -398,7 +401,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
         if (Preset().situation[i].contains(value)) {
           int indexInInnerList = Preset().situation[i].indexOf(value);
           isSelected2[i][indexInInnerList] = true;
-          count2++;
+          countSituation++;
         }
       }
     }
@@ -410,7 +413,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
         if (Preset().emotion[i].contains(value)) {
           int indexInInnerList = Preset().emotion[i].indexOf(value);
           isSelected3[i][indexInInnerList] = true;
-          count3++;
+          countEmotion++;
         }
       }
     }
