@@ -2,7 +2,6 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:heroicons/heroicons.dart';
@@ -17,18 +16,18 @@ import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
+import '../component/notification.dart';
 import '../provider/backgroundController.dart';
-
-import 'notification.dart';
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
   final UserInfoValueModel user;
+  final bool alert;
 
   // final controller = Provider.of<BackgroundController>(context);
   // final userInfo = Provider.of<UserInfoValueModel>(context);
   // final userName = userInfo.userNickName;
-  const ProfileSettings({Key? key, required this.provider, required this.user})
+  const ProfileSettings({Key? key, required this.provider, required this.user, required this.alert})
       : super(key: key);
 
   @override
@@ -36,9 +35,15 @@ class ProfileSettings extends StatefulWidget {
 }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
-  bool positive = false;
   int index =
       1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
+  bool positive = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    positive = widget.alert;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -609,26 +614,27 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return Container(
       margin: EdgeInsets.only(right: 15),
       child: CustomAnimatedToggleSwitch<bool>(
-        current: positive,
+        current: FlutterLocalNotification.hasNotificationPermission,
         values: [false, true],
         dif: 0.0,
         indicatorSize: Size.square(30.0),
         animationDuration: const Duration(milliseconds: 200),
         animationCurve: Curves.linear,
-        onChanged: (b) => setState(() => positive = b),
+        onChanged: (b) => setState(() => FlutterLocalNotification.hasNotificationPermission = b),
         iconBuilder: (context, local, global) {
           return const SizedBox();
         },
         defaultCursor: SystemMouseCursors.click,
         onTap: () {
-          setState(() => positive = !positive);
-          // if (positive) {
-          //   alarmsettings();
+          setState(() => FlutterLocalNotification.hasNotificationPermission = !FlutterLocalNotification.hasNotificationPermission);
+          print(FlutterLocalNotification.hasNotificationPermission);
+          // print(FlutterLocalNotification.hasNotificationPermission);
+          // if (FlutterLocalNotification.hasNotificationPermission) {
+          //   FlutterLocalNotification.showNotification();
           // }
           // else {
-          //   FlutterLocalNotification.requestNotificationPermissionOff();
-          //   print("notification is turned offed");
           //   FlutterLocalNotification.showNotification();
+          //   print("notification is turned off");
           // }
         },
         iconsTappable: false,
@@ -644,7 +650,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     decoration: BoxDecoration(
                         color: Color(0xffF2F2F2),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(50.0)),
+                        const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 3.0,
                           color: Color(0xffC6C6C6),
@@ -675,6 +681,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       ),
     );
   }
+
 
   Widget companyInfoView() {
     return Container(

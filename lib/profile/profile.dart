@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (BuildContext context) {
                           return ProfileSettings(
                             provider: controller,
-                            user: userInfo,
+                            user: userInfo, alert: false,
                           );
                         },
                       );

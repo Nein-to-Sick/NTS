@@ -13,7 +13,8 @@ import 'package:nts/provider/calendarController.dart';
 import 'package:provider/provider.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key});
+  const MyProfilePage({super.key, required this.alert});
+  final alert;
 
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
@@ -48,7 +49,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         builder: (BuildContext context) {
                           return ProfileSettings(
                             provider: controller,
-                            user: userInfo,
+                            user: userInfo, alert: widget.alert,
+
                           );
                         },
                       );

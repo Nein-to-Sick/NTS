@@ -13,6 +13,7 @@ import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
+import 'package:nts/provider/alertController.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (context) => UserInfoValueModel(),
             ),
+            ChangeNotifierProvider(create: (context) => AlertController())
           ],
           child: const Background(),
         ),
@@ -75,14 +77,15 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
+  bool alert = false;
+
   @override
   void initState() {
     // 초기화
     FlutterLocalNotification.init();
-
-    // 3초 후 권한 요청
-    Future.delayed(const Duration(seconds: 1),
-        FlutterLocalNotification.requestNotificationPermission());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
+    });
     super.initState();
   }
 
@@ -221,7 +224,7 @@ class BackgroundState extends State<Background> {
                           SearchBarController()), // count_provider.dart
                   ChangeNotifierProvider(
                       create: (BuildContext context) => CalendarController()),
-                ], child: const MyProfilePage()
+                ], child: MyProfilePage(alert: alert,)
                     //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );
               } else {
