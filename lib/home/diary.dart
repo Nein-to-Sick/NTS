@@ -110,7 +110,7 @@ class DiaryState extends State<Diary> {
                                 gptModel.whileLoadingStart();
                               });
                               return const MyFireFlyProgressbar(
-                                loadingText: '반딧불이가 일기를 가져가는 중...',
+                                loadingText: '정리 중...',
                               );
                             }
                             //  Future 데이터 가져오기

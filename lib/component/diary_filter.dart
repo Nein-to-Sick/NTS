@@ -3,11 +3,15 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/model/preset.dart';
+import 'package:nts/model/search_model.dart';
 import 'package:nts/profile/new_calendar.dart';
+import 'package:provider/provider.dart';
 
 class SearchFilterDialog extends StatefulWidget {
+  final ProfileSearchModel searchModel;
   const SearchFilterDialog({
     super.key,
+    required this.searchModel,
   });
 
   @override
@@ -28,6 +32,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
         (i) => List.generate(Preset().situation[i].length, (j) => false));
     isSelected3 = List.generate(Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
+    updateIsSelectedSituation();
+    updateIsSelectedEmotion();
   }
 
   @override
@@ -37,8 +43,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(10)),
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
           width: MediaQuery.of(context).size.width * 0.85,
           height: MediaQuery.of(context).size.height * 0.9,
           child: SingleChildScrollView(
@@ -93,62 +98,14 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                         ),
 
                         //  calendar date picker
-                        const MyNewCalendar(),
-
-                        // GestureDetector(
-                        //   onTap: () {},
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       Container(
-                        //         width: 120,
-                        //         height: 50,
-                        //         decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           border: Border.all(
-                        //             color: MyThemeColors.myGreyscale.shade200,
-                        //             width: 2,
-                        //           ),
-                        //         ),
-                        //         child: Center(
-                        //             child: Text(
-                        //           '0000:00:00',
-                        //           style: TextStyle(
-                        //             fontWeight: FontWeight.bold,
-                        //             color: MyThemeColors.myGreyscale.shade600,
-                        //           ),
-                        //         )),
-                        //       ),
-                        //       Text(
-                        //         '~',
-                        //         style: TextStyle(
-                        //           fontSize: 20,
-                        //           fontWeight: FontWeight.bold,
-                        //           color: MyThemeColors.myGreyscale.shade600,
-                        //         ),
-                        //       ),
-                        //       Container(
-                        //         width: 120,
-                        //         height: 50,
-                        //         decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           border: Border.all(
-                        //             color: MyThemeColors.myGreyscale.shade200,
-                        //             width: 2,
-                        //           ),
-                        //         ),
-                        //         child: Center(
-                        //             child: Text(
-                        //           '0000:00:00',
-                        //           style: TextStyle(
-                        //             fontWeight: FontWeight.bold,
-                        //             color: MyThemeColors.myGreyscale.shade600,
-                        //           ),
-                        //         )),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        ChangeNotifierProvider.value(
+                          value: widget.searchModel,
+                          child: Consumer<ProfileSearchModel>(
+                            builder: (context, model, child) => MyNewCalendar(
+                              searchModel: model,
+                            ),
+                          ),
+                        ),
 
                         const SizedBox(
                           height: 25,
@@ -194,8 +151,15 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                                 !isSelected2[index1][index2];
                                             if (isSelected2[index1][index2]) {
                                               count2++;
+                                              widget.searchModel.addSituation(
+                                                  Preset().situation[index1]
+                                                      [index2]);
                                             } else {
                                               count2--;
+                                              widget.searchModel
+                                                  .removeSituation(
+                                                      Preset().situation[index1]
+                                                          [index2]);
                                             }
                                           });
                                         },
@@ -285,8 +249,14 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                                 !isSelected3[index1][index2];
                                             if (isSelected3[index1][index2]) {
                                               count3++;
+                                              widget.searchModel.addEmotion(
+                                                  Preset().emotion[index1]
+                                                      [index2]);
                                             } else {
                                               count3--;
+                                              widget.searchModel.removeEmotion(
+                                                  Preset().emotion[index1]
+                                                      [index2]);
                                             }
                                           });
                                         },
@@ -366,7 +336,21 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                         ),
                                       ),
                                       onTap: () {
-                                        //  초기화 기능
+                                        widget.searchModel.clearAllValue();
+                                        setState(() {
+                                          isSelected2 = List.generate(
+                                              Preset().situation.length,
+                                              (i) => List.generate(
+                                                  Preset().situation[i].length,
+                                                  (j) => false));
+                                          isSelected3 = List.generate(
+                                              Preset().emotion.length,
+                                              (i) => List.generate(
+                                                  Preset().emotion[i].length,
+                                                  (j) => false));
+                                          count2 = 0;
+                                          count3 = 0;
+                                        });
                                       })),
                               const SizedBox(
                                 width: 10,
@@ -375,7 +359,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                 flex: 1,
                                 child: Button(
                                   function: () {
-                                    //  검색 함수
+                                    //  검색 실행 함수
+                                    Navigator.pop(context);
                                   },
                                   title: '검색하기',
                                   condition: (count2 > 0 || count3 > 0)
@@ -396,5 +381,29 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
         ),
       ),
     );
+  }
+
+  void updateIsSelectedSituation() {
+    for (var value in widget.searchModel.situationResult) {
+      for (int i = 0; i < Preset().situation.length; i++) {
+        if (Preset().situation[i].contains(value)) {
+          int indexInInnerList = Preset().situation[i].indexOf(value);
+          isSelected2[i][indexInInnerList] = true;
+          count2++;
+        }
+      }
+    }
+  }
+
+  void updateIsSelectedEmotion() {
+    for (var value in widget.searchModel.emotionResult) {
+      for (int i = 0; i < Preset().emotion.length; i++) {
+        if (Preset().emotion[i].contains(value)) {
+          int indexInInnerList = Preset().emotion[i].indexOf(value);
+          isSelected3[i][indexInInnerList] = true;
+          count3++;
+        }
+      }
+    }
   }
 }

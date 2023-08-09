@@ -3,25 +3,41 @@ import 'dart:math';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
+import 'package:nts/model/search_model.dart';
 
 class MyNewCalendar extends StatefulWidget {
-  const MyNewCalendar({Key? key}) : super(key: key);
+  final ProfileSearchModel searchModel;
+  const MyNewCalendar({Key? key, required this.searchModel}) : super(key: key);
 
   @override
   State<MyNewCalendar> createState() => _MyNewCalendarState();
 }
 
 class _MyNewCalendarState extends State<MyNewCalendar> {
+  List<DateTime?> _dialogCalendarPickerValue = [
+    DateTime.now(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.searchModel.timeResult.isNotEmpty) {
+      if (widget.searchModel.timeResult[1].compareTo('null') == 0) {
+        _dialogCalendarPickerValue[0] =
+            DateTime.parse(widget.searchModel.timeResult[0]);
+      } else {
+        _dialogCalendarPickerValue[0] =
+            DateTime.parse(widget.searchModel.timeResult[0]);
+        _dialogCalendarPickerValue
+            .add(DateTime.parse(widget.searchModel.timeResult[1]));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildCalendarDialog();
   }
-
-  List<String> timeResult = List<String>.empty(growable: true);
-
-  List<DateTime?> _dialogCalendarPickerValue = [
-    DateTime.now(),
-  ];
 
   String _getValueText(
     CalendarDatePicker2Type datePickerType,
@@ -186,12 +202,7 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
           });
 
           temp = _getValueText(config.calendarType, values);
-
-          timeResult = temp
-              .substring(0, temp.length)
-              .split('@ ')
-              .map((value) => value.trim())
-              .toList();
+          widget.searchModel.updateCalendarValue(temp);
         }
       },
       child: Row(
@@ -209,9 +220,10 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
             ),
             child: Center(
                 child: Text(
-              (timeResult.isEmpty || timeResult[0].compareTo('null') == 0)
+              (widget.searchModel.timeResult.isEmpty ||
+                      widget.searchModel.timeResult[0].compareTo('null') == 0)
                   ? '시작 날짜'
-                  : timeResult[0],
+                  : widget.searchModel.timeResult[0],
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: MyThemeColors.myGreyscale.shade600,
@@ -238,11 +250,11 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
             ),
             child: Center(
               child: Text(
-                (timeResult.isEmpty)
+                (widget.searchModel.timeResult.isEmpty)
                     ? '마지막 날짜'
-                    : (timeResult[1].compareTo('null') == 0)
-                        ? timeResult[0]
-                        : timeResult[1],
+                    : (widget.searchModel.timeResult[1].compareTo('null') == 0)
+                        ? widget.searchModel.timeResult[0]
+                        : widget.searchModel.timeResult[1],
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyThemeColors.myGreyscale.shade600,
