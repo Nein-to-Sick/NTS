@@ -61,33 +61,9 @@ class NavigationToggle extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
-            // page == 2
-            //     ? const Padding(
-            //         padding: EdgeInsets.only(right: 80.0),
-            //         child: Text(
-            //           "홈",
-            //           style: TextStyle(
-            //               color: Colors.white,
-            //               fontSize: 13,
-            //               fontWeight: FontWeight.w700),
-            //         ),
-            //       )
-            //     : Container(),
-            // page == 3
-            //     ? const Padding(
-            //         padding: EdgeInsets.only(left: 75.0),
-            //         child: Text(
-            //           "프로필",
-            //           style: TextStyle(
-            //               color: Colors.white,
-            //               fontSize: 13,
-            //               fontWeight: FontWeight.w700),
-            //         ),
-            //       )
-            //     : Container()
           ],
         ),
       ),
