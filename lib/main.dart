@@ -139,7 +139,21 @@ class BackgroundState extends State<Background> {
               ),
             ],
           ),
-          const FireFly(),
+          AnimatedBuilder(
+            animation: scrollController,
+            builder: (context, child) {
+              if(controller.fireFly) {
+                if (scrollController.offset == 600 ||
+                    scrollController.offset == 855) {
+                  return const FireFly();
+                } else {
+                  return const SizedBox.shrink();
+                }
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
           AnimatedBuilder(
             animation: scrollController,
             builder: (context, child) {
@@ -161,6 +175,9 @@ class BackgroundState extends State<Background> {
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        controller.fireFlyOn();
+                      });
                       return MultiProvider(providers: [
                         ChangeNotifierProvider(
                           create: (BuildContext context) => MessageController(),
@@ -180,9 +197,11 @@ class BackgroundState extends State<Background> {
                           // );
                           NickName().myNicknameSheet(
                               context,
-                              Provider.of<UserInfoValueModel>(context,
-                                  listen: false,), 1
-                          );
+                              Provider.of<UserInfoValueModel>(
+                                context,
+                                listen: false,
+                              ),
+                              1);
                         },
                       );
 
@@ -207,16 +226,19 @@ class BackgroundState extends State<Background> {
               }
             },
           ),
-          AnimatedBuilder(
-            animation: scrollController,
-            builder: (context, child) {
-              if (scrollController.offset != 0) {
-                return const NavigationToggle();
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
+          controller.fireFly
+              ? AnimatedBuilder(
+                  animation: scrollController,
+                  builder: (context, child) {
+                    if (scrollController.offset == 600 ||
+                        scrollController.offset == 855) {
+                      return const NavigationToggle();
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                )
+              : Container(),
         ],
       ),
     );
