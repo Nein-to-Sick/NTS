@@ -170,6 +170,7 @@ class _HomePageState extends State<HomePage> {
                             child: Diary(
                               controller: controller,
                               messageController: messageController,
+                              userInfo: userInfo,
                             ),
                           );
                         },

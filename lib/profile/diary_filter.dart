@@ -312,46 +312,48 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                           child: Row(
                             children: [
                               Flexible(
-                                  flex: 1,
-                                  child: GestureDetector(
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                            color: MyThemeColors
-                                                .myGreyscale.shade200,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(13.0),
-                                          child: Text(
-                                            "초기화",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color:
-                                                    MyThemeColors.primaryColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                        ),
+                                flex: 1,
+                                child: GestureDetector(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            MyThemeColors.myGreyscale.shade200,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(13.0),
+                                      child: Text(
+                                        "초기화",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: MyThemeColors.primaryColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700),
                                       ),
-                                      onTap: () {
-                                        widget.searchModel.clearAllValue();
-                                        setState(() {
-                                          isSelected2 = List.generate(
-                                              Preset().situation.length,
-                                              (i) => List.generate(
-                                                  Preset().situation[i].length,
-                                                  (j) => false));
-                                          isSelected3 = List.generate(
-                                              Preset().emotion.length,
-                                              (i) => List.generate(
-                                                  Preset().emotion[i].length,
-                                                  (j) => false));
-                                          count2 = 0;
-                                          count3 = 0;
-                                        });
-                                      })),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    widget.searchModel.clearAllValue();
+                                    setState(
+                                      () {
+                                        isSelected2 = List.generate(
+                                            Preset().situation.length,
+                                            (i) => List.generate(
+                                                Preset().situation[i].length,
+                                                (j) => false));
+                                        isSelected3 = List.generate(
+                                            Preset().emotion.length,
+                                            (i) => List.generate(
+                                                Preset().emotion[i].length,
+                                                (j) => false));
+                                        count2 = 0;
+                                        count3 = 0;
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
                               const SizedBox(
                                 width: 10,
                               ),

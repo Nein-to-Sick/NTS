@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +6,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
+import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
@@ -12,11 +14,16 @@ import '../component/button.dart';
 import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
-  const Diary(
-      {super.key, required this.controller, required this.messageController});
-
   final controller;
   final messageController;
+  final UserInfoValueModel userInfo;
+
+  const Diary({
+    super.key,
+    required this.controller,
+    required this.messageController,
+    required this.userInfo,
+  });
 
   @override
   DiaryState createState() => DiaryState();
@@ -631,6 +638,8 @@ class DiaryState extends State<Diary> {
                               widget.messageController,
                               time,
                             );
+
+                            widget.userInfo.userDiaryExist();
 
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(

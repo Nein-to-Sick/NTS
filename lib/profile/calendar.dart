@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/provider/calendarController.dart';
-import 'package:provider/provider.dart';
 
 class Calendar extends StatefulWidget {
   final CalendarController calendarController;

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Diary {
+class DiaryModel {
   final String title;
   final String content;
   final List<dynamic> situation;
   final List<dynamic> emotion;
   final String date;
 
-  Diary({
+  DiaryModel({
     required this.title,
     required this.content,
     required this.situation,
@@ -15,14 +15,14 @@ class Diary {
     required this.date,
   });
 
-  static Diary fromSnapshot(DocumentSnapshot snap) {
-    Diary diary = Diary(
+  static DiaryModel fromSnapshot(DocumentSnapshot snap) {
+    DiaryModel diaryModel = DiaryModel(
       title: snap['title'],
       content: snap['content'],
       situation: snap['situation'],
       emotion: snap['emotion'],
       date: snap['date'],
     );
-    return diary;
+    return diaryModel;
   }
 }

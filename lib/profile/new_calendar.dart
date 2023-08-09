@@ -14,24 +14,24 @@ class MyNewCalendar extends StatefulWidget {
 }
 
 class _MyNewCalendarState extends State<MyNewCalendar> {
-  List<DateTime?> _dialogCalendarPickerValue = [
-    DateTime.now(),
-  ];
+  // List<DateTime?> dialogCalendarPickerValue = [
+  //   DateTime.now(),
+  // ];
 
   @override
   void initState() {
     super.initState();
-    if (widget.searchModel.timeResult.isNotEmpty) {
-      if (widget.searchModel.timeResult[1].compareTo('null') == 0) {
-        _dialogCalendarPickerValue[0] =
-            DateTime.parse(widget.searchModel.timeResult[0]);
-      } else {
-        _dialogCalendarPickerValue[0] =
-            DateTime.parse(widget.searchModel.timeResult[0]);
-        _dialogCalendarPickerValue
-            .add(DateTime.parse(widget.searchModel.timeResult[1]));
-      }
-    }
+    // if (widget.searchModel.timeResult.isNotEmpty) {
+    //   if (widget.searchModel.timeResult[1].compareTo('null') == 0) {
+    //     dialogCalendarPickerValue[0] =
+    //         DateTime.parse(widget.searchModel.timeResult[0]);
+    //   } else {
+    //     dialogCalendarPickerValue[0] =
+    //         DateTime.parse(widget.searchModel.timeResult[0]);
+    //     dialogCalendarPickerValue
+    //         .add(DateTime.parse(widget.searchModel.timeResult[1]));
+    //   }
+    // }
   }
 
   @override
@@ -188,7 +188,7 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
           dialogSize: const Size(325, 350),
           borderRadius: BorderRadius.circular(10),
           barrierDismissible: false,
-          value: _dialogCalendarPickerValue,
+          value: widget.searchModel.dialogCalendarPickerValue,
           dialogBackgroundColor: MyThemeColors.myGreyscale.shade50,
         );
         if (values != null) {
@@ -197,9 +197,11 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
           //   config.calendarType,
           //   values,
           // ));
-          setState(() {
-            _dialogCalendarPickerValue = values;
-          });
+          // setState(() {
+          //   dialogCalendarPickerValue = values;
+          // });
+
+          widget.searchModel.updateCalendarSubValue(values);
 
           temp = _getValueText(config.calendarType, values);
           widget.searchModel.updateCalendarValue(temp);
@@ -390,8 +392,6 @@ class _CalendarDatePicker2WithActionButtonsCustomState
 
   @override
   Widget build(BuildContext context) {
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -408,19 +408,18 @@ class _CalendarDatePicker2WithActionButtonsCustomState
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildCancelButton(Theme.of(context).colorScheme, localizations),
+            _buildCancelButton(Theme.of(context).colorScheme),
             const SizedBox(width: 20),
             // if ((widget.config.gapBetweenCalendarAndButtons ?? 0) > 0)
             //   SizedBox(width: widget.config.gapBetweenCalendarAndButtons),
-            _buildOkButton(Theme.of(context).colorScheme, localizations),
+            _buildOkButton(Theme.of(context).colorScheme),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCancelButton(
-      ColorScheme colorScheme, MaterialLocalizations localizations) {
+  Widget _buildCancelButton(ColorScheme colorScheme) {
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: () => setState(() {
@@ -449,28 +448,10 @@ class _CalendarDatePicker2WithActionButtonsCustomState
           ),
         ),
       ),
-      /*
-      Container(
-        padding: widget.config.buttonPadding ??
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: widget.config.cancelButton ??
-            Text(
-              localizations.cancelButtonLabel.toUpperCase(),
-              style: widget.config.cancelButtonTextStyle ??
-                  TextStyle(
-                    color: widget.config.selectedDayHighlightColor ??
-                        colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
-            ),
-      ),
-      */
     );
   }
 
-  Widget _buildOkButton(
-      ColorScheme colorScheme, MaterialLocalizations localizations) {
+  Widget _buildOkButton(ColorScheme colorScheme) {
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: () => setState(() {
@@ -500,24 +481,6 @@ class _CalendarDatePicker2WithActionButtonsCustomState
           ),
         ),
       ),
-
-      /*
-      Container(
-        padding: widget.config.buttonPadding ??
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: widget.config.okButton ??
-            Text(
-              localizations.okButtonLabel.toUpperCase(),
-              style: widget.config.okButtonTextStyle ??
-                  TextStyle(
-                    color: widget.config.selectedDayHighlightColor ??
-                        colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
-            ),
-      ),
-      */
     );
   }
 }

@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('ko', ''),
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
             ),
             ChangeNotifierProvider(
               create: (context) => UserInfoValueModel(),
+            ),
+            ChangeNotifierProvider(
+              create: (BuildContext context) => MessageController(),
             ),
           ],
           child: const Background(),
@@ -171,11 +175,7 @@ class BackgroundState extends State<Background> {
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
-                      return MultiProvider(providers: [
-                        ChangeNotifierProvider(
-                          create: (BuildContext context) => MessageController(),
-                        ),
-                      ], child: const HomePage());
+                      return const HomePage();
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {
@@ -239,11 +239,27 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
       if (userSnapshot.exists) {
         Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
+        //  check whether the nickName exist
         if (userData.containsKey('nicknameMade')) {
           userNickNameIsMade = userData['nicknameMade'];
-          model.userNickName = userData['nickname'];
+          model.userNickNameUpdate(userData['nickname']);
         } else {
           print('No field');
+        }
+
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('diary')
+            .get();
+
+        //  check whether the diary exist
+        if (querySnapshot.docs.isNotEmpty) {
+          print('nononono');
+
+          model.userDiaryExist();
+        } else {
+          print('wowowowo');
         }
       } else {
         print('No document');

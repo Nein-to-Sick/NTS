@@ -341,15 +341,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
-                          final List<Diary> diaries = snapshot.data!.docs
+                          final List<DiaryModel> diaries = snapshot.data!.docs
                               .map((DocumentSnapshot doc) =>
-                                  Diary.fromSnapshot(doc))
+                                  DiaryModel.fromSnapshot(doc))
                               .toList();
 
                           // Filter the diaries based on the entered text in the search bar
                           final String searchText =
                               textEditingController.text.toLowerCase();
-                          final List<Diary> filteredDiaries = diaries
+                          final List<DiaryModel> filteredDiaries = diaries
                               .where((diary) => diary.title
                                   .toLowerCase()
                                   .contains(searchText))
@@ -392,7 +392,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     children: List.generate(
                                       filteredDiaries.length,
                                       (index) {
-                                        final Diary diary =
+                                        final DiaryModel diary =
                                             filteredDiaries[index];
                                         return Padding(
                                           padding: const EdgeInsets.only(
