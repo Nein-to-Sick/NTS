@@ -70,15 +70,19 @@ class DiaryState extends State<Diary> {
         builder: (context) {
           return dialogWithYesOrNo(
             context,
-            '일기 쓰기 종료',
-            '창을 닫으시겠나요?\n내용은 저장되지 않습니다',
+            '정말로 나가시는건가요?',
+            '나갈시 기존에 쓰고 있었던 글은\n모두 삭제되고 복구가 불가능합니다.',
+            '나가기',
             //  on Yes
             () {
               gptModel.endAnalyzeDiary();
               Navigator.pop(context);
+              Navigator.pop(context);
             },
             //  on No
-            () {},
+            () {
+              Navigator.pop(context);
+            },
           );
         },
       );

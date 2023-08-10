@@ -75,7 +75,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return ProfileSettings(provider: controller);
+                          return ProfileSettings(
+                            provider: controller,
+                            user: userInfo, alert: false,
+                          );
                         },
                       );
                     },

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
@@ -62,14 +63,18 @@ class _LetterState extends State<Letter> {
         builder: (context) {
           return dialogWithYesOrNo(
             context,
-            '편지 쓰기 종료',
-            '창을 닫으시겠나요?\n내용은 저장되지 않습니다',
+            '정말로 나가시는건가요?',
+            '나갈시 기존에 쓰고 있었던 글은\n모두 삭제되고 복구가 불가능합니다.',
+            '나가기',
             //  on Yes
             () {
               Navigator.pop(context);
+              Navigator.pop(context);
             },
             //  on No
-            () {},
+            () {
+              Navigator.pop(context);
+            },
           );
         },
       );
@@ -282,6 +287,18 @@ class _LetterState extends State<Letter> {
                     ),
                   ],
                 ),
+              ),
+              isSelfSelected
+                  ? Text(
+                      "주의사항: 나에게 보내면 최소 한달 뒤에 확인 가능합니다.",
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[400]),
+                    )
+                  : Container(),
+              const SizedBox(
+                height: 10,
               ),
               Button(
                 function: () {
@@ -686,7 +703,7 @@ class _LetterState extends State<Letter> {
 
                   //  submmit button
                   Button(
-                    function: () {
+                    function: () async {
                       List<String> sit = [];
                       for (int i = 0; i < Preset().situation.length; i++) {
                         for (int j = 0; j < Preset().situation[i].length; j++) {
@@ -707,11 +724,16 @@ class _LetterState extends State<Letter> {
                       DateTime now = DateTime.now();
                       String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
 
+                      String? addedDocId;
                       if (isSelfSelected) {
-                        DatabaseService().selfMessage(
-                            textEditingController.text, sit, emo, time);
+                        addedDocId = await DatabaseService().selfMessage(
+                            textEditingController.text,
+                            sit,
+                            emo,
+                            time,
+                            widget.userName);
                       } else {
-                        DatabaseService().someoneMessage(
+                        addedDocId = await DatabaseService().someoneMessage(
                           textEditingController.text,
                           sit,
                           emo,
@@ -732,12 +754,27 @@ class _LetterState extends State<Letter> {
                         duration: const Duration(seconds: 5),
                         //올라와있는 시간
                         action: SnackBarAction(
-                          textColor: MyThemeColors.primaryColor,
-                          //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                          label: '취소하기',
-                          //버튼이름
-                          onPressed: () {},
-                        ),
+                            textColor: MyThemeColors.primaryColor,
+                            //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                            label: '취소하기',
+                            //버튼이름
+                            onPressed: () {
+                              if (addedDocId != null) {
+                                if (isSelfSelected) {
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(userId)
+                                      .collection('selfMailBox')
+                                      .doc(addedDocId)
+                                      .delete();
+                                } else {
+                                  FirebaseFirestore.instance
+                                      .collection('everyMail')
+                                      .doc(addedDocId)
+                                      .delete();
+                                }
+                              }
+                            }),
                       ));
                     },
                     title: '보낸 후 나가기',

@@ -4,6 +4,7 @@ class UserInfoValueModel with ChangeNotifier {
   // user info data
   String userNickName = '';
   //  whether the nickname entered in the first place
+  String userEmail = '';
   bool isValueEntered = false;
   //  whether the diary exist
   bool isDiaryExist = false;
@@ -16,6 +17,16 @@ class UserInfoValueModel with ChangeNotifier {
   void userInfoClear() {
     userNickName = '';
     isValueEntered = false;
+    notifyListeners();
+  }
+
+  void userEmailUpdate(value) {
+    userNickName = value;
+    notifyListeners();
+  }
+
+  void userEmailClear() {
+    userEmail = '';
     notifyListeners();
   }
 
