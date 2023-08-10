@@ -43,8 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final calendarController = Provider.of<CalendarController>(context);
 
     void signUserOut() {
-      Provider.of<UserInfoValueModel>(context, listen: false)
-          .userNickNameClear();
+      Provider.of<UserInfoValueModel>(context, listen: false).userInfoClear();
       FirebaseAuth.instance.signOut();
       controller.movePage(0);
     }
@@ -344,15 +343,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
-                          final List<Diary> diaries = snapshot.data!.docs
+                          final List<DiaryModel> diaries = snapshot.data!.docs
                               .map((DocumentSnapshot doc) =>
-                                  Diary.fromSnapshot(doc))
+                                  DiaryModel.fromSnapshot(doc))
                               .toList();
 
                           // Filter the diaries based on the entered text in the search bar
                           final String searchText =
                               textEditingController.text.toLowerCase();
-                          final List<Diary> filteredDiaries = diaries
+                          final List<DiaryModel> filteredDiaries = diaries
                               .where((diary) => diary.title
                                   .toLowerCase()
                                   .contains(searchText))
@@ -361,9 +360,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               children: [
                                 calendar
-                                    ? const Padding(
+                                    ? Padding(
                                         padding: EdgeInsets.only(top: 20.0),
-                                        child: Calendar(),
+                                        child: Calendar(
+                                          calendarController:
+                                              calendarController,
+                                        ),
                                       )
                                     : Container(),
                                 situation
@@ -392,7 +394,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     children: List.generate(
                                       filteredDiaries.length,
                                       (index) {
-                                        final Diary diary =
+                                        final DiaryModel diary =
                                             filteredDiaries[index];
                                         return Padding(
                                           padding: const EdgeInsets.only(

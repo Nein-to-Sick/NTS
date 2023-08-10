@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 class UserInfoValueModel with ChangeNotifier {
   // user info data
   String userNickName = '';
+  //  whether the nickname entered in the first place
   String userEmail = '';
   bool isValueEntered = false;
+  //  whether the diary exist
+  bool isDiaryExist = false;
 
   void userNickNameUpdate(value) {
     userNickName = value;
     notifyListeners();
   }
 
-  void userNickNameClear() {
+  void userInfoClear() {
     userNickName = '';
+    isValueEntered = false;
     notifyListeners();
   }
 
@@ -33,6 +37,11 @@ class UserInfoValueModel with ChangeNotifier {
 
   void valueDeUpdate() {
     isValueEntered = false;
+    notifyListeners();
+  }
+
+  void userDiaryExist() {
+    isDiaryExist = true;
     notifyListeners();
   }
 }

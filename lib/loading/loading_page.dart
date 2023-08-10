@@ -141,7 +141,7 @@ class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
 
   @override
   Widget build(BuildContext context) {
-    const double progress = 0.45;
+    const double progress = 0.5;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

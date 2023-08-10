@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/provider/calendarController.dart';
-import 'package:provider/provider.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({Key? key}) : super(key: key);
+  final CalendarController calendarController;
+  const Calendar({Key? key, required this.calendarController})
+      : super(key: key);
 
   @override
   State<Calendar> createState() => _CalendarState();
@@ -30,8 +31,6 @@ class _CalendarState extends State<Calendar> {
     int days = daysInMonth(year, month);
     int padDays = daysInMonth(year, month - 1);
     int firstWeekday = firstWeekdayOfMonth(year, month);
-
-    final calendarController = Provider.of<CalendarController>(context);
 
     List<TableRow> tableRows = [];
 
@@ -82,9 +81,9 @@ class _CalendarState extends State<Calendar> {
                 selected = {};
                 count = 0;
               }
-              if(count == 2 || count == 1) {
-                calendarController.setSelected(selected);
-                calendarController.setCount(count);
+              if (count == 2 || count == 1) {
+                widget.calendarController.setSelected(selected);
+                widget.calendarController.setCount(count);
               }
             });
           },
@@ -132,145 +131,147 @@ class _CalendarState extends State<Calendar> {
       );
     }
 
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.449,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white.withOpacity(0.9),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 24, 20, 0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "$month월 $year년",
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          size: 13,
-                          color: MyThemeColors.myGreyscale[300],
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (month == 1) {
-                                  year--;
-                                  month = 12;
-                                } else {
-                                  month--;
-                                }
-                              });
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Icon(
-                                Icons.arrow_back_ios_new_outlined,
-                                color: MyThemeColors.myGreyscale[100],
-                                size: 22,
-                              ),
-                            )),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (month == 12) {
-                                  year++;
-                                  month = 1;
-                                } else {
-                                  month++;
-                                }
-                              });
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: MyThemeColors.myGreyscale[100],
-                                size: 22,
-                              ),
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 25),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Column(
-              children: [
-                Table(
-                  children: tableRows,
-                  defaultVerticalAlignment: TableCellVerticalAlignment.top,
-                  defaultColumnWidth: const IntrinsicColumnWidth(flex: 1),
-                ),
-                Divider(
-                  color: MyThemeColors.myGreyscale[100],
-                  thickness: 1,
-                ),
-                Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Wrap(
-                        spacing: 40.0, // gap between adjacent chips
-                        children: (selected.keys
-                                .where((key) => selected[key]!)
-                                .toList()
-                              ..sort((a, b) => a.compareTo(b))) // 정렬 추가
-                            .map<Widget>((date) {
-                          int year = int.parse(date.substring(0, 4));
-                          int month =
-                              int.parse(date.substring(4, 6)); // 숫자로 변환해 0 제거
-                          int day =
-                              int.parse(date.substring(6, 8)); // 숫자로 변환해 0 제거
-
-                          return Chip(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)),
-                            backgroundColor: MyThemeColors.myGreyscale[100],
-                            label: Text('$year년 $month월 $day일'),
-                            labelStyle: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    count == 2
-                        ? const Padding(
-                            padding: EdgeInsets.only(top: 15.0),
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "~",
-                                  style: TextStyle(fontSize: 16),
-                                )),
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(10)),
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 24, 20, 0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "$year년 $month월",
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 13,
+                            color: MyThemeColors.myGreyscale[300],
                           )
-                        : Container()
-                  ],
-                ),
-              ],
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (month == 1) {
+                                    year--;
+                                    month = 12;
+                                  } else {
+                                    month--;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Icon(
+                                  Icons.arrow_back_ios_new_outlined,
+                                  color: MyThemeColors.myGreyscale[100],
+                                  size: 22,
+                                ),
+                              )),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (month == 12) {
+                                    year++;
+                                    month = 1;
+                                  } else {
+                                    month++;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                  color: MyThemeColors.myGreyscale[100],
+                                  size: 22,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                ],
+              ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: Column(
+                children: [
+                  Table(
+                    children: tableRows,
+                    defaultVerticalAlignment: TableCellVerticalAlignment.top,
+                    defaultColumnWidth: const IntrinsicColumnWidth(flex: 1),
+                  ),
+                  Divider(
+                    color: MyThemeColors.myGreyscale[100],
+                    thickness: 1,
+                  ),
+                  Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Wrap(
+                          spacing: 40.0, // gap between adjacent chips
+                          children: (selected.keys
+                                  .where((key) => selected[key]!)
+                                  .toList()
+                                ..sort((a, b) => a.compareTo(b))) // 정렬 추가
+                              .map<Widget>((date) {
+                            int year = int.parse(date.substring(0, 4));
+                            int month =
+                                int.parse(date.substring(4, 6)); // 숫자로 변환해 0 제거
+                            int day =
+                                int.parse(date.substring(6, 8)); // 숫자로 변환해 0 제거
+
+                            return Chip(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)),
+                              backgroundColor: MyThemeColors.myGreyscale[100],
+                              label: Text('$year년 $month월 $day일'),
+                              labelStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      count == 2
+                          ? const Padding(
+                              padding: EdgeInsets.only(top: 15.0),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "~",
+                                    style: TextStyle(fontSize: 16),
+                                  )),
+                            )
+                          : Container()
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

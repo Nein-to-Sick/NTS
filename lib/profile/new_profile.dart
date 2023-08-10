@@ -1,16 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/component/diary_filter.dart';
-import 'package:nts/database/databaseService.dart';
-import 'package:nts/model/diaryModel.dart';
+import 'package:nts/model/search_model.dart';
 import 'package:nts/model/user_info_model.dart';
+import 'package:nts/profile/profile_search_page.dart';
 import 'package:nts/profile/settings.dart';
 import 'package:nts/provider/backgroundController.dart';
-import 'package:nts/provider/calendarController.dart';
+import 'package:nts/provider/gpt_model.dart';
+import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
+import 'package:nts/home/diary.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.alert});
@@ -20,296 +20,179 @@ class MyProfilePage extends StatefulWidget {
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
-class _MyProfilePageState extends State<MyProfilePage> {
-  final searchBarController = TextEditingController();
-
+class _MyProfilePageState extends State<MyProfilePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
-    final calendarController = Provider.of<CalendarController>(context);
+    final searchModel = Provider.of<ProfileSearchModel>(context);
+    final messageController = Provider.of<MessageController>(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            //  setting button
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //  setting button
-                  IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return ProfileSettings(
-                            provider: controller,
-                            user: userInfo, alert: widget.alert,
-
-                          );
-                        },
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
+    super.build(context);
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    //  temp logout button
+                    IconButton(
+                      onPressed: () {
+                        userInfo.userInfoClear();
+                        FirebaseAuth.instance.signOut();
+                        controller.movePage(0);
+                      },
+                      icon: const Icon(
+                        Icons.logout,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                ],
+
+                    //  setting button
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return ProfileSettings(
+                              provider: controller,
+                              user: userInfo,
+                              alert: false,
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
 
-                  //  title
-                  Text(
-                    "${userInfo.userNickName}님의 일기",
-                    style: const TextStyle(
-                        fontSize: 25, color: Colors.white, fontFamily: "Dodam"),
-                  ),
+                    //  title
+                    Text(
+                      "${userInfo.userNickName}님의 일기",
+                      style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontFamily: "Dodam"),
+                    ),
 
-                  const SizedBox(
-                    height: 25,
-                  ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ),
 
-                  //  search bar and filter
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      //  search bar
-                      Flexible(
-                        flex: 85,
-                        child: TextField(
-                          controller: searchBarController,
-                          keyboardType: TextInputType.multiline,
-                          autocorrect: false,
-                          textInputAction: TextInputAction.go,
-                          onSubmitted: (value) {
-                            FocusScope.of(context).unfocus();
-                          },
-                          onTapOutside: (value) {
-                            FocusScope.of(context).unfocus();
-                          },
-                          style: TextStyle(
-                            color: MyThemeColors.myGreyscale[300],
-                          ),
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(
-                                left: 15, right: 15, top: 10, bottom: 10),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: MyThemeColors.primaryColor,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            fillColor: MyThemeColors.myGreyscale[700]
-                                ?.withOpacity(0.5),
-                            filled: true,
-                            hintText: 'ex. 알바, 여행, 공부',
-                            hintStyle: TextStyle(
-                              color: MyThemeColors.myGreyscale[300],
-                            ),
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: IconButton(
-                                onPressed: () {
-                                  // 검색 실행
-                                },
-                                icon: HeroIcon(
-                                  HeroIcons.magnifyingGlass,
-                                  style: HeroIconStyle.mini,
-                                  color: MyThemeColors.myGreyscale[300],
-                                ),
-                              ),
-                            ),
-                          ),
+              //  search page or none page
+              (userInfo.isDiaryExist)
+                  ? Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: MyProfileSearchPage(
+                          searchModel: searchModel,
                         ),
                       ),
-
-                      const SizedBox(
-                        width: 12,
-                      ),
-
-                      //  filter button
-                      Flexible(
-                        flex: 15,
+                    )
+                  : Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Container(
-                          height: 45,
-                          width: 45,
+                          height: double.maxFinite,
+                          width: double.maxFinite,
                           decoration: BoxDecoration(
                             color: MyThemeColors.myGreyscale[700]
                                 ?.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: IconButton(
-                            onPressed: () {
-                              showAnimatedDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                animationType:
-                                    DialogTransitionType.slideFromBottomFade,
-                                builder: (BuildContext context) {
-                                  return const SearchFilterDialog();
-                                },
-                              );
-                            },
-                            icon: HeroIcon(
-                              HeroIcons.funnel,
-                              style: HeroIconStyle.solid,
-                              color: MyThemeColors.myGreyscale[300],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-            ),
-
-            //  diary list view
-            Expanded(
-              child: StreamBuilder(
-                //  searching condition
-                stream: calendarController.count == 2
-                    ? FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(userId)
-                        .collection("diary")
-                        .orderBy("date", descending: true)
-                        .where("date",
-                            isGreaterThanOrEqualTo:
-                                calendarController.formatStartDate(),
-                            isLessThanOrEqualTo:
-                                calendarController.formatEndDate())
-                        .snapshots()
-                    : calendarController.count == 1
-                        ? FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(userId)
-                            .collection("diary")
-                            .orderBy("date", descending: true)
-                            .where("date",
-                                isGreaterThanOrEqualTo:
-                                    calendarController.formatStartDate(),
-                                isLessThanOrEqualTo:
-                                    calendarController.formatOneDayEndDate())
-                            .snapshots()
-                        :
-                        //  without condition
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(userId)
-                            .collection("diary")
-                            .orderBy("date", descending: true)
-                            .snapshots(),
-
-                //  show list of diary
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('Something went wrong'));
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  final List<Diary> diaries = snapshot.data!.docs
-                      .map((DocumentSnapshot doc) => Diary.fromSnapshot(doc))
-                      .toList();
-
-                  //  Filter the diaries based on the entered text in the search bar
-                  final String searchText =
-                      searchBarController.text.toLowerCase();
-                  final List<Diary> filteredDiaries = diaries
-                      .where((diary) =>
-                          diary.title.toLowerCase().contains(searchText))
-                      .toList();
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          filteredDiaries.length,
-                          (index) {
-                            final Diary diary = filteredDiaries[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white.withOpacity(0.9),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '일기 보관함이 비어있습니다.',
+                                style: TextStyle(
+                                  color: MyThemeColors.myGreyscale[400],
+                                  fontSize: 16,
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        diary.date,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: MyThemeColors.myGreyscale[400],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              //  when try to write diary
+                              GestureDetector(
+                                onTap: () {
+                                  controller.movePage(600);
+                                  controller.changeColor(2);
+                                  showAnimatedDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    animationType: DialogTransitionType
+                                        .slideFromBottomFade,
+                                    builder: (BuildContext context) {
+                                      return MultiProvider(
+                                        providers: [
+                                          ChangeNotifierProvider(
+                                            create: (context) => GPTModel(),
+                                          ),
+                                          ChangeNotifierProvider(
+                                            create: (context) =>
+                                                BackgroundController(),
+                                          ),
+                                        ],
+                                        child: Diary(
+                                          controller: controller,
+                                          messageController: messageController,
+                                          userInfo: userInfo,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        diary.title,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: "Dodam",
-                                          color: MyThemeColors.myGreyscale[800],
-                                        ),
-                                      ),
-                                    ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: const Text(
+                                  '일기 쓰러가기',
+                                  style: TextStyle(
+                                    color: MyThemeColors.secondaryColor,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),
-                            );
-                          },
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
 
-            //  consider bottom toggle button position
-            const SizedBox(
-              height: 150,
-            ),
-          ],
+              //  consider bottom toggle button position
+              const SizedBox(
+                height: 150,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
