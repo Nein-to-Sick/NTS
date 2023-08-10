@@ -16,7 +16,7 @@ buildscript {
         // implementation 'androidx.window:window-java:1.0.0'
     }
 
-    
+
 }
 
 allprojects {
