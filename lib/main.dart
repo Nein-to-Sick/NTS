@@ -96,8 +96,7 @@ class BackgroundState extends State<Background> {
     // 초기화
     FlutterLocalNotification.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      alert =
-          true; //(await FlutterLocalNotification.requestNotificationPermission())!;
+      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
     });
     super.initState();
   }
