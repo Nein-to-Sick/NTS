@@ -102,7 +102,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                             padding: EdgeInsets.only(
                                 bottom:
                                     MediaQuery.of(context).viewInsets.bottom *
-                                        0.4),
+                                        0.6),
                             child: GestureDetector(
                               onTap: () {
                                 FocusScope.of(context).requestFocus(_focusNode);
@@ -230,6 +230,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                     }
                                     //  update diary content
                                     else {
+                                      widget.searchModel.refreshBuilder();
                                       //  실제로 수정된 경우만 파이어베이스 쓰기
                                       if (firstContent.compareTo(
                                               diaryTextController.text) !=

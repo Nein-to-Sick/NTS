@@ -12,10 +12,6 @@ import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import 'package:nts/home/diary.dart';
 
-/*
-일기 수정시 furturebuilder 리빌드 or DiaryModel 내용 갱신 필요
-*/
-
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key});
 

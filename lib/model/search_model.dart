@@ -32,7 +32,13 @@ class ProfileSearchModel with ChangeNotifier {
 
   //  일기 수정 후 리빌드 필요
   void refreshBuilder() {
-    futureSearchResults = futureSearchResults;
+    futureSearchResults = (FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("diary")
+        .orderBy("date", descending: true)
+        .get());
+
     notifyListeners();
   }
 

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
@@ -24,12 +23,15 @@ class MyProfileSearchPage extends StatefulWidget {
 class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
   final searchBarController = TextEditingController();
 
+  //  without provider future
+  /*
   Future<QuerySnapshot> futureSearchResults = (FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection("diary")
       .orderBy("date", descending: true)
       .get());
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +51,8 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
     //  search result with data
     displaySearchResult() {
       return FutureBuilder(
-        future: futureSearchResults,
-        //widget.searchModel.futureSearchResults,
+        future: widget.searchModel.futureSearchResults,
+        //futureSearchResults,
         builder: (context, snapshot) {
           //  error
           if (snapshot.hasError) {
@@ -94,7 +96,6 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
               if (widget.searchModel.timeResult.isNotEmpty) {
                 //  서로 다른 기간
                 if (widget.searchModel.timeResult[1].compareTo('null') != 0) {
-                  print('differ');
                   startDate = widget.searchModel.parseFormedTime(
                       widget.searchModel.timeResult[0], "0:0:0");
                   endDate = widget.searchModel.parseFormedTime(
@@ -102,9 +103,6 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                 }
                 //  하루만 일때
                 else {
-                  print('same');
-                  print(widget.searchModel.timeResult[0]);
-                  print(widget.searchModel.timeResult[1]);
                   startDate = widget.searchModel.parseFormedTime(
                       widget.searchModel.timeResult[0], "0:0:0");
                   endDate = widget.searchModel.parseFormedTime(
