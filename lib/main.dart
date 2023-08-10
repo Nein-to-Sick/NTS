@@ -18,9 +18,7 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
 import 'package:nts/provider/alertController.dart';
 import 'package:nts/provider/backgroundController.dart';
-import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
-import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
@@ -234,11 +232,6 @@ class BackgroundState extends State<Background> {
               } else if (scrollController.offset == 855) {
                 return MultiProvider(
                   providers: [
-                    ChangeNotifierProvider(
-                        create: (BuildContext context) =>
-                            SearchBarController()), // count_provider.dart
-                    ChangeNotifierProvider(
-                        create: (BuildContext context) => CalendarController()),
                     ChangeNotifierProvider(
                         create: (BuildContext context) => ProfileSearchModel()),
                   ],

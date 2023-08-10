@@ -6,15 +6,17 @@ import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/model/user_info_model.dart';
+import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/gpt_model.dart';
+import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
-  final controller;
-  final messageController;
+  final BackgroundController controller;
+  final MessageController messageController;
   final UserInfoValueModel userInfo;
 
   const Diary({

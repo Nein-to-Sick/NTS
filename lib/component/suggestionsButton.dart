@@ -10,7 +10,7 @@ void myShowBottomSheet(BuildContext context) {
   final opinionController = TextEditingController();
 
   showModalBottomSheet(
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20))),
     context: context,
@@ -65,7 +65,7 @@ void myShowBottomSheet(BuildContext context) {
                             controller: opinionController,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: "궁금하거나 불편하거나 제안하고 싶은 점이 있다면\n얘기해주세요!",
                               hintStyle: TextStyle(
