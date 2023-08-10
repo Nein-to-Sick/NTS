@@ -9,6 +9,7 @@ import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickname_sheet.dart';
+import 'package:nts/component/notification.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/search_model.dart';
@@ -195,11 +196,10 @@ class BackgroundState extends State<Background> {
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
-
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         controller.fireFlyOn();
                       });
-                      return const HomePage());
+                      return const HomePage();
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {
@@ -229,15 +229,21 @@ class BackgroundState extends State<Background> {
                   },
                 );
               } else if (scrollController.offset == 855) {
-                return MultiProvider(providers: [
-                  ChangeNotifierProvider(
-                      create: (BuildContext context) =>
-                          SearchBarController()), // count_provider.dart
-                  ChangeNotifierProvider(
-                      create: (BuildContext context) => CalendarController()),
-                  ChangeNotifierProvider(
-                      create: (BuildContext context) => ProfileSearchModel()),
-                ], child: MyProfilePage(alert: alert,)
+                return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              SearchBarController()), // count_provider.dart
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              CalendarController()),
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              ProfileSearchModel()),
+                    ],
+                    child: MyProfilePage(
+                      alert: alert,
+                    )
                     //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );
               } else {
