@@ -37,7 +37,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
-  cloud_firestore: ^4.8.4
   provider: ^6.0.5
   firebase_ui_auth: ^1.6.2
   heroicons: ^0.9.0
@@ -59,6 +58,7 @@ dependencies:
   flutter_localization: ^0.1.13
   flutter_email_sender: ^6.0.1
   flutter_native_splash: ^2.3.1
+  cloud_firestore: ^4.8.4
 
 
 dev_dependencies:
