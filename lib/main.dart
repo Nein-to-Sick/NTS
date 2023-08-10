@@ -18,9 +18,7 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
 import 'package:nts/provider/alertController.dart';
 import 'package:nts/provider/backgroundController.dart';
-import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
-import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
@@ -235,11 +233,6 @@ class BackgroundState extends State<Background> {
                 return MultiProvider(
                   providers: [
                     ChangeNotifierProvider(
-                        create: (BuildContext context) =>
-                            SearchBarController()), // count_provider.dart
-                    ChangeNotifierProvider(
-                        create: (BuildContext context) => CalendarController()),
-                    ChangeNotifierProvider(
                         create: (BuildContext context) => ProfileSearchModel()),
                   ],
                   child: MyProfilePage(
@@ -287,7 +280,7 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
           model.userNickName = userData['nickname'];
           model.userEmail = userData['email'];
         } else {
-          print('No field');
+          debugPrint('No field');
         }
 
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -301,10 +294,10 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
           model.userDiaryExist();
         }
       } else {
-        print('No document');
+        debugPrint('No document');
       }
     } else {
-      print('User ID is null');
+      debugPrint('User ID is null');
     }
     //  delay for loading page
     return Future.delayed(const Duration(seconds: 1), () {
