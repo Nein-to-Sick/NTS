@@ -48,7 +48,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
               color: MyThemeColors.myGreyscale.shade50,
               borderRadius: BorderRadius.circular(10)),
           width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.9,
+          height: MediaQuery.of(context).size.height * 0.75,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 22),
             child: Column(
@@ -102,7 +102,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                             padding: EdgeInsets.only(
                                 bottom:
                                     MediaQuery.of(context).viewInsets.bottom *
-                                        0.6),
+                                        0.35),
                             child: GestureDetector(
                               onTap: () {
                                 FocusScope.of(context).requestFocus(_focusNode);

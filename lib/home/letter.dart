@@ -94,7 +94,7 @@ class _LetterState extends State<Letter> {
                 color: Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
             width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).size.height * 0.75,
             child: Stack(
               children: <Widget>[
                 PageView.builder(
@@ -120,7 +120,7 @@ class _LetterState extends State<Letter> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 13.0),
+                  padding: const EdgeInsets.only(top: 20.0),
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: LinearProgressBar(
@@ -180,7 +180,7 @@ class _LetterState extends State<Letter> {
                     Text(
                       "받는 이를 정해주세요",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color: MyThemeColors.myGreyscale[600]),
                     ),
@@ -329,7 +329,7 @@ class _LetterState extends State<Letter> {
           Text(
             "어떤 상황에 있는 사람한테 쓸까요?",
             style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: MyThemeColors.myGreyscale[900]),
           ),
@@ -337,9 +337,9 @@ class _LetterState extends State<Letter> {
             height: 6,
           ),
           Text(
-            "알맞은 상황/감정을 골라주세요.",
+            "키워드를 모두 골라주세요.",
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: MyThemeColors.myGreyscale[600]),
           ),
@@ -476,7 +476,7 @@ class _LetterState extends State<Letter> {
           Text(
             "어떤 감정을 가진 사람한테 쓸까요?",
             style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: MyThemeColors.myGreyscale[900]),
           ),
@@ -484,9 +484,9 @@ class _LetterState extends State<Letter> {
             height: 6,
           ),
           Text(
-            "알맞은 상황/감정을 골라주세요.",
+            "키워드를 모두 골라주세요.",
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: MyThemeColors.myGreyscale[600]),
           ),

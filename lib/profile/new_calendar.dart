@@ -195,58 +195,67 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: 120,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: MyThemeColors.myGreyscale.shade200,
-                width: 2,
+          Flexible(
+            flex: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: MyThemeColors.myGreyscale.shade200,
+                  width: 2,
+                ),
+                color: MyThemeColors.whiteColor,
               ),
-              color: MyThemeColors.whiteColor,
+              child: Center(
+                  child: Text(
+                (widget.searchModel.timeResult.isEmpty ||
+                        widget.searchModel.timeResult[0].compareTo('null') == 0)
+                    ? '시작 날짜'
+                    : widget.searchModel.timeResult[0],
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: MyThemeColors.myGreyscale.shade600,
+                ),
+              )),
             ),
-            child: Center(
-                child: Text(
-              (widget.searchModel.timeResult.isEmpty ||
-                      widget.searchModel.timeResult[0].compareTo('null') == 0)
-                  ? '시작 날짜'
-                  : widget.searchModel.timeResult[0],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: MyThemeColors.myGreyscale.shade600,
-              ),
-            )),
           ),
           Text(
-            '~',
+            '  ~  ',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: MyThemeColors.myGreyscale.shade600,
             ),
           ),
-          Container(
-            width: 120,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: MyThemeColors.myGreyscale.shade200,
-                width: 2,
+          Flexible(
+            flex: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: MyThemeColors.myGreyscale.shade200,
+                  width: 2,
+                ),
+                color: MyThemeColors.whiteColor,
               ),
-              color: MyThemeColors.whiteColor,
-            ),
-            child: Center(
-              child: Text(
-                (widget.searchModel.timeResult.isEmpty)
-                    ? '마지막 날짜'
-                    : (widget.searchModel.timeResult[1].compareTo('null') == 0)
-                        ? widget.searchModel.timeResult[0]
-                        : widget.searchModel.timeResult[1],
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: MyThemeColors.myGreyscale.shade600,
+              child: Center(
+                child: Text(
+                  (widget.searchModel.timeResult.isEmpty)
+                      ? '마지막 날짜'
+                      : (widget.searchModel.timeResult[1].compareTo('null') ==
+                              0)
+                          ? widget.searchModel.timeResult[0]
+                          : widget.searchModel.timeResult[1],
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: MyThemeColors.myGreyscale.shade600,
+                  ),
                 ),
               ),
             ),

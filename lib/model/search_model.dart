@@ -43,6 +43,7 @@ class ProfileSearchModel with ChangeNotifier {
   }
 
 /*
+  //  필터마다 다른 쿼리를 얻는 방식은 보류함
   //  필터에 따른 서로 다른 query 리턴
   void newFilterQuery() {
     Query newQuery = FirebaseFirestore.instance
