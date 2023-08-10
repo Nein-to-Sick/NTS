@@ -45,7 +45,7 @@ class NickName {
                   height: 35,
                 ),
                 Text(
-                  "$printitle",
+                  printitle,
                   style: const TextStyle(
                       color: MyThemeColors.blackColor,
                       fontWeight: FontWeight.bold,

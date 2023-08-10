@@ -280,7 +280,7 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
           model.userNickName = userData['nickname'];
           model.userEmail = userData['email'];
         } else {
-          print('No field');
+          debugPrint('No field');
         }
 
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -294,10 +294,10 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
           model.userDiaryExist();
         }
       } else {
-        print('No document');
+        debugPrint('No document');
       }
     } else {
-      print('User ID is null');
+      debugPrint('User ID is null');
     }
     //  delay for loading page
     return Future.delayed(const Duration(seconds: 1), () {
