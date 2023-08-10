@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/profile/new_calendar.dart';
-import 'package:nts/profile/notification.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/gpt_model.dart';
@@ -202,32 +200,35 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: _isTextVisible ? null : () {
-                      showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        animationType: DialogTransitionType.slideFromBottomFade,
-                        builder: (BuildContext context) {
-                          return MultiProvider(
-                            providers: [
-                              ChangeNotifierProvider(
-                                create: (context) => GPTModel(),
-                              ),
-                              ChangeNotifierProvider(
-                                create: (context) => BackgroundController(),
-                              ),
-                            ],
-                            child: Diary(
-                              controller: controller,
-                              messageController: messageController,
-                              userInfo: userInfo,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                              );
-                            },
+                            onTap: _isTextVisible
+                                ? null
+                                : () {
+                                    showAnimatedDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      animationType: DialogTransitionType
+                                          .slideFromBottomFade,
+                                      builder: (BuildContext context) {
+                                        return MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider(
+                                              create: (context) => GPTModel(),
+                                            ),
+                                            ChangeNotifierProvider(
+                                              create: (context) =>
+                                                  BackgroundController(),
+                                            ),
+                                          ],
+                                          child: Diary(
+                                            controller: controller,
+                                            messageController:
+                                                messageController,
+                                            userInfo: userInfo,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
                             child: Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -249,18 +250,20 @@ class _HomePageState extends State<HomePage> {
                             height: 11,
                           ),
                           GestureDetector(
-                            onTap: _isTextVisible ? null : () {
-                              showAnimatedDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) => Letter(
-                                  controller: controller,
-                                  userName: userName,
-                                ),
-                                animationType:
-                                    DialogTransitionType.slideFromBottomFade,
-                              );
-                            },
+                            onTap: _isTextVisible
+                                ? null
+                                : () {
+                                    showAnimatedDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) => Letter(
+                                        controller: controller,
+                                        userName: userName,
+                                      ),
+                                      animationType: DialogTransitionType
+                                          .slideFromBottomFade,
+                                    );
+                                  },
                             child: Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
