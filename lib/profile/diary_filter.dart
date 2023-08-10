@@ -9,14 +9,10 @@ import 'package:provider/provider.dart';
 
 class SearchFilterDialog extends StatefulWidget {
   final ProfileSearchModel searchModel;
-  final Function newSearchFunction;
-  final Function resetSearchFunction;
 
   const SearchFilterDialog({
     super.key,
     required this.searchModel,
-    required this.newSearchFunction,
-    required this.resetSearchFunction,
   });
 
   @override
@@ -340,24 +336,25 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                     ),
                                   ),
                                   onTap: () {
-                                    widget.resetSearchFunction();
-                                    widget.searchModel.clearAllValue();
-                                    setState(
-                                      () {
-                                        isSelected2 = List.generate(
-                                            Preset().situation.length,
-                                            (i) => List.generate(
-                                                Preset().situation[i].length,
-                                                (j) => false));
-                                        isSelected3 = List.generate(
-                                            Preset().emotion.length,
-                                            (i) => List.generate(
-                                                Preset().emotion[i].length,
-                                                (j) => false));
-                                        countSituation = 0;
-                                        countEmotion = 0;
-                                      },
-                                    );
+                                    if (widget.searchModel.isFiltered()) {
+                                      widget.searchModel.clearAllValue();
+                                      setState(
+                                        () {
+                                          isSelected2 = List.generate(
+                                              Preset().situation.length,
+                                              (i) => List.generate(
+                                                  Preset().situation[i].length,
+                                                  (j) => false));
+                                          isSelected3 = List.generate(
+                                              Preset().emotion.length,
+                                              (i) => List.generate(
+                                                  Preset().emotion[i].length,
+                                                  (j) => false));
+                                          countSituation = 0;
+                                          countEmotion = 0;
+                                        },
+                                      );
+                                    }
                                   },
                                 ),
                               ),
@@ -366,20 +363,30 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                               ),
                               Flexible(
                                 flex: 1,
-                                child: Button(
-                                  function: () {
-                                    widget.newSearchFunction();
+                                child: GestureDetector(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                        color: MyThemeColors.primaryColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(13.0),
+                                      child: Text(
+                                        "검색하기",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: MyThemeColors.whiteColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
                                     Navigator.pop(context);
                                   },
-                                  title: '검색하기',
-                                  condition: (countSituation > 0 ||
-                                          countEmotion > 0 ||
-                                          widget.searchModel.timeResult
-                                              .isNotEmpty)
-                                      ? 'not null'
-                                      : 'null',
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         )

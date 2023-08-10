@@ -9,12 +9,11 @@ import 'package:nts/model/search_model.dart';
 class ReadDiaryDialog extends StatefulWidget {
   final DiaryModel diaryContent;
   final ProfileSearchModel searchModel;
-  final Function refreshFunction;
-  const ReadDiaryDialog(
-      {super.key,
-      required this.diaryContent,
-      required this.searchModel,
-      required this.refreshFunction});
+  const ReadDiaryDialog({
+    super.key,
+    required this.diaryContent,
+    required this.searchModel,
+  });
 
   @override
   State<ReadDiaryDialog> createState() => _ReadDiaryDialogState();
@@ -191,6 +190,10 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                     setState(() {
                                       editMode = !editMode;
                                     });
+                                    if (editMode) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_focusNode);
+                                    }
                                   },
                                 ),
                               ),
@@ -242,11 +245,12 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                           "content":
                                               diaryTextController.text.trim()
                                         });
+                                        widget.diaryContent.updateDiaryContent(
+                                            diaryTextController.text.trim());
                                       }
                                       setState(() {
                                         editMode = !editMode;
                                       });
-                                      widget.refreshFunction();
                                       Navigator.pop(context);
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(

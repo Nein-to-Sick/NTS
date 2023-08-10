@@ -14,24 +14,9 @@ class MyNewCalendar extends StatefulWidget {
 }
 
 class _MyNewCalendarState extends State<MyNewCalendar> {
-  // List<DateTime?> dialogCalendarPickerValue = [
-  //   DateTime.now(),
-  // ];
-
   @override
   void initState() {
     super.initState();
-    // if (widget.searchModel.timeResult.isNotEmpty) {
-    //   if (widget.searchModel.timeResult[1].compareTo('null') == 0) {
-    //     dialogCalendarPickerValue[0] =
-    //         DateTime.parse(widget.searchModel.timeResult[0]);
-    //   } else {
-    //     dialogCalendarPickerValue[0] =
-    //         DateTime.parse(widget.searchModel.timeResult[0]);
-    //     dialogCalendarPickerValue
-    //         .add(DateTime.parse(widget.searchModel.timeResult[1]));
-    //   }
-    // }
   }
 
   @override

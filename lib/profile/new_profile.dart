@@ -13,9 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:nts/home/diary.dart';
 
 /*
-필터에서 기간 선택시 검색 버튼 활성화
 일기 수정시 furturebuilder 리빌드 or DiaryModel 내용 갱신 필요
-검색의 쿼리 구현 문제
 */
 
 class MyProfilePage extends StatefulWidget {

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileSearchModel with ChangeNotifier {
@@ -9,6 +10,14 @@ class ProfileSearchModel with ChangeNotifier {
   List<String> situationResult = List<String>.empty(growable: true);
   List<String> emotionResult = List<String>.empty(growable: true);
   String diraySearchTitle = '';
+
+  //  future query
+  Future<QuerySnapshot> futureSearchResults = (FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection("diary")
+      .orderBy("date", descending: true)
+      .get());
 
   //  필터 적용 여부 확인
   bool isFiltered() {
@@ -21,20 +30,25 @@ class ProfileSearchModel with ChangeNotifier {
     }
   }
 
+  //  일기 수정 후 리빌드 필요
+  void refreshBuilder() {
+    futureSearchResults = futureSearchResults;
+    notifyListeners();
+  }
+
+/*
   //  필터에 따른 서로 다른 query 리턴
-  Query newFilterQuery(userId) {
-    final diaryPath = FirebaseFirestore.instance
+  void newFilterQuery() {
+    Query newQuery = FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("diary")
         .orderBy("date", descending: true);
-
-    Query newQuery = diaryPath;
 
     try {
       if (timeResult.isNotEmpty) {
         //  서로 다른 기간
-        if (timeResult[1].isNotEmpty) {
+        if (timeResult[1].compareTo('null') != 0) {
           newQuery = newQuery.where("date",
               isGreaterThanOrEqualTo: parseFormedTime(timeResult[0], "0:0:0"),
               isLessThanOrEqualTo: parseFormedTime(timeResult[1], "23:59:59"));
@@ -62,8 +76,22 @@ class ProfileSearchModel with ChangeNotifier {
       debugPrint(e.toString());
     }
 
-    return newQuery;
+    futureSearchResults = newQuery.get();
+    notifyListeners();
   }
+
+  //  필터 리셋 함수
+  void resetFilter() {
+    futureSearchResults = (FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("diary")
+        .orderBy("date", descending: true)
+        .get());
+
+    notifyListeners();
+  }
+  */
 
   //  검색창의 검색어 저장 함수
   void updateTitleValue(value) {
@@ -117,6 +145,7 @@ class ProfileSearchModel with ChangeNotifier {
     clearSituationValue();
     clearEmotionValue();
     clearCalendarSubValue();
+    //resetFilter();
     notifyListeners();
   }
 

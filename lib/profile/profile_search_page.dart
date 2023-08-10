@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/database/databaseService.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/model/diaryModel.dart';
 import 'package:nts/model/search_model.dart';
@@ -22,47 +21,15 @@ class MyProfileSearchPage extends StatefulWidget {
   State<MyProfileSearchPage> createState() => _MyProfileSearchPageState();
 }
 
-//  diary firestore path
-final diaryPath = FirebaseFirestore.instance
-    .collection('users')
-    .doc(userId)
-    .collection("diary")
-    .orderBy("date", descending: true);
-
 class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
   final searchBarController = TextEditingController();
-  //  whether the query state changed
-  bool isBasicQuery = true;
 
-  //  basic query state
-  Future<QuerySnapshot> futureSearchResults = (diaryPath.get());
-
-  //  new filter
-  changeSearchFilter() async {
-    setState(() {
-      futureSearchResults = widget.searchModel.newFilterQuery(userId).get();
-      isBasicQuery = false;
-    });
-  }
-
-  //  reset filter
-  resetSearchFilter() {
-    if (!isBasicQuery) {
-      setState(() {
-        futureSearchResults = (diaryPath.get());
-        isBasicQuery = true;
-      });
-    }
-  }
-
-  //  just for refresh future builder
-  refreshBuilder() {
-    Future<QuerySnapshot> temp = futureSearchResults;
-    setState(() {
-      futureSearchResults = temp;
-      print('refresh!');
-    });
-  }
+  Future<QuerySnapshot> futureSearchResults = (FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection("diary")
+      .orderBy("date", descending: true)
+      .get());
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +50,7 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
     displaySearchResult() {
       return FutureBuilder(
         future: futureSearchResults,
+        //widget.searchModel.futureSearchResults,
         builder: (context, snapshot) {
           //  error
           if (snapshot.hasError) {
@@ -115,10 +83,55 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
             //  Filter the diaries based on the entered text in the search bar
             final String searchText =
                 searchBarController.text.trim().toLowerCase();
+
+            //  final List<DiaryModel> filteredDiaries = diaries
+            //     .where(
+            //         (diary) => diary.title.toLowerCase().contains(searchText))
+            //     .toList();
+
+            bool getDateCompare(String diaryDateTime) {
+              String startDate = '', endDate = '';
+              if (widget.searchModel.timeResult.isNotEmpty) {
+                //  서로 다른 기간
+                if (widget.searchModel.timeResult[1].compareTo('null') != 0) {
+                  print('differ');
+                  startDate = widget.searchModel.parseFormedTime(
+                      widget.searchModel.timeResult[0], "0:0:0");
+                  endDate = widget.searchModel.parseFormedTime(
+                      widget.searchModel.timeResult[1], "23:59:59");
+                }
+                //  하루만 일때
+                else {
+                  print('same');
+                  print(widget.searchModel.timeResult[0]);
+                  print(widget.searchModel.timeResult[1]);
+                  startDate = widget.searchModel.parseFormedTime(
+                      widget.searchModel.timeResult[0], "0:0:0");
+                  endDate = widget.searchModel.parseFormedTime(
+                      widget.searchModel.timeResult[0], "23:59:59");
+                }
+              }
+
+              return (diaryDateTime.compareTo(startDate) >= 0 &&
+                  diaryDateTime.compareTo(endDate) <= 0);
+            }
+
+            //  time, emotion, situation filter
             final List<DiaryModel> filteredDiaries = diaries
-                .where(
-                    (diary) => diary.title.toLowerCase().contains(searchText))
+                .where((diary) =>
+                    diary.title.toLowerCase().contains(searchText) &&
+                    (widget.searchModel.emotionResult.isEmpty ||
+                        widget.searchModel.emotionResult.every(
+                            (emotion) => diary.emotion.contains(emotion))) &&
+                    (widget.searchModel.situationResult.isEmpty ||
+                        widget.searchModel.situationResult.every((situation) =>
+                            diary.situation.contains(situation))) &&
+                    (widget.searchModel.timeResult.isEmpty ||
+                        getDateCompare(
+                          diary.date,
+                        )))
                 .toList();
+
             return (filteredDiaries.isEmpty)
                 ? displayNoSearchResult()
                 : SingleChildScrollView(
@@ -142,7 +155,6 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                                     return ReadDiaryDialog(
                                       diaryContent: diary,
                                       searchModel: widget.searchModel,
-                                      refreshFunction: refreshBuilder,
                                     );
                                   },
                                 );
@@ -215,7 +227,7 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                   widget.searchModel.updateTitleValue(value.trim());
                 },
                 onSubmitted: (value) {
-                  changeSearchFilter();
+                  // 검색 실행
                   FocusScope.of(context).unfocus();
                 },
                 onTapOutside: (value) {
@@ -294,8 +306,6 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                           builder: (BuildContext context) {
                             return SearchFilterDialog(
                               searchModel: widget.searchModel,
-                              newSearchFunction: changeSearchFilter,
-                              resetSearchFunction: resetSearchFilter,
                             );
                           },
                         );

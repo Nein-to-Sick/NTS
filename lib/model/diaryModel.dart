@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
-class DiaryModel {
+class DiaryModel with ChangeNotifier {
   final String title;
-  final String content;
+  late String content;
   final List<dynamic> situation;
   final List<dynamic> emotion;
   final String date;
@@ -27,5 +28,10 @@ class DiaryModel {
       path: snap.id,
     );
     return diaryModel;
+  }
+
+  void updateDiaryContent(value) {
+    content = value;
+    notifyListeners();
   }
 }
