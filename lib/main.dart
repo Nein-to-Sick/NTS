@@ -11,6 +11,7 @@ import 'package:nts/component/navigationToggle.dart';
 import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
+import 'package:nts/model/search_model.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
 import 'package:nts/provider/alertController.dart';
@@ -19,9 +20,9 @@ import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
-import 'component/notification.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,15 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: MyThemeColors.primaryColor.withOpacity(0.6),
         ),
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko', ''),
+        Locale('en', ''),
+      ],
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -59,6 +69,9 @@ class MyApp extends StatelessWidget {
             ),
             ChangeNotifierProvider(
               create: (context) => UserInfoValueModel(),
+            ),
+            ChangeNotifierProvider(
+              create: (BuildContext context) => MessageController(),
             ),
             ChangeNotifierProvider(create: (context) => AlertController())
           ],
@@ -182,14 +195,11 @@ class BackgroundState extends State<Background> {
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
+
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         controller.fireFlyOn();
                       });
-                      return MultiProvider(providers: [
-                        ChangeNotifierProvider(
-                          create: (BuildContext context) => MessageController(),
-                        ),
-                      ], child: const HomePage());
+                      return const HomePage());
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {
@@ -225,6 +235,8 @@ class BackgroundState extends State<Background> {
                           SearchBarController()), // count_provider.dart
                   ChangeNotifierProvider(
                       create: (BuildContext context) => CalendarController()),
+                  ChangeNotifierProvider(
+                      create: (BuildContext context) => ProfileSearchModel()),
                 ], child: MyProfilePage(alert: alert,)
                     //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );
@@ -263,12 +275,24 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
       if (userSnapshot.exists) {
         Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
+        //  check whether the nickName exist
         if (userData.containsKey('nicknameMade')) {
           userNickNameIsMade = userData['nicknameMade'];
           model.userNickName = userData['nickname'];
           model.userEmail = userData['email'];
         } else {
           print('No field');
+        }
+
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('diary')
+            .get();
+
+        //  check whether the diary exist
+        if (querySnapshot.docs.isNotEmpty) {
+          model.userDiaryExist();
         }
       } else {
         print('No document');

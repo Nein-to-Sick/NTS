@@ -810,7 +810,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Color(0xffFCE181),
               onTap: () {
                 print("click");
-                widget.user.userNickNameClear();
+                // controller.movePage(0);
+                Provider.of<UserInfoValueModel>(context, listen: false)
+                    .userInfoClear();
+
                 widget.user.userEmailClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
@@ -829,7 +832,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white,
               onTap: () {
-                widget.user.userNickNameClear();
+                Provider.of<UserInfoValueModel>(context, listen: false)
+                    .userInfoClear();
+
                 widget.user.userEmailClear();
                 DeleteAccount(context, widget.provider);
               },

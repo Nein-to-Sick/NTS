@@ -30,6 +30,7 @@ class _LetterState extends State<Letter> {
   bool isSelfSelected = false;
   bool isSomeoneSelected = false;
   String contents = "";
+  final FocusNode _focusNode = FocusNode();
 
   late PageController _pageController;
 
@@ -41,6 +42,12 @@ class _LetterState extends State<Letter> {
     isSelected3 = List.generate(Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
     _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -643,39 +650,46 @@ class _LetterState extends State<Letter> {
                       padding: EdgeInsets.only(
                           bottom:
                               MediaQuery.of(context).viewInsets.bottom * 0.4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: TextField(
-                              onSubmitted: (value) {
-                                FocusScope.of(context).unfocus();
-                              },
-                              onTapOutside: (p) {
-                                FocusScope.of(context).unfocus();
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  contents = value;
-                                });
-                              },
-                              controller: textEditingController,
-                              style: const TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: MyThemeColors.myGreyscale[300],
-                                      fontFamily: "Dodam"),
-                                  hintMaxLines: 10,
-                                  hintText:
-                                      "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
-                              maxLines: null,
-                              keyboardType: TextInputType.multiline,
+                      child: GestureDetector(
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(_focusNode);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: TextField(
+                                focusNode: _focusNode,
+                                onSubmitted: (value) {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                onTapOutside: (p) {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    contents = value;
+                                  });
+                                },
+                                controller: textEditingController,
+                                style: const TextStyle(fontSize: 16),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: MyThemeColors.myGreyscale[300],
+                                        fontFamily: "Dodam"),
+                                    hintMaxLines: 10,
+                                    hintText:
+                                        "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                                maxLines: null,
+                                maxLength: 300,
+                                keyboardType: TextInputType.multiline,
+                              ),
                             ),
                           ),
                         ),
