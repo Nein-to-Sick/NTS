@@ -46,7 +46,7 @@ class NickName {
                 ),
                 Text(
                   "$printitle",
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: MyThemeColors.blackColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20),

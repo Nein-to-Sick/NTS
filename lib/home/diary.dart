@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
@@ -102,7 +101,7 @@ class DiaryState extends State<Diary> {
                 color: Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
             width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).size.height * 0.75,
             child: Stack(
               children: <Widget>[
                 PageView.builder(
@@ -115,7 +114,6 @@ class DiaryState extends State<Diary> {
                         return _buildPageFirst();
                       case 1:
                         return
-
                             //  AI analyzation result
                             FutureBuilder<bool>(
                           future: gptModel.watiFetchDiaryData(),
@@ -139,7 +137,10 @@ class DiaryState extends State<Diary> {
                             }
                             //  오류 발생 시
                             else if (snapshot.hasError) {
-                              return const Center(child: Text('오류 발생'));
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                gptModel.whileLoadingDone();
+                              });
+                              return _buildPageSecond();
                             }
                             //  분석 완료
                             else {
@@ -171,7 +172,7 @@ class DiaryState extends State<Diary> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 13.0),
+                  padding: const EdgeInsets.only(top: 20.0),
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: LinearProgressBar(
@@ -356,9 +357,10 @@ class DiaryState extends State<Diary> {
             height: 6,
           ),
           Text(
-            "현재 상황과 관련된 키워드를 모두 골라주세요.",
+            "키워드를 모두 골라주세요.",
+            textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
               color: MyThemeColors.myGreyscale[600],
             ),
@@ -507,9 +509,10 @@ class DiaryState extends State<Diary> {
             height: 6,
           ),
           Text(
-            "현재 감정과 관련된 키워드를 모두 골라주세요.",
+            "키워드를 모두 골라주세요.",
+            textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: MyThemeColors.myGreyscale[600]),
           ),

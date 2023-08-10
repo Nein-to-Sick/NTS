@@ -16,17 +16,13 @@ class UserInfoValueModel with ChangeNotifier {
 
   void userInfoClear() {
     userNickName = '';
+    userEmail = '';
     isValueEntered = false;
     notifyListeners();
   }
 
   void userEmailUpdate(value) {
     userNickName = value;
-    notifyListeners();
-  }
-
-  void userEmailClear() {
-    userEmail = '';
     notifyListeners();
   }
 

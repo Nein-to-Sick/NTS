@@ -14,7 +14,7 @@ import 'package:nts/home/diary.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.alert});
-  final alert;
+  final bool alert;
 
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
@@ -184,7 +184,7 @@ class _MyProfilePageState extends State<MyProfilePage>
 
               //  consider bottom toggle button position
               const SizedBox(
-                height: 150,
+                height: 120,
               ),
             ],
           ),

@@ -1,20 +1,17 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
-import 'package:nts/component/new_nickname.dart';
 import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
 import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
-import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
@@ -27,7 +24,11 @@ class ProfileSettings extends StatefulWidget {
   // final controller = Provider.of<BackgroundController>(context);
   // final userInfo = Provider.of<UserInfoValueModel>(context);
   // final userName = userInfo.userNickName;
-  const ProfileSettings({Key? key, required this.provider, required this.user, required this.alert})
+  const ProfileSettings(
+      {Key? key,
+      required this.provider,
+      required this.user,
+      required this.alert})
       : super(key: key);
 
   @override
@@ -40,7 +41,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   bool positive = false;
   @override
   void initState() {
-    // TODO: implement initState
     positive = widget.alert;
     super.initState();
   }
@@ -401,7 +401,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       width: MediaQuery.of(context).size.width,
                       child: WrappedKoreanText(
                         CompanyInfo().termsOfUse[i][0],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -410,7 +410,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       width: MediaQuery.of(context).size.width,
                       child: WrappedKoreanText(
                         CompanyInfo().termsOfUse[i][1],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.normal),
                       ),
                     ),
@@ -437,7 +437,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       width: MediaQuery.of(context).size.width,
                       child: WrappedKoreanText(
                         CompanyInfo().privacyPolicy[i][0],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -446,7 +446,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       width: MediaQuery.of(context).size.width,
                       child: WrappedKoreanText(
                         CompanyInfo().privacyPolicy[i][1],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.normal),
                       ),
                     ),
@@ -458,7 +458,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               width: MediaQuery.of(context).size.width,
               child: WrappedKoreanText(
                 CompanyInfo().privacyPolicyExplain,
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+                style: const TextStyle(
+                    fontSize: 10, fontWeight: FontWeight.normal),
               ),
             ),
           ],
@@ -483,12 +484,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                     child: Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: const Text(
                           "계정 관리",
                           style: TextStyle(fontSize: 16),
                         ))),
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
                 ),
@@ -501,8 +502,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                     child: Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: const Text(
                           "알림 설정",
                           style: TextStyle(fontSize: 16),
                         ))),
@@ -521,12 +522,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Text("오픈 라이센스",
+                    margin: const EdgeInsets.only(left: 20),
+                    child: const Text("오픈 라이센스",
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                   ),
                 ),
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
                 ),
@@ -544,12 +545,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Text("이용약관",
+                    margin: const EdgeInsets.only(left: 20),
+                    child: const Text("이용약관",
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                   ),
                 ),
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
                 ),
@@ -567,12 +568,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Text("개인정보 처리방침",
+                    margin: const EdgeInsets.only(left: 20),
+                    child: const Text("개인정보 처리방침",
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                   ),
                 ),
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
                 ),
@@ -590,12 +591,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Text("사업자 정보",
+                    margin: const EdgeInsets.only(left: 20),
+                    child: const Text("사업자 정보",
                         style: TextStyle(fontSize: 16, color: Colors.black)),
                   ),
                 ),
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
                 ),
@@ -612,21 +613,23 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   Widget alarmButton() {
     return Container(
-      margin: EdgeInsets.only(right: 15),
+      margin: const EdgeInsets.only(right: 15),
       child: CustomAnimatedToggleSwitch<bool>(
         current: FlutterLocalNotification.hasNotificationPermission,
         values: [false, true],
         dif: 0.0,
-        indicatorSize: Size.square(30.0),
+        indicatorSize: const Size.square(30.0),
         animationDuration: const Duration(milliseconds: 200),
         animationCurve: Curves.linear,
-        onChanged: (b) => setState(() => FlutterLocalNotification.hasNotificationPermission = b),
+        onChanged: (b) => setState(
+            () => FlutterLocalNotification.hasNotificationPermission = b),
         iconBuilder: (context, local, global) {
           return const SizedBox();
         },
         defaultCursor: SystemMouseCursors.click,
         onTap: () {
-          setState(() => FlutterLocalNotification.hasNotificationPermission = !FlutterLocalNotification.hasNotificationPermission);
+          setState(() => FlutterLocalNotification.hasNotificationPermission =
+              !FlutterLocalNotification.hasNotificationPermission);
           print(FlutterLocalNotification.hasNotificationPermission);
           // print(FlutterLocalNotification.hasNotificationPermission);
           // if (FlutterLocalNotification.hasNotificationPermission) {
@@ -648,12 +651,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   height: 20.0,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: Color(0xffF2F2F2),
+                        color: const Color(0xffF2F2F2),
                         borderRadius:
-                        const BorderRadius.all(Radius.circular(50.0)),
+                            const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 3.0,
-                          color: Color(0xffC6C6C6),
+                          color: const Color(0xffC6C6C6),
                         )),
                   )),
               child,
@@ -663,11 +666,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         foregroundIndicatorBuilder: (context, global) {
           return SizedBox.fromSize(
             size: global.indicatorSize,
-            child: DecoratedBox(
+            child: const DecoratedBox(
               decoration: BoxDecoration(
                 color: Color(0xffC6C6C6),
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
                       color: Color(0xffC6C6C6),
                       spreadRadius: 0.05,
@@ -682,7 +685,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     );
   }
 
-
   Widget companyInfoView() {
     return Container(
       child: Center(
@@ -693,10 +695,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               width: MediaQuery.of(context).size.width,
               child: Text(
                 CompanyInfo().companyName,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -720,7 +722,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       },
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        foregroundColor: Color(0xffFCE181),
+        foregroundColor: const Color(0xffFCE181),
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         padding: const EdgeInsets.all(20),
@@ -760,18 +762,19 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                     child: Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: const Text(
                           "이메일",
                           style: TextStyle(fontSize: 16),
                         ))),
                 Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: AutoSizeText(
                       widget.user.userEmail,
                       maxLines: 1,
-                      style: TextStyle(fontSize: 16, color: Color(0xff868686)),
+                      style: const TextStyle(
+                          fontSize: 16, color: Color(0xff868686)),
                     )),
               ]),
             ),
@@ -785,17 +788,18 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                     child: Container(
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: const Text(
                           "닉네임 변경",
                           style: TextStyle(fontSize: 16),
                         ))),
                 Container(
                     child: Text(
                   widget.user.userNickName,
-                  style: TextStyle(fontSize: 16, color: Color(0xff868686)),
+                  style:
+                      const TextStyle(fontSize: 16, color: Color(0xff868686)),
                 )),
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
                 ),
@@ -807,20 +811,16 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             //로그아웃
             buildCustomButton(
-              backgroundColor: Color(0xffFCE181),
+              backgroundColor: const Color(0xffFCE181),
               onTap: () {
-                print("click");
                 // controller.movePage(0);
-                Provider.of<UserInfoValueModel>(context, listen: false)
-                    .userInfoClear();
-
-                widget.user.userEmailClear();
+                widget.user.userInfoClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
                 widget.provider.fireFlyOff();
                 Navigator.pop(context);
               },
-              inside: Center(
+              inside: const Center(
                 child: Text(
                   "로그아웃",
                   style: TextStyle(fontSize: 16, color: Colors.white),
@@ -832,13 +832,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white,
               onTap: () {
-                Provider.of<UserInfoValueModel>(context, listen: false)
-                    .userInfoClear();
-
-                widget.user.userEmailClear();
+                widget.user.userInfoClear();
                 DeleteAccount(context, widget.provider);
               },
-              inside: Center(
+              inside: const Center(
                 child: Text(
                   "계정탈퇴",
                   style: TextStyle(fontSize: 16, color: Color(0xffFCE181)),

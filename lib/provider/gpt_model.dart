@@ -1,6 +1,7 @@
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 class GPTModel with ChangeNotifier {
   bool isOnLoading = false;
@@ -87,7 +88,7 @@ class GPTModel with ChangeNotifier {
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
               content:
-                  "너는 전문 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음으로 오는 일기에서 파악되는 감정을 <기쁨, 감사함, 기대됨, 설렘, 놀람, 지루함, 피곤함, 짜증남, 무기력함, 우울함, 슬픔, 화남, 무서움, 두려움> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+                  "너는 전문 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음으로 오는 일기에서 파악되는 감정을 <기쁨, 감사함, 기대됨, 설렘, 놀람, 지루함, 피곤함, 짜증남, 무기력함, 우울함, 슬픔, 화남, 걱정, 두려움> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
@@ -108,7 +109,8 @@ class GPTModel with ChangeNotifier {
           presencePenalty: 0,
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
-              content: "다음 일기의 내용을 보고 적절한 제목을 만들어줘 <$prompt>",
+              content:
+                  "너는 소설가로 요구에따라 적절한 문장을 만들어야해. 다음 일기의 내용을 보고 완성된 문장의 제목을 만들어줘. <$prompt>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
@@ -142,10 +144,10 @@ class GPTModel with ChangeNotifier {
         */
         startAnalyzeDiary();
       } catch (e) {
-        print('Error happen!');
         situationSummerization.add('error');
         emotionSummerization.add('error');
-        diaryTitle = "직접 추가하기";
+        diaryTitle =
+            "${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}의 일기";
       }
 
       notifyListeners();
@@ -160,7 +162,7 @@ class GPTModel with ChangeNotifier {
 
     //  delay for loading page
     return Future.delayed(
-      const Duration(milliseconds: 1500),
+      const Duration(milliseconds: 1000),
       () {
         if (situationSummerization.isNotEmpty &&
             emotionSummerization.isNotEmpty) {

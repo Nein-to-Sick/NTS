@@ -1,3 +1,4 @@
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +24,6 @@ import 'package:nts/provider/searchBarController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'home/home.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -98,7 +98,8 @@ class BackgroundState extends State<Background> {
     // 초기화
     FlutterLocalNotification.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
+      alert =
+          true; //(await FlutterLocalNotification.requestNotificationPermission())!;
     });
     super.initState();
   }
@@ -121,7 +122,9 @@ class BackgroundState extends State<Background> {
               SystemNavigator.pop();
             },
             //  on No
-            () {},
+            () {
+              Navigator.pop(context);
+            },
           );
         },
       );
@@ -135,7 +138,7 @@ class BackgroundState extends State<Background> {
     return WillPopScope(
       //뒤로가기 막음
       onWillPop: () {
-        if (scrollController.offset == 600) {
+        if (scrollController.offset == 600 || scrollController.offset == 0) {
           onBackKeyCallOnMain();
         } else if (scrollController.offset == 855) {
           onBackKeyCallOnMyPage();
@@ -230,22 +233,19 @@ class BackgroundState extends State<Background> {
                 );
               } else if (scrollController.offset == 855) {
                 return MultiProvider(
-                    providers: [
-                      ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              SearchBarController()), // count_provider.dart
-                      ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              CalendarController()),
-                      ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              ProfileSearchModel()),
-                    ],
-                    child: MyProfilePage(
-                      alert: alert,
-                    )
-                    //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
-                    );
+                  providers: [
+                    ChangeNotifierProvider(
+                        create: (BuildContext context) =>
+                            SearchBarController()), // count_provider.dart
+                    ChangeNotifierProvider(
+                        create: (BuildContext context) => CalendarController()),
+                    ChangeNotifierProvider(
+                        create: (BuildContext context) => ProfileSearchModel()),
+                  ],
+                  child: MyProfilePage(
+                    alert: alert,
+                  ),
+                );
               } else {
                 return const SizedBox.shrink();
               }
