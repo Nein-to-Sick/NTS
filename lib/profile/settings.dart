@@ -2,12 +2,13 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/new_nickname.dart';
+import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
@@ -15,26 +16,63 @@ import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:provider/provider.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
+import '../component/notification.dart';
 import '../provider/backgroundController.dart';
-
-import 'notification.dart';
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
-  const ProfileSettings({Key? key, required this.provider}) : super(key: key);
+  final UserInfoValueModel user;
+  final bool alert;
+
+  // final controller = Provider.of<BackgroundController>(context);
+  // final userInfo = Provider.of<UserInfoValueModel>(context);
+  // final userName = userInfo.userNickName;
+  const ProfileSettings({Key? key, required this.provider, required this.user, required this.alert})
+      : super(key: key);
 
   @override
   State<ProfileSettings> createState() => _ProfileSettingsState();
 }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
-  bool positive = false;
   int index =
       1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
+  bool positive = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    positive = widget.alert;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // final controller = Provider.of<BackgroundController>(context);
+    void _sendEmail() async {
+      final Email email = Email(
+        body: '',
+        subject: '[양파가족 문의]',
+        recipients: ['onionfamily.official@gmail.com'],
+        cc: [],
+        bcc: [],
+        attachmentPaths: [],
+        isHTML: false,
+      );
+
+      try {
+        await FlutterEmailSender.send(email);
+      } catch (error) {
+        String title =
+            "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)\n\nonionfamily.official@gmail.com";
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(title),
+              );
+            });
+      }
+    }
 
     Widget mainSettings = Padding(
       padding: EdgeInsets.fromLTRB(
@@ -139,7 +177,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         child: Column(
           children: [
             const Text(
-              "개인정보 처리방침",
+              "사업자 정보",
               style: TextStyle(fontSize: 20),
             ),
             Expanded(child: companyInfoView()),
@@ -576,26 +614,27 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return Container(
       margin: EdgeInsets.only(right: 15),
       child: CustomAnimatedToggleSwitch<bool>(
-        current: positive,
+        current: FlutterLocalNotification.hasNotificationPermission,
         values: [false, true],
         dif: 0.0,
         indicatorSize: Size.square(30.0),
         animationDuration: const Duration(milliseconds: 200),
         animationCurve: Curves.linear,
-        onChanged: (b) => setState(() => positive = b),
+        onChanged: (b) => setState(() => FlutterLocalNotification.hasNotificationPermission = b),
         iconBuilder: (context, local, global) {
           return const SizedBox();
         },
         defaultCursor: SystemMouseCursors.click,
         onTap: () {
-          setState(() => positive = !positive);
-          // if (positive) {
-          //   alarmsettings();
+          setState(() => FlutterLocalNotification.hasNotificationPermission = !FlutterLocalNotification.hasNotificationPermission);
+          print(FlutterLocalNotification.hasNotificationPermission);
+          // print(FlutterLocalNotification.hasNotificationPermission);
+          // if (FlutterLocalNotification.hasNotificationPermission) {
+          //   FlutterLocalNotification.showNotification();
           // }
           // else {
-          //   FlutterLocalNotification.requestNotificationPermissionOff();
-          //   print("notification is turned offed");
           //   FlutterLocalNotification.showNotification();
+          //   print("notification is turned off");
           // }
         },
         iconsTappable: false,
@@ -611,7 +650,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     decoration: BoxDecoration(
                         color: Color(0xffF2F2F2),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(50.0)),
+                        const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 3.0,
                           color: Color(0xffC6C6C6),
@@ -642,6 +681,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       ),
     );
   }
+
 
   Widget companyInfoView() {
     return Container(
@@ -729,7 +769,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: AutoSizeText(
-                      "xxxxxxxxx@gmail.com",
+                      widget.user.userEmail,
                       maxLines: 1,
                       style: TextStyle(fontSize: 16, color: Color(0xff868686)),
                     )),
@@ -738,7 +778,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             buildCustomButton(
               onTap: () {
-                NewNickName(context);
+                // NewNickName(context);
+                NickName().myNicknameSheet(context, widget.user, 1);
               },
               backgroundColor: Colors.white,
               inside: Row(children: [
@@ -751,7 +792,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         ))),
                 Container(
                     child: Text(
-                  "하루",
+                  widget.user.userNickName,
                   style: TextStyle(fontSize: 16, color: Color(0xff868686)),
                 )),
                 HeroIcon(
@@ -772,8 +813,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 // controller.movePage(0);
                 Provider.of<UserInfoValueModel>(context, listen: false)
                     .userInfoClear();
+
+                widget.user.userEmailClear();
                 FirebaseAuth.instance.signOut();
                 widget.provider.movePage(0);
+                widget.provider.fireFlyOff();
                 Navigator.pop(context);
               },
               inside: Center(
@@ -790,6 +834,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               onTap: () {
                 Provider.of<UserInfoValueModel>(context, listen: false)
                     .userInfoClear();
+
+                widget.user.userEmailClear();
                 DeleteAccount(context, widget.provider);
               },
               inside: Center(
@@ -832,20 +878,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget LicenceDetailPage(String title, String licence) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Text(
-            licence,
-            style: const TextStyle(fontSize: 15),
-          ),
-        ],
       ),
     );
   }

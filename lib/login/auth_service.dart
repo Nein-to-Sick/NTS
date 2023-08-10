@@ -39,6 +39,8 @@ class AuthService {
         "nicknameMade": false,
         "email": userEmail,
         "created_at": FieldValue.serverTimestamp(),
+        "green": 0,
+        "yellow": 0,
       });
     }
 

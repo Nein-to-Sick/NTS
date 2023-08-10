@@ -8,12 +8,13 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
-import 'package:nts/component/nickName_Sheet.dart';
+import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/search_model.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
+import 'package:nts/provider/alertController.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/calendarController.dart';
 import 'package:nts/provider/messageController.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (BuildContext context) => MessageController(),
             ),
+            ChangeNotifierProvider(create: (context) => AlertController())
           ],
           child: const Background(),
         ),
@@ -88,16 +90,17 @@ class Background extends StatefulWidget {
 }
 
 class BackgroundState extends State<Background> {
-  // @override
-  // void initState() {
-  //   // 초기화
-  //   FlutterLocalNotification.init();
+  bool alert = false;
 
-  //   // 3초 후 권한 요청
-  //   Future.delayed(const Duration(seconds: 1),
-  //       FlutterLocalNotification.requestNotificationPermission());
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // 초기화
+    FlutterLocalNotification.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +112,9 @@ class BackgroundState extends State<Background> {
         builder: (context) {
           return dialogWithYesOrNo(
             context,
-            '앱 종료',
-            '앱을 종료하시겠나요?',
+            '정말로 종료하시는 건가요?',
+            "",
+            "종료",
             //  on Yes
             () {
               SystemNavigator.pop();
@@ -153,7 +157,22 @@ class BackgroundState extends State<Background> {
               ),
             ],
           ),
-          const FireFly(),
+          AnimatedBuilder(
+            animation: scrollController,
+            builder: (context, child) {
+              if (controller.fireFly) {
+                if (scrollController.offset == 0 ||
+                    scrollController.offset == 600 ||
+                    scrollController.offset == 855) {
+                  return const FireFly();
+                } else {
+                  return const SizedBox.shrink();
+                }
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
           AnimatedBuilder(
             animation: scrollController,
             builder: (context, child) {
@@ -169,23 +188,37 @@ class BackgroundState extends State<Background> {
                             .userNickName
                             .isEmpty &&
                         snapshot.connectionState == ConnectionState.waiting) {
+                      print(controller.fireFly);
                       return const MyFireFlyProgressbar(
                         loadingText: '로그인하는 중...',
                       );
                     }
                     //  계정이 존재하고 닉네임이 있는 경우
                     else if (snapshot.data == true) {
-                      return const HomePage();
+
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        controller.fireFlyOn();
+                      });
+                      return const HomePage());
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {
                       WidgetsBinding.instance.addPostFrameCallback(
                         (_) {
-                          myNicknameSheet(
-                            context,
-                            Provider.of<UserInfoValueModel>(context,
-                                listen: false),
-                          );
+                          // String printitle = "사용할 닉네임을 정해주세요";
+                          // myNicknameSheet(
+                          //   context,
+                          //   Provider.of<UserInfoValueModel>(context,
+                          //       listen: false),
+                          //       ''
+                          // );
+                          NickName().myNicknameSheet(
+                              context,
+                              Provider.of<UserInfoValueModel>(
+                                context,
+                                listen: false,
+                              ),
+                              0);
                         },
                       );
 
@@ -204,7 +237,7 @@ class BackgroundState extends State<Background> {
                       create: (BuildContext context) => CalendarController()),
                   ChangeNotifierProvider(
                       create: (BuildContext context) => ProfileSearchModel()),
-                ], child: const MyProfilePage()
+                ], child: MyProfilePage(alert: alert,)
                     //const ProfilePage() // home.dart // child 하위에 모든 것들은 CountProvider에 접근 할 수 있다.
                     );
               } else {
@@ -212,16 +245,19 @@ class BackgroundState extends State<Background> {
               }
             },
           ),
-          AnimatedBuilder(
-            animation: scrollController,
-            builder: (context, child) {
-              if (scrollController.offset != 0) {
-                return const NavigationToggle();
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
+          controller.fireFly
+              ? AnimatedBuilder(
+                  animation: scrollController,
+                  builder: (context, child) {
+                    if (scrollController.offset == 600 ||
+                        scrollController.offset == 855) {
+                      return const NavigationToggle();
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                )
+              : Container(),
         ],
       ),
     );
@@ -242,7 +278,8 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
         //  check whether the nickName exist
         if (userData.containsKey('nicknameMade')) {
           userNickNameIsMade = userData['nicknameMade'];
-          model.userNickNameUpdate(userData['nickname']);
+          model.userNickName = userData['nickname'];
+          model.userEmail = userData['email'];
         } else {
           print('No field');
         }

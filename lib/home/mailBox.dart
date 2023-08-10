@@ -7,10 +7,12 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/model/letterModel.dart';
 
 import '../component/button.dart';
+import '../database/databaseService.dart';
 import 'letter.dart';
 
 class MailBox extends StatefulWidget {
-  const MailBox({Key? key, required this.controller, required this.userName}) : super(key: key);
+  const MailBox({Key? key, required this.controller, required this.userName})
+      : super(key: key);
 
   final controller;
   final userName;
@@ -27,6 +29,9 @@ class _MailBoxState extends State<MailBox> {
   late String content = "";
   late int idx = 1;
   late bool notMatch = false;
+  late bool heart = false;
+  late String id = "";
+  late String fromUid = "";
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +40,7 @@ class _MailBoxState extends State<MailBox> {
           .collection('users')
           .doc(uid)
           .collection("mailBox")
+          .orderBy('date', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -63,6 +69,9 @@ class _MailBoxState extends State<MailBox> {
                     from = letter.from;
                     content = letter.content;
                     notMatch = letter.notMatch;
+                    heart = letter.heart;
+                    id = letter.id;
+                    fromUid = letter.fromUid;
                   });
                 },
                 child: Card(
@@ -73,10 +82,7 @@ class _MailBoxState extends State<MailBox> {
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.7,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
                         children: [
                           Row(
@@ -121,6 +127,7 @@ class _MailBoxState extends State<MailBox> {
         );
       },
     );
+
     Widget second = Column(
       children: [
         const SizedBox(
@@ -135,10 +142,7 @@ class _MailBoxState extends State<MailBox> {
             child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.7,
+                width: MediaQuery.of(context).size.width * 0.7,
                 child: Column(
                   children: [
                     Expanded(
@@ -154,19 +158,48 @@ class _MailBoxState extends State<MailBox> {
                         alignment: Alignment.bottomCenter,
                         child: Column(
                           children: [
-                            !notMatch ? HeroIcon(
-                              HeroIcons.heart,
-                              style: HeroIconStyle.outline,
-                              color: MyThemeColors.myGreyscale[700],
-                            ) : Container(),
-                            const SizedBox(height: 3,),
-                            Text("from.$from", style: TextStyle(fontSize: 13,
-                                fontFamily: "Dodam",
-                                color: MyThemeColors.myGreyscale[200]),),
-                            const SizedBox(height: 3,),
-                            Text(time, style: TextStyle(fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: MyThemeColors.myGreyscale[200]),),
+                            !notMatch
+                                ? GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        heart = !heart;
+                                      });
+                                      DatabaseService().clickHeart(id, heart, fromUid);
+                                    },
+                                    child: heart
+                                        ? const HeroIcon(
+                                            HeroIcons.heart,
+                                            style: HeroIconStyle.solid,
+                                            color: MyThemeColors.secondaryColor,
+                                          )
+                                        : HeroIcon(
+                                            HeroIcons.heart,
+                                            style: HeroIconStyle.outline,
+                                            color:
+                                                MyThemeColors.myGreyscale[700],
+                                          ),
+                                  )
+                                : Container(),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              "from.$from",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: "Dodam",
+                                  color: MyThemeColors.myGreyscale[200]),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              time,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                  color: MyThemeColors.myGreyscale[200]),
+                            ),
                           ],
                         ))
                   ],
@@ -175,46 +208,46 @@ class _MailBoxState extends State<MailBox> {
             ),
           ),
         ),
-        notMatch ? Column(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  showAnimatedDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) => Letter(
-                      controller: widget.controller,
-                      userName: widget.userName,
-                    ),
-                    animationType: DialogTransitionType.slideFromBottomFade,
-                  );
-                },
-                child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  decoration: BoxDecoration(
-                      color: MyThemeColors.secondaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(13.0),
-                    child: Text(
-                      "편지 쓰러가기",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
-                    ),
+        notMatch
+            ? Column(
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                )),
-          ],
-        ) : Container(),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => Letter(
+                            controller: widget.controller,
+                            userName: widget.userName,
+                          ),
+                          animationType:
+                              DialogTransitionType.slideFromBottomFade,
+                        );
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: MyThemeColors.secondaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(13.0),
+                          child: Text(
+                            "편지 쓰러가기",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      )),
+                ],
+              )
+            : Container(),
         const SizedBox(
           height: 15,
         ),
@@ -235,14 +268,8 @@ class _MailBoxState extends State<MailBox> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.8,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * 0.7,
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.height * 0.7,
           child: Stack(
             children: [
               Padding(
@@ -261,11 +288,11 @@ class _MailBoxState extends State<MailBox> {
                       idx == 1 ? first : Expanded(child: second),
                       idx != 2
                           ? Button(
-                        function: () {
-                          Navigator.pop(context);
-                        },
-                        title: '닫기',
-                      )
+                              function: () {
+                                Navigator.pop(context);
+                              },
+                              title: '닫기',
+                            )
                           : Container()
                     ],
                   ),

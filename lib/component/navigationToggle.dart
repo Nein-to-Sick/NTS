@@ -20,10 +20,11 @@ class NavigationToggle extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.transparent,
+                  border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(50)),
               child: Padding(
-                padding: const EdgeInsets.all(13.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -32,85 +33,37 @@ class NavigationToggle extends StatelessWidget {
                         controller.movePage(600);
                         controller.changeColor(2);
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: page == 2
-                              ? MyThemeColors.primaryColor
-                              : Colors.white.withOpacity(0.5), // 수정
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: HeroIcon(
-                            HeroIcons.home,
-                            style: HeroIconStyle.solid,
-                            color: page == 2
-                                ? Colors.white
-                                : MyThemeColors.myGreyscale.shade900,
-                            size: 30,
-                          ),
-                        ),
+                      child: HeroIcon(
+                        HeroIcons.home,
+                        style: HeroIconStyle.solid,
+                        color: page == 2
+                            ? Colors.white
+                            : MyThemeColors.myGreyscale.shade500,
+                        size: 24,
                       ),
                     ),
-                    const SizedBox(
-                      width: 16,
-                    ),
+                    const SizedBox(width: 15,),
                     GestureDetector(
                       onTap: () {
                         controller.movePage(855);
                         controller.changeColor(3);
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: page == 3
-                              ? MyThemeColors.primaryColor
-                              : Colors.white.withOpacity(0.5),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: HeroIcon(
-                            HeroIcons.user,
-                            style: HeroIconStyle.solid,
-                            color: page == 3
-                                ? Colors.white
-                                : MyThemeColors.myGreyscale.shade400,
-                            size: 30,
-                          ),
-                        ),
+                      child: HeroIcon(
+                        HeroIcons.user,
+                        style: HeroIconStyle.solid,
+                        color: page == 3
+                            ? Colors.white
+                            : MyThemeColors.myGreyscale.shade500,
+                        size: 24,
                       ),
                     )
                   ],
                 ),
               ),
             ),
-            const SizedBox(
-              height: 5,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
-            page == 2
-                ? const Padding(
-                    padding: EdgeInsets.only(right: 80.0),
-                    child: Text(
-                      "홈",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  )
-                : Container(),
-            page == 3
-                ? const Padding(
-                    padding: EdgeInsets.only(left: 75.0),
-                    child: Text(
-                      "프로필",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  )
-                : Container()
           ],
         ),
       ),

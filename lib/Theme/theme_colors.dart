@@ -4,7 +4,7 @@ class MyThemeColors {
   // color system
   static const Color primaryColor = Color(0xff026670);
   static const Color secondaryColor = Color(0xffFCE181);
-  //static const Color teritaryColor = Color(0xff07679F);
+  static const Color teritaryColor = Color(0xffFC8181);
 
   // achromatic color
   static const Color whiteColor = Colors.white;

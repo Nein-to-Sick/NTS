@@ -13,7 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:nts/home/diary.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key});
+  const MyProfilePage({super.key, required this.alert});
+  final alert;
 
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
