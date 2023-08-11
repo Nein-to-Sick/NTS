@@ -56,17 +56,24 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         showAnimatedDialog(
                             context: context,
                             barrierDismissible: false,
+                            barrierColor: Colors.transparent,
                             builder: (BuildContext context) => const Help(),
                             animationType:
-                            DialogTransitionType.slideFromBottomFade);
+                                DialogTransitionType.slideFromBottomFade);
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 20.0),
-                        child: Opacity(opacity: 0.4,child: HeroIcon(HeroIcons.questionMarkCircle, style: HeroIconStyle.solid,size: 25,)),
+                        child: Opacity(
+                            opacity: 0.4,
+                            child: HeroIcon(
+                              HeroIcons.questionMarkCircle,
+                              style: HeroIconStyle.solid,
+                              size: 25,
+                            )),
                       ),
                     ),
                     Padding(
@@ -113,8 +120,10 @@ class _HomePageState extends State<HomePage> {
                                                 height: 10,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(20),
-                                                    color: const Color(0xffFCE181)),
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    color: const Color(
+                                                        0xffFCE181)),
                                               ),
                                             ),
                                           )
@@ -130,34 +139,32 @@ class _HomePageState extends State<HomePage> {
                                       style: HeroIconStyle.solid,
                                     ),
                                   ),
-                                ],
-                              )
-                            : const Opacity(
-                                opacity: 0.4,
-                                child: HeroIcon(
-                                  HeroIcons.envelope,
-                                  color: Colors.white,
-                                  style: HeroIconStyle.solid,
-                                ),
-                              ),
-                        onTap: () {
-                          showAnimatedDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              barrierColor: Colors.transparent,
-                              builder: (BuildContext context) => MailBox(
-                                    controller: controller,
-                                    userName: userName,
-                                  ),
-                              animationType:
-                                  DialogTransitionType.slideFromTopFade);
-                          messageController.confirm();
-                        },
-                      )),
+                            onTap: () {
+                              showAnimatedDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  barrierColor: Colors.transparent,
+                                  builder: (BuildContext context) => MailBox(
+                                        controller: controller,
+                                        userName: userName,
+                                      ),
+                                  animationType:
+                                      DialogTransitionType.slideFromTopFade);
+                              messageController.confirm();
+                            },
+                          )),
+                    ),
+                  ],
                 ),
-                ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Onboarding(controller: controller)));
-                }, child: Text("온보딩")),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Onboarding(controller: controller)));
+                    },
+                    child: Text("온보딩")),
                 Column(
                   children: [
                     AnimatedOpacity(
