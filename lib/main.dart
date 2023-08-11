@@ -206,12 +206,13 @@ class BackgroundState extends State<Background> {
                       WidgetsBinding.instance.addPostFrameCallback(
                         (_) {
                           NickName().myNicknameSheet(
+                            context,
+                            Provider.of<UserInfoValueModel>(
                               context,
-                              Provider.of<UserInfoValueModel>(
-                                context,
-                                listen: false,
-                              ),
-                              0);
+                              listen: false,
+                            ),
+                            0,
+                          );
                         },
                       );
 
@@ -257,6 +258,7 @@ class BackgroundState extends State<Background> {
 
 Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
   if (model.userNickName.isEmpty) {
+    bool userNickNameIsMade = false;
     final userCollection = FirebaseFirestore.instance.collection("users");
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -267,6 +269,7 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
             userSnapshot.data() as Map<String, dynamic>;
         //  check whether the nickName exist
         if (userData.containsKey('nicknameMade')) {
+          userNickNameIsMade = userData['nicknameMade'];
           model.userNickName = userData['nickname'];
           model.userEmail = userData['email'];
         } else {
@@ -291,7 +294,7 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
     }
     //  delay for loading page
     return Future.delayed(const Duration(seconds: 1), () {
-      return model.userNickName.isEmpty;
+      return userNickNameIsMade;
     });
   }
 
