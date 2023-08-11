@@ -28,147 +28,152 @@ class NickName {
         ),
       ),
       builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Container(
-            decoration: BoxDecoration(
-                color: MyThemeColors.whiteColor,
-                borderRadius: BorderRadius.circular(25)),
-            height: 320,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  height: 35,
-                ),
-                Text(
-                  printitle,
-                  style: const TextStyle(
-                      color: MyThemeColors.blackColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "나중에 언제든지 바꿀 수 있어요",
-                  style: TextStyle(
-                    color: MyThemeColors.myGreyscale.shade600,
-                    fontSize: 15,
+        return WillPopScope(
+          onWillPop: () {
+            return Future(() => false);
+          },
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: MyThemeColors.whiteColor,
+                  borderRadius: BorderRadius.circular(25)),
+              height: 320,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 35,
                   ),
-                ),
-                const SizedBox(
-                  height: 35,
-                ),
-                //  nickname textfield
-                Padding(
-                  padding: const EdgeInsets.only(left: 45, right: 45),
-                  child: SizedBox(
-                    height: 80,
-                    child: TextField(
-                      controller: userNickNameController,
-                      keyboardType: TextInputType.multiline,
-                      autocorrect: false,
-                      maxLength: 12,
-                      //  enter(엔터) 키 이벤트 처리 with onSubmitted
-                      textInputAction: TextInputAction.go,
+                  Text(
+                    printitle,
+                    style: const TextStyle(
+                        color: MyThemeColors.blackColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "나중에 언제든지 바꿀 수 있어요",
+                    style: TextStyle(
+                      color: MyThemeColors.myGreyscale.shade600,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  //  nickname textfield
+                  Padding(
+                    padding: const EdgeInsets.only(left: 45, right: 45),
+                    child: SizedBox(
+                      height: 80,
+                      child: TextField(
+                        controller: userNickNameController,
+                        keyboardType: TextInputType.multiline,
+                        autocorrect: false,
+                        maxLength: 12,
+                        //  enter(엔터) 키 이벤트 처리 with onSubmitted
+                        textInputAction: TextInputAction.go,
 
-                      onChanged: (value) {
-                        if (userNickNameController.text.trim().isNotEmpty) {
-                          userInfoProvider.valueUpdate();
-                        } else {
-                          userInfoProvider.valueDeUpdate();
-                        }
-                      },
-                      onSubmitted: (value) {
-                        FocusScope.of(context).unfocus();
-                      },
-                      onTapOutside: (p) {
-                        FocusScope.of(context).unfocus();
-                      },
+                        onChanged: (value) {
+                          if (userNickNameController.text.trim().isNotEmpty) {
+                            userInfoProvider.valueUpdate();
+                          } else {
+                            userInfoProvider.valueDeUpdate();
+                          }
+                        },
+                        onSubmitted: (value) {
+                          FocusScope.of(context).unfocus();
+                        },
+                        onTapOutside: (p) {
+                          FocusScope.of(context).unfocus();
+                        },
 
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            left: 15, right: 15, top: 10, bottom: 10),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 10, bottom: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: MyThemeColors.myGreyscale.shade600,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: MyThemeColors.primaryColor,
+                              width: 1.5,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          fillColor: MyThemeColors.myGreyscale.shade50,
+                          filled: true,
+                          hintText: '최대 12글자',
+                          hintStyle: TextStyle(
                             color: MyThemeColors.myGreyscale.shade600,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: MyThemeColors.primaryColor,
-                            width: 1.5,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        fillColor: MyThemeColors.myGreyscale.shade50,
-                        filled: true,
-                        hintText: '최대 12글자',
-                        hintStyle: TextStyle(
-                          color: MyThemeColors.myGreyscale.shade600,
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton(
-                  onPressed: (userInfoProvider.isValueEntered)
-                      ? () {
-                          userNickNameFirebaseUpdate(
-                              context, userNickNameController.text.trim());
-                          userInfoProvider.userNickNameUpdate(
-                              userNickNameController.text.trim());
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: (userInfoProvider.isValueEntered)
+                        ? () {
+                            userNickNameFirebaseUpdate(
+                                context, userNickNameController.text.trim());
+                            userInfoProvider.userNickNameUpdate(
+                                userNickNameController.text.trim());
 
-                          (type == 1)
-                              ? Navigator.pop(context)
-                              : Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MultiProvider(
-                                      providers: [
-                                        ChangeNotifierProvider(
-                                          create: (context) =>
-                                              BackgroundController(),
-                                        ),
-                                      ],
-                                      child: const MyApp(),
+                            (type == 1)
+                                ? Navigator.pop(context)
+                                : Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MultiProvider(
+                                        providers: [
+                                          ChangeNotifierProvider(
+                                            create: (context) =>
+                                                BackgroundController(),
+                                          ),
+                                        ],
+                                        child: const MyApp(),
+                                      ),
                                     ),
-                                  ),
-                                  (route) => false);
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    foregroundColor: (userInfoProvider.isValueEntered)
-                        ? MyThemeColors.whiteColor
-                        : MyThemeColors.myGreyscale.shade900,
-                    backgroundColor: (userInfoProvider.isValueEntered)
-                        ? MyThemeColors.primaryColor
-                        : MyThemeColors.myGreyscale.shade100,
-                    surfaceTintColor: MyThemeColors.myGreyscale.shade100,
-                    padding: const EdgeInsets.fromLTRB(140, 15, 140, 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                                    (route) => false);
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      foregroundColor: (userInfoProvider.isValueEntered)
+                          ? MyThemeColors.whiteColor
+                          : MyThemeColors.myGreyscale.shade900,
+                      backgroundColor: (userInfoProvider.isValueEntered)
+                          ? MyThemeColors.primaryColor
+                          : MyThemeColors.myGreyscale.shade100,
+                      surfaceTintColor: MyThemeColors.myGreyscale.shade100,
+                      padding: const EdgeInsets.fromLTRB(140, 15, 140, 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    '저장',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
+                    child: const Text(
+                      '저장',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         );

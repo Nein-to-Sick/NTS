@@ -45,10 +45,10 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-              color: MyThemeColors.myGreyscale.shade50,
+              color: MyThemeColors.myGreyscale[25],
               borderRadius: BorderRadius.circular(10)),
           width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.75,
+          height: MediaQuery.of(context).size.height * 0.8,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 22),
             child: Column(
@@ -102,51 +102,57 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                             padding: EdgeInsets.only(
                                 bottom:
                                     MediaQuery.of(context).viewInsets.bottom *
-                                        0.35),
+                                        0.4),
                             child: GestureDetector(
                               onTap: () {
                                 FocusScope.of(context).requestFocus(_focusNode);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            MyThemeColors.myGreyscale.shade100,
-                                        blurRadius: 0.5, // 그림자의 흐림 정도
-                                        spreadRadius: 0.5, // 그림자의 확장 정도
-                                        offset: const Offset(0, 3), // 그림자의 위치
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: MyThemeColors.myGreyscale.shade100,
+                                      blurRadius: 0.5, // 그림자의 흐림 정도
+                                      spreadRadius: 0.5, // 그림자의 확장 정도
+                                      offset: const Offset(0, 3), // 그림자의 위치
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: MyThemeColors.myGreyscale.shade50,
+                                ),
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(15, 13, 15, 13),
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
-                                    child: TextField(
-                                      focusNode: _focusNode,
-                                      onSubmitted: (value) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      onTapOutside: (p) {
-                                        FocusScope.of(context).unfocus();
-                                      },
-                                      onChanged: (value) {},
-                                      readOnly: !editMode,
-                                      controller: diaryTextController,
-                                      style: const TextStyle(fontSize: 16),
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: "Dodam",
-                                          color: MyThemeColors.myGreyscale[300],
+                                    child: Column(
+                                      children: [
+                                        TextField(
+                                          focusNode: _focusNode,
+                                          onSubmitted: (value) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          onTapOutside: (p) {
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                          onChanged: (value) {},
+                                          readOnly: !editMode,
+                                          controller: diaryTextController,
+                                          style: const TextStyle(fontSize: 16),
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: "Dodam",
+                                              color: MyThemeColors
+                                                  .myGreyscale[300],
+                                            ),
+                                          ),
+                                          maxLines: null,
+                                          maxLength: 300,
+                                          keyboardType: TextInputType.multiline,
                                         ),
-                                      ),
-                                      maxLines: null,
-                                      keyboardType: TextInputType.multiline,
+                                      ],
                                     ),
                                   ),
                                 ),

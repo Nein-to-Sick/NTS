@@ -164,7 +164,8 @@ class _MailBoxState extends State<MailBox> {
                                       setState(() {
                                         heart = !heart;
                                       });
-                                      DatabaseService().clickHeart(id, heart, fromUid);
+                                      DatabaseService()
+                                          .clickHeart(id, heart, fromUid);
                                     },
                                     child: heart
                                         ? const HeroIcon(
@@ -220,6 +221,7 @@ class _MailBoxState extends State<MailBox> {
                         showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
+                          barrierColor: Colors.transparent,
                           builder: (BuildContext context) => Letter(
                             controller: widget.controller,
                             userName: widget.userName,
