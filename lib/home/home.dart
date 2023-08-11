@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 setState(() {
                                   speakerOn = !speakerOn;
-                                  if(speakerOn) {
+                                  if (speakerOn) {
                                     widget.player.play();
                                   } else {
                                     widget.player.pause();
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                           GestureDetector(
                             onTap: () {
                               showAnimatedDialog(
-                                barrierColor: Colors.transparent,
+                                  barrierColor: Colors.transparent,
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (BuildContext context) =>
@@ -171,7 +171,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                             onTap: () {
                               showAnimatedDialog(
-                                  barrierColor: Colors.transparent,
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (BuildContext context) => MailBox(
@@ -210,7 +209,6 @@ class _HomePageState extends State<HomePage> {
                                 ? null
                                 : () {
                                     showAnimatedDialog(
-                                      barrierColor: Colors.transparent,
                                       context: context,
                                       barrierDismissible: false,
                                       animationType: DialogTransitionType
