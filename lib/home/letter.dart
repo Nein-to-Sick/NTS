@@ -359,55 +359,57 @@ class _LetterState extends State<Letter> {
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: SizedBox(
                             height: 30,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: Preset().situation[index1].length,
-                              itemBuilder: (BuildContext context, int index2) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isSelected2[index1][index2] =
-                                          !isSelected2[index1][index2];
-                                      if (isSelected2[index1][index2]) {
-                                        count2++;
-                                      } else {
-                                        count2--;
-                                      }
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 9.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: isSelected2[index1][index2]
-                                            ? MyThemeColors.myGreyscale.shade700
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: MyThemeColors
-                                              .myGreyscale.shade700,
-                                        ), // 수정
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            12, 0, 12, 0),
-                                        child: Text(
-                                          Preset().situation[index1][index2],
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            color: isSelected2[index1][index2]
-                                                ? Colors.white
-                                                : MyThemeColors
-                                                    .myGreyscale.shade900,
+                            child: Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: Preset().situation[index1].length,
+                                itemBuilder: (BuildContext context, int index2) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isSelected2[index1][index2] =
+                                            !isSelected2[index1][index2];
+                                        if (isSelected2[index1][index2]) {
+                                          count2++;
+                                        } else {
+                                          count2--;
+                                        }
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 9.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: isSelected2[index1][index2]
+                                              ? MyThemeColors.myGreyscale.shade600
+                                              : Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: MyThemeColors
+                                                .myGreyscale.shade100,
+                                          ), // 수정
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              12, 0, 12, 0),
+                                          child: Text(
+                                            Preset().situation[index1][index2],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color: isSelected2[index1][index2]
+                                                  ? Colors.white
+                                                  : MyThemeColors
+                                                      .myGreyscale.shade600,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         );
@@ -506,55 +508,57 @@ class _LetterState extends State<Letter> {
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: SizedBox(
                             height: 30,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: Preset().emotion[index1].length,
-                              itemBuilder: (BuildContext context, int index2) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isSelected3[index1][index2] =
-                                          !isSelected3[index1][index2];
-                                      if (isSelected3[index1][index2]) {
-                                        count3++;
-                                      } else {
-                                        count3--;
-                                      }
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 9.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: isSelected3[index1][index2]
-                                            ? MyThemeColors.myGreyscale.shade700
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: MyThemeColors
-                                              .myGreyscale.shade700,
-                                        ), // 수정
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            12, 0, 12, 0),
-                                        child: Text(
-                                          Preset().emotion[index1][index2],
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            color: isSelected3[index1][index2]
-                                                ? Colors.white
-                                                : MyThemeColors
-                                                    .myGreyscale.shade900,
+                            child: Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: Preset().emotion[index1].length,
+                                itemBuilder: (BuildContext context, int index2) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isSelected3[index1][index2] =
+                                            !isSelected3[index1][index2];
+                                        if (isSelected3[index1][index2]) {
+                                          count3++;
+                                        } else {
+                                          count3--;
+                                        }
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 9.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: isSelected3[index1][index2]
+                                              ? MyThemeColors.myGreyscale.shade600
+                                              : Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: MyThemeColors
+                                                .myGreyscale.shade100,
+                                          ), // 수정
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              12, 0, 12, 0),
+                                          child: Text(
+                                            Preset().emotion[index1][index2],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color: isSelected3[index1][index2]
+                                                  ? Colors.white
+                                                  : MyThemeColors
+                                                      .myGreyscale.shade600,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         );
