@@ -7,6 +7,7 @@ import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:provider/provider.dart';
+import '../component/help.dart';
 import '../model/user_info_model.dart';
 import 'diary.dart';
 import 'letter.dart';
@@ -51,80 +52,99 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: messageController.newMessage
-                      ? const EdgeInsets.only(top: 17, left: 7)
-                      : const EdgeInsets.only(top: 20),
-                  child: Align(
-                      alignment: Alignment.topRight,
-                      child: GestureDetector(
-                        child: messageController.newMessage
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  const Text(
-                                    "새로운 편지가 도착했어요",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13,
-                                        color: Colors.white),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Stack(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        showAnimatedDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) => const Help(),
+                            animationType:
+                            DialogTransitionType.slideFromBottomFade);
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Opacity(opacity: 0.4,child: HeroIcon(HeroIcons.questionMarkCircle, style: HeroIconStyle.solid,size: 25,)),
+                      ),
+                    ),
+                    Padding(
+                      padding: messageController.newMessage
+                          ? const EdgeInsets.only(top: 17, left: 7)
+                          : const EdgeInsets.only(top: 20),
+                      child: Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                            child: messageController.newMessage
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(3),
-                                        child: const Align(
-                                          alignment: Alignment.topRight,
-                                          child: HeroIcon(
-                                            HeroIcons.envelope,
-                                            color: Colors.white,
-                                            style: HeroIconStyle.solid,
-                                          ),
-                                        ),
+                                      const Text(
+                                        "새로운 편지가 도착했어요",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: Colors.white),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 2, left: 20),
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                color: const Color(0xffFCE181)),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Stack(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.all(3),
+                                            child: const Align(
+                                              alignment: Alignment.topRight,
+                                              child: HeroIcon(
+                                                HeroIcons.envelope,
+                                                color: Colors.white,
+                                                style: HeroIconStyle.solid,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      )
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 2, left: 20),
+                                            child: Align(
+                                              alignment: Alignment.topRight,
+                                              child: Container(
+                                                width: 10,
+                                                height: 10,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(20),
+                                                    color: const Color(0xffFCE181)),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ],
+                                  )
+                                : const Opacity(
+                                    opacity: 0.4,
+                                    child: HeroIcon(
+                                      HeroIcons.envelope,
+                                      color: Colors.white,
+                                      style: HeroIconStyle.solid,
+                                    ),
                                   ),
-                                ],
-                              )
-                            : const Opacity(
-                                opacity: 0.4,
-                                child: HeroIcon(
-                                  HeroIcons.envelope,
-                                  color: Colors.white,
-                                  style: HeroIconStyle.solid,
-                                ),
-                              ),
-                        onTap: () {
-                          showAnimatedDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) => MailBox(
-                                    controller: controller,
-                                    userName: userName,
-                                  ),
-                              animationType:
-                                  DialogTransitionType.slideFromTopFade);
-                          messageController.confirm();
-                        },
-                      )),
+                            onTap: () {
+                              showAnimatedDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) => MailBox(
+                                        controller: controller,
+                                        userName: userName,
+                                      ),
+                                  animationType:
+                                      DialogTransitionType.slideFromTopFade);
+                              messageController.confirm();
+                            },
+                          )),
+                    ),
+                  ],
                 ),
                 ElevatedButton(onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Onboarding(controller: controller)));
