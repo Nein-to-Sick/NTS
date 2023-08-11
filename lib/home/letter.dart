@@ -124,6 +124,8 @@ class _LetterState extends State<Letter> {
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: LinearProgressBar(
+                      dotsInactiveSize: 4,
+                      dotsActiveSize: 4,
                       maxSteps: 4,
                       progressType: LinearProgressBar.progressTypeDots,
                       currentStep: index,
@@ -158,10 +160,10 @@ class _LetterState extends State<Letter> {
 
   _buildPageFirst() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
+      padding: const EdgeInsets.only(bottom: 24.0, top: 50),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
               Expanded(
@@ -178,111 +180,115 @@ class _LetterState extends State<Letter> {
                       height: 6,
                     ),
                     Text(
-                      "받는 이를 정해주세요",
+                      "받는 이를 정해주세요.",
                       style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: MyThemeColors.myGreyscale[600]),
+                          color: MyThemeColors.myGreyscale[400]),
                     ),
-                    const SizedBox(height: 85),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isSelfSelected = !isSelfSelected;
-                          isSomeoneSelected = false;
-                        });
-                      },
-                      child: Container(
-                        width: 84,
-                        height: 85,
-                        decoration: BoxDecoration(
-                          color: isSelfSelected
-                              ? MyThemeColors.myGreyscale.shade700
-                              : Colors.white, // 수정
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: MyThemeColors.myGreyscale.shade700,
-                            width: 1.3,
-                          ),
-                        ),
-                        // 수정
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HeroIcon(
-                              HeroIcons.user,
-                              style: HeroIconStyle.solid,
-                              color: isSelfSelected
-                                  ? Colors.white
-                                  : MyThemeColors.myGreyscale.shade900,
-                              size: 25,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "나",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: isSelfSelected
-                                      ? Colors.white
-                                      : MyThemeColors.myGreyscale.shade900,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isSelfSelected = false;
-                          isSomeoneSelected = !isSomeoneSelected;
-                        });
-                      },
-                      child: Container(
-                        width: 84,
-                        height: 85,
-                        decoration: BoxDecoration(
-                          color: isSomeoneSelected
-                              ? MyThemeColors.myGreyscale.shade700
-                              : Colors.white, // 수정
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: MyThemeColors.myGreyscale.shade700,
-                            width: 1.3,
-                          ),
-                        ),
-                        // 수정
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HeroIcon(
-                              HeroIcons.userGroup,
-                              style: HeroIconStyle.solid,
-                              color: isSomeoneSelected
-                                  ? Colors.white
-                                  : MyThemeColors.myGreyscale.shade900,
-                              size: 25,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "누군가",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: isSomeoneSelected
-                                    ? Colors.white
-                                    : MyThemeColors.myGreyscale.shade900,
-                                fontWeight: FontWeight.w500,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isSelfSelected = !isSelfSelected;
+                                isSomeoneSelected = false;
+                              });
+                            },
+                            child: Container(
+                              width: 84,
+                              height: 85,
+                              decoration: BoxDecoration(
+                                color: isSelfSelected
+                                    ? Colors.black
+                                    : Colors.white, // 수정
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: MyThemeColors.myGreyscale.shade100,
+                                ),
                               ),
-                            )
-                          ],
-                        ),
+                              // 수정
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  HeroIcon(
+                                    HeroIcons.user,
+                                    style: HeroIconStyle.solid,
+                                    color: isSelfSelected
+                                        ? Colors.white
+                                        : MyThemeColors.myGreyscale.shade600,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "나",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: isSelfSelected
+                                            ? Colors.white
+                                            : MyThemeColors.myGreyscale.shade600,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isSelfSelected = false;
+                                isSomeoneSelected = !isSomeoneSelected;
+                              });
+                            },
+                            child: Container(
+                              width: 84,
+                              height: 85,
+                              decoration: BoxDecoration(
+                                color: isSomeoneSelected
+                                    ? Colors.black
+                                    : Colors.white, // 수정
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: MyThemeColors.myGreyscale.shade100,
+                                ),
+                              ),
+                              // 수정
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  HeroIcon(
+                                    HeroIcons.userGroup,
+                                    style: HeroIconStyle.solid,
+                                    color: isSomeoneSelected
+                                        ? Colors.white
+                                        : MyThemeColors.myGreyscale.shade600,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "누군가",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: isSomeoneSelected
+                                          ? Colors.white
+                                          : MyThemeColors.myGreyscale.shade600,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -323,7 +329,7 @@ class _LetterState extends State<Letter> {
 
   _buildPageSecond() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
+      padding: const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
         children: [
           Text(
@@ -341,130 +347,126 @@ class _LetterState extends State<Letter> {
             style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[600]),
+                color: MyThemeColors.myGreyscale[400]),
           ),
-          const SizedBox(height: 30),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: Preset().situation.length,
-                      itemBuilder: (BuildContext context, int index1) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: SizedBox(
-                            height: 30,
-                            child: Center(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: Preset().situation[index1].length,
-                                itemBuilder: (BuildContext context, int index2) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isSelected2[index1][index2] =
-                                            !isSelected2[index1][index2];
-                                        if (isSelected2[index1][index2]) {
-                                          count2++;
-                                        } else {
-                                          count2--;
-                                        }
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 9.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: Preset().situation.length,
+                itemBuilder: (BuildContext context, int index1) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: SizedBox(
+                      height: 30,
+                      child: Center(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: Preset().situation[index1].length,
+                          itemBuilder: (BuildContext context, int index2) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSelected2[index1][index2] =
+                                  !isSelected2[index1][index2];
+                                  if (isSelected2[index1][index2]) {
+                                    count2++;
+                                  } else {
+                                    count2--;
+                                  }
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 9.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: isSelected2[index1][index2]
+                                        ? Colors.black
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: MyThemeColors
+                                          .myGreyscale.shade100,
+                                    ), // 수정
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12, 0, 12, 0),
+                                    child: Center(
+                                      child: Text(
+                                        Preset().situation[index1][index2],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
                                           color: isSelected2[index1][index2]
-                                              ? MyThemeColors.myGreyscale.shade600
-                                              : Colors.white,
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: MyThemeColors
-                                                .myGreyscale.shade100,
-                                          ), // 수정
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              12, 0, 12, 0),
-                                          child: Text(
-                                            Preset().situation[index1][index2],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                              color: isSelected2[index1][index2]
-                                                  ? Colors.white
-                                                  : MyThemeColors
-                                                      .myGreyscale.shade600,
-                                            ),
-                                          ),
+                                              ? Colors.white
+                                              : MyThemeColors
+                                              .myGreyscale.shade600,
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                          flex: 1,
-                          child: GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    color: MyThemeColors.myGreyscale.shade200,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(13.0),
-                                  child: Text(
-                                    "이전",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: MyThemeColors.primaryColor,
-                                        fontSize: 16), //수정
                                   ),
                                 ),
                               ),
-                              onTap: () {
-                                _pageController.previousPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.ease,
-                                );
-                              })),
-                      const SizedBox(
-                        width: 10,
+                            );
+                          },
+                        ),
                       ),
-                      Flexible(
-                          flex: 1,
-                          child: Button(
-                            function: () {
-                              _pageController.nextPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.ease,
-                              );
-                            },
-                            title: '다음',
-                            condition: count2 > 0 ? 'not null' : 'null',
-                          )),
-                    ],
-                  )
-                ],
+                    ),
+                  );
+                },
               ),
             ),
           ),
+          Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: MyThemeColors.myGreyscale.shade200,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(13.0),
+                          child: Text(
+                            "이전",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: MyThemeColors.primaryColor,
+                                fontSize: 16), //수정
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      })),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                  flex: 1,
+                  child: Button(
+                    function: () {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    },
+                    title: '다음',
+                    condition: count2 > 0 ? 'not null' : 'null',
+                  )),
+            ],
+          )
+
         ],
       ),
     );
@@ -472,7 +474,7 @@ class _LetterState extends State<Letter> {
 
   _buildPageThird() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
+      padding: const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
         children: [
           Text(
@@ -490,80 +492,216 @@ class _LetterState extends State<Letter> {
             style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[600]),
+                color: MyThemeColors.myGreyscale[400]),
           ),
-          const SizedBox(height: 30),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: Preset().emotion.length,
-                      itemBuilder: (BuildContext context, int index1) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: SizedBox(
-                            height: 30,
-                            child: Center(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: Preset().emotion[index1].length,
-                                itemBuilder: (BuildContext context, int index2) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isSelected3[index1][index2] =
-                                            !isSelected3[index1][index2];
-                                        if (isSelected3[index1][index2]) {
-                                          count3++;
-                                        } else {
-                                          count3--;
-                                        }
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 9.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: Preset().emotion.length,
+                itemBuilder: (BuildContext context, int index1) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: SizedBox(
+                      height: 30,
+                      child: Center(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: Preset().emotion[index1].length,
+                          itemBuilder: (BuildContext context, int index2) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSelected3[index1][index2] =
+                                  !isSelected3[index1][index2];
+                                  if (isSelected3[index1][index2]) {
+                                    count3++;
+                                  } else {
+                                    count3--;
+                                  }
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 9.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: isSelected3[index1][index2]
+                                        ? Colors.black
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: MyThemeColors
+                                          .myGreyscale.shade100,
+                                    ), // 수정
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12, 0, 12, 0),
+                                    child: Center(
+                                      child: Text(
+                                        Preset().emotion[index1][index2],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
                                           color: isSelected3[index1][index2]
-                                              ? MyThemeColors.myGreyscale.shade600
-                                              : Colors.white,
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: MyThemeColors
-                                                .myGreyscale.shade100,
-                                          ), // 수정
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              12, 0, 12, 0),
-                                          child: Text(
-                                            Preset().emotion[index1][index2],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                              color: isSelected3[index1][index2]
-                                                  ? Colors.white
-                                                  : MyThemeColors
-                                                      .myGreyscale.shade600,
-                                            ),
-                                          ),
+                                              ? Colors.white
+                                              : MyThemeColors
+                                              .myGreyscale.shade600,
                                         ),
                                       ),
                                     ),
-                                  );
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: MyThemeColors.myGreyscale.shade200,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(13.0),
+                          child: Text(
+                            "이전",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: MyThemeColors.primaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700), //수정
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      })),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                  flex: 1,
+                  child: Button(
+                    function: () {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    },
+                    title: '다음',
+                    condition: count3 > 0 ? 'not null' : 'null',
+                  )),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  _buildPageFourth() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0, top: 50),
+      child: Column(
+        children: [
+          Text(
+            "편지 쓰기",
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
+          ),
+          const SizedBox(
+            height: 6,
+          ),
+          Text(
+            "응원/지지/격려하는 글을 써주세요.",
+            style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[400]),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom * 0.4),
+                      child: GestureDetector(
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(_focusNode);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: MyThemeColors.myGreyscale.shade50,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: TextField(
+                                focusNode: _focusNode,
+                                onSubmitted: (value) {
+                                  FocusScope.of(context).unfocus();
                                 },
+                                onTapOutside: (p) {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    contents = value;
+                                  });
+                                },
+                                controller: textEditingController,
+                                style: const TextStyle(fontSize: 16, height: 1.6),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: MyThemeColors.myGreyscale[300],
+                                        fontFamily: "Dodam",
+                                      height: 1.6
+                                    ),
+                                    hintMaxLines: 10,
+                                    hintText:
+                                        "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
                               ),
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     ),
+                  ),
+
+                  const SizedBox(
+                    height: 13,
                   ),
                   Row(
                     children: [
@@ -599,192 +737,87 @@ class _LetterState extends State<Letter> {
                       Flexible(
                           flex: 1,
                           child: Button(
-                            function: () {
-                              _pageController.nextPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.ease,
-                              );
+                            function: () async {
+                              List<String> sit = [];
+                              for (int i = 0; i < Preset().situation.length; i++) {
+                                for (int j = 0; j < Preset().situation[i].length; j++) {
+                                  if (isSelected2[i][j] == true) {
+                                    sit.add(Preset().situation[i][j]);
+                                  }
+                                }
+                              }
+                              List<String> emo = [];
+                              for (int i = 0; i < Preset().emotion.length; i++) {
+                                for (int j = 0; j < Preset().emotion[i].length; j++) {
+                                  if (isSelected3[i][j] == true) {
+                                    emo.add(Preset().emotion[i][j]);
+                                  }
+                                }
+                              }
+
+                              DateTime now = DateTime.now();
+                              String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
+
+                              String? addedDocId;
+                              if (isSelfSelected) {
+                                addedDocId = await DatabaseService().selfMessage(
+                                    textEditingController.text,
+                                    sit,
+                                    emo,
+                                    time,
+                                    widget.userName);
+                              } else {
+                                addedDocId = await DatabaseService().someoneMessage(
+                                  textEditingController.text,
+                                  sit,
+                                  emo,
+                                  widget.userName,
+                                  time,
+                                );
+                              }
+
+                              Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.white,
+                                content: const Text(
+                                  '내 편지를 보냈습니다!',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                duration: const Duration(seconds: 5),
+                                //올라와있는 시간
+                                action: SnackBarAction(
+                                    textColor: MyThemeColors.primaryColor,
+                                    //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                    label: '취소하기',
+                                    //버튼이름
+                                    onPressed: () {
+                                      if (addedDocId != null) {
+                                        if (isSelfSelected) {
+                                          FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(userId)
+                                              .collection('selfMailBox')
+                                              .doc(addedDocId)
+                                              .delete();
+                                        } else {
+                                          FirebaseFirestore.instance
+                                              .collection('everyMail')
+                                              .doc(addedDocId)
+                                              .delete();
+                                        }
+                                      }
+                                    }),
+                              ));
                             },
-                            title: '다음',
-                            condition: count3 > 0 ? 'not null' : 'null',
+                            title: '보내기',
+                            condition: contents.isNotEmpty ? 'not null' : 'null',
                           )),
                     ],
                   )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildPageFourth() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30.0, top: 50),
-      child: Column(
-        children: [
-          Text(
-            "편지 쓰기",
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: MyThemeColors.myGreyscale[900]),
-          ),
-          const SizedBox(
-            height: 6,
-          ),
-          Text(
-            "응원/지지/격려하는 글을 써주세요.",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[600]),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          bottom:
-                              MediaQuery.of(context).viewInsets.bottom * 0.4),
-                      child: GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(_focusNode);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: MyThemeColors.myGreyscale.shade50,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: TextField(
-                                focusNode: _focusNode,
-                                onSubmitted: (value) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onTapOutside: (p) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onChanged: (value) {
-                                  setState(() {
-                                    contents = value;
-                                  });
-                                },
-                                controller: textEditingController,
-                                style: const TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                        fontSize: 16,
-                                        color: MyThemeColors.myGreyscale[300],
-                                        fontFamily: "Dodam"),
-                                    hintMaxLines: 10,
-                                    hintText:
-                                        "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
-                                maxLines: null,
-                                maxLength: 300,
-                                keyboardType: TextInputType.multiline,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(
-                    height: 13,
-                  ),
-
                   //  submmit button
-                  Button(
-                    function: () async {
-                      List<String> sit = [];
-                      for (int i = 0; i < Preset().situation.length; i++) {
-                        for (int j = 0; j < Preset().situation[i].length; j++) {
-                          if (isSelected2[i][j] == true) {
-                            sit.add(Preset().situation[i][j]);
-                          }
-                        }
-                      }
-                      List<String> emo = [];
-                      for (int i = 0; i < Preset().emotion.length; i++) {
-                        for (int j = 0; j < Preset().emotion[i].length; j++) {
-                          if (isSelected3[i][j] == true) {
-                            emo.add(Preset().emotion[i][j]);
-                          }
-                        }
-                      }
 
-                      DateTime now = DateTime.now();
-                      String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
-
-                      String? addedDocId;
-                      if (isSelfSelected) {
-                        addedDocId = await DatabaseService().selfMessage(
-                            textEditingController.text,
-                            sit,
-                            emo,
-                            time,
-                            widget.userName);
-                      } else {
-                        addedDocId = await DatabaseService().someoneMessage(
-                          textEditingController.text,
-                          sit,
-                          emo,
-                          widget.userName,
-                          time,
-                        );
-                      }
-
-                      Navigator.pop(context);
-
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.white,
-                        content: const Text(
-                          '내 편지를 보냈습니다!',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        duration: const Duration(seconds: 5),
-                        //올라와있는 시간
-                        action: SnackBarAction(
-                            textColor: MyThemeColors.primaryColor,
-                            //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                            label: '취소하기',
-                            //버튼이름
-                            onPressed: () {
-                              if (addedDocId != null) {
-                                if (isSelfSelected) {
-                                  FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(userId)
-                                      .collection('selfMailBox')
-                                      .doc(addedDocId)
-                                      .delete();
-                                } else {
-                                  FirebaseFirestore.instance
-                                      .collection('everyMail')
-                                      .doc(addedDocId)
-                                      .delete();
-                                }
-                              }
-                            }),
-                      ));
-                    },
-                    title: '보낸 후 나가기',
-                    condition: contents.isNotEmpty ? 'not null' : 'null',
-                  )
                 ],
               ),
             ),
