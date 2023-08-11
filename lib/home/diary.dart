@@ -100,7 +100,7 @@ class DiaryState extends State<Diary> {
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
+                color: MyThemeColors.myGreyscale[25],
                 borderRadius: BorderRadius.circular(10)),
             width: MediaQuery.of(context).size.width * 0.85,
             height: MediaQuery.of(context).size.height * 0.75,
@@ -263,7 +263,7 @@ class DiaryState extends State<Diary> {
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.white),
+                                color: MyThemeColors.myGreyscale[50]),
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(15, 13, 15, 13),

@@ -59,6 +59,7 @@ dependencies:
   flutter_email_sender: ^6.0.1
   flutter_native_splash: ^2.3.1
   cloud_firestore: ^4.8.4
+  just_audio: ^0.9.34
 
 
 dev_dependencies:
@@ -88,6 +89,8 @@ flutter:
   assets:
     - assets/
     - assets/onboard/
+    - assets/bgm/bgm.mp3
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

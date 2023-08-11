@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
@@ -90,6 +91,14 @@ class Background extends StatefulWidget {
 
 class BackgroundState extends State<Background> {
   bool alert = false;
+  final player = AudioPlayer();
+
+  //간단히 함수로 처리
+  Future playEffectAudio() async {
+    final duration = await player.setAsset("assets/bgm/bgm.mp3");
+    await player.setLoopMode(LoopMode.one);
+    await player.play();
+  }
 
   @override
   void initState() {
@@ -99,6 +108,7 @@ class BackgroundState extends State<Background> {
       alert =
           true; //(await FlutterLocalNotification.requestNotificationPermission())!;
     });
+    playEffectAudio();
     super.initState();
   }
 
@@ -153,7 +163,7 @@ class BackgroundState extends State<Background> {
               SizedBox(
                 width: 1300,
                 child: Image.asset(
-                  'assets/back.png',
+                  'assets/background.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -200,7 +210,7 @@ class BackgroundState extends State<Background> {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         controller.fireFlyOn();
                       });
-                      return const HomePage();
+                      return HomePage(player: player);
                     }
                     //  계정이 존재하고 닉네임이 없는 경우
                     else if (snapshot.data == false) {

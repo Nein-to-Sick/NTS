@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:nts/home/mailBox.dart';
 import 'package:nts/onboarding.dart';
 import 'package:nts/provider/backgroundController.dart';
@@ -13,14 +14,16 @@ import 'diary.dart';
 import 'letter.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.player}) : super(key: key);
 
+  final AudioPlayer player;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   bool _isTextVisible = true;
+  bool speakerOn = true;
 
   void _toggleTextVisibility() {
     setState(() {
@@ -55,18 +58,52 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: (){
-                        showAnimatedDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) => const Help(),
-                            animationType:
-                            DialogTransitionType.slideFromBottomFade);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 20.0),
-                        child: Opacity(opacity: 0.4,child: HeroIcon(HeroIcons.questionMarkCircle, style: HeroIconStyle.solid,size: 25,)),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  speakerOn = !speakerOn;
+                                  if(speakerOn) {
+                                    widget.player.play();
+                                  } else {
+                                    widget.player.pause();
+                                  }
+                                });
+                              },
+                              child: Opacity(
+                                  opacity: 0.4,
+                                  child: HeroIcon(
+                                    speakerOn
+                                        ? HeroIcons.speakerWave
+                                        : HeroIcons.speakerXMark,
+                                    style: HeroIconStyle.solid,
+                                  ))),
+                          SizedBox(
+                            width: 13,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showAnimatedDialog(
+                                barrierColor: Colors.transparent,
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) =>
+                                      const Help(),
+                                  animationType:
+                                      DialogTransitionType.slideFromBottomFade);
+                            },
+                            child: Opacity(
+                                opacity: 0.4,
+                                child: HeroIcon(
+                                  HeroIcons.questionMarkCircle,
+                                  style: HeroIconStyle.solid,
+                                  size: 25,
+                                )),
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
@@ -113,8 +150,10 @@ class _HomePageState extends State<HomePage> {
                                                 height: 10,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(20),
-                                                    color: const Color(0xffFCE181)),
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    color: const Color(
+                                                        0xffFCE181)),
                                               ),
                                             ),
                                           )
@@ -132,6 +171,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                             onTap: () {
                               showAnimatedDialog(
+                                  barrierColor: Colors.transparent,
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (BuildContext context) => MailBox(
@@ -146,9 +186,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Onboarding(controller: controller)));
-                }, child: Text("온보딩")),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Onboarding(controller: controller)));
+                    },
+                    child: Text("온보딩")),
                 Column(
                   children: [
                     AnimatedOpacity(
@@ -164,6 +210,7 @@ class _HomePageState extends State<HomePage> {
                                 ? null
                                 : () {
                                     showAnimatedDialog(
+                                      barrierColor: Colors.transparent,
                                       context: context,
                                       barrierDismissible: false,
                                       animationType: DialogTransitionType
