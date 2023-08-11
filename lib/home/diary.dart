@@ -150,6 +150,22 @@ class DiaryState extends State<Diary> {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
                                   gptModel.whileLoadingDone();
+
+                                  //  ai analyze snackbar
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.white,
+                                      content: Text(
+                                        '일기를 키워드로 정리했어요!',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      duration: Duration(seconds: 5),
+                                    ),
+                                  );
                                 });
                                 updateIsSelectedSituation();
                                 updateIsSelectedEmotion();
@@ -262,8 +278,9 @@ class DiaryState extends State<Diary> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: MyThemeColors.myGreyscale[50]),
+                              borderRadius: BorderRadius.circular(10),
+                              color: MyThemeColors.myGreyscale.shade50,
+                            ),
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(15, 13, 15, 13),

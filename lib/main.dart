@@ -105,8 +105,7 @@ class BackgroundState extends State<Background> {
     // 초기화
     FlutterLocalNotification.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      alert =
-          true; //(await FlutterLocalNotification.requestNotificationPermission())!;
+      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
     });
     playEffectAudio();
     super.initState();
@@ -163,7 +162,7 @@ class BackgroundState extends State<Background> {
               SizedBox(
                 width: 1300,
                 child: Image.asset(
-                  'assets/background.png',
+                  'assets/back2.png',
                   fit: BoxFit.cover,
                 ),
               ),
