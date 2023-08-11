@@ -60,7 +60,7 @@ dependencies:
   flutter_native_splash: ^2.3.1
   cloud_firestore: ^4.8.4
   just_audio: ^0.9.34
-  shared_preferences: ^2.2.0
+
 
 
 dev_dependencies:

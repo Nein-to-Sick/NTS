@@ -215,20 +215,14 @@ class BackgroundState extends State<Background> {
                     else if (snapshot.data == false) {
                       WidgetsBinding.instance.addPostFrameCallback(
                         (_) {
-                          // String printitle = "사용할 닉네임을 정해주세요";
-                          // myNicknameSheet(
-                          //   context,
-                          //   Provider.of<UserInfoValueModel>(context,
-                          //       listen: false),
-                          //       ''
-                          // );
                           NickName().myNicknameSheet(
+                            context,
+                            Provider.of<UserInfoValueModel>(
                               context,
-                              Provider.of<UserInfoValueModel>(
-                                context,
-                                listen: false,
-                              ),
-                              0);
+                              listen: false,
+                            ),
+                            0,
+                          );
                         },
                       );
 
