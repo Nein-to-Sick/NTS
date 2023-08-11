@@ -115,6 +115,7 @@ class _HomePageState extends State<HomePage> {
                           showAnimatedDialog(
                               context: context,
                               barrierDismissible: false,
+                              barrierColor: Colors.transparent,
                               builder: (BuildContext context) => MailBox(
                                     controller: controller,
                                     userName: userName,
@@ -206,6 +207,7 @@ class _HomePageState extends State<HomePage> {
                                     showAnimatedDialog(
                                       context: context,
                                       barrierDismissible: false,
+                                      barrierColor: Colors.transparent,
                                       animationType: DialogTransitionType
                                           .slideFromBottomFade,
                                       builder: (BuildContext context) {
@@ -256,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                                     showAnimatedDialog(
                                       context: context,
                                       barrierDismissible: false,
+                                      barrierColor: Colors.transparent,
                                       builder: (BuildContext context) => Letter(
                                         controller: controller,
                                         userName: userName,
@@ -285,11 +288,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.08),
+                      padding: const EdgeInsets.only(bottom: 100),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.

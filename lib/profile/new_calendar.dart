@@ -174,7 +174,7 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
           borderRadius: BorderRadius.circular(10),
           barrierDismissible: false,
           value: widget.searchModel.dialogCalendarPickerValue,
-          dialogBackgroundColor: MyThemeColors.myGreyscale.shade50,
+          dialogBackgroundColor: MyThemeColors.whiteColor,
         );
         if (values != null) {
           String temp = '';
@@ -405,7 +405,7 @@ class _CalendarDatePicker2WithActionButtonsCustomState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildCancelButton(Theme.of(context).colorScheme),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
             // if ((widget.config.gapBetweenCalendarAndButtons ?? 0) > 0)
             //   SizedBox(width: widget.config.gapBetweenCalendarAndButtons),
             _buildOkButton(Theme.of(context).colorScheme),

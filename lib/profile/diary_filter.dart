@@ -43,8 +43,9 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-              color: MyThemeColors.myGreyscale.shade50,
-              borderRadius: BorderRadius.circular(10)),
+            color: MyThemeColors.myGreyscale[25],
+            borderRadius: BorderRadius.circular(10),
+          ),
           width: MediaQuery.of(context).size.width * 0.85,
           height: MediaQuery.of(context).size.height * 0.75,
           child: SingleChildScrollView(
@@ -142,81 +143,88 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                           const EdgeInsets.only(bottom: 5.0),
                                       child: SizedBox(
                                         height: 30,
-                                        child: ListView.builder(
-                                          // physics:
-                                          //     const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount:
-                                              Preset().situation[index1].length,
-                                          itemBuilder: (BuildContext context,
-                                              int index2) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  isSelected2[index1][index2] =
-                                                      !isSelected2[index1]
-                                                          [index2];
-                                                  if (isSelected2[index1]
-                                                      [index2]) {
-                                                    countSituation++;
-                                                    widget.searchModel
-                                                        .addSituation(Preset()
-                                                                .situation[
-                                                            index1][index2]);
-                                                  } else {
-                                                    countSituation--;
-                                                    widget.searchModel
-                                                        .removeSituation(
-                                                            Preset().situation[
-                                                                    index1]
-                                                                [index2]);
-                                                  }
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 9.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: isSelected2[index1]
-                                                            [index2]
-                                                        ? MyThemeColors
+                                        child: Center(
+                                          child: ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: Preset()
+                                                .situation[index1]
+                                                .length,
+                                            itemBuilder: (BuildContext context,
+                                                int index2) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    isSelected2[index1]
+                                                            [index2] =
+                                                        !isSelected2[index1]
+                                                            [index2];
+                                                    if (isSelected2[index1]
+                                                        [index2]) {
+                                                      countSituation++;
+                                                      widget.searchModel
+                                                          .addSituation(Preset()
+                                                                  .situation[
+                                                              index1][index2]);
+                                                    } else {
+                                                      countSituation--;
+                                                      widget.searchModel
+                                                          .removeSituation(
+                                                              Preset().situation[
+                                                                      index1]
+                                                                  [index2]);
+                                                    }
+                                                  });
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 9.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: isSelected2[index1]
+                                                              [index2]
+                                                          ? MyThemeColors
+                                                              .myGreyscale
+                                                              .shade700
+                                                          : Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      border: Border.all(
+                                                        color: MyThemeColors
                                                             .myGreyscale
-                                                            .shade700
-                                                        : Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                      color: MyThemeColors
-                                                          .myGreyscale.shade700,
+                                                            .shade700,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(12, 0, 12, 0),
-                                                    child: Text(
-                                                      Preset().situation[index1]
-                                                          [index2],
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        color:
-                                                            isSelected2[index1]
-                                                                    [index2]
-                                                                ? Colors.white
-                                                                : MyThemeColors
-                                                                    .myGreyscale
-                                                                    .shade900,
-                                                        fontWeight:
-                                                            FontWeight.w500,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          12, 0, 12, 0),
+                                                      child: Text(
+                                                        Preset().situation[
+                                                            index1][index2],
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: isSelected2[
+                                                                      index1]
+                                                                  [index2]
+                                                              ? Colors.white
+                                                              : MyThemeColors
+                                                                  .myGreyscale
+                                                                  .shade900,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     );
@@ -255,68 +263,76 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                 padding: const EdgeInsets.only(bottom: 5.0),
                                 child: SizedBox(
                                   height: 30,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: Preset().emotion[index1].length,
-                                    itemBuilder:
-                                        (BuildContext context, int index2) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            isSelected3[index1][index2] =
-                                                !isSelected3[index1][index2];
-                                            if (isSelected3[index1][index2]) {
-                                              countEmotion++;
-                                              widget.searchModel.addEmotion(
-                                                  Preset().emotion[index1]
-                                                      [index2]);
-                                            } else {
-                                              countEmotion--;
-                                              widget.searchModel.removeEmotion(
-                                                  Preset().emotion[index1]
-                                                      [index2]);
-                                            }
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 9.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: isSelected3[index1][index2]
-                                                  ? MyThemeColors
-                                                      .myGreyscale.shade700
-                                                  : Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                color: MyThemeColors
-                                                    .myGreyscale.shade700,
+                                  child: Center(
+                                    child: ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          Preset().emotion[index1].length,
+                                      itemBuilder:
+                                          (BuildContext context, int index2) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isSelected3[index1][index2] =
+                                                  !isSelected3[index1][index2];
+                                              if (isSelected3[index1][index2]) {
+                                                countEmotion++;
+                                                widget.searchModel.addEmotion(
+                                                    Preset().emotion[index1]
+                                                        [index2]);
+                                              } else {
+                                                countEmotion--;
+                                                widget.searchModel
+                                                    .removeEmotion(
+                                                        Preset().emotion[index1]
+                                                            [index2]);
+                                              }
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 9.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: isSelected3[index1]
+                                                        [index2]
+                                                    ? MyThemeColors
+                                                        .myGreyscale.shade700
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                border: Border.all(
+                                                  color: MyThemeColors
+                                                      .myGreyscale.shade700,
+                                                ),
                                               ),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      12, 0, 12, 0),
-                                              child: Text(
-                                                Preset().emotion[index1]
-                                                    [index2],
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: isSelected3[index1]
-                                                          [index2]
-                                                      ? Colors.white
-                                                      : MyThemeColors
-                                                          .myGreyscale.shade900,
-                                                  fontWeight: FontWeight.w500,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                child: Text(
+                                                  Preset().emotion[index1]
+                                                      [index2],
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: isSelected3[index1]
+                                                            [index2]
+                                                        ? Colors.white
+                                                        : MyThemeColors
+                                                            .myGreyscale
+                                                            .shade900,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               );

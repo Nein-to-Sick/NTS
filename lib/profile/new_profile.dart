@@ -146,6 +146,7 @@ class _MyProfilePageState extends State<MyProfilePage>
                                   showAnimatedDialog(
                                     context: context,
                                     barrierDismissible: false,
+                                    barrierColor: Colors.transparent,
                                     animationType: DialogTransitionType
                                         .slideFromBottomFade,
                                     builder: (BuildContext context) {

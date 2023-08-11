@@ -117,7 +117,8 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
             //  time, emotion, situation filter
             final List<DiaryModel> filteredDiaries = diaries
                 .where((diary) =>
-                    diary.title.toLowerCase().contains(searchText) &&
+                    (diary.title.toLowerCase().contains(searchText) ||
+                        diary.content.toLowerCase().contains(searchText)) &&
                     (widget.searchModel.emotionResult.isEmpty ||
                         widget.searchModel.emotionResult.every(
                             (emotion) => diary.emotion.contains(emotion))) &&
@@ -147,6 +148,7 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                                 showAnimatedDialog(
                                   context: context,
                                   barrierDismissible: false,
+                                  barrierColor: Colors.transparent,
                                   animationType:
                                       DialogTransitionType.slideFromBottomFade,
                                   builder: (BuildContext context) {
@@ -252,7 +254,7 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                   ),
                   fillColor: MyThemeColors.myGreyscale[700]?.withOpacity(0.5),
                   filled: true,
-                  hintText: '제목으로 검색',
+                  hintText: '제목 / 내용으로 검색',
                   hintStyle: TextStyle(
                     color: MyThemeColors.myGreyscale[300],
                   ),
@@ -299,6 +301,7 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                         showAnimatedDialog(
                           context: context,
                           barrierDismissible: false,
+                          barrierColor: Colors.transparent,
                           animationType:
                               DialogTransitionType.slideFromBottomFade,
                           builder: (BuildContext context) {

@@ -152,7 +152,7 @@ class BackgroundState extends State<Background> {
               SizedBox(
                 width: 1300,
                 child: Image.asset(
-                  'assets/back.png',
+                  'assets/back2.png',
                   fit: BoxFit.cover,
                 ),
               ),
