@@ -44,36 +44,39 @@ class _MyProfilePageState extends State<MyProfilePage>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     //  temp logout button
-                    IconButton(
-                      onPressed: () {
-                        userInfo.userInfoClear();
-                        FirebaseAuth.instance.signOut();
-                        controller.movePage(0);
-                      },
-                      icon: const Icon(
-                        Icons.logout,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     userInfo.userInfoClear();
+                    //     FirebaseAuth.instance.signOut();
+                    //     controller.movePage(0);
+                    //   },
+                    //   icon: const Icon(
+                    //     Icons.logout,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
 
                     //  setting button
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return ProfileSettings(
-                              provider: controller,
-                              user: userInfo,
-                              alert: false,
-                            );
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.settings,
-                        color: Colors.white,
+                    Opacity(
+                      opacity: 0.4,
+                      child: IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return ProfileSettings(
+                                provider: controller,
+                                user: userInfo,
+                                alert: false,
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],

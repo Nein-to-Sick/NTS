@@ -217,10 +217,11 @@ class DatabaseService {
       'emotion': emotion,
       'date': time,
       'endDate': endDate,
-      'from': "Me",
+      'from': userName,
       'from_uid': userId,
-      'notMatch': true,
-      'heart': false
+      'notMatch': false,
+      'heart': false,
+      'heart_count': 0
     });
     return docRef.id;
   }
