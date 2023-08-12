@@ -63,7 +63,7 @@ class _LetterState extends State<Letter> {
         builder: (context) {
           return dialogWithYesOrNo(
             context,
-            '정말로 나가시는건가요?',
+            '정말로 나가시는 건가요?',
             '나갈시 기존에 쓰고 있었던 글은\n모두 삭제되고 복구가 불가능합니다.',
             '나가기',
             //  on Yes
