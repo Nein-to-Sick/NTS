@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Row(
                         children: [
                           GestureDetector(
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                                   animationType:
                                       DialogTransitionType.slideFromBottomFade);
                             },
-                            child: Opacity(
+                            child: const Opacity(
                                 opacity: 0.4,
                                 child: HeroIcon(
                                   HeroIcons.questionMarkCircle,
