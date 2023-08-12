@@ -95,7 +95,7 @@ class BackgroundState extends State<Background> {
 
   //간단히 함수로 처리
   Future playEffectAudio() async {
-    final duration = await player.setAsset("assets/bgm/bgm.mp3");
+    final duration = await player.setAsset("assets/bgm/bgm1.mp3");
     await player.setLoopMode(LoopMode.one);
     await player.play();
   }

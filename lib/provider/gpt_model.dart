@@ -8,6 +8,7 @@ class GPTModel with ChangeNotifier {
   bool isAnalyzed = false;
   String diaryMainText = '';
   String diaryTitle = '';
+  // bool isLoading = false;
   List<String> situationSummerization = List<String>.empty(growable: true);
   List<String> emotionSummerization = List<String>.empty(growable: true);
 
