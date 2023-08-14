@@ -2,14 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/main.dart';
 import 'package:nts/model/user_info_model.dart';
-import 'package:nts/provider/backgroundController.dart';
-import 'package:provider/provider.dart';
 
 class NickName {
-  void myNicknameSheet(
-      BuildContext context, UserInfoValueModel userInfoProvider, int type) {
+  void myNicknameSheet(BuildContext context,
+      UserInfoValueModel userInfoProvider, int type, dynamic pageController) {
     String printitle = (type == 1) ? "새로운 닉네임을 입력해주세요" : "사용할 닉네임을 정해주세요";
     final userNickNameController = TextEditingController();
     userNickNameController.text = (userInfoProvider.userNickName.isEmpty)
@@ -20,6 +17,7 @@ class NickName {
       context: context,
       isScrollControlled: true,
       isDismissible: (type == 1) ? true : false,
+      barrierColor: Colors.transparent,
       enableDrag: (type == 1) ? true : false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -132,22 +130,13 @@ class NickName {
                             userInfoProvider.userNickNameUpdate(
                                 userNickNameController.text.trim());
 
-                            (type == 1)
-                                ? Navigator.pop(context)
-                                : Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MultiProvider(
-                                        providers: [
-                                          ChangeNotifierProvider(
-                                            create: (context) =>
-                                                BackgroundController(),
-                                          ),
-                                        ],
-                                        child: const MyApp(),
-                                      ),
-                                    ),
-                                    (route) => false);
+                            if (type == 0) {
+                              pageController.animateToPage(4,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.ease);
+                            }
+
+                            Navigator.pop(context);
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -190,7 +179,6 @@ class NickName {
     await userCollection.doc(userId).update(
       {
         "nickname": newNickName,
-        "nicknameMade": true,
       },
     );
   }

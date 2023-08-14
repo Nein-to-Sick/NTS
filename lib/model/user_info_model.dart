@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 class UserInfoValueModel with ChangeNotifier {
-  // user info data
   String userNickName = '';
-  //  whether the nickname entered in the first place
   String userEmail = '';
   bool isValueEntered = false;
-  //  whether the diary exist
   bool isDiaryExist = false;
 
   void userNickNameUpdate(value) {
@@ -18,11 +15,12 @@ class UserInfoValueModel with ChangeNotifier {
     userNickName = '';
     userEmail = '';
     isValueEntered = false;
+    isDiaryExist = false;
     notifyListeners();
   }
 
   void userEmailUpdate(value) {
-    userNickName = value;
+    userEmail = value;
     notifyListeners();
   }
 

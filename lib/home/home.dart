@@ -3,7 +3,6 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/onboarding.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/gpt_model.dart';
@@ -197,15 +196,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Onboarding(controller: controller)));
-                    },
-                    child: Text("온보딩")),
                 Column(
                   children: [
                     AnimatedOpacity(
