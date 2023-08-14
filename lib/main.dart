@@ -202,6 +202,7 @@ class BackgroundState extends State<Background> {
                       print(controller.fireFly);
                       return const MyFireFlyProgressbar(
                         loadingText: '로그인하는 중...',
+                        textColor: MyThemeColors.whiteColor,
                       );
                     }
                     //  계정이 존재하고 닉네임이 있는 경우

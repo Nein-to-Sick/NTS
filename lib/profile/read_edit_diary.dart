@@ -109,52 +109,80 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: MyThemeColors.myGreyscale.shade200,
+                                    width: 1,
+                                  ),
                                   boxShadow: [
                                     BoxShadow(
                                       color: MyThemeColors.myGreyscale.shade100,
                                       blurRadius: 0.5, // 그림자의 흐림 정도
-                                      spreadRadius: 0.5, // 그림자의 확장 정도
-                                      offset: const Offset(0, 3), // 그림자의 위치
+                                      spreadRadius: 0.25, // 그림자의 확장 정도
+                                      offset: const Offset(0, 1), // 그림자의 위치
                                     ),
                                   ],
                                   borderRadius: BorderRadius.circular(10),
                                   color: MyThemeColors.myGreyscale.shade50,
                                 ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          focusNode: _focusNode,
-                                          onSubmitted: (value) {
-                                            FocusScope.of(context).unfocus();
-                                          },
-                                          onTapOutside: (p) {
-                                            FocusScope.of(context).unfocus();
-                                          },
-                                          onChanged: (value) {},
-                                          readOnly: !editMode,
-                                          controller: diaryTextController,
-                                          style: const TextStyle(fontSize: 16),
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintStyle: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: "Dodam",
-                                              color: MyThemeColors
-                                                  .myGreyscale[300],
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 13, 15, 13),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Column(
+                                          children: [
+                                            TextField(
+                                              focusNode: _focusNode,
+                                              onSubmitted: (value) {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                              },
+                                              onTapOutside: (p) {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                              },
+                                              onChanged: (value) {},
+                                              readOnly: !editMode,
+                                              controller: diaryTextController,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                              decoration: InputDecoration(
+                                                counterText: "",
+                                                border: InputBorder.none,
+                                                hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Dodam",
+                                                  color: MyThemeColors
+                                                      .myGreyscale[300],
+                                                ),
+                                              ),
+                                              maxLines: null,
+                                              maxLength: 300,
+                                              keyboardType:
+                                                  TextInputType.multiline,
                                             ),
-                                          ),
-                                          maxLines: null,
-                                          maxLength: 300,
-                                          keyboardType: TextInputType.multiline,
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Text(
+                                          "${diaryTextController.text.length}/300",
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                            color:
+                                                MyThemeColors.myGreyscale[200],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
