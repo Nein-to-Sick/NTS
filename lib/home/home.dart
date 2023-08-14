@@ -98,9 +98,9 @@ class _HomePageState extends State<HomePage> {
                           GestureDetector(
                             onTap: () {
                               showAnimatedDialog(
-                                  barrierColor: Colors.transparent,
                                   context: context,
                                   barrierDismissible: false,
+                                  barrierColor: Colors.transparent,
                                   builder: (BuildContext context) =>
                                       const Help(),
                                   animationType:
@@ -184,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                               showAnimatedDialog(
                                   context: context,
                                   barrierDismissible: false,
+                                  barrierColor: Colors.transparent,
                                   builder: (BuildContext context) => MailBox(
                                         controller: controller,
                                         userName: userName,
@@ -222,6 +223,7 @@ class _HomePageState extends State<HomePage> {
                                     showAnimatedDialog(
                                       context: context,
                                       barrierDismissible: false,
+                                      barrierColor: Colors.transparent,
                                       animationType: DialogTransitionType
                                           .slideFromBottomFade,
                                       builder: (BuildContext context) {
@@ -263,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(
-                            height: 11,
+                            height: 15,
                           ),
                           GestureDetector(
                             onTap: _isTextVisible
@@ -305,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.08),
+                      padding: const EdgeInsets.only(bottom: 100),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.
@@ -313,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                             Duration(milliseconds: _isTextVisible ? 2000 : 300),
                         // 애니메이션 지속 시간 설정
                         child: Text(
-                          "화면 탭하여 글쓰기",
+                          "화면을 탭하여 글쓰기",
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,

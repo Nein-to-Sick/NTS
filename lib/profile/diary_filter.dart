@@ -110,7 +110,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                         ),
 
                         const SizedBox(
-                          height: 50,
+                          height: 55,
                         ),
 
                         //  situation
@@ -124,119 +124,101 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                           ),
                         ),
 
+                        const SizedBox(
+                          height: 15,
+                        ),
+
                         //  situation keyword selection
-                        Row(
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: SizedBox(
-                                height: 220,
-                                width: MediaQuery.of(context).size.width,
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: Preset().situation.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index1) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 5.0),
-                                      child: SizedBox(
-                                        height: 30,
-                                        child: Center(
-                                          child: ListView.builder(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: Preset()
-                                                .situation[index1]
-                                                .length,
-                                            itemBuilder: (BuildContext context,
-                                                int index2) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    isSelected2[index1]
-                                                            [index2] =
-                                                        !isSelected2[index1]
-                                                            [index2];
-                                                    if (isSelected2[index1]
-                                                        [index2]) {
-                                                      countSituation++;
-                                                      widget.searchModel
-                                                          .addSituation(Preset()
-                                                                  .situation[
-                                                              index1][index2]);
-                                                    } else {
-                                                      countSituation--;
-                                                      widget.searchModel
-                                                          .removeSituation(
-                                                              Preset().situation[
-                                                                      index1]
-                                                                  [index2]);
-                                                    }
-                                                  });
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 9.0),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: isSelected2[index1]
-                                                              [index2]
-                                                          ? MyThemeColors
-                                                              .myGreyscale
-                                                              .shade700
-                                                          : Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      border: Border.all(
-                                                        color: MyThemeColors
+                        SizedBox(
+                          height: 40.0 * Preset().situation.length - 10,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            itemCount: Preset().situation.length,
+                            itemBuilder: (BuildContext context, int index1) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: SizedBox(
+                                  height: 30,
+                                  child: ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        Preset().situation[index1].length,
+                                    itemBuilder:
+                                        (BuildContext context, int index2) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isSelected2[index1][index2] =
+                                                !isSelected2[index1][index2];
+                                            if (isSelected2[index1][index2]) {
+                                              countSituation++;
+                                              widget.searchModel.addSituation(
+                                                  Preset().situation[index1]
+                                                      [index2]);
+                                            } else {
+                                              countSituation--;
+                                              widget.searchModel
+                                                  .removeSituation(
+                                                      Preset().situation[index1]
+                                                          [index2]);
+                                            }
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 9.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: isSelected2[index1][index2]
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: MyThemeColors
+                                                    .myGreyscale.shade100,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      12, 0, 12, 0),
+                                              child: Center(
+                                                child: Text(
+                                                  Preset().situation[index1]
+                                                      [index2],
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: isSelected2[index1]
+                                                            [index2]
+                                                        ? Colors.white
+                                                        : MyThemeColors
                                                             .myGreyscale
-                                                            .shade700,
-                                                      ),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(
-                                                          12, 0, 12, 0),
-                                                      child: Text(
-                                                        Preset().situation[
-                                                            index1][index2],
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: isSelected2[
-                                                                      index1]
-                                                                  [index2]
-                                                              ? Colors.white
-                                                              : MyThemeColors
-                                                                  .myGreyscale
-                                                                  .shade900,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                    ),
+                                                            .shade600,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
-                                              );
-                                            },
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              );
+                            },
+                          ),
                         ),
 
                         const SizedBox(
-                          height: 40,
+                          height: 55,
                         ),
 
                         //  emotion
@@ -250,89 +232,90 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                           ),
                         ),
 
+                        const SizedBox(
+                          height: 15,
+                        ),
+
                         //  emotion keyword selection
                         SizedBox(
-                          height: 200,
-                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: 40.0 * Preset().emotion.length + 10,
+                          width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
+                            padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: Preset().emotion.length,
                             itemBuilder: (BuildContext context, int index1) {
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 5.0),
+                                padding: const EdgeInsets.only(bottom: 10.0),
                                 child: SizedBox(
                                   height: 30,
-                                  child: Center(
-                                    child: ListView.builder(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          Preset().emotion[index1].length,
-                                      itemBuilder:
-                                          (BuildContext context, int index2) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              isSelected3[index1][index2] =
-                                                  !isSelected3[index1][index2];
-                                              if (isSelected3[index1][index2]) {
-                                                countEmotion++;
-                                                widget.searchModel.addEmotion(
-                                                    Preset().emotion[index1]
-                                                        [index2]);
-                                              } else {
-                                                countEmotion--;
-                                                widget.searchModel
-                                                    .removeEmotion(
-                                                        Preset().emotion[index1]
-                                                            [index2]);
-                                              }
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 9.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: isSelected3[index1]
-                                                        [index2]
-                                                    ? MyThemeColors
-                                                        .myGreyscale.shade700
-                                                    : Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                border: Border.all(
-                                                  color: MyThemeColors
-                                                      .myGreyscale.shade700,
-                                                ),
+                                  child: ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: Preset().emotion[index1].length,
+                                    itemBuilder:
+                                        (BuildContext context, int index2) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isSelected3[index1][index2] =
+                                                !isSelected3[index1][index2];
+                                            if (isSelected3[index1][index2]) {
+                                              countEmotion++;
+                                              widget.searchModel.addEmotion(
+                                                  Preset().emotion[index1]
+                                                      [index2]);
+                                            } else {
+                                              countEmotion--;
+                                              widget.searchModel.removeEmotion(
+                                                  Preset().emotion[index1]
+                                                      [index2]);
+                                            }
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 9.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: isSelected3[index1][index2]
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: MyThemeColors
+                                                    .myGreyscale.shade100,
                                               ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        12, 0, 12, 0),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      12, 0, 12, 0),
+                                              child: Center(
                                                 child: Text(
                                                   Preset().emotion[index1]
                                                       [index2],
                                                   style: TextStyle(
-                                                    fontSize: 16,
+                                                    fontSize: 14,
                                                     color: isSelected3[index1]
                                                             [index2]
                                                         ? Colors.white
                                                         : MyThemeColors
                                                             .myGreyscale
-                                                            .shade900,
+                                                            .shade600,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               );
@@ -341,7 +324,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                         ),
 
                         const SizedBox(
-                          height: 30,
+                          height: 55,
                         ),
 
                         //  clear and search button

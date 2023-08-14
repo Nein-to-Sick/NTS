@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:nts/Theme/theme_colors.dart';
@@ -38,6 +37,7 @@ class _MyProfilePageState extends State<MyProfilePage>
         if (details.primaryVelocity != null &&
             details.primaryVelocity! > minDragVelocity) {
           controller.movePage(600);
+          controller.changeColor(2);
         }
       },
       child: Scaffold(
@@ -119,7 +119,9 @@ class _MyProfilePageState extends State<MyProfilePage>
 
                 //  search page or none page
                 (userInfo.isDiaryExist)
-                    ? Expanded(
+                    ?
+                    //  search page
+                    Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: MyProfileSearchPage(
@@ -127,7 +129,9 @@ class _MyProfilePageState extends State<MyProfilePage>
                           ),
                         ),
                       )
-                    : Expanded(
+                    :
+                    //  no result page
+                    Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Container(
@@ -175,7 +179,8 @@ class _MyProfilePageState extends State<MyProfilePage>
                                           ],
                                           child: Diary(
                                             controller: controller,
-                                            messageController: messageController,
+                                            messageController:
+                                                messageController,
                                             userInfo: userInfo,
                                           ),
                                         );
@@ -198,7 +203,7 @@ class _MyProfilePageState extends State<MyProfilePage>
 
                 //  consider bottom toggle button position
                 const SizedBox(
-                  height: 120,
+                  height: 90,
                 ),
               ],
             ),

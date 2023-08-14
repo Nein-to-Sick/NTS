@@ -108,7 +108,9 @@ class MyFireFlyProgressbarAndDotPainter extends CustomPainter {
 
 class MyFireFlyProgressbar extends StatefulWidget {
   final String loadingText;
-  const MyFireFlyProgressbar({super.key, required this.loadingText});
+  final Color textColor;
+  const MyFireFlyProgressbar(
+      {super.key, required this.loadingText, required this.textColor});
 
   @override
   MyFireFlyProgressbarState createState() => MyFireFlyProgressbarState();
@@ -170,8 +172,8 @@ class MyFireFlyProgressbarState extends State<MyFireFlyProgressbar>
           ),
           Text(
             widget.loadingText,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: widget.textColor,
               fontWeight: FontWeight.bold,
               fontSize: 17,
             ),
