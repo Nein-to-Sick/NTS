@@ -90,7 +90,7 @@ flutter:
   assets:
     - assets/
     - assets/onboard/
-    - assets/bgm/bgm.mp3
+    - assets/bgm/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

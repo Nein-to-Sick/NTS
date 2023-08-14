@@ -26,14 +26,18 @@ class _HomePageState extends State<HomePage> {
   bool speakerOn = true;
 
   void _toggleTextVisibility() {
-    setState(() {
-      _isTextVisible = false;
-    });
-    Future.delayed(const Duration(seconds: 3), () {
+    if (mounted) {
       setState(() {
-        _isTextVisible = true;
+        _isTextVisible = false;
       });
-    });
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          setState(() {
+            _isTextVisible = true;
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -50,6 +54,13 @@ class _HomePageState extends State<HomePage> {
           onTap: () {
             _toggleTextVisibility(); // Add this line
           },
+          onHorizontalDragEnd: (details) {
+            if (details.primaryVelocity!.isNegative) {
+              // 오른쪽에서 왼쪽으로 드래그
+              controller.movePage(855);
+              controller.changeColor(3);
+            }
+          },
           child: Container(
             color: Colors.transparent,
             child: Column(
@@ -59,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Row(
                         children: [
                           GestureDetector(
@@ -95,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                                   animationType:
                                       DialogTransitionType.slideFromBottomFade);
                             },
-                            child: Opacity(
+                            child: const Opacity(
                                 opacity: 0.4,
                                 child: HeroIcon(
                                   HeroIcons.questionMarkCircle,
@@ -294,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 100),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.08),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.

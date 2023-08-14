@@ -22,6 +22,8 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage>
     with AutomaticKeepAliveClientMixin {
+  final double minDragVelocity = 0.3;
+
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
@@ -30,164 +32,176 @@ class _MyProfilePageState extends State<MyProfilePage>
     final messageController = Provider.of<MessageController>(context);
 
     super.build(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    //  temp logout button
-                    IconButton(
-                      onPressed: () {
-                        userInfo.userInfoClear();
-                        FirebaseAuth.instance.signOut();
-                        controller.movePage(0);
-                      },
-                      icon: const Icon(
-                        Icons.logout,
-                        color: Colors.white,
-                      ),
-                    ),
+    return GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails details) {
+        // 왼쪽에서 오른쪽으로 드래그했는지 확인합니다.
+        if (details.primaryVelocity != null &&
+            details.primaryVelocity! > minDragVelocity) {
+          controller.movePage(600);
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      //  temp logout button
+                      // IconButton(
+                      //   onPressed: () {
+                      //     userInfo.userInfoClear();
+                      //     FirebaseAuth.instance.signOut();
+                      //     controller.movePage(0);
+                      //   },
+                      //   icon: const Icon(
+                      //     Icons.logout,
+                      //     color: Colors.white,
+                      //   ),
+                      // ),
 
-                    //  setting button
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return ProfileSettings(
-                              provider: controller,
-                              user: userInfo,
-                              alert: false,
+                      //  setting button
+                      Opacity(
+                        opacity: 0.4,
+                        child: IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return ProfileSettings(
+                                  provider: controller,
+                                  user: userInfo,
+                                  alert: false,
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 30,
-                    ),
-
-                    //  title
-                    Text(
-                      "${userInfo.userNickName}님의 일기",
-                      style: const TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontFamily: "Dodam"),
-                    ),
-
-                    const SizedBox(
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-
-              //  search page or none page
-              (userInfo.isDiaryExist)
-                  ? Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: MyProfileSearchPage(
-                          searchModel: searchModel,
+                          icon: const Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    )
-                  : Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Container(
-                          height: double.maxFinite,
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                            color: MyThemeColors.myGreyscale[700]
-                                ?.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 30,
+                      ),
+
+                      //  title
+                      Text(
+                        "${userInfo.userNickName}님의 일기",
+                        style: const TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontFamily: "Dodam"),
+                      ),
+
+                      const SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  ),
+                ),
+
+                //  search page or none page
+                (userInfo.isDiaryExist)
+                    ? Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: MyProfileSearchPage(
+                            searchModel: searchModel,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '일기 보관함이 비어있습니다.',
-                                style: TextStyle(
-                                  color: MyThemeColors.myGreyscale[400],
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              //  when try to write diary
-                              GestureDetector(
-                                onTap: () {
-                                  controller.movePage(600);
-                                  controller.changeColor(2);
-                                  showAnimatedDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    barrierColor: Colors.transparent,
-                                    animationType: DialogTransitionType
-                                        .slideFromBottomFade,
-                                    builder: (BuildContext context) {
-                                      return MultiProvider(
-                                        providers: [
-                                          ChangeNotifierProvider(
-                                            create: (context) => GPTModel(),
-                                          ),
-                                          ChangeNotifierProvider(
-                                            create: (context) =>
-                                                BackgroundController(),
-                                          ),
-                                        ],
-                                        child: Diary(
-                                          controller: controller,
-                                          messageController: messageController,
-                                          userInfo: userInfo,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: const Text(
-                                  '일기 쓰러가기',
+                        ),
+                      )
+                    : Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Container(
+                            height: double.maxFinite,
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              color: MyThemeColors.myGreyscale[700]
+                                  ?.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '일기 보관함이 비어있습니다.',
                                   style: TextStyle(
-                                    color: MyThemeColors.secondaryColor,
+                                    color: MyThemeColors.myGreyscale[400],
                                     fontSize: 16,
                                   ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                //  when try to write diary
+                                GestureDetector(
+                                  onTap: () {
+                                    controller.movePage(600);
+                                    controller.changeColor(2);
+                                    showAnimatedDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      barrierColor: Colors.transparent,
+                                      animationType: DialogTransitionType
+                                          .slideFromBottomFade,
+                                      builder: (BuildContext context) {
+                                        return MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider(
+                                              create: (context) => GPTModel(),
+                                            ),
+                                            ChangeNotifierProvider(
+                                              create: (context) =>
+                                                  BackgroundController(),
+                                            ),
+                                          ],
+                                          child: Diary(
+                                            controller: controller,
+                                            messageController: messageController,
+                                            userInfo: userInfo,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Text(
+                                    '일기 쓰러가기',
+                                    style: TextStyle(
+                                      color: MyThemeColors.secondaryColor,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-              //  consider bottom toggle button position
-              const SizedBox(
-                height: 120,
-              ),
-            ],
+                //  consider bottom toggle button position
+                const SizedBox(
+                  height: 120,
+                ),
+              ],
+            ),
           ),
         ),
       ),

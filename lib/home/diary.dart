@@ -71,7 +71,7 @@ class DiaryState extends State<Diary> {
         builder: (context) {
           return dialogWithYesOrNo(
             context,
-            '정말로 나가시는건가요?',
+            '정말로 나가시는 건가요?',
             '나갈시 기존에 쓰고 있었던 글은\n모두 삭제되고 복구가 불가능합니다.',
             '나가기',
             //  on Yes
@@ -189,7 +189,7 @@ class DiaryState extends State<Diary> {
                     });
                   },
                 ),
-                Padding(
+                !gptModel.isOnLoading ? Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Align(
                     alignment: Alignment.topCenter,
@@ -204,7 +204,7 @@ class DiaryState extends State<Diary> {
                       dotsSpacing: const EdgeInsets.only(right: 8),
                     ),
                   ),
-                ),
+                ) : Container(),
 
                 // 로딩 중에는 버튼 비활성화
                 (gptModel.isOnLoading)
@@ -429,12 +429,32 @@ class DiaryState extends State<Diary> {
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  isSelected2[index1][index2] =
-                                  !isSelected2[index1][index2];
-                                  if (isSelected2[index1][index2]) {
-                                    count2++;
+                                  if (Preset().situation[index1][index2].contains("상황 없음")) {
+                                    for (int i = 0; i < Preset().situation.length; i++) {
+                                      for (int j = 0; j < Preset().situation[i].length; j++) {
+                                        if (i != index1 || j != index2) {
+                                          isSelected2[i][j] = false;
+                                        }
+                                      }
+                                    }
                                   } else {
-                                    count2--;
+                                    // 다른 키워드가 선택되면 '상황 없음'을 해제합니다.
+                                    for (int i = 0; i < Preset().situation.length; i++) {
+                                      for (int j = 0; j < Preset().situation[i].length; j++) {
+                                        if (Preset().situation[i][j].contains("상황 없음")) {
+                                          isSelected2[i][j] = false;
+                                        }
+                                      }
+                                    }
+                                  }
+                                  isSelected2[index1][index2] = !isSelected2[index1][index2];
+                                  count2=0;
+                                  for (int i = 0; i < Preset().situation.length; i++) {
+                                    for (int j = 0; j < Preset().situation[i].length; j++) {
+                                      if (isSelected2[i][j] == true) {
+                                        count2++;
+                                      }
+                                    }
                                   }
                                 });
                               },
