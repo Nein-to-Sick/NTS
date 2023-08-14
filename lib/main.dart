@@ -10,7 +10,6 @@ import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
-import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/component/notification.dart';
 import 'package:nts/home/home_page_list_builder.dart';
 import 'package:nts/loading/loading_page.dart';
@@ -23,7 +22,6 @@ import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
