@@ -189,22 +189,24 @@ class DiaryState extends State<Diary> {
                     });
                   },
                 ),
-                !gptModel.isOnLoading ? Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: LinearProgressBar(
-                      dotsInactiveSize: 4,
-                      dotsActiveSize: 4,
-                      maxSteps: 3,
-                      progressType: LinearProgressBar.progressTypeDots,
-                      currentStep: index,
-                      progressColor: MyThemeColors.primaryColor,
-                      backgroundColor: MyThemeColors.myGreyscale.shade100,
-                      dotsSpacing: const EdgeInsets.only(right: 8),
-                    ),
-                  ),
-                ) : Container(),
+                !gptModel.isOnLoading
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: LinearProgressBar(
+                            dotsInactiveSize: 4,
+                            dotsActiveSize: 4,
+                            maxSteps: 3,
+                            progressType: LinearProgressBar.progressTypeDots,
+                            currentStep: index,
+                            progressColor: MyThemeColors.primaryColor,
+                            backgroundColor: MyThemeColors.myGreyscale.shade100,
+                            dotsSpacing: const EdgeInsets.only(right: 8),
+                          ),
+                        ),
+                      )
+                    : Container(),
 
                 // 로딩 중에는 버튼 비활성화
                 (gptModel.isOnLoading)
@@ -274,20 +276,21 @@ class DiaryState extends State<Diary> {
                         padding: EdgeInsets.only(
                             bottom:
                                 MediaQuery.of(context).viewInsets.bottom * 0.4),
-                        child: GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(_focusNode);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: MyThemeColors.myGreyscale.shade50,
-                            ),
-                            child: Stack(
-                              children: [
-                                Padding(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: MyThemeColors.myGreyscale.shade50,
+                          ),
+                          child: Stack(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(_focusNode);
+                                },
+                                child: Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(15, 5, 15,0),
+                                      const EdgeInsets.fromLTRB(15, 5, 15, 60),
                                   child: Padding(
                                     //  아래 padding으로 대체시 텍스트 필드만 밀림
                                     padding: const EdgeInsets.all(0),
@@ -335,22 +338,64 @@ class DiaryState extends State<Diary> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text(
-                                      "${contents.length}/300",
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
-                                          color:
-                                              MyThemeColors.myGreyscale[200]),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(7)),
+                                        color: Colors.white),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.height *
+                                              0.014),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  "(날짜) ${DateFormat("yyyy년 MM월 dd일 HH시").format(DateTime.now())}",
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: MyThemeColors
+                                                          .myGreyscale[200])),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: Text(
+                                                    "${contents.length}/300",
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: MyThemeColors
+                                                            .myGreyscale[200]),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
@@ -385,7 +430,8 @@ class DiaryState extends State<Diary> {
 
   _buildPageSecond() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
+      padding:
+          const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
         children: [
           Text(
@@ -409,7 +455,8 @@ class DiaryState extends State<Diary> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.08),
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -424,14 +471,19 @@ class DiaryState extends State<Diary> {
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: Preset().situation[index1].length,
-                          itemBuilder:
-                              (BuildContext context, int index2) {
+                          itemBuilder: (BuildContext context, int index2) {
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  if (Preset().situation[index1][index2].contains("상황 없음")) {
-                                    for (int i = 0; i < Preset().situation.length; i++) {
-                                      for (int j = 0; j < Preset().situation[i].length; j++) {
+                                  if (Preset()
+                                      .situation[index1][index2]
+                                      .contains("상황 없음")) {
+                                    for (int i = 0;
+                                        i < Preset().situation.length;
+                                        i++) {
+                                      for (int j = 0;
+                                          j < Preset().situation[i].length;
+                                          j++) {
                                         if (i != index1 || j != index2) {
                                           isSelected2[i][j] = false;
                                         }
@@ -439,18 +491,29 @@ class DiaryState extends State<Diary> {
                                     }
                                   } else {
                                     // 다른 키워드가 선택되면 '상황 없음'을 해제합니다.
-                                    for (int i = 0; i < Preset().situation.length; i++) {
-                                      for (int j = 0; j < Preset().situation[i].length; j++) {
-                                        if (Preset().situation[i][j].contains("상황 없음")) {
+                                    for (int i = 0;
+                                        i < Preset().situation.length;
+                                        i++) {
+                                      for (int j = 0;
+                                          j < Preset().situation[i].length;
+                                          j++) {
+                                        if (Preset()
+                                            .situation[i][j]
+                                            .contains("상황 없음")) {
                                           isSelected2[i][j] = false;
                                         }
                                       }
                                     }
                                   }
-                                  isSelected2[index1][index2] = !isSelected2[index1][index2];
-                                  count2=0;
-                                  for (int i = 0; i < Preset().situation.length; i++) {
-                                    for (int j = 0; j < Preset().situation[i].length; j++) {
+                                  isSelected2[index1][index2] =
+                                      !isSelected2[index1][index2];
+                                  count2 = 0;
+                                  for (int i = 0;
+                                      i < Preset().situation.length;
+                                      i++) {
+                                    for (int j = 0;
+                                        j < Preset().situation[i].length;
+                                        j++) {
                                       if (isSelected2[i][j] == true) {
                                         count2++;
                                       }
@@ -459,23 +522,20 @@ class DiaryState extends State<Diary> {
                                 });
                               },
                               child: Padding(
-                                padding:
-                                const EdgeInsets.only(right: 9.0),
+                                padding: const EdgeInsets.only(right: 9.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected2[index1][index2]
                                         ? Colors.black
                                         : Colors.white,
-                                    borderRadius:
-                                    BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors
-                                          .myGreyscale.shade100,
+                                      color: MyThemeColors.myGreyscale.shade100,
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12, 0, 12, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
                                     child: Center(
                                       child: Text(
                                         Preset().situation[index1][index2],
@@ -484,7 +544,7 @@ class DiaryState extends State<Diary> {
                                           color: isSelected2[index1][index2]
                                               ? Colors.white
                                               : MyThemeColors
-                                              .myGreyscale.shade600,
+                                                  .myGreyscale.shade600,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -510,8 +570,7 @@ class DiaryState extends State<Diary> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            color: MyThemeColors
-                                .myGreyscale.shade200, // 수정
+                            color: MyThemeColors.myGreyscale.shade200, // 수정
                             borderRadius: BorderRadius.circular(10)),
                         child: const Padding(
                           padding: EdgeInsets.all(13.0),
@@ -557,7 +616,8 @@ class DiaryState extends State<Diary> {
     final gptModel = Provider.of<GPTModel>(context, listen: false);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
+      padding:
+          const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
         children: [
           Text(
@@ -580,7 +640,8 @@ class DiaryState extends State<Diary> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.08),
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -595,13 +656,12 @@ class DiaryState extends State<Diary> {
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: Preset().emotion[index1].length,
-                          itemBuilder:
-                              (BuildContext context, int index2) {
+                          itemBuilder: (BuildContext context, int index2) {
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
                                   isSelected3[index1][index2] =
-                                  !isSelected3[index1][index2];
+                                      !isSelected3[index1][index2];
                                   if (isSelected3[index1][index2]) {
                                     count3++;
                                   } else {
@@ -610,33 +670,29 @@ class DiaryState extends State<Diary> {
                                 });
                               },
                               child: Padding(
-                                padding:
-                                const EdgeInsets.only(right: 9.0),
+                                padding: const EdgeInsets.only(right: 9.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected3[index1][index2]
                                         ? Colors.black
                                         : Colors.white,
-                                    borderRadius:
-                                    BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors
-                                          .myGreyscale.shade100,
+                                      color: MyThemeColors.myGreyscale.shade100,
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12, 0, 12, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
                                     child: Center(
                                       child: Text(
                                         Preset().emotion[index1][index2],
                                         style: TextStyle(
                                             fontSize: 16,
-                                            color: isSelected3[index1]
-                                            [index2]
+                                            color: isSelected3[index1][index2]
                                                 ? Colors.white
                                                 : MyThemeColors
-                                                .myGreyscale.shade600,
+                                                    .myGreyscale.shade600,
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ),
@@ -692,12 +748,8 @@ class DiaryState extends State<Diary> {
                 child: Button(
                   function: () {
                     List<String> sit = [];
-                    for (int i = 0;
-                    i < Preset().situation.length;
-                    i++) {
-                      for (int j = 0;
-                      j < Preset().situation[i].length;
-                      j++) {
+                    for (int i = 0; i < Preset().situation.length; i++) {
+                      for (int j = 0; j < Preset().situation[i].length; j++) {
                         if (isSelected2[i][j] == true) {
                           sit.add(Preset().situation[i][j]);
                         }
@@ -705,9 +757,7 @@ class DiaryState extends State<Diary> {
                     }
                     List<String> emo = [];
                     for (int i = 0; i < Preset().emotion.length; i++) {
-                      for (int j = 0;
-                      j < Preset().emotion[i].length;
-                      j++) {
+                      for (int j = 0; j < Preset().emotion[i].length; j++) {
                         if (isSelected3[i][j] == true) {
                           emo.add(Preset().emotion[i][j]);
                         }
@@ -715,8 +765,7 @@ class DiaryState extends State<Diary> {
                     }
 
                     DateTime now = DateTime.now();
-                    String time =
-                    DateFormat('yyyy/MM/dd HH:mm').format(now);
+                    String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
 
                     //  diray firebase upload
                     DatabaseService().writeDiary(

@@ -13,10 +13,10 @@ import '../model/preset.dart';
 class Letter extends StatefulWidget {
   const Letter(
       {Key? key,
-        required this.controller,
-        required this.userName,
-        this.situation = const [], // 수정
-        this.emotion = const []}) // 수정
+      required this.controller,
+      required this.userName,
+      this.situation = const [], // 수정
+      this.emotion = const []}) // 수정
       : super(key: key);
   final controller;
   final userName;
@@ -47,22 +47,23 @@ class _LetterState extends State<Letter> {
     isSelected2 = List.generate(
         Preset().situation.length,
         (i) => List.generate(Preset().situation[i].length, (j) {
-          if(widget.situation.contains(Preset().situation[i][j])){
-            count2++;
-            return true;
-          } else {
-            return false;
-          }
+              if (widget.situation.contains(Preset().situation[i][j])) {
+                count2++;
+                return true;
+              } else {
+                return false;
+              }
             }));
-    isSelected3 = List.generate(Preset().emotion.length,
+    isSelected3 = List.generate(
+        Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) {
-          if(widget.emotion.contains(Preset().emotion[i][j])){
-            count3++;
-            return true;
-          } else {
-            return false;
-          }
-        }));
+              if (widget.emotion.contains(Preset().emotion[i][j])) {
+                count3++;
+                return true;
+              } else {
+                return false;
+              }
+            }));
     _pageController = PageController(initialPage: 0);
     if (widget.situation.isNotEmpty) {}
   }
@@ -711,52 +712,127 @@ class _LetterState extends State<Letter> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          bottom:
-                              MediaQuery.of(context).viewInsets.bottom * 0.4),
-                      child: GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(_focusNode);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: MyThemeColors.myGreyscale.shade50,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: TextField(
-                                focusNode: _focusNode,
-                                onSubmitted: (value) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onTapOutside: (p) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onChanged: (value) {
-                                  setState(() {
-                                    contents = value;
-                                  });
-                                },
-                                controller: textEditingController,
-                                style:
-                                    const TextStyle(fontSize: 16, height: 1.6),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                        fontSize: 16,
-                                        color: MyThemeColors.myGreyscale[300],
-                                        fontFamily: "Dodam",
-                                        height: 1.6),
-                                    hintMaxLines: 10,
-                                    hintText:
-                                        "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
+                          bottom: MediaQuery.of(context)
+                                  .viewInsets
+                                  .bottom *
+                              0.4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: MyThemeColors.myGreyscale.shade50,
+                        ),
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context)
+                                    .requestFocus(_focusNode);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    15, 13, 15, 80),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: TextField(
+                                    focusNode: _focusNode,
+                                    onSubmitted: (value) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    onTapOutside: (p) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    onChanged: (value) {
+                                      setState(() {
+                                        contents = value;
+                                      });
+                                    },
+                                    controller: textEditingController,
+                                    style: const TextStyle(
+                                        fontSize: 16, height: 1.6),
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: MyThemeColors
+                                                .myGreyscale[300],
+                                            fontFamily: "Dodam",
+                                            height: 1.6),
+                                        hintMaxLines: 10,
+                                        hintText:
+                                            "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                                    maxLines: null,
+                                    keyboardType: TextInputType.multiline,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(7)),
+                                      color: Colors.white
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.02),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        isSelfSelected
+                                            ? Text("(보내는 이) 나", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),)
+                                            : Text("(보내는 이) 누군가", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                        const SizedBox(height: 2,),
+                                        Row(
+                                          children: [
+                                            Text("(상황) ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                            Text(
+                                              Preset()
+                                                  .situation
+                                                  .asMap()
+                                                  .entries
+                                                  .expand((entry) => entry.value
+                                                  .asMap()
+                                                  .entries
+                                                  .where((subEntry) =>
+                                              isSelected2[entry.key]
+                                              [subEntry.key]))
+                                                  .map((subEntry) => subEntry.value)
+                                                  .toList()
+                                                  .join(', '), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),// 콤마로 키워드를 구분합니다.
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 2,),
+                                        Row(
+                                          children: [
+                                            Text("(감정) ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                            Text(
+                                              Preset()
+                                                  .emotion
+                                                  .asMap()
+                                                  .entries
+                                                  .expand((entry) => entry.value
+                                                  .asMap()
+                                                  .entries
+                                                  .where((subEntry) =>
+                                              isSelected3[entry.key]
+                                              [subEntry.key]))
+                                                  .map((subEntry) => subEntry.value)
+                                                  .toList()
+                                                  .join(', '), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]), // 콤마로 키워드를 구분합니다.
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
