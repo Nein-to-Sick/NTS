@@ -19,8 +19,7 @@ class MyProfilePage extends StatefulWidget {
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
-class _MyProfilePageState extends State<MyProfilePage>
-    with AutomaticKeepAliveClientMixin {
+class _MyProfilePageState extends State<MyProfilePage> {
   final double minDragVelocity = 0.3;
 
   @override
@@ -30,7 +29,6 @@ class _MyProfilePageState extends State<MyProfilePage>
     final searchModel = Provider.of<ProfileSearchModel>(context);
     final messageController = Provider.of<MessageController>(context);
 
-    super.build(context);
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
         // 왼쪽에서 오른쪽으로 드래그했는지 확인합니다.
@@ -53,19 +51,6 @@ class _MyProfilePageState extends State<MyProfilePage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      //  temp logout button
-                      // IconButton(
-                      //   onPressed: () {
-                      //     userInfo.userInfoClear();
-                      //     FirebaseAuth.instance.signOut();
-                      //     controller.movePage(0);
-                      //   },
-                      //   icon: const Icon(
-                      //     Icons.logout,
-                      //     color: Colors.white,
-                      //   ),
-                      // ),
-
                       //  setting button
                       Opacity(
                         opacity: 0.4,
@@ -105,9 +90,10 @@ class _MyProfilePageState extends State<MyProfilePage>
                       Text(
                         "${userInfo.userNickName}님의 일기",
                         style: const TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontFamily: "Dodam"),
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontFamily: "Dodam",
+                        ),
                       ),
 
                       const SizedBox(
@@ -212,7 +198,4 @@ class _MyProfilePageState extends State<MyProfilePage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

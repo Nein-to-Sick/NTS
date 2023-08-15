@@ -12,6 +12,7 @@ class NickName {
     userNickNameController.text = (userInfoProvider.userNickName.isEmpty)
         ? ""
         : userInfoProvider.userNickName;
+    int nickNameLength = userNickNameController.text.length;
 
     showModalBottomSheet(
       context: context,
@@ -66,6 +67,20 @@ class NickName {
                   const SizedBox(
                     height: 35,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 50, bottom: 5),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        "$nickNameLength/12",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[200],
+                        ),
+                      ),
+                    ),
+                  ),
                   //  nickname textfield
                   Padding(
                     padding: const EdgeInsets.only(left: 45, right: 45),
@@ -76,10 +91,12 @@ class NickName {
                         keyboardType: TextInputType.multiline,
                         autocorrect: false,
                         maxLength: 12,
+
                         //  enter(엔터) 키 이벤트 처리 with onSubmitted
                         textInputAction: TextInputAction.go,
 
                         onChanged: (value) {
+                          nickNameLength = userNickNameController.text.length;
                           if (userNickNameController.text.trim().isNotEmpty) {
                             userInfoProvider.valueUpdate();
                           } else {
@@ -94,11 +111,12 @@ class NickName {
                         },
 
                         decoration: InputDecoration(
+                          counterText: "",
                           contentPadding: const EdgeInsets.only(
                               left: 15, right: 15, top: 10, bottom: 10),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: MyThemeColors.myGreyscale.shade600,
+                              color: MyThemeColors.myGreyscale.shade200,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -113,12 +131,13 @@ class NickName {
                           filled: true,
                           hintText: '최대 12글자',
                           hintStyle: TextStyle(
-                            color: MyThemeColors.myGreyscale.shade600,
+                            color: MyThemeColors.myGreyscale.shade200,
                           ),
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(
                     height: 10,
                   ),

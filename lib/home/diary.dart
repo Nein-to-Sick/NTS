@@ -553,17 +553,18 @@ class DiaryState extends State<Diary> {
                 width: 10,
               ),
               Flexible(
-                  flex: 1,
-                  child: Button(
-                    function: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease,
-                      );
-                    },
-                    title: '다음',
-                    condition: count2 > 0 ? 'not null' : 'null',
-                  )),
+                flex: 1,
+                child: Button(
+                  function: () {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  title: '다음',
+                  condition: count2 > 0 ? 'not null' : 'null',
+                ),
+              ),
             ],
           )
         ],
