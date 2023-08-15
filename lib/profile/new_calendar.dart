@@ -170,11 +170,12 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
         final values = await showCalendarDatePicker2DialogCustom(
           context: context,
           config: config,
-          dialogSize: const Size(325, 350),
+          dialogSize: Size(MediaQuery.of(context).size.width * 0.85, 425),
           borderRadius: BorderRadius.circular(10),
           barrierDismissible: false,
           value: widget.searchModel.dialogCalendarPickerValue,
-          dialogBackgroundColor: MyThemeColors.whiteColor,
+          dialogBackgroundColor: MyThemeColors.myGreyscale[25],
+          // barrierColor: Colors.transparent
         );
         if (values != null) {
           String temp = '';
@@ -204,9 +205,9 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: MyThemeColors.myGreyscale.shade200,
-                  width: 2,
+                  width: 1,
                 ),
-                color: MyThemeColors.whiteColor,
+                color: MyThemeColors.myGreyscale[25],
               ),
               child: Center(
                   child: Text(
@@ -239,9 +240,9 @@ class _MyNewCalendarState extends State<MyNewCalendar> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: MyThemeColors.myGreyscale.shade200,
-                  width: 2,
+                  width: 1,
                 ),
-                color: MyThemeColors.whiteColor,
+                color: MyThemeColors.myGreyscale[25],
               ),
               child: Center(
                 child: Text(
@@ -282,7 +283,7 @@ Future<List<DateTime?>?> showCalendarDatePicker2DialogCustom({
   TransitionBuilder? builder,
 }) {
   var dialog = Dialog(
-    insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+    insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
     backgroundColor: dialogBackgroundColor ?? Theme.of(context).canvasColor,
     shape: RoundedRectangleBorder(
       borderRadius: borderRadius ?? BorderRadius.circular(10),
@@ -389,6 +390,7 @@ class _CalendarDatePicker2WithActionButtonsCustomState
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         MediaQuery.removePadding(
@@ -401,21 +403,30 @@ class _CalendarDatePicker2WithActionButtonsCustomState
           ),
         ),
         //SizedBox(height: widget.config.gapBetweenCalendarAndButtons ?? 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildCancelButton(Theme.of(context).colorScheme),
-            const SizedBox(width: 10),
-            // if ((widget.config.gapBetweenCalendarAndButtons ?? 0) > 0)
-            //   SizedBox(width: widget.config.gapBetweenCalendarAndButtons),
-            _buildOkButton(Theme.of(context).colorScheme),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                flex: 1,
+                child: _buildCancelButton(),
+              ),
+              const SizedBox(width: 10),
+              // if ((widget.config.gapBetweenCalendarAndButtons ?? 0) > 0)
+              //   SizedBox(width: widget.config.gapBetweenCalendarAndButtons),
+              Flexible(
+                flex: 1,
+                child: _buildOkButton(),
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildCancelButton(ColorScheme colorScheme) {
+  Widget _buildCancelButton() {
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: () => setState(() {
@@ -427,14 +438,14 @@ class _CalendarDatePicker2WithActionButtonsCustomState
         }
       }),
       child: Container(
-        width: 90,
-        height: 40,
+        height: 50,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
             color: MyThemeColors.myGreyscale.shade200,
             borderRadius: BorderRadius.circular(10)),
         child: const Center(
           child: Text(
-            "닫기",
+            "취소",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: MyThemeColors.primaryColor,
@@ -447,7 +458,7 @@ class _CalendarDatePicker2WithActionButtonsCustomState
     );
   }
 
-  Widget _buildOkButton(ColorScheme colorScheme) {
+  Widget _buildOkButton() {
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: () => setState(() {
@@ -460,8 +471,8 @@ class _CalendarDatePicker2WithActionButtonsCustomState
         }
       }),
       child: Container(
-        width: 90,
-        height: 40,
+        height: 50,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
             color: MyThemeColors.primaryColor,
             borderRadius: BorderRadius.circular(10)),

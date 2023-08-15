@@ -129,12 +129,14 @@ class DiaryState extends State<Diary> {
                               });
                               return const MyFireFlyProgressbar(
                                 loadingText: '정리 중...',
+                                textColor: MyThemeColors.blackColor,
                               );
                             }
                             //  Future 데이터 가져오기
                             else if (snapshot.data == false) {
                               return const MyFireFlyProgressbar(
                                 loadingText: '정리 중...',
+                                textColor: MyThemeColors.blackColor,
                               );
                             }
                             //  오류 발생 시
@@ -594,17 +596,18 @@ class DiaryState extends State<Diary> {
                 width: 10,
               ),
               Flexible(
-                  flex: 1,
-                  child: Button(
-                    function: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease,
-                      );
-                    },
-                    title: '다음',
-                    condition: count2 > 0 ? 'not null' : 'null',
-                  )),
+                flex: 1,
+                child: Button(
+                  function: () {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  title: '다음',
+                  condition: count2 > 0 ? 'not null' : 'null',
+                ),
+              ),
             ],
           )
         ],

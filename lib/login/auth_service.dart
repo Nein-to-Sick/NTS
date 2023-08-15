@@ -36,7 +36,6 @@ class AuthService {
     } else {
       await docRef.set({
         "nickname": "",
-        "nicknameMade": false,
         "email": userEmail,
         "created_at": FieldValue.serverTimestamp(),
         "green": 0,

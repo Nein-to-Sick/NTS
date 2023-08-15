@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:nts/Theme/theme_colors.dart';
@@ -20,8 +19,7 @@ class MyProfilePage extends StatefulWidget {
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
-class _MyProfilePageState extends State<MyProfilePage>
-    with AutomaticKeepAliveClientMixin {
+class _MyProfilePageState extends State<MyProfilePage> {
   final double minDragVelocity = 0.3;
 
   @override
@@ -31,13 +29,13 @@ class _MyProfilePageState extends State<MyProfilePage>
     final searchModel = Provider.of<ProfileSearchModel>(context);
     final messageController = Provider.of<MessageController>(context);
 
-    super.build(context);
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
         // 왼쪽에서 오른쪽으로 드래그했는지 확인합니다.
         if (details.primaryVelocity != null &&
             details.primaryVelocity! > minDragVelocity) {
           controller.movePage(600);
+          controller.changeColor(2);
         }
       },
       child: Scaffold(
@@ -53,19 +51,6 @@ class _MyProfilePageState extends State<MyProfilePage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      //  temp logout button
-                      // IconButton(
-                      //   onPressed: () {
-                      //     userInfo.userInfoClear();
-                      //     FirebaseAuth.instance.signOut();
-                      //     controller.movePage(0);
-                      //   },
-                      //   icon: const Icon(
-                      //     Icons.logout,
-                      //     color: Colors.white,
-                      //   ),
-                      // ),
-
                       //  setting button
                       Opacity(
                         opacity: 0.4,
@@ -105,9 +90,10 @@ class _MyProfilePageState extends State<MyProfilePage>
                       Text(
                         "${userInfo.userNickName}님의 일기",
                         style: const TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontFamily: "Dodam"),
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontFamily: "Dodam",
+                        ),
                       ),
 
                       const SizedBox(
@@ -119,7 +105,9 @@ class _MyProfilePageState extends State<MyProfilePage>
 
                 //  search page or none page
                 (userInfo.isDiaryExist)
-                    ? Expanded(
+                    ?
+                    //  search page
+                    Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: MyProfileSearchPage(
@@ -127,7 +115,9 @@ class _MyProfilePageState extends State<MyProfilePage>
                           ),
                         ),
                       )
-                    : Expanded(
+                    :
+                    //  no result page
+                    Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Container(
@@ -175,7 +165,8 @@ class _MyProfilePageState extends State<MyProfilePage>
                                           ],
                                           child: Diary(
                                             controller: controller,
-                                            messageController: messageController,
+                                            messageController:
+                                                messageController,
                                             userInfo: userInfo,
                                           ),
                                         );
@@ -198,7 +189,7 @@ class _MyProfilePageState extends State<MyProfilePage>
 
                 //  consider bottom toggle button position
                 const SizedBox(
-                  height: 120,
+                  height: 90,
                 ),
               ],
             ),
@@ -207,7 +198,4 @@ class _MyProfilePageState extends State<MyProfilePage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
