@@ -278,20 +278,21 @@ class DiaryState extends State<Diary> {
                         padding: EdgeInsets.only(
                             bottom:
                                 MediaQuery.of(context).viewInsets.bottom * 0.4),
-                        child: GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(_focusNode);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: MyThemeColors.myGreyscale.shade50,
-                            ),
-                            child: Stack(
-                              children: [
-                                Padding(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: MyThemeColors.myGreyscale.shade50,
+                          ),
+                          child: Stack(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(_focusNode);
+                                },
+                                child: Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                      const EdgeInsets.fromLTRB(15, 5, 15, 60),
                                   child: Padding(
                                     //  아래 padding으로 대체시 텍스트 필드만 밀림
                                     padding: const EdgeInsets.all(0),
@@ -339,22 +340,64 @@ class DiaryState extends State<Diary> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text(
-                                      "${contents.length}/300",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        color: MyThemeColors.myGreyscale[200],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(7)),
+                                        color: Colors.white),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.height *
+                                              0.014),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  "(날짜) ${DateFormat("yyyy년 MM월 dd일 HH시").format(DateTime.now())}",
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: MyThemeColors
+                                                          .myGreyscale[200])),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: Text(
+                                                    "${contents.length}/300",
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: MyThemeColors
+                                                            .myGreyscale[200]),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),

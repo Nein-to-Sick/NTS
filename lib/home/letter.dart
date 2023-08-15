@@ -11,10 +11,17 @@ import '../database/databaseService.dart';
 import '../model/preset.dart';
 
 class Letter extends StatefulWidget {
-  const Letter({Key? key, required this.controller, required this.userName})
+  const Letter(
+      {Key? key,
+      required this.controller,
+      required this.userName,
+      this.situation = const [], // 수정
+      this.emotion = const []}) // 수정
       : super(key: key);
   final controller;
   final userName;
+  final List<dynamic> situation; // 수정
+  final List<dynamic> emotion; // 수정
 
   @override
   State<Letter> createState() => _LetterState();
@@ -37,11 +44,28 @@ class _LetterState extends State<Letter> {
   @override
   void initState() {
     super.initState();
-    isSelected2 = List.generate(Preset().situation.length,
-        (i) => List.generate(Preset().situation[i].length, (j) => false));
-    isSelected3 = List.generate(Preset().emotion.length,
-        (i) => List.generate(Preset().emotion[i].length, (j) => false));
+    isSelected2 = List.generate(
+        Preset().situation.length,
+        (i) => List.generate(Preset().situation[i].length, (j) {
+              if (widget.situation.contains(Preset().situation[i][j])) {
+                count2++;
+                return true;
+              } else {
+                return false;
+              }
+            }));
+    isSelected3 = List.generate(
+        Preset().emotion.length,
+        (i) => List.generate(Preset().emotion[i].length, (j) {
+              if (widget.emotion.contains(Preset().emotion[i][j])) {
+                count3++;
+                return true;
+              } else {
+                return false;
+              }
+            }));
     _pageController = PageController(initialPage: 0);
+    if (widget.situation.isNotEmpty) {}
   }
 
   @override
@@ -230,7 +254,8 @@ class _LetterState extends State<Letter> {
                                         fontSize: 16,
                                         color: isSelfSelected
                                             ? Colors.white
-                                            : MyThemeColors.myGreyscale.shade600,
+                                            : MyThemeColors
+                                                .myGreyscale.shade600,
                                         fontWeight: FontWeight.w500),
                                   )
                                 ],
@@ -329,7 +354,8 @@ class _LetterState extends State<Letter> {
 
   _buildPageSecond() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
+      padding:
+          const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
         children: [
           Text(
@@ -351,7 +377,8 @@ class _LetterState extends State<Letter> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.08),
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -370,9 +397,15 @@ class _LetterState extends State<Letter> {
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  if (Preset().situation[index1][index2].contains("상황 없음")) {
-                                    for (int i = 0; i < Preset().situation.length; i++) {
-                                      for (int j = 0; j < Preset().situation[i].length; j++) {
+                                  if (Preset()
+                                      .situation[index1][index2]
+                                      .contains("상황 없음")) {
+                                    for (int i = 0;
+                                        i < Preset().situation.length;
+                                        i++) {
+                                      for (int j = 0;
+                                          j < Preset().situation[i].length;
+                                          j++) {
                                         if (i != index1 || j != index2) {
                                           isSelected2[i][j] = false;
                                         }
@@ -380,18 +413,29 @@ class _LetterState extends State<Letter> {
                                     }
                                   } else {
                                     // 다른 키워드가 선택되면 '상황 없음'을 해제합니다.
-                                    for (int i = 0; i < Preset().situation.length; i++) {
-                                      for (int j = 0; j < Preset().situation[i].length; j++) {
-                                        if (Preset().situation[i][j].contains("상황 없음")) {
+                                    for (int i = 0;
+                                        i < Preset().situation.length;
+                                        i++) {
+                                      for (int j = 0;
+                                          j < Preset().situation[i].length;
+                                          j++) {
+                                        if (Preset()
+                                            .situation[i][j]
+                                            .contains("상황 없음")) {
                                           isSelected2[i][j] = false;
                                         }
                                       }
                                     }
                                   }
-                                  isSelected2[index1][index2] = !isSelected2[index1][index2];
-                                  count2=0;
-                                  for (int i = 0; i < Preset().situation.length; i++) {
-                                    for (int j = 0; j < Preset().situation[i].length; j++) {
+                                  isSelected2[index1][index2] =
+                                      !isSelected2[index1][index2];
+                                  count2 = 0;
+                                  for (int i = 0;
+                                      i < Preset().situation.length;
+                                      i++) {
+                                    for (int j = 0;
+                                        j < Preset().situation[i].length;
+                                        j++) {
                                       if (isSelected2[i][j] == true) {
                                         count2++;
                                       }
@@ -399,7 +443,6 @@ class _LetterState extends State<Letter> {
                                   }
                                 });
                               },
-
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 9.0),
                                 child: Container(
@@ -409,13 +452,12 @@ class _LetterState extends State<Letter> {
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors
-                                          .myGreyscale.shade100,
+                                      color: MyThemeColors.myGreyscale.shade100,
                                     ), // 수정
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12, 0, 12, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
                                     child: Center(
                                       child: Text(
                                         Preset().situation[index1][index2],
@@ -425,7 +467,7 @@ class _LetterState extends State<Letter> {
                                           color: isSelected2[index1][index2]
                                               ? Colors.white
                                               : MyThemeColors
-                                              .myGreyscale.shade600,
+                                                  .myGreyscale.shade600,
                                         ),
                                       ),
                                     ),
@@ -487,7 +529,6 @@ class _LetterState extends State<Letter> {
                   )),
             ],
           )
-
         ],
       ),
     );
@@ -495,7 +536,8 @@ class _LetterState extends State<Letter> {
 
   _buildPageThird() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
+      padding:
+          const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
         children: [
           Text(
@@ -517,7 +559,8 @@ class _LetterState extends State<Letter> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.08),
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -537,7 +580,7 @@ class _LetterState extends State<Letter> {
                               onTap: () {
                                 setState(() {
                                   isSelected3[index1][index2] =
-                                  !isSelected3[index1][index2];
+                                      !isSelected3[index1][index2];
                                   if (isSelected3[index1][index2]) {
                                     count3++;
                                   } else {
@@ -554,13 +597,12 @@ class _LetterState extends State<Letter> {
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors
-                                          .myGreyscale.shade100,
+                                      color: MyThemeColors.myGreyscale.shade100,
                                     ), // 수정
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12, 0, 12, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
                                     child: Center(
                                       child: Text(
                                         Preset().emotion[index1][index2],
@@ -570,7 +612,7 @@ class _LetterState extends State<Letter> {
                                           color: isSelected3[index1][index2]
                                               ? Colors.white
                                               : MyThemeColors
-                                              .myGreyscale.shade600,
+                                                  .myGreyscale.shade600,
                                         ),
                                       ),
                                     ),
@@ -670,52 +712,127 @@ class _LetterState extends State<Letter> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          bottom:
-                              MediaQuery.of(context).viewInsets.bottom * 0.4),
-                      child: GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(_focusNode);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: MyThemeColors.myGreyscale.shade50,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: TextField(
-                                focusNode: _focusNode,
-                                onSubmitted: (value) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onTapOutside: (p) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onChanged: (value) {
-                                  setState(() {
-                                    contents = value;
-                                  });
-                                },
-                                controller: textEditingController,
-                                style: const TextStyle(fontSize: 16, height: 1.6),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                        fontSize: 16,
-                                        color: MyThemeColors.myGreyscale[300],
-                                        fontFamily: "Dodam",
-                                      height: 1.6
-                                    ),
-                                    hintMaxLines: 10,
-                                    hintText:
-                                        "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
+                          bottom: MediaQuery.of(context)
+                                  .viewInsets
+                                  .bottom *
+                              0.4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: MyThemeColors.myGreyscale.shade50,
+                        ),
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context)
+                                    .requestFocus(_focusNode);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    15, 13, 15, 80),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: TextField(
+                                    focusNode: _focusNode,
+                                    onSubmitted: (value) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    onTapOutside: (p) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    onChanged: (value) {
+                                      setState(() {
+                                        contents = value;
+                                      });
+                                    },
+                                    controller: textEditingController,
+                                    style: const TextStyle(
+                                        fontSize: 16, height: 1.6),
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: MyThemeColors
+                                                .myGreyscale[300],
+                                            fontFamily: "Dodam",
+                                            height: 1.6),
+                                        hintMaxLines: 10,
+                                        hintText:
+                                            "ex. 이 세상에는 네가 믿지 못할만큼 많은 사람들이 너를 응원하고, 네 성공을 진심으로 바라고 있어요. 우리 함께 하면서 한 걸음 한 걸음 더 나아가요. 모든 시련과 어려움을 함께 극복할 수 있어요.\n\n네 곁에 있음에 감사하며, 네 꿈을 위해 늘 응원하겠습니다."),
+                                    maxLines: null,
+                                    keyboardType: TextInputType.multiline,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(7)),
+                                      color: Colors.white
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.02),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        isSelfSelected
+                                            ? Text("(보내는 이) 나", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),)
+                                            : Text("(보내는 이) 누군가", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                        const SizedBox(height: 2,),
+                                        Row(
+                                          children: [
+                                            Text("(상황) ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                            Text(
+                                              Preset()
+                                                  .situation
+                                                  .asMap()
+                                                  .entries
+                                                  .expand((entry) => entry.value
+                                                  .asMap()
+                                                  .entries
+                                                  .where((subEntry) =>
+                                              isSelected2[entry.key]
+                                              [subEntry.key]))
+                                                  .map((subEntry) => subEntry.value)
+                                                  .toList()
+                                                  .join(', '), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),// 콤마로 키워드를 구분합니다.
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 2,),
+                                        Row(
+                                          children: [
+                                            Text("(감정) ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                            Text(
+                                              Preset()
+                                                  .emotion
+                                                  .asMap()
+                                                  .entries
+                                                  .expand((entry) => entry.value
+                                                  .asMap()
+                                                  .entries
+                                                  .where((subEntry) =>
+                                              isSelected3[entry.key]
+                                              [subEntry.key]))
+                                                  .map((subEntry) => subEntry.value)
+                                                  .toList()
+                                                  .join(', '), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]), // 콤마로 키워드를 구분합니다.
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
@@ -760,16 +877,24 @@ class _LetterState extends State<Letter> {
                           child: Button(
                             function: () async {
                               List<String> sit = [];
-                              for (int i = 0; i < Preset().situation.length; i++) {
-                                for (int j = 0; j < Preset().situation[i].length; j++) {
+                              for (int i = 0;
+                                  i < Preset().situation.length;
+                                  i++) {
+                                for (int j = 0;
+                                    j < Preset().situation[i].length;
+                                    j++) {
                                   if (isSelected2[i][j] == true) {
                                     sit.add(Preset().situation[i][j]);
                                   }
                                 }
                               }
                               List<String> emo = [];
-                              for (int i = 0; i < Preset().emotion.length; i++) {
-                                for (int j = 0; j < Preset().emotion[i].length; j++) {
+                              for (int i = 0;
+                                  i < Preset().emotion.length;
+                                  i++) {
+                                for (int j = 0;
+                                    j < Preset().emotion[i].length;
+                                    j++) {
                                   if (isSelected3[i][j] == true) {
                                     emo.add(Preset().emotion[i][j]);
                                   }
@@ -777,18 +902,17 @@ class _LetterState extends State<Letter> {
                               }
 
                               DateTime now = DateTime.now();
-                              String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
+                              String time =
+                                  DateFormat('yyyy/MM/dd HH:mm').format(now);
 
                               String? addedDocId;
                               if (isSelfSelected) {
-                                addedDocId = await DatabaseService().selfMessage(
-                                    textEditingController.text,
-                                    sit,
-                                    emo,
-                                    time,
-                                    widget.userName);
+                                addedDocId = await DatabaseService()
+                                    .selfMessage(textEditingController.text,
+                                        sit, emo, time, widget.userName);
                               } else {
-                                addedDocId = await DatabaseService().someoneMessage(
+                                addedDocId =
+                                    await DatabaseService().someoneMessage(
                                   textEditingController.text,
                                   sit,
                                   emo,
@@ -799,7 +923,8 @@ class _LetterState extends State<Letter> {
 
                               Navigator.pop(context);
 
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: Colors.white,
                                 content: const Text(
@@ -833,12 +958,12 @@ class _LetterState extends State<Letter> {
                               ));
                             },
                             title: '보내기',
-                            condition: contents.isNotEmpty ? 'not null' : 'null',
+                            condition:
+                                contents.isNotEmpty ? 'not null' : 'null',
                           )),
                     ],
                   )
                   //  submmit button
-
                 ],
               ),
             ),

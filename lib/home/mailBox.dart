@@ -32,6 +32,8 @@ class _MailBoxState extends State<MailBox> {
   late bool heart = false;
   late String id = "";
   late String fromUid = "";
+  late List<dynamic> situation = [];
+  late List<dynamic> emotion = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,8 @@ class _MailBoxState extends State<MailBox> {
                     heart = letter.heart;
                     id = letter.id;
                     fromUid = letter.fromUid;
+                    situation = letter.situation;
+                    emotion = letter.emotion;
                   });
                 },
                 child: Card(
@@ -236,6 +240,8 @@ class _MailBoxState extends State<MailBox> {
                           builder: (BuildContext context) => Letter(
                             controller: widget.controller,
                             userName: widget.userName,
+                            situation: situation,
+                            emotion: emotion,
                           ),
                           animationType:
                               DialogTransitionType.slideFromBottomFade,
