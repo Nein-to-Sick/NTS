@@ -90,26 +90,25 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                 searchBarController.text.trim().toLowerCase();
 
             bool getDateCompare(String diaryDateTime) {
-              String startDate = '', endDate = '';
-              if (widget.searchModel.timeResult.isNotEmpty) {
-                //  서로 다른 기간
-                if (widget.searchModel.timeResult[1].compareTo('null') != 0) {
-                  startDate = widget.searchModel.parseFormedTime(
-                      widget.searchModel.timeResult[0], "0:0:0");
-                  endDate = widget.searchModel.parseFormedTime(
-                      widget.searchModel.timeResult[1], "23:59:59");
-                }
-                //  하루만 일때
-                else {
-                  startDate = widget.searchModel.parseFormedTime(
-                      widget.searchModel.timeResult[0], "0:0:0");
-                  endDate = widget.searchModel.parseFormedTime(
-                      widget.searchModel.timeResult[0], "23:59:59");
-                }
+              DateTime startDate, endDate;
+              startDate = endDate = DateTime.now();
+              if (widget.searchModel.timeResult[1].compareTo('null') != 0) {
+                startDate = widget.searchModel.parseFormedTime(
+                    widget.searchModel.timeResult[0], "00:00:00");
+                endDate = widget.searchModel.parseFormedTime(
+                    widget.searchModel.timeResult[1], "23:59:59");
+              } else {
+                startDate = widget.searchModel.parseFormedTime(
+                    widget.searchModel.timeResult[0], "00:00:00");
+                endDate = widget.searchModel.parseFormedTime(
+                    widget.searchModel.timeResult[0], "23:59:59");
               }
 
-              return (diaryDateTime.compareTo(startDate) >= 0 &&
-                  diaryDateTime.compareTo(endDate) <= 0);
+              DateTime diaryDateTimeValue = widget.searchModel.parseFormedTime(
+                  diaryDateTime, '${diaryDateTime.substring(11, 16)}:00');
+
+              return (diaryDateTimeValue.isAfter(startDate) &&
+                  diaryDateTimeValue.isBefore(endDate));
             }
 
             //  time, emotion, situation filter
