@@ -128,6 +128,9 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                   top: 50,
                   child: GestureDetector(
                     onTap: () {
+                      setState(() {
+                        currentPageIndex = 5;
+                      });
                       _pageController.animateToPage(3,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.ease);
