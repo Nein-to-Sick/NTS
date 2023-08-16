@@ -503,7 +503,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     child: Container(
                         margin: const EdgeInsets.only(left: 20),
                         child: Text(
-                          "AI 꺼짐",
+                          "AI정리 사용",
                           style: TextStyle(
                             fontSize: 16,
                             color: widget.gptprovider.isAIUsing

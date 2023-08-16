@@ -14,6 +14,7 @@ class NickName {
         ? ""
         : userInfoProvider.userNickName;
     int nickNameLength = userNickNameController.text.length;
+    final firstNickName = userNickNameController.text;
 
     showModalBottomSheet(
       context: context,
@@ -36,10 +37,12 @@ class NickName {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: MyThemeColors.whiteColor,
-                  borderRadius: BorderRadius.circular(25)),
-              height: 320,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))),
+              height: 330,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -118,7 +121,10 @@ class NickName {
 
                         onChanged: (value) {
                           nickNameLength = userNickNameController.text.length;
-                          if (userNickNameController.text.trim().isNotEmpty) {
+                          if (userNickNameController.text.trim().isNotEmpty &&
+                              (firstNickName
+                                      .compareTo(userNickNameController.text) !=
+                                  0)) {
                             userInfoProvider.valueUpdate();
                           } else {
                             userInfoProvider.valueDeUpdate();
@@ -165,6 +171,7 @@ class NickName {
                   ElevatedButton(
                     onPressed: (userInfoProvider.isValueEntered)
                         ? () async {
+                            userInfoProvider.valueDeUpdate();
                             userNickNameFirebaseUpdate(
                                 context, userNickNameController.text.trim());
                             userInfoProvider.userNickNameUpdate(
@@ -174,6 +181,18 @@ class NickName {
                               pageController.animateToPage(4,
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.ease);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    '닉네임이 변경되었습니다!',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                ),
+                              );
                             }
 
                             Navigator.pop(context);
