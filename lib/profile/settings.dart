@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
@@ -502,7 +503,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           "AI 꺼짐",
                           style: TextStyle(
                             fontSize: 16,
-                            color: widget.gptprovider.using
+                            color: widget.gptprovider.isAIUsing
                                 ? MyThemeColors.blackColor
                                 : MyThemeColors.myGreyscale[200]!,
                           ),
@@ -616,7 +617,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       margin: const EdgeInsets.only(right: 15),
       child: CustomAnimatedToggleSwitch<bool>(
         current: FlutterLocalNotification.hasNotificationPermission,
-        values: [false, true],
+        values: const [false, true],
         dif: 0.0,
         indicatorSize: const Size.square(30.0),
         animationDuration: const Duration(milliseconds: 200),
@@ -697,20 +698,24 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return Container(
       margin: const EdgeInsets.only(right: 15),
       child: CustomAnimatedToggleSwitch<bool>(
-        current: widget.gptprovider.using,
-        values: [false, true],
+        current: widget.gptprovider.isAIUsing,
+        values: const [false, true],
         dif: 0.0,
         indicatorSize: const Size.square(30.0),
         animationDuration: const Duration(milliseconds: 200),
         animationCurve: Curves.linear,
-        onChanged: (b) => setState(() => widget.gptprovider.using = b),
+        onChanged: (b) => setState(() => widget.gptprovider.isAIUsing = b),
         iconBuilder: (context, local, global) {
           return const SizedBox();
         },
         defaultCursor: SystemMouseCursors.click,
-        onTap: () {
-          setState(() => widget.gptprovider.using = !widget.gptprovider.using);
-          print(widget.gptprovider.using);
+        onTap: () async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          widget.gptprovider
+              .updateAIUsingSetting(!widget.gptprovider.isAIUsing);
+
+          //  local variable update
+          prefs.setBool('isAIUsing', widget.gptprovider.isAIUsing);
         },
         iconsTappable: false,
         wrapperBuilder: (context, global, child) {
@@ -723,14 +728,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   height: 20.0,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: widget.gptprovider.using
+                        color: widget.gptprovider.isAIUsing
                             ? MyThemeColors.secondaryColor
                             : MyThemeColors.myGreyscale[50],
                         borderRadius:
                             const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 3.0,
-                          color: widget.gptprovider.using
+                          color: widget.gptprovider.isAIUsing
                               ? MyThemeColors.secondaryColor
                               : MyThemeColors.myGreyscale[200]!,
                         )),
@@ -747,7 +752,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
-                      color: widget.gptprovider.using
+                      color: widget.gptprovider.isAIUsing
                           ? MyThemeColors.blackColor
                           : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,

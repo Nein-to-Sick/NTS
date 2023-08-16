@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -163,7 +164,7 @@ class NickName {
                   ),
                   ElevatedButton(
                     onPressed: (userInfoProvider.isValueEntered)
-                        ? () {
+                        ? () async {
                             userNickNameFirebaseUpdate(
                                 context, userNickNameController.text.trim());
                             userInfoProvider.userNickNameUpdate(
@@ -176,6 +177,12 @@ class NickName {
                             }
 
                             Navigator.pop(context);
+
+                            //  local variable update
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.setString(
+                                'nickname', userInfoProvider.userNickName);
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
