@@ -76,6 +76,11 @@ class _HomePageState extends State<HomePage> {
                           GestureDetector(
                               onTap: () {
                                 messageController.speakerToggle();
+                                if(speaker) {
+                                  widget.player.pause();
+                                } else {
+                                  widget.player.play();
+                                }
                               },
                               child: Opacity(
                                   opacity: 0.4,
