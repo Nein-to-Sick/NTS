@@ -5,64 +5,78 @@ import 'package:provider/provider.dart';
 import '../provider/backgroundController.dart';
 
 class NavigationToggle extends StatelessWidget {
-  const NavigationToggle({Key? key}) : super(key: key);
+
+
+  const NavigationToggle({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final double boxScale;
+
     final controller = Provider.of<BackgroundController>(context);
     final int page = controller.page;
 
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    if (screenHeight <= 667) { //iPhone8
+      boxScale = 0.8;
+    } else if (screenHeight <= 852) { //iPhone14 Pro
+      boxScale = 1.0;
+    } else {
+      boxScale = 1.2;
+    }
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.01),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(50)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.movePage(600);
-                        controller.changeColor(2);
-                      },
-                      child: HeroIcon(
-                        HeroIcons.home,
-                        style: HeroIconStyle.solid,
-                        color: page == 2
-                            ? Colors.white
-                            : MyThemeColors.myGreyscale.shade500,
-                        size: 24,
+            Transform.scale(  // Transformer.scale로 Container 크기 조절
+              scale: boxScale,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(50)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          controller.movePage(600);
+                          controller.changeColor(2);
+                        },
+                        child: HeroIcon(
+                          HeroIcons.home,
+                          style: HeroIconStyle.solid,
+                          color: page == 2
+                              ? Colors.white
+                              : MyThemeColors.myGreyscale.shade500,
+                          size: 24,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 15,),
-                    GestureDetector(
-                      onTap: () {
-                        controller.movePage(855);
-                        controller.changeColor(3);
-                      },
-                      child: HeroIcon(
-                        HeroIcons.user,
-                        style: HeroIconStyle.solid,
-                        color: page == 3
-                            ? Colors.white
-                            : MyThemeColors.myGreyscale.shade500,
-                        size: 24,
-                      ),
-                    )
-                  ],
+                      const SizedBox(width: 15,),
+                      GestureDetector(
+                        onTap: () {
+                          controller.movePage(855);
+                          controller.changeColor(3);
+                        },
+                        child: HeroIcon(
+                          HeroIcons.user,
+                          style: HeroIconStyle.solid,
+                          color: page == 3
+                              ? Colors.white
+                              : MyThemeColors.myGreyscale.shade500,
+                          size: 24,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
             ),
           ],
         ),

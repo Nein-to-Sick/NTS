@@ -237,17 +237,19 @@ class BackgroundState extends State<Background> {
             },
           ),
           controller.fireFly
-              ? AnimatedBuilder(
-                  animation: scrollController,
-                  builder: (context, child) {
-                    if (scrollController.offset == 600 ||
-                        scrollController.offset == 855) {
-                      return const NavigationToggle();
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
+              ? SafeArea(
+                child: AnimatedBuilder(
+                    animation: scrollController,
+                    builder: (context, child) {
+                      if (scrollController.offset == 600 ||
+                          scrollController.offset == 855) {
+                        return const NavigationToggle();
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+              )
               : Container(),
         ],
       ),
