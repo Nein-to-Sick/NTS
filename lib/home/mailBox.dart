@@ -152,12 +152,14 @@ class _MailBoxState extends State<MailBox> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(
-                        content,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: MyThemeColors.myGreyscale[800],
-                            fontFamily: "Dodam"),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          content,
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: MyThemeColors.myGreyscale[800],
+                              fontFamily: "Dodam"),
+                        ),
                       ),
                     ),
                     Align(
