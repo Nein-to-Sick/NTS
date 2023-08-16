@@ -27,7 +27,7 @@ class NavigationToggle extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.01),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.03),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
