@@ -14,8 +14,9 @@ class MessageController with ChangeNotifier {
   }
 
   bool speaker = true;
-  void speakerToggle() {
-    speaker = !speaker;
+
+  void setSpeaker(value) {
+    speaker = value;
     notifyListeners();
   }
 }

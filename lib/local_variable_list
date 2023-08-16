@@ -6,3 +6,5 @@ String email
 Bool diaryExist
 //  whether AI use setting on/off
 Bool isAIUsing
+//  whether background music setting on/off
+Bool speakerSetting

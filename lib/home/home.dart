@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:nts/home/mailBox.dart';
@@ -42,10 +43,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
-    final userName = userInfo.userNickName;
     final messageController = Provider.of<MessageController>(context);
     final gptMdoel = Provider.of<GPTModel>(context);
-    final speaker = messageController.speaker;
 
     return SafeArea(
       child: Padding(
@@ -74,18 +73,23 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         children: [
                           GestureDetector(
-                              onTap: () {
-                                messageController.speakerToggle();
-                                if(speaker) {
-                                  widget.player.pause();
-                                } else {
+                              onTap: () async {
+                                final SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                messageController
+                                    .setSpeaker(!messageController.speaker);
+                                if (messageController.speaker) {
                                   widget.player.play();
+                                } else {
+                                  widget.player.pause();
                                 }
+                                await prefs.setBool('speakerSetting',
+                                    messageController.speaker);
                               },
                               child: Opacity(
                                   opacity: 0.4,
                                   child: HeroIcon(
-                                    speaker
+                                    messageController.speaker
                                         ? HeroIcons.speakerWave
                                         : HeroIcons.speakerXMark,
                                     style: HeroIconStyle.solid,
@@ -185,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                                   barrierColor: Colors.transparent,
                                   builder: (BuildContext context) => MailBox(
                                         controller: controller,
-                                        userName: userName,
+                                        userName: userInfo.userNickName,
                                       ),
                                   animationType:
                                       DialogTransitionType.slideFromTopFade);
@@ -262,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                       barrierColor: Colors.transparent,
                                       builder: (BuildContext context) => Letter(
                                         controller: controller,
-                                        userName: userName,
+                                        userName: userInfo.userNickName,
                                       ),
                                       animationType: DialogTransitionType
                                           .slideFromBottomFade,
@@ -292,7 +296,8 @@ class _HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.095),
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.095),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.
