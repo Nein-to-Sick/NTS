@@ -195,7 +195,7 @@ class BackgroundState extends State<Background> {
                 if (scrollController.offset == 0 ||
                     scrollController.offset == 600 ||
                     scrollController.offset == 855) {
-                  return const FireFly();
+                  return FireFly(userInfoController: userInfo,);
                 } else {
                   return const SizedBox.shrink();
                 }
@@ -289,16 +289,18 @@ Future<int> _getUserDataFromFirebase(
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
     DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
-    int currentYellowValue = userSnapshot["yellow"];
+
+    int currentYellowValue = userInfoModel.currentYellowValue;
+    userInfoModel.updateYellowValue(userSnapshot["yellow"]);
 
     //  max yellow value < 31
     if (currentYellowValue + 1 < 31) {
-      currentYellowValue++;
+      userInfoModel.updateYellowValue(currentYellowValue++);
     }
 
     //  when is the first day of month
     if (now.day == 1) {
-      currentYellowValue = 1;
+      userInfoModel.updateYellowValue(1);
     }
 
     await userCollection.doc(userId).update({
