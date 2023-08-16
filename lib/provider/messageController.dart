@@ -12,4 +12,10 @@ class MessageController with ChangeNotifier {
     newMessage = false;
     notifyListeners();
   }
+
+  bool speaker = true;
+  void speakerToggle() {
+    speaker = !speaker;
+    notifyListeners();
+  }
 }

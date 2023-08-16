@@ -22,7 +22,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isTextVisible = true;
-  bool speakerOn = true;
 
   void _toggleTextVisibility() {
     if (mounted) {
@@ -46,6 +45,7 @@ class _HomePageState extends State<HomePage> {
     final userName = userInfo.userNickName;
     final messageController = Provider.of<MessageController>(context);
     final gptMdoel = Provider.of<GPTModel>(context);
+    final speaker = messageController.speaker;
 
     return SafeArea(
       child: Padding(
@@ -75,24 +75,17 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  speakerOn = !speakerOn;
-                                  if (speakerOn) {
-                                    widget.player.play();
-                                  } else {
-                                    widget.player.pause();
-                                  }
-                                });
+                                messageController.speakerToggle();
                               },
                               child: Opacity(
                                   opacity: 0.4,
                                   child: HeroIcon(
-                                    speakerOn
+                                    speaker
                                         ? HeroIcons.speakerWave
                                         : HeroIcons.speakerXMark,
                                     style: HeroIconStyle.solid,
                                   ))),
-                          SizedBox(
+                          const SizedBox(
                             width: 13,
                           ),
                           GestureDetector(
