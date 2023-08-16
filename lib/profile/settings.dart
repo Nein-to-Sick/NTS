@@ -6,7 +6,10 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
+import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/nickname_sheet.dart';
+import 'package:nts/component/settings_dialog.dart';
+import 'package:nts/component/suggestionsButton.dart';
 import 'package:nts/component/suggestions_button.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
@@ -48,32 +51,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     // final controller = Provider.of<BackgroundController>(context);
-    void _sendEmail() async {
-      final Email email = Email(
-        body: '',
-        subject: '[양파가족 문의]',
-        recipients: ['onionfamily.official@gmail.com'],
-        cc: [],
-        bcc: [],
-        attachmentPaths: [],
-        isHTML: false,
-      );
-
-      try {
-        await FlutterEmailSender.send(email);
-      } catch (error) {
-        String title =
-            "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)\n\nonionfamily.official@gmail.com";
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(title),
-              );
-            });
-      }
-    }
-
     Widget mainSettings = Padding(
       padding: EdgeInsets.fromLTRB(
           MediaQuery.of(context).size.width * 0.045,
@@ -93,7 +70,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.045),
+                  horizontal: MediaQuery.of(context).size.width * 0.02),
               child: Button(
                 function: () {
                   Navigator.pop(context);
@@ -122,7 +99,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.045),
+                  horizontal: MediaQuery.of(context).size.width * 0.02),
               child: Button(
                 function: () {
                   setState(() {
@@ -153,7 +130,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.045),
+                  horizontal: MediaQuery.of(context).size.width * 0.02),
               child: Button(
                 function: () {
                   setState(() {
@@ -184,7 +161,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.045),
+                  horizontal: MediaQuery.of(context).size.width * 0.02),
               child: Button(
                 function: () {
                   setState(() {
@@ -215,7 +192,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.045),
+                  horizontal: MediaQuery.of(context).size.width * 0.02),
               child: Button(
                 function: () {
                   setState(() {
@@ -248,7 +225,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.045),
+                horizontal: MediaQuery.of(context).size.width * 0.02),
             child: Button(
               function: () {
                 setState(() {
@@ -280,7 +257,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.045),
+                horizontal: MediaQuery.of(context).size.width * 0.02),
             child: Button(
               function: () {
                 setState(() {
@@ -295,13 +272,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     );
 
     return Dialog(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: MyThemeColors.myGreyscale[25],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ), //openLicense
       child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.9,
+          height: MediaQuery.of(context).size.height * 0.8,
           child: Stack(
             children: [
               index == 1
@@ -510,6 +487,21 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 alarmButton(),
               ]),
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            //알림설정
+            buildCustomContainer(
+              backgroundColor: Colors.white.withOpacity(0.9),
+              inside: Row(children: [
+                Expanded(
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: const Text(
+                          "AI 꺼짐",
+                          style: TextStyle(fontSize: 16),
+                        ))),
+                alarmButton(),
+              ]),
+            ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             //오픈 라이센스
             buildCustomButton(
@@ -631,14 +623,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           setState(() => FlutterLocalNotification.hasNotificationPermission =
               !FlutterLocalNotification.hasNotificationPermission);
           print(FlutterLocalNotification.hasNotificationPermission);
-          // print(FlutterLocalNotification.hasNotificationPermission);
-          // if (FlutterLocalNotification.hasNotificationPermission) {
-          //   FlutterLocalNotification.showNotification();
-          // }
-          // else {
-          //   FlutterLocalNotification.showNotification();
-          //   print("notification is turned off");
-          // }
+
+          if (FlutterLocalNotification.hasNotificationPermission) {
+            FlutterLocalNotification.showNotification();
+          } else {
+            print("notification is turned off");
+          }
         },
         iconsTappable: false,
         wrapperBuilder: (context, global, child) {
@@ -651,12 +641,18 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   height: 20.0,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: const Color(0xffF2F2F2),
+                        color:
+                            FlutterLocalNotification.hasNotificationPermission
+                                ? Color(0xffFCE181)
+                                : MyThemeColors.myGreyscale[50],
                         borderRadius:
                             const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 3.0,
-                          color: const Color(0xffC6C6C6),
+                          color:
+                              FlutterLocalNotification.hasNotificationPermission
+                                  ? Color(0xffFCE181)
+                                  : MyThemeColors.myGreyscale[200]!,
                         )),
                   )),
               child,
@@ -668,7 +664,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             size: global.indicatorSize,
             child: const DecoratedBox(
               decoration: BoxDecoration(
-                color: Color(0xffC6C6C6),
+                // color: FlutterLocalNotification.hasNotificationPermission
+                //     ? Color(0xffFCE181)
+                //     : MyThemeColors.myGreyscale[50]!,
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
@@ -744,8 +742,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           ),
           Text(
             '건의함',
-            style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(fontSize: 15, color: Colors.black),
           ),
         ],
       ),
@@ -769,9 +766,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         ))),
                 Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.50,
                     child: AutoSizeText(
                       widget.user.userEmail,
+                      textAlign: TextAlign.end,
                       maxLines: 1,
                       style: const TextStyle(
                           fontSize: 16, color: Color(0xff868686)),
@@ -811,14 +809,24 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             //로그아웃
             buildCustomButton(
-              backgroundColor: const Color(0xffFCE181),
+              backgroundColor: MyThemeColors.teritaryColor,
               onTap: () {
-                // controller.movePage(0);
-                widget.user.userInfoClear();
-                FirebaseAuth.instance.signOut();
-                widget.provider.movePage(0);
-                widget.provider.fireFlyOff();
-                Navigator.pop(context);
+                // widget.user.userInfoClear();
+                // FirebaseAuth.instance.signOut();
+                // widget.provider.movePage(0);
+                // widget.provider.fireFlyOff();
+                // Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return SettingDialog(
+                      provider: widget.provider,
+                      user: widget.user,
+                      type: 0,
+                    );
+                  },
+                );
               },
               inside: const Center(
                 child: Text(
@@ -832,13 +840,26 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white,
               onTap: () {
-                widget.user.userInfoClear();
-                DeleteAccount(context, widget.provider);
+                // widget.user.userInfoClear();
+                // DeleteAccount(context, widget.provider);
+
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return SettingDialog(
+                      provider: widget.provider,
+                      user: widget.user,
+                      type: 1,
+                    );
+                  },
+                );
               },
               inside: const Center(
                 child: Text(
                   "계정탈퇴",
-                  style: TextStyle(fontSize: 16, color: Color(0xffFCE181)),
+                  style: TextStyle(
+                      fontSize: 16, color: MyThemeColors.teritaryColor),
                 ),
               ),
             ),
@@ -858,7 +879,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             padding: const EdgeInsets.all(8.0),
             child: ExpansionTile(
               backgroundColor: MyThemeColors.whiteColor,
-              textColor: MyThemeColors.primaryColor,
+              textColor: MyThemeColors.blackColor,
               collapsedBackgroundColor: MyThemeColors.whiteColor,
               collapsedShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
@@ -867,9 +888,15 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               title: Text(ossLicenses[index].name[0].toUpperCase() +
                   ossLicenses[index].name.substring(1)),
               subtitle: Text(ossLicenses[index].description),
+              tilePadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              childrenPadding: EdgeInsets.all(10),
               children: [
                 ListTile(
-                  title: Text(ossLicenses[index].license!),
+                  title: Text(
+                    ossLicenses[index].license!,
+                    style: TextStyle(
+                        fontSize: 12, color: MyThemeColors.myGreyscale[600]),
+                  ),
                 )
               ],
             ),

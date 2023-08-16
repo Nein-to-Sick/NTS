@@ -44,9 +44,26 @@ class NickName {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(
-                    height: 35,
-                  ),
+                  (type == 1)
+                      ? Container(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                  height: 4,
+                                  width: 61.86,
+                                  color: MyThemeColors.myGreyscale[50]),
+                              SizedBox(
+                                height: 32,
+                              ),
+                            ],
+                          ),
+                        )
+                      : SizedBox(
+                          height: 32,
+                        ),
                   Text(
                     printitle,
                     style: const TextStyle(
@@ -64,6 +81,11 @@ class NickName {
                       fontSize: 15,
                     ),
                   ),
+                  IconButton(
+                      onPressed: () {
+                        FirebaseAuth.instance.signOut();
+                      },
+                      icon: Icon(Icons.abc)),
                   const SizedBox(
                     height: 35,
                   ),
@@ -167,7 +189,11 @@ class NickName {
                           ? MyThemeColors.primaryColor
                           : MyThemeColors.myGreyscale.shade100,
                       surfaceTintColor: MyThemeColors.myGreyscale.shade100,
-                      padding: const EdgeInsets.fromLTRB(140, 15, 140, 15),
+                      padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width / 2 - 55,
+                          15,
+                          MediaQuery.of(context).size.width / 2 - 55,
+                          15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
