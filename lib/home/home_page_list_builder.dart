@@ -167,7 +167,10 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
     return Center(
       child: Stack(
         children: [
-          Center(child: Image.asset(imagePath)),
+          Center(
+              child: Container(
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  child: Image.asset(imagePath))),
           Padding(
             padding: const EdgeInsets.only(top: 130.0),
             child: Align(

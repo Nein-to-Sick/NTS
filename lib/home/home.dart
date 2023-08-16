@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final userName = userInfo.userNickName;
     final messageController = Provider.of<MessageController>(context);
+    final gptMdoel = Provider.of<GPTModel>(context);
 
     return SafeArea(
       child: Padding(
@@ -217,21 +218,17 @@ class _HomePageState extends State<HomePage> {
                                       animationType: DialogTransitionType
                                           .slideFromBottomFade,
                                       builder: (BuildContext context) {
-                                        return MultiProvider(
-                                          providers: [
-                                            ChangeNotifierProvider(
-                                              create: (context) => GPTModel(),
+                                        return ChangeNotifierProvider.value(
+                                          value: gptMdoel,
+                                          child: Consumer<GPTModel>(
+                                            builder: (context, model, child) =>
+                                                Diary(
+                                              controller: controller,
+                                              messageController:
+                                                  messageController,
+                                              userInfo: userInfo,
+                                              gptModel: gptMdoel,
                                             ),
-                                            ChangeNotifierProvider(
-                                              create: (context) =>
-                                                  BackgroundController(),
-                                            ),
-                                          ],
-                                          child: Diary(
-                                            controller: controller,
-                                            messageController:
-                                                messageController,
-                                            userInfo: userInfo,
                                           ),
                                         );
                                       },
@@ -297,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.08),
+                      padding: const EdgeInsets.only(bottom: 100),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.
