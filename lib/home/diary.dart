@@ -15,6 +15,7 @@ import '../component/button.dart';
 import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
+  final GPTModel gptModel;
   final BackgroundController controller;
   final MessageController messageController;
   final UserInfoValueModel userInfo;
@@ -24,6 +25,7 @@ class Diary extends StatefulWidget {
     required this.controller,
     required this.messageController,
     required this.userInfo,
+    required this.gptModel,
   });
 
   @override
@@ -63,7 +65,6 @@ class DiaryState extends State<Diary> {
   }
 
   _buildBody(BuildContext context) {
-    final gptModel = Provider.of<GPTModel>(context);
     onBackKeyCall() {
       FocusScope.of(context).unfocus();
       showDialog(
@@ -76,7 +77,7 @@ class DiaryState extends State<Diary> {
             '나가기',
             //  on Yes
             () {
-              gptModel.endAnalyzeDiary();
+              widget.gptModel.endAnalyzeDiary();
               Navigator.pop(context);
               Navigator.pop(context);
             },
@@ -118,14 +119,14 @@ class DiaryState extends State<Diary> {
                         return
                             //  AI analyzation result
                             FutureBuilder<bool>(
-                          future: gptModel.watiFetchDiaryData(),
+                          future: widget.gptModel.watiFetchDiaryData(),
                           builder: (context, snapshot) {
                             //  최초 분석의 경우
                             if (snapshot.connectionState ==
                                     ConnectionState.waiting &&
-                                gptModel.isAnalyzed == false) {
+                                widget.gptModel.isAnalyzed == false) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                gptModel.whileLoadingStart();
+                                widget.gptModel.whileLoadingStart();
                               });
                               return const MyFireFlyProgressbar(
                                 loadingText: '정리 중...',
@@ -142,16 +143,16 @@ class DiaryState extends State<Diary> {
                             //  오류 발생 시
                             else if (snapshot.hasError) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                gptModel.whileLoadingDone();
+                                widget.gptModel.whileLoadingDone();
                               });
                               return _buildPageSecond();
                             }
                             //  분석 완료
                             else {
-                              if (gptModel.isOnLoading) {
+                              if (widget.gptModel.isOnLoading) {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  gptModel.whileLoadingDone();
+                                  widget.gptModel.whileLoadingDone();
 
                                   //  ai analyze snackbar
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -191,7 +192,7 @@ class DiaryState extends State<Diary> {
                     });
                   },
                 ),
-                !gptModel.isOnLoading
+                !widget.gptModel.isOnLoading
                     ? Padding(
                         padding: const EdgeInsets.only(top: 20.0),
                         child: Align(
@@ -211,7 +212,7 @@ class DiaryState extends State<Diary> {
                     : Container(),
 
                 // 로딩 중에는 버튼 비활성화
-                (gptModel.isOnLoading)
+                (widget.gptModel.isOnLoading)
                     ? Container()
                     : GestureDetector(
                         onTap: () {
@@ -240,8 +241,6 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageFirst() {
-    final gptModel = Provider.of<GPTModel>(context, listen: false);
-
     return Padding(
         padding: const EdgeInsets.only(bottom: 24.0, top: 50),
         child: Column(
@@ -313,7 +312,8 @@ class DiaryState extends State<Diary> {
                                           FocusScope.of(context).unfocus();
                                         },
                                         onChanged: (value) {
-                                          gptModel.updateDiaryMainText(value);
+                                          widget.gptModel
+                                              .updateDiaryMainText(value);
                                           setState(() {
                                             contents = value;
                                           });
@@ -416,7 +416,8 @@ class DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Button(
                 function: () {
-                  gptModel.tryAnalyzeDiary(gptModel.diaryMainText.trim());
+                  widget.gptModel
+                      .tryAnalyzeDiary(widget.gptModel.diaryMainText.trim());
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.ease,
@@ -616,8 +617,6 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageThird() {
-    final gptModel = Provider.of<GPTModel>(context, listen: false);
-
     return Padding(
       padding:
           const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
@@ -772,7 +771,7 @@ class DiaryState extends State<Diary> {
 
                     //  diray firebase upload
                     DatabaseService().writeDiary(
-                      gptModel.diaryTitle,
+                      widget.gptModel.diaryTitle,
                       textEditingController.text.trim(),
                       sit,
                       emo,
@@ -805,7 +804,7 @@ class DiaryState extends State<Diary> {
                         ),
                       ),
                     );
-                    gptModel.endAnalyzeDiary();
+                    widget.gptModel.endAnalyzeDiary();
                   },
                   title: '저장',
                   condition: count3 > 0 ? 'not null' : 'null',
@@ -819,8 +818,7 @@ class DiaryState extends State<Diary> {
   }
 
   void updateIsSelectedSituation() {
-    final gptModel = Provider.of<GPTModel>(context, listen: false);
-    for (var value in gptModel.situationSummerization) {
+    for (var value in widget.gptModel.situationSummerization) {
       for (int i = 0; i < Preset().situation.length; i++) {
         if (Preset().situation[i].contains(value)) {
           int indexInInnerList = Preset().situation[i].indexOf(value);
@@ -832,8 +830,7 @@ class DiaryState extends State<Diary> {
   }
 
   void updateIsSelectedEmotion() {
-    final gptModel = Provider.of<GPTModel>(context, listen: false);
-    for (var value in gptModel.emotionSummerization) {
+    for (var value in widget.gptModel.emotionSummerization) {
       for (int i = 0; i < Preset().emotion.length; i++) {
         if (Preset().emotion[i].contains(value)) {
           int indexInInnerList = Preset().emotion[i].indexOf(value);

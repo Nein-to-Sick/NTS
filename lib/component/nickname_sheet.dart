@@ -45,23 +45,21 @@ class NickName {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   (type == 1)
-                      ? Container(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                  height: 4,
-                                  width: 61.86,
-                                  color: MyThemeColors.myGreyscale[50]),
-                              SizedBox(
-                                height: 32,
-                              ),
-                            ],
-                          ),
+                      ? Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                                height: 4,
+                                width: 61.86,
+                                color: MyThemeColors.myGreyscale[50]),
+                            const SizedBox(
+                              height: 32,
+                            ),
+                          ],
                         )
-                      : SizedBox(
+                      : const SizedBox(
                           height: 32,
                         ),
                   Text(
@@ -81,11 +79,11 @@ class NickName {
                       fontSize: 15,
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                      icon: Icon(Icons.abc)),
+                  // IconButton(
+                  //     onPressed: () {
+                  //       FirebaseAuth.instance.signOut();
+                  //     },
+                  //     icon: Icon(Icons.abc)),
                   const SizedBox(
                     height: 35,
                   ),

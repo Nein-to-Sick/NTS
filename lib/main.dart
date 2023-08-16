@@ -19,6 +19,7 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/profile/new_profile.dart';
 import 'package:nts/provider/alertController.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -72,7 +73,12 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (BuildContext context) => MessageController(),
             ),
-            ChangeNotifierProvider(create: (context) => AlertController())
+            ChangeNotifierProvider(
+              create: (context) => AlertController(),
+            ),
+            ChangeNotifierProvider(
+              create: (context) => GPTModel(),
+            ),
           ],
           child: const Background(),
         ),

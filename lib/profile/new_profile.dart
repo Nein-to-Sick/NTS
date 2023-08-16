@@ -28,6 +28,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final searchModel = Provider.of<ProfileSearchModel>(context);
     final messageController = Provider.of<MessageController>(context);
+    final gptModel = Provider.of<GPTModel>(context);
 
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
@@ -153,21 +154,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       animationType: DialogTransitionType
                                           .slideFromBottomFade,
                                       builder: (BuildContext context) {
-                                        return MultiProvider(
-                                          providers: [
-                                            ChangeNotifierProvider(
-                                              create: (context) => GPTModel(),
+                                        return ChangeNotifierProvider.value(
+                                          value: gptModel,
+                                          child: Consumer<GPTModel>(
+                                            builder: (context, model, child) =>
+                                                Diary(
+                                              controller: controller,
+                                              messageController:
+                                                  messageController,
+                                              userInfo: userInfo,
+                                              gptModel: gptModel,
                                             ),
-                                            ChangeNotifierProvider(
-                                              create: (context) =>
-                                                  BackgroundController(),
-                                            ),
-                                          ],
-                                          child: Diary(
-                                            controller: controller,
-                                            messageController:
-                                                messageController,
-                                            userInfo: userInfo,
                                           ),
                                         );
                                       },
