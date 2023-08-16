@@ -38,6 +38,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
 
   @override
   Widget build(BuildContext context) {
+    double maxWidth = MediaQuery.of(context).size.width * 0.85;
+
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -46,7 +48,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
             color: MyThemeColors.myGreyscale[25],
             borderRadius: BorderRadius.circular(10),
           ),
-          width: MediaQuery.of(context).size.width * 0.85,
+          width: maxWidth,
           height: MediaQuery.of(context).size.height * 0.75,
           child: SingleChildScrollView(
             child: Padding(
@@ -138,6 +140,13 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                             scrollDirection: Axis.vertical,
                             itemCount: Preset().situation.length,
                             itemBuilder: (BuildContext context, int index1) {
+                              double sidePadding = 9.0;
+                              double itemExtentValue = (maxWidth -
+                                      30 -
+                                      sidePadding *
+                                          Preset().situation[index1].length) /
+                                  Preset().situation[index1].length;
+
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
                                 child: SizedBox(
@@ -145,7 +154,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                   child: ListView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
+                                    //shrinkWrap: true,
+                                    itemExtent: itemExtentValue,
                                     scrollDirection: Axis.horizontal,
                                     itemCount:
                                         Preset().situation[index1].length,
@@ -171,8 +181,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                           });
                                         },
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 9.0),
+                                          padding: EdgeInsets.only(
+                                              right: sidePadding),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: isSelected2[index1][index2]
@@ -188,13 +198,13 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      12, 0, 12, 0),
+                                                      0, 0, 0, 0),
                                               child: Center(
                                                 child: Text(
                                                   Preset().situation[index1]
                                                       [index2],
                                                   style: TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 12,
                                                     color: isSelected2[index1]
                                                             [index2]
                                                         ? Colors.white

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,7 +45,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xff272D35),
         fontFamily: "SUITE",
         textSelectionTheme: TextSelectionThemeData(
           //  커서 색상 수정
@@ -115,6 +116,16 @@ class BackgroundState extends State<Background> {
     });
     playEffectAudio();
     super.initState();
+
+    //  when android
+    if (Platform.isAndroid) {
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          systemNavigationBarColor: Color(0xff272D35),
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+      );
+    }
   }
 
   @override
@@ -266,6 +277,35 @@ Future<int> _getUserDataFromFirebase(
     MessageController messageModel,
     AudioPlayer player) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  DateTime currentDateTime = DateTime.parse(
+      prefs.getString('LoginedDate') ?? DateTime.now().toString());
+  DateTime now = DateTime.now();
+
+  //  When last login time was not today
+  if (currentDateTime.isBefore(DateTime(now.year, now.month, now.day))) {
+    //  local variable update
+    prefs.setString('LoginedDate', DateTime.now().toString());
+    final userCollection = FirebaseFirestore.instance.collection("users");
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+    DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
+    int currentYellowValue = userSnapshot["yellow"];
+
+    //  max yellow value < 31
+    if (currentYellowValue + 1 < 31) {
+      currentYellowValue++;
+    }
+
+    //  when is the first day of month
+    if (now.day == 1) {
+      currentYellowValue = 1;
+    }
+
+    await userCollection.doc(userId).update({
+      "yellow": currentYellowValue,
+    });
+  }
 
   if (userInfoModel.userNickName.isEmpty) {
     //  local variable initialization
