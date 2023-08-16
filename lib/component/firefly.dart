@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
 
 class FireFly extends StatefulWidget {
-  const FireFly({super.key});
+  const FireFly({super.key, required this.userInfoController});
+
+  final userInfoController;
 
   @override
   FireFlyState createState() => FireFlyState();
 }
 
 class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
-  int fireFlyCount = 30;
+  int fireFlyCount = 1;
   late List<AnimationController> controller = [];
   List<Animation<double>> animation = [];
 
@@ -37,6 +39,7 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    fireFlyCount = widget.userInfoController.currentYellowValue;
     _firestoreDocumentStream =
         _firestore.collection('users').doc(userId).snapshots();
     for (int i = 0; i < fireFlyCount; i++) {

@@ -5,6 +5,7 @@ class UserInfoValueModel with ChangeNotifier {
   String userEmail = '';
   bool isValueEntered = false;
   bool isDiaryExist = false;
+  int currentYellowValue = 1;
 
   void userNickNameUpdate(value) {
     userNickName = value;
@@ -36,6 +37,11 @@ class UserInfoValueModel with ChangeNotifier {
 
   void userDiaryExist(value) {
     isDiaryExist = value;
+    notifyListeners();
+  }
+
+  void updateYellowValue(value) {
+    currentYellowValue = value;
     notifyListeners();
   }
 }
