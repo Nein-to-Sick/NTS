@@ -81,11 +81,11 @@ class NickName {
                       fontSize: 15,
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                      icon: Icon(Icons.abc)),
+                  // IconButton(
+                  //     onPressed: () {
+                  //       FirebaseAuth.instance.signOut();
+                  //     },
+                  //     icon: Icon(Icons.abc)),
                   const SizedBox(
                     height: 35,
                   ),

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 class GPTModel with ChangeNotifier {
   bool isOnLoading = false;
   bool isAnalyzed = false;
+  bool using = true;
   String diaryMainText = '';
   String diaryTitle = '';
   List<String> situationSummerization = List<String>.empty(growable: true);
