@@ -434,6 +434,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageSecond() {
+    double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return Padding(
       padding:
           const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
@@ -467,13 +468,16 @@ class DiaryState extends State<Diary> {
                 scrollDirection: Axis.vertical,
                 itemCount: Preset().situation.length,
                 itemBuilder: (BuildContext context, int index1) {
+                  double itemExtentValue =
+                      (maxWidth - 48) / Preset().situation[index1].length;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: SizedBox(
                       height: 30,
                       child: Center(
                         child: ListView.builder(
-                          shrinkWrap: true,
+                          //shrinkWrap: true,
+                          itemExtent: itemExtentValue,
                           scrollDirection: Axis.horizontal,
                           itemCount: Preset().situation[index1].length,
                           itemBuilder: (BuildContext context, int index2) {
@@ -527,7 +531,7 @@ class DiaryState extends State<Diary> {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 9.0),
+                                padding: const EdgeInsets.only(right: 7.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected2[index1][index2]
@@ -540,17 +544,20 @@ class DiaryState extends State<Diary> {
                                   ),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                        const EdgeInsets.fromLTRB(2, 0, 2, 0),
                                     child: Center(
-                                      child: Text(
-                                        Preset().situation[index1][index2],
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: isSelected2[index1][index2]
-                                              ? Colors.white
-                                              : MyThemeColors
-                                                  .myGreyscale.shade600,
-                                          fontWeight: FontWeight.w500,
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          Preset().situation[index1][index2],
+                                          style: TextStyle(
+                                            //fontSize: 12,
+                                            color: isSelected2[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade600,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -619,6 +626,7 @@ class DiaryState extends State<Diary> {
   }
 
   _buildPageThird() {
+    double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return Padding(
       padding:
           const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
@@ -651,13 +659,16 @@ class DiaryState extends State<Diary> {
                 scrollDirection: Axis.vertical,
                 itemCount: Preset().emotion.length,
                 itemBuilder: (BuildContext context, int index1) {
+                  double itemExtentValue =
+                      (maxWidth - 48) / Preset().emotion[index1].length;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: SizedBox(
                       height: 30,
                       child: Center(
                         child: ListView.builder(
-                          shrinkWrap: true,
+                          //shrinkWrap: true,
+                          itemExtent: itemExtentValue,
                           scrollDirection: Axis.horizontal,
                           itemCount: Preset().emotion[index1].length,
                           itemBuilder: (BuildContext context, int index2) {
@@ -674,7 +685,7 @@ class DiaryState extends State<Diary> {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 9.0),
+                                padding: const EdgeInsets.only(right: 7.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected3[index1][index2]
@@ -687,17 +698,20 @@ class DiaryState extends State<Diary> {
                                   ),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                        const EdgeInsets.fromLTRB(2, 0, 2, 0),
                                     child: Center(
-                                      child: Text(
-                                        Preset().emotion[index1][index2],
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: isSelected3[index1][index2]
-                                                ? Colors.white
-                                                : MyThemeColors
-                                                    .myGreyscale.shade600,
-                                            fontWeight: FontWeight.w500),
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          Preset().emotion[index1][index2],
+                                          style: TextStyle(
+                                              //fontSize: 16,
+                                              color: isSelected3[index1][index2]
+                                                  ? Colors.white
+                                                  : MyThemeColors
+                                                      .myGreyscale.shade600,
+                                              fontWeight: FontWeight.w500),
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -140,11 +140,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                             scrollDirection: Axis.vertical,
                             itemCount: Preset().situation.length,
                             itemBuilder: (BuildContext context, int index1) {
-                              double sidePadding = 9.0;
-                              double itemExtentValue = (maxWidth -
-                                      30 -
-                                      sidePadding *
-                                          Preset().situation[index1].length) /
+                              //  maxWidth = Media.width * 0.85, 60 = horizontal padding
+                              double itemExtentValue = (maxWidth - 60) /
                                   Preset().situation[index1].length;
 
                               return Padding(
@@ -181,8 +178,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                           });
                                         },
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              right: sidePadding),
+                                          padding:
+                                              const EdgeInsets.only(right: 7),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: isSelected2[index1][index2]
@@ -198,20 +195,24 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 0),
+                                                      2, 0, 2, 0),
                                               child: Center(
-                                                child: Text(
-                                                  Preset().situation[index1]
-                                                      [index2],
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: isSelected2[index1]
-                                                            [index2]
-                                                        ? Colors.white
-                                                        : MyThemeColors
-                                                            .myGreyscale
-                                                            .shade600,
-                                                    fontWeight: FontWeight.w500,
+                                                child: FittedBox(
+                                                  fit: BoxFit.fitWidth,
+                                                  child: Text(
+                                                    Preset().situation[index1]
+                                                        [index2],
+                                                    style: TextStyle(
+                                                      //fontSize: 12,
+                                                      color: isSelected2[index1]
+                                                              [index2]
+                                                          ? Colors.white
+                                                          : MyThemeColors
+                                                              .myGreyscale
+                                                              .shade600,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -256,6 +257,10 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                             scrollDirection: Axis.vertical,
                             itemCount: Preset().emotion.length,
                             itemBuilder: (BuildContext context, int index1) {
+                              //  maxWidth = Media.width * 0.85, 60 = horizontal padding
+                              double itemExtentValue = (maxWidth - 60) /
+                                  Preset().emotion[index1].length;
+
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
                                 child: SizedBox(
@@ -263,7 +268,8 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                   child: ListView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
+                                    //shrinkWrap: true,
+                                    itemExtent: itemExtentValue,
                                     scrollDirection: Axis.horizontal,
                                     itemCount: Preset().emotion[index1].length,
                                     itemBuilder:
@@ -288,7 +294,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                         },
                                         child: Padding(
                                           padding:
-                                              const EdgeInsets.only(right: 9.0),
+                                              const EdgeInsets.only(right: 7.0),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: isSelected3[index1][index2]
@@ -304,20 +310,24 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      12, 0, 12, 0),
+                                                      2, 0, 2, 0),
                                               child: Center(
-                                                child: Text(
-                                                  Preset().emotion[index1]
-                                                      [index2],
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: isSelected3[index1]
-                                                            [index2]
-                                                        ? Colors.white
-                                                        : MyThemeColors
-                                                            .myGreyscale
-                                                            .shade600,
-                                                    fontWeight: FontWeight.w500,
+                                                child: FittedBox(
+                                                  fit: BoxFit.fitWidth,
+                                                  child: Text(
+                                                    Preset().emotion[index1]
+                                                        [index2],
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: isSelected3[index1]
+                                                              [index2]
+                                                          ? Colors.white
+                                                          : MyThemeColors
+                                                              .myGreyscale
+                                                              .shade600,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
