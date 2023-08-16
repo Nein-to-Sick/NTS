@@ -326,13 +326,12 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                     ),
                     //  필터 적용 여부 표시
                     (widget.searchModel.isFiltered())
-                        ? Positioned(
-                            top: 5,
-                            left: 23,
+                        ? Align(
+                            alignment: Alignment.topRight,
                             child: Container(
                               width: 9,
                               height: 9,
-                              padding: const EdgeInsets.all(5),
+                              margin: const EdgeInsets.all(5),
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: MyThemeColors.secondaryColor,

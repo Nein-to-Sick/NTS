@@ -94,7 +94,7 @@ class NickName {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Text(
-                        "$nickNameLength/12",
+                        "$nickNameLength/20",
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -112,7 +112,7 @@ class NickName {
                         controller: userNickNameController,
                         keyboardType: TextInputType.multiline,
                         autocorrect: false,
-                        maxLength: 12,
+                        maxLength: 20,
 
                         //  enter(엔터) 키 이벤트 처리 with onSubmitted
                         textInputAction: TextInputAction.go,
@@ -151,7 +151,7 @@ class NickName {
                           ),
                           fillColor: MyThemeColors.myGreyscale.shade50,
                           filled: true,
-                          hintText: '최대 12글자',
+                          hintText: '최대 20글자',
                           hintStyle: TextStyle(
                             color: MyThemeColors.myGreyscale.shade200,
                           ),
