@@ -292,7 +292,7 @@ class _HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.08),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.095),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.
