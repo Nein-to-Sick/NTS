@@ -131,9 +131,9 @@ class BackgroundState extends State<Background> {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
-    final userInfo = Provider.of<UserInfoValueModel>(context);
-    final gptModel = Provider.of<GPTModel>(context);
-    final messageModel = Provider.of<MessageController>(context);
+    final userInfo = Provider.of<UserInfoValueModel>(context, listen: false);
+    final gptModel = Provider.of<GPTModel>(context, listen: false);
+    final messageModel = Provider.of<MessageController>(context, listen: false);
     final ScrollController scrollController = controller.scrollController;
     onBackKeyCallOnMain() {
       showDialog(
@@ -195,7 +195,7 @@ class BackgroundState extends State<Background> {
                 if (scrollController.offset == 0 ||
                     scrollController.offset == 600 ||
                     scrollController.offset == 855) {
-                  return FireFly(userInfoController: userInfo,);
+                  return FireFly(userInfoController: userInfo);
                 } else {
                   return const SizedBox.shrink();
                 }
@@ -310,6 +310,7 @@ Future<int> _getUserDataFromFirebase(
 
   if (userInfoModel.userNickName.isEmpty) {
     //  local variable initialization
+
     userInfoModel.userNickNameUpdate(prefs.getString('nickname') ?? '');
     userInfoModel.userEmailUpdate(prefs.getString('email') ?? '');
     userInfoModel.userDiaryExist(prefs.getBool('diaryExist') ?? false);
