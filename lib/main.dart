@@ -101,9 +101,8 @@ class BackgroundState extends State<Background> {
 
   //간단히 함수로 처리
   Future playEffectAudio() async {
-    final duration = await player.setAsset("assets/bgm/bgm1.mp3");
+    await player.setAsset("assets/bgm/bgm1.mp3");
     await player.setLoopMode(LoopMode.one);
-    await player.play();
   }
 
   @override
@@ -122,6 +121,7 @@ class BackgroundState extends State<Background> {
     final controller = Provider.of<BackgroundController>(context);
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final gptModel = Provider.of<GPTModel>(context);
+    final messageModel = Provider.of<MessageController>(context);
     final ScrollController scrollController = controller.scrollController;
     onBackKeyCallOnMain() {
       showDialog(
@@ -199,7 +199,8 @@ class BackgroundState extends State<Background> {
                 return const LoginPage();
               } else if (scrollController.offset == 600) {
                 return FutureBuilder(
-                  future: _getUserDataFromFirebase(userInfo, gptModel),
+                  future: _getUserDataFromFirebase(
+                      userInfo, gptModel, messageModel, player),
                   builder: (context, snapshot) {
                     //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
                     if (userInfo.userNickName.isEmpty &&
@@ -238,7 +239,7 @@ class BackgroundState extends State<Background> {
           ),
           controller.fireFly
               ? SafeArea(
-                child: AnimatedBuilder(
+                  child: AnimatedBuilder(
                     animation: scrollController,
                     builder: (context, child) {
                       if (scrollController.offset == 600 ||
@@ -249,7 +250,7 @@ class BackgroundState extends State<Background> {
                       }
                     },
                   ),
-              )
+                )
               : Container(),
         ],
       ),
@@ -259,7 +260,10 @@ class BackgroundState extends State<Background> {
 
 //  0: OnBoarding, 4: HomePage
 Future<int> _getUserDataFromFirebase(
-    UserInfoValueModel userInfoModel, GPTModel gptModel) async {
+    UserInfoValueModel userInfoModel,
+    GPTModel gptModel,
+    MessageController messageModel,
+    AudioPlayer player) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   if (userInfoModel.userNickName.isEmpty) {
@@ -268,6 +272,13 @@ Future<int> _getUserDataFromFirebase(
     userInfoModel.userEmailUpdate(prefs.getString('email') ?? '');
     userInfoModel.userDiaryExist(prefs.getBool('diaryExist') ?? false);
     gptModel.updateAIUsingSetting(prefs.getBool('isAIUsing') ?? true);
+    messageModel.setSpeaker(prefs.getBool('speakerSetting') ?? true);
+
+    if (messageModel.speaker) {
+      player.play();
+    } else {
+      player.pause();
+    }
 
     if (userInfoModel.userNickName.isEmpty) {
       final userCollection = FirebaseFirestore.instance.collection("users");
