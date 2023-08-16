@@ -8,3 +8,5 @@ Bool diaryExist
 Bool isAIUsing
 //  whether background music setting on/off
 Bool speakerSetting
+//  The last logined time
+String LoginedDate
