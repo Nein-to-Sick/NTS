@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/confirm_dialog.dart';
+import 'package:nts/model/user_info_model.dart';
+import 'package:nts/provider/backgroundController.dart';
 
 import '../component/button.dart';
 import '../database/databaseService.dart';
@@ -18,8 +20,8 @@ class Letter extends StatefulWidget {
       this.situation = const [], // 수정
       this.emotion = const []}) // 수정
       : super(key: key);
-  final controller;
-  final userName;
+  final BackgroundController controller;
+  final String userName;
   final List<dynamic> situation; // 수정
   final List<dynamic> emotion; // 수정
 
@@ -353,6 +355,7 @@ class _LetterState extends State<Letter> {
   }
 
   _buildPageSecond() {
+    double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return Padding(
       padding:
           const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
@@ -384,13 +387,16 @@ class _LetterState extends State<Letter> {
                 scrollDirection: Axis.vertical,
                 itemCount: Preset().situation.length,
                 itemBuilder: (BuildContext context, int index1) {
+                  double itemExtentValue =
+                      (maxWidth - 48) / Preset().situation[index1].length;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: SizedBox(
                       height: 30,
                       child: Center(
                         child: ListView.builder(
-                          shrinkWrap: true,
+                          //shrinkWrap: true,
+                          itemExtent: itemExtentValue,
                           scrollDirection: Axis.horizontal,
                           itemCount: Preset().situation[index1].length,
                           itemBuilder: (BuildContext context, int index2) {
@@ -444,7 +450,7 @@ class _LetterState extends State<Letter> {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 9.0),
+                                padding: const EdgeInsets.only(right: 7.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected2[index1][index2]
@@ -457,17 +463,20 @@ class _LetterState extends State<Letter> {
                                   ),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                        const EdgeInsets.fromLTRB(2, 0, 2, 0),
                                     child: Center(
-                                      child: Text(
-                                        Preset().situation[index1][index2],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color: isSelected2[index1][index2]
-                                              ? Colors.white
-                                              : MyThemeColors
-                                                  .myGreyscale.shade600,
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          Preset().situation[index1][index2],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            //fontSize: 16,
+                                            color: isSelected2[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade600,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -535,6 +544,7 @@ class _LetterState extends State<Letter> {
   }
 
   _buildPageThird() {
+    double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return Padding(
       padding:
           const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
@@ -566,13 +576,16 @@ class _LetterState extends State<Letter> {
                 scrollDirection: Axis.vertical,
                 itemCount: Preset().emotion.length,
                 itemBuilder: (BuildContext context, int index1) {
+                  double itemExtentValue =
+                      (maxWidth - 48) / Preset().emotion[index1].length;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: SizedBox(
                       height: 30,
                       child: Center(
                         child: ListView.builder(
-                          shrinkWrap: true,
+                          //shrinkWrap: true,
+                          itemExtent: itemExtentValue,
                           scrollDirection: Axis.horizontal,
                           itemCount: Preset().emotion[index1].length,
                           itemBuilder: (BuildContext context, int index2) {
@@ -589,7 +602,7 @@ class _LetterState extends State<Letter> {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 9.0),
+                                padding: const EdgeInsets.only(right: 7.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected3[index1][index2]
@@ -602,17 +615,20 @@ class _LetterState extends State<Letter> {
                                   ),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                        const EdgeInsets.fromLTRB(2, 0, 2, 0),
                                     child: Center(
-                                      child: Text(
-                                        Preset().emotion[index1][index2],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color: isSelected3[index1][index2]
-                                              ? Colors.white
-                                              : MyThemeColors
-                                                  .myGreyscale.shade600,
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          Preset().emotion[index1][index2],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            //fontSize: 16,
+                                            color: isSelected3[index1][index2]
+                                                ? Colors.white
+                                                : MyThemeColors
+                                                    .myGreyscale.shade600,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -712,10 +728,8 @@ class _LetterState extends State<Letter> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context)
-                                  .viewInsets
-                                  .bottom *
-                              0.4),
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom * 0.4),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -725,12 +739,11 @@ class _LetterState extends State<Letter> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                FocusScope.of(context)
-                                    .requestFocus(_focusNode);
+                                FocusScope.of(context).requestFocus(_focusNode);
                               },
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    15, 13, 15, 80),
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 13, 15, 80),
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child: TextField(
@@ -753,8 +766,8 @@ class _LetterState extends State<Letter> {
                                         border: InputBorder.none,
                                         hintStyle: TextStyle(
                                             fontSize: 16,
-                                            color: MyThemeColors
-                                                .myGreyscale[300],
+                                            color:
+                                                MyThemeColors.myGreyscale[300],
                                             fontFamily: "Dodam",
                                             height: 1.6),
                                         hintMaxLines: 10,
@@ -772,57 +785,107 @@ class _LetterState extends State<Letter> {
                                 alignment: Alignment.bottomLeft,
                                 child: Container(
                                   decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(7)),
-                                      color: Colors.white
-                                  ),
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(7)),
+                                      color: Colors.white),
                                   child: Padding(
-                                    padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.02),
+                                    padding: EdgeInsets.all(
+                                        MediaQuery.of(context).size.height *
+                                            0.02),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         isSelfSelected
-                                            ? Text("(보내는 이) 나", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),)
-                                            : Text("(보내는 이) 누군가", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
-                                        const SizedBox(height: 2,),
+                                            ? Text(
+                                                "(보내는 이) 나",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: MyThemeColors
+                                                        .myGreyscale[200]),
+                                              )
+                                            : Text(
+                                                "(보내는 이) 누군가",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: MyThemeColors
+                                                        .myGreyscale[200]),
+                                              ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
                                         Row(
                                           children: [
-                                            Text("(상황) ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                            Text(
+                                              "(상황) ",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: MyThemeColors
+                                                      .myGreyscale[200]),
+                                            ),
                                             Text(
                                               Preset()
                                                   .situation
                                                   .asMap()
                                                   .entries
                                                   .expand((entry) => entry.value
-                                                  .asMap()
-                                                  .entries
-                                                  .where((subEntry) =>
-                                              isSelected2[entry.key]
-                                              [subEntry.key]))
-                                                  .map((subEntry) => subEntry.value)
+                                                      .asMap()
+                                                      .entries
+                                                      .where((subEntry) =>
+                                                          isSelected2[entry.key]
+                                                              [subEntry.key]))
+                                                  .map((subEntry) =>
+                                                      subEntry.value)
                                                   .toList()
-                                                  .join(', '), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),// 콤마로 키워드를 구분합니다.
+                                                  .join(', '),
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: MyThemeColors
+                                                          .myGreyscale[
+                                                      200]), // 콤마로 키워드를 구분합니다.
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 2,),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
                                         Row(
                                           children: [
-                                            Text("(감정) ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]),),
+                                            Text(
+                                              "(감정) ",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: MyThemeColors
+                                                      .myGreyscale[200]),
+                                            ),
                                             Text(
                                               Preset()
                                                   .emotion
                                                   .asMap()
                                                   .entries
                                                   .expand((entry) => entry.value
-                                                  .asMap()
-                                                  .entries
-                                                  .where((subEntry) =>
-                                              isSelected3[entry.key]
-                                              [subEntry.key]))
-                                                  .map((subEntry) => subEntry.value)
+                                                      .asMap()
+                                                      .entries
+                                                      .where((subEntry) =>
+                                                          isSelected3[entry.key]
+                                                              [subEntry.key]))
+                                                  .map((subEntry) =>
+                                                      subEntry.value)
                                                   .toList()
-                                                  .join(', '), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: MyThemeColors.myGreyscale[200]), // 콤마로 키워드를 구분합니다.
+                                                  .join(', '),
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: MyThemeColors
+                                                          .myGreyscale[
+                                                      200]), // 콤마로 키워드를 구분합니다.
                                             ),
                                           ],
                                         ),
