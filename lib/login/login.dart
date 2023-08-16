@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyle(
                       fontSize: 16,
                     ),
-                    child: Text("일기 쓰고 편지 받는 앱"),
+                    child: Text("마음을 밝히는 작은 불빛"),
                   ),
                 ),
                 SizedBox(
