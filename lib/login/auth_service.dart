@@ -40,7 +40,7 @@ class AuthService {
         "email": userEmail,
         "created_at": FieldValue.serverTimestamp(),
         "green": 0,
-        "yellow": 0,
+        "yellow": 1,
       });
     }
 
