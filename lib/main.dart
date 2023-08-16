@@ -1,4 +1,5 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -119,6 +120,8 @@ class BackgroundState extends State<Background> {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
+    final userInfo = Provider.of<UserInfoValueModel>(context);
+    final gptModel = Provider.of<GPTModel>(context);
     final ScrollController scrollController = controller.scrollController;
     onBackKeyCallOnMain() {
       showDialog(
@@ -196,13 +199,10 @@ class BackgroundState extends State<Background> {
                 return const LoginPage();
               } else if (scrollController.offset == 600) {
                 return FutureBuilder(
-                  future: _getNickNameFromFirebase(
-                      Provider.of<UserInfoValueModel>(context, listen: false)),
+                  future: _getUserDataFromFirebase(userInfo, gptModel),
                   builder: (context, snapshot) {
                     //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
-                    if (Provider.of<UserInfoValueModel>(context, listen: false)
-                            .userNickName
-                            .isEmpty &&
+                    if (userInfo.userNickName.isEmpty &&
                         snapshot.connectionState == ConnectionState.waiting) {
                       print(controller.fireFly);
                       return const MyFireFlyProgressbar(
@@ -256,46 +256,63 @@ class BackgroundState extends State<Background> {
 }
 
 //  0: OnBoarding, 4: HomePage
-Future<int> _getNickNameFromFirebase(UserInfoValueModel model) async {
-  if (model.userNickName.isEmpty) {
-    final userCollection = FirebaseFirestore.instance.collection("users");
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+Future<int> _getUserDataFromFirebase(
+    UserInfoValueModel userInfoModel, GPTModel gptModel) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (userId != null) {
-      DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
-      if (userSnapshot.exists) {
-        Map<String, dynamic> userData =
-            userSnapshot.data() as Map<String, dynamic>;
-        //  check whether the nickName exist
-        if (userData.containsKey('nickname') && userData.containsKey('email')) {
-          model.userNickNameUpdate(userData['nickname']);
-          model.userEmailUpdate(userData['email']);
+  if (userInfoModel.userNickName.isEmpty) {
+    //  local variable initialization
+    userInfoModel.userNickNameUpdate(prefs.getString('nickname') ?? '');
+    userInfoModel.userEmailUpdate(prefs.getString('email') ?? '');
+    userInfoModel.userDiaryExist(prefs.getBool('diaryExist') ?? false);
+    gptModel.updateAIUsingSetting(prefs.getBool('isAIUsing') ?? true);
+
+    if (userInfoModel.userNickName.isEmpty) {
+      final userCollection = FirebaseFirestore.instance.collection("users");
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId != null) {
+        DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
+        if (userSnapshot.exists) {
+          Map<String, dynamic> userData =
+              userSnapshot.data() as Map<String, dynamic>;
+          //  check whether the nickName exist
+          if (userData.containsKey('nickname') &&
+              userData.containsKey('email')) {
+            userInfoModel.userNickNameUpdate(userData['nickname']);
+            userInfoModel.userEmailUpdate(userData['email']);
+          } else {
+            debugPrint('No field');
+            return 0;
+          }
+
+          QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('diary')
+              .get();
+
+          //  check whether the diary exist
+          if (querySnapshot.docs.isNotEmpty) {
+            userInfoModel.userDiaryExist(true);
+          }
+
+          //  local variable update
+          await prefs.setString('nickname', userData['nickname']);
+          await prefs.setString('email', userData['email']);
+          await prefs.setBool('diaryExist', true);
         } else {
-          debugPrint('No field');
-          return 0;
-        }
-
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .collection('diary')
-            .get();
-
-        //  check whether the diary exist
-        if (querySnapshot.docs.isNotEmpty) {
-          model.userDiaryExist();
+          debugPrint('No document');
         }
       } else {
-        debugPrint('No document');
+        debugPrint('User ID is null');
       }
-    } else {
-      debugPrint('User ID is null');
-    }
-
-    if (model.userNickName.isEmpty) {
-      return 0;
     }
   }
 
-  return 4;
+  if (userInfoModel.userNickName.isEmpty) {
+    return 0;
+  } else {
+    return 4;
+  }
 }

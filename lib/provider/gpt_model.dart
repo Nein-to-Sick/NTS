@@ -4,9 +4,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 
 class GPTModel with ChangeNotifier {
+  //  while diary anlyzing
   bool isOnLoading = false;
+  //  ahen after analye done
   bool isAnalyzed = false;
-  bool using = true;
+  //  AI setting state
+  bool isAIUsing = true;
   String diaryMainText = '';
   String diaryTitle = '';
   List<String> situationSummerization = List<String>.empty(growable: true);
@@ -15,6 +18,11 @@ class GPTModel with ChangeNotifier {
   //  일기 내용 저장
   void updateDiaryMainText(value) {
     diaryMainText = value.toString().trim();
+    notifyListeners();
+  }
+
+  void updateAIUsingSetting(value) {
+    isAIUsing = value;
     notifyListeners();
   }
 
@@ -45,7 +53,7 @@ class GPTModel with ChangeNotifier {
   }
 
   void tryAnalyzeDiary(String prompt) async {
-    if (isAnalyzed == false) {
+    if (isAIUsing == true && isAnalyzed == false) {
       String emotionsTemp = '';
       String situationTemp = '';
       OpenAI.apiKey = dotenv.env['OpenAI_apiKey']!;
@@ -153,11 +161,19 @@ class GPTModel with ChangeNotifier {
 
       notifyListeners();
     }
+    //  when Ai setting off
+    else {
+      situationSummerization.add('none');
+      emotionSummerization.add('none');
+      diaryTitle =
+          "${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}의 일기";
+      startAnalyzeDiary();
+    }
     //return chatCompletion.choices.first.message.content;
   }
 
   Future<bool> watiFetchDiaryData() async {
-    if (isAnalyzed) {
+    if (isAIUsing == false || isAnalyzed) {
       return true;
     }
 

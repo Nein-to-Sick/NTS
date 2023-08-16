@@ -34,8 +34,8 @@ class UserInfoValueModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void userDiaryExist() {
-    isDiaryExist = true;
+  void userDiaryExist(value) {
+    isDiaryExist = value;
     notifyListeners();
   }
 }

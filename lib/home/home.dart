@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                                         : HeroIcons.speakerXMark,
                                     style: HeroIconStyle.solid,
                                   ))),
-                          SizedBox(
+                          const SizedBox(
                             width: 13,
                           ),
                           GestureDetector(

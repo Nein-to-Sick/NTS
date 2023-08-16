@@ -1,0 +1,8 @@
+//  user nickname
+String nickname
+//  user email
+String email
+//  whether the diary exist
+Bool diaryExist
+//  whether AI use setting on/off
+Bool isAIUsing

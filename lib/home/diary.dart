@@ -9,7 +9,6 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/messageController.dart';
-import 'package:provider/provider.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
@@ -154,24 +153,27 @@ class DiaryState extends State<Diary> {
                                     .addPostFrameCallback((_) {
                                   widget.gptModel.whileLoadingDone();
 
-                                  //  ai analyze snackbar
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.white,
-                                      content: Text(
-                                        '일기를 키워드로 정리했어요!',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 13,
+                                  if (widget.gptModel.isAIUsing) {
+                                    //  ai analyze snackbar
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.white,
+                                        content: Text(
+                                          '일기를 키워드로 정리했어요!',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                          ),
                                         ),
+                                        duration: Duration(seconds: 2),
                                       ),
-                                      duration: Duration(seconds: 5),
-                                    ),
-                                  );
+                                    );
+
+                                    updateIsSelectedSituation();
+                                    updateIsSelectedEmotion();
+                                  }
                                 });
-                                updateIsSelectedSituation();
-                                updateIsSelectedEmotion();
                               }
 
                               //  상황 분석
@@ -779,7 +781,7 @@ class DiaryState extends State<Diary> {
                       time,
                     );
 
-                    widget.userInfo.userDiaryExist();
+                    widget.userInfo.userDiaryExist(true);
 
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(

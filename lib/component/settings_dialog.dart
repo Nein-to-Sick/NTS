@@ -43,7 +43,7 @@ class _SettingDialogState extends State<SettingDialog> {
     Future<void> _deleteAccount() async {
       print("계정탈퇴");
       widget.user.userInfoClear();
-      widget.gptprovider.using = true;
+      widget.gptprovider.isAIUsing = true;
       String? userId = FirebaseAuth.instance.currentUser?.uid;
       FirebaseFirestore.instance.collection("users").doc(userId).delete();
       await FirebaseAuth.instance.currentUser?.delete();
