@@ -3,11 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
+import 'package:nts/model/user_info_model.dart';
 
 class FireFly extends StatefulWidget {
   const FireFly({super.key, required this.userInfoController});
 
-  final userInfoController;
+  final UserInfoValueModel userInfoController;
 
   @override
   FireFlyState createState() => FireFlyState();
@@ -81,17 +82,18 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
       vsync: this,
     );
 
-    _spreadAnimation = Tween<double>(begin: 10, end: 16).animate(_spreadAnimationController!)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _spreadAnimationController!.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          _spreadAnimationController!.forward();
-        }
-      });
+    _spreadAnimation =
+        Tween<double>(begin: 10, end: 16).animate(_spreadAnimationController!)
+          ..addListener(() {
+            setState(() {});
+          })
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _spreadAnimationController!.reverse();
+            } else if (status == AnimationStatus.dismissed) {
+              _spreadAnimationController!.forward();
+            }
+          });
 
     _spreadAnimationController!.forward();
   }
@@ -151,16 +153,17 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
-                                  greenFieldValue == 0 ? const BoxShadow(
-                                      spreadRadius: 1,
-                                      color: MyThemeColors.secondaryColor,
-                                      blurRadius: 8, // 20
-                                      blurStyle: BlurStyle.normal) : BoxShadow(
-                                      spreadRadius: _spreadAnimation!.value,
-                                      color: MyThemeColors.secondaryColor,
-                                      blurRadius: 30,
-                                      blurStyle: BlurStyle.normal
-                                  ),
+                                  greenFieldValue == 0
+                                      ? const BoxShadow(
+                                          spreadRadius: 1,
+                                          color: MyThemeColors.secondaryColor,
+                                          blurRadius: 8, // 20
+                                          blurStyle: BlurStyle.normal)
+                                      : BoxShadow(
+                                          spreadRadius: _spreadAnimation!.value,
+                                          color: MyThemeColors.secondaryColor,
+                                          blurRadius: 30,
+                                          blurStyle: BlurStyle.normal),
                                 ]),
                             child: CustomPaint(
                               size: Size(_size[i], _size[i]),

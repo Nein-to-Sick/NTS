@@ -1,6 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -1026,10 +1027,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     );
   }
 
-  void _logout() {
+  void _logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     print("로그아웃");
     widget.user.userInfoClear();
+    await prefs.clear();
     FirebaseAuth.instance.signOut();
+    GoogleSignIn().signOut();
     widget.provider.movePage(0);
     widget.provider.fireFlyOff();
     Navigator.pop(context);
@@ -1037,10 +1041,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Future<void> _deleteAccount() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     print("계정탈퇴");
     widget.user.userInfoClear();
+    await prefs.clear();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
     FirebaseFirestore.instance.collection("users").doc(userId).delete();
+    GoogleSignIn().disconnect();
     await FirebaseAuth.instance.currentUser?.delete();
     widget.provider.movePage(0);
     Navigator.pop(context);

@@ -6,7 +6,7 @@ class BackgroundController with ChangeNotifier {
   void movePage(double page) {
     scrollController.animateTo(
       page,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 750),
       curve: Curves.easeOut,
     );
     notifyListeners();
@@ -23,6 +23,7 @@ class BackgroundController with ChangeNotifier {
     fireFly = true;
     notifyListeners();
   }
+
   void fireFlyOff() {
     fireFly = false;
     notifyListeners();
