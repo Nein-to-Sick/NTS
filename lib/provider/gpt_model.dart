@@ -45,6 +45,7 @@ class GPTModel with ChangeNotifier {
   //  기록할 경우 변수 초기화
   void endAnalyzeDiary() {
     isAnalyzed = false;
+    isOnLoading = false;
     situationSummerization.clear();
     emotionSummerization.clear();
     diaryMainText = '';
