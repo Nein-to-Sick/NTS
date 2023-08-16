@@ -902,6 +902,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     return SettingDialog(
                       provider: widget.provider,
                       user: widget.user,
+                      gptprovider: widget.gptprovider,
                       type: 0,
                     );
                   },
@@ -929,6 +930,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     return SettingDialog(
                       provider: widget.provider,
                       user: widget.user,
+                      gptprovider: widget.gptprovider,
                       type: 1,
                     );
                   },
