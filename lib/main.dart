@@ -310,7 +310,6 @@ Future<int> _getUserDataFromFirebase(
 
   if (userInfoModel.userNickName.isEmpty) {
     //  local variable initialization
-
     userInfoModel.userNickNameUpdate(prefs.getString('nickname') ?? '');
     userInfoModel.userEmailUpdate(prefs.getString('email') ?? '');
     userInfoModel.userDiaryExist(prefs.getBool('diaryExist') ?? false);
@@ -351,12 +350,12 @@ Future<int> _getUserDataFromFirebase(
           //  check whether the diary exist
           if (querySnapshot.docs.isNotEmpty) {
             userInfoModel.userDiaryExist(true);
+            await prefs.setBool('diaryExist', true);
           }
 
           //  local variable update
           await prefs.setString('nickname', userData['nickname']);
           await prefs.setString('email', userData['email']);
-          await prefs.setBool('diaryExist', true);
         } else {
           debugPrint('No document');
         }
