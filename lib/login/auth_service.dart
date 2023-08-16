@@ -74,7 +74,8 @@ class AuthService {
         "docId": "firstMessage",
         "from_uid": "반디",
         "situation": [],
-        "emotion": []
+        "emotion": [],
+        "heart_count": 0
       });
     }
 
