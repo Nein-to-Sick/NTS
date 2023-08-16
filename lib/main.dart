@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xff272D35),
         fontFamily: "SUITE",
         textSelectionTheme: TextSelectionThemeData(
           //  커서 색상 수정
