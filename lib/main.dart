@@ -210,14 +210,13 @@ class BackgroundState extends State<Background> {
               if (scrollController.offset == 0) {
                 return const LoginPage();
               } else if (scrollController.offset == 600) {
-                return FutureBuilder(
+                return FutureBuilder<int>(
                   future: _getUserDataFromFirebase(
                       userInfo, gptModel, messageModel, player),
                   builder: (context, snapshot) {
                     //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
                     if (userInfo.userNickName.isEmpty &&
                         snapshot.connectionState == ConnectionState.waiting) {
-                      print(controller.fireFly);
                       return const MyFireFlyProgressbar(
                         loadingText: '로그인하는 중...',
                         textColor: MyThemeColors.whiteColor,
@@ -285,7 +284,7 @@ Future<int> _getUserDataFromFirebase(
   //  When last login time was not today
   if (currentDateTime.isBefore(DateTime(now.year, now.month, now.day))) {
     //  local variable update
-    prefs.setString('LoginedDate', DateTime.now().toString());
+    await prefs.setString('LoginedDate', DateTime.now().toString());
     final userCollection = FirebaseFirestore.instance.collection("users");
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 

@@ -1,4 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nts/component/confirm_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,6 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/nickname_sheet.dart';
-import 'package:nts/component/settings_dialog.dart';
 import 'package:nts/component/suggestions_button.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/oss_licenses.dart';
@@ -904,12 +906,28 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   context: context,
                   barrierDismissible: false,
                   builder: (BuildContext context) {
-                    return SettingDialog(
+                    return dialogWithYesOrNo(
+                      context,
+                      '로그아웃 하시겠나요?',
+                      '',
+                      '로그아웃',
+                      //  on Yes
+                      () {
+                        _logout();
+                      },
+                      //  on No
+                      () {
+                        Navigator.pop(context);
+                      },
+                    );
+
+                    /*
+                    SettingDialog(
                       provider: widget.provider,
                       user: widget.user,
-                      gptprovider: widget.gptprovider,
                       type: 0,
                     );
+                    */
                   },
                 );
               },
@@ -932,12 +950,28 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   context: context,
                   barrierDismissible: false,
                   builder: (BuildContext context) {
-                    return SettingDialog(
+                    return dialogWithYesOrNo(
+                      context,
+                      '정말로 떠나시는 건가요?',
+                      '계정 탈퇴시 기존에 저장된 데이터는\n모두 삭제되고 복구가 불가능합니다.',
+                      '탈퇴하기',
+                      //  on Yes
+                      () {
+                        _deleteAccount();
+                      },
+                      //  on No
+                      () {
+                        Navigator.pop(context);
+                      },
+                    );
+
+                    /*
+                    SettingDialog(
                       provider: widget.provider,
                       user: widget.user,
-                      gptprovider: widget.gptprovider,
                       type: 1,
                     );
+                    */
                   },
                 );
               },
@@ -990,5 +1024,26 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         },
       ),
     );
+  }
+
+  void _logout() {
+    print("로그아웃");
+    widget.user.userInfoClear();
+    FirebaseAuth.instance.signOut();
+    widget.provider.movePage(0);
+    widget.provider.fireFlyOff();
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  Future<void> _deleteAccount() async {
+    print("계정탈퇴");
+    widget.user.userInfoClear();
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    FirebaseFirestore.instance.collection("users").doc(userId).delete();
+    await FirebaseAuth.instance.currentUser?.delete();
+    widget.provider.movePage(0);
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 }
