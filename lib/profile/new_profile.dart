@@ -64,6 +64,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 return ProfileSettings(
                                   provider: controller,
                                   user: userInfo,
+                                  gptprovider: gptModel,
                                   alert: false,
                                 );
                               },
