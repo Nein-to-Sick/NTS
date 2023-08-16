@@ -47,7 +47,7 @@ class DatabaseService {
           situation, selectedEmotion);
 
       if (matchingDocuments.isEmpty) {
-        notMatch(messageController);
+        notMatch(messageController, situation, emotion);
         return;
       }
 
@@ -167,7 +167,7 @@ class DatabaseService {
     return filteredDocuments;
   }
 
-  Future<void> notMatch(messageController) async {
+  Future<void> notMatch(messageController, situation, emotion) async {
     print("일치하는 편지가 없습니다.");
 
     Random rand = Random();
@@ -194,6 +194,8 @@ class DatabaseService {
       'heart': false,
       'docId': "notMatch",
       'from_uid': 'notMatch',
+      'situation': situation,
+      'emotion': emotion
     });
     messageController.getMessage();
     FlutterLocalNotification.showNotification(); // 알림
@@ -217,10 +219,11 @@ class DatabaseService {
       'emotion': emotion,
       'date': time,
       'endDate': endDate,
-      'from': "Me",
+      'from': userName,
       'from_uid': userId,
-      'notMatch': true,
-      'heart': false
+      'notMatch': false,
+      'heart': false,
+      'heart_count': 0
     });
     return docRef.id;
   }

@@ -8,6 +8,8 @@ class LetterModel {
   final bool heart;
   final String id;
   final String fromUid;
+  final List<dynamic> situation;
+  final List<dynamic> emotion;
 
   LetterModel(
       {required this.content,
@@ -16,7 +18,9 @@ class LetterModel {
       required this.notMatch,
       required this.heart,
       required this.id,
-      required this.fromUid});
+      required this.fromUid,
+      required this.situation,
+      required this.emotion});
 
   static LetterModel fromSnapshot(DocumentSnapshot snap) {
     LetterModel letterModel = LetterModel(
@@ -26,7 +30,9 @@ class LetterModel {
         notMatch: snap['notMatch'],
         heart: snap['heart'],
         id: snap['docId'],
-        fromUid: snap['from_uid']);
+        fromUid: snap['from_uid'],
+        situation: snap['situation'],
+        emotion: snap['emotion']);
     return letterModel;
   }
 }

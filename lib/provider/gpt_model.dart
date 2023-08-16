@@ -110,7 +110,7 @@ class GPTModel with ChangeNotifier {
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
               content:
-                  "너는 소설가로 요구에따라 적절한 문장을 만들어야해. 다음 일기의 내용을 보고 완성된 문장의 제목을 만들어줘. <$prompt>",
+                  "너는 글요약 전문가야. 다음 일기의 내용을 잘 요약해서 한 줄의 제목을 만들어줘. <$prompt>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
@@ -162,7 +162,7 @@ class GPTModel with ChangeNotifier {
 
     //  delay for loading page
     return Future.delayed(
-      const Duration(milliseconds: 1000),
+      const Duration(milliseconds: 500),
       () {
         if (situationSummerization.isNotEmpty &&
             emotionSummerization.isNotEmpty) {

@@ -5,12 +5,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/firefly.dart';
 import 'package:nts/component/navigationToggle.dart';
-import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/component/notification.dart';
+import 'package:nts/home/home_page_list_builder.dart';
 import 'package:nts/loading/loading_page.dart';
 import 'package:nts/login/login.dart';
 import 'package:nts/model/search_model.dart';
@@ -21,7 +22,6 @@ import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +90,14 @@ class Background extends StatefulWidget {
 
 class BackgroundState extends State<Background> {
   bool alert = false;
+  final player = AudioPlayer();
+
+  //간단히 함수로 처리
+  Future playEffectAudio() async {
+    final duration = await player.setAsset("assets/bgm/bgm1.mp3");
+    await player.setLoopMode(LoopMode.one);
+    await player.play();
+  }
 
   @override
   void initState() {
@@ -98,6 +106,7 @@ class BackgroundState extends State<Background> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       alert = (await FlutterLocalNotification.requestNotificationPermission())!;
     });
+    playEffectAudio();
     super.initState();
   }
 
@@ -152,7 +161,7 @@ class BackgroundState extends State<Background> {
               SizedBox(
                 width: 1300,
                 child: Image.asset(
-                  'assets/back2.png',
+                  'assets/background.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -192,37 +201,15 @@ class BackgroundState extends State<Background> {
                       print(controller.fireFly);
                       return const MyFireFlyProgressbar(
                         loadingText: '로그인하는 중...',
+                        textColor: MyThemeColors.whiteColor,
                       );
                     }
-                    //  계정이 존재하고 닉네임이 있는 경우
-                    else if (snapshot.data == true) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        controller.fireFlyOn();
-                      });
-                      return const HomePage();
-                    }
-                    //  계정이 존재하고 닉네임이 없는 경우
-                    else if (snapshot.data == false) {
-                      WidgetsBinding.instance.addPostFrameCallback(
-                        (_) {
-                          // String printitle = "사용할 닉네임을 정해주세요";
-                          // myNicknameSheet(
-                          //   context,
-                          //   Provider.of<UserInfoValueModel>(context,
-                          //       listen: false),
-                          //       ''
-                          // );
-                          NickName().myNicknameSheet(
-                              context,
-                              Provider.of<UserInfoValueModel>(
-                                context,
-                                listen: false,
-                              ),
-                              0);
-                        },
+                    //  로그인 성공 후
+                    else if (snapshot.hasData) {
+                      return HomePageListViewBuilder(
+                        player: player,
+                        firstPageIndex: snapshot.data!,
                       );
-
-                      return Container();
                     } else {
                       return Container();
                     }
@@ -262,9 +249,9 @@ class BackgroundState extends State<Background> {
   }
 }
 
-Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
+//  0: OnBoarding, 4: HomePage
+Future<int> _getNickNameFromFirebase(UserInfoValueModel model) async {
   if (model.userNickName.isEmpty) {
-    bool userNickNameIsMade = false;
     final userCollection = FirebaseFirestore.instance.collection("users");
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -274,12 +261,12 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
         Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
         //  check whether the nickName exist
-        if (userData.containsKey('nicknameMade')) {
-          userNickNameIsMade = userData['nicknameMade'];
-          model.userNickName = userData['nickname'];
-          model.userEmail = userData['email'];
+        if (userData.containsKey('nickname') && userData.containsKey('email')) {
+          model.userNickNameUpdate(userData['nickname']);
+          model.userEmailUpdate(userData['email']);
         } else {
           debugPrint('No field');
+          return 0;
         }
 
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -298,11 +285,11 @@ Future<bool> _getNickNameFromFirebase(UserInfoValueModel model) async {
     } else {
       debugPrint('User ID is null');
     }
-    //  delay for loading page
-    return Future.delayed(const Duration(seconds: 1), () {
-      return userNickNameIsMade;
-    });
+
+    if (model.userNickName.isEmpty) {
+      return 0;
+    }
   }
 
-  return true;
+  return 4;
 }

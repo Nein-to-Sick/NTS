@@ -32,6 +32,8 @@ class _MailBoxState extends State<MailBox> {
   late bool heart = false;
   late String id = "";
   late String fromUid = "";
+  late List<dynamic> situation = [];
+  late List<dynamic> emotion = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +74,12 @@ class _MailBoxState extends State<MailBox> {
                     heart = letter.heart;
                     id = letter.id;
                     fromUid = letter.fromUid;
+                    situation = letter.situation;
+                    emotion = letter.emotion;
                   });
                 },
                 child: Card(
-                  elevation: 5,
+                  elevation: 0.7,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -84,6 +88,7 @@ class _MailBoxState extends State<MailBox> {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,7 +140,7 @@ class _MailBoxState extends State<MailBox> {
         ),
         Expanded(
           child: Card(
-            elevation: 5,
+            elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -144,6 +149,7 @@ class _MailBoxState extends State<MailBox> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Text(
@@ -158,32 +164,6 @@ class _MailBoxState extends State<MailBox> {
                         alignment: Alignment.bottomCenter,
                         child: Column(
                           children: [
-                            !notMatch
-                                ? GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        heart = !heart;
-                                      });
-                                      DatabaseService()
-                                          .clickHeart(id, heart, fromUid);
-                                    },
-                                    child: heart
-                                        ? const HeroIcon(
-                                            HeroIcons.heart,
-                                            style: HeroIconStyle.solid,
-                                            color: MyThemeColors.secondaryColor,
-                                          )
-                                        : HeroIcon(
-                                            HeroIcons.heart,
-                                            style: HeroIconStyle.outline,
-                                            color:
-                                                MyThemeColors.myGreyscale[700],
-                                          ),
-                                  )
-                                : Container(),
-                            const SizedBox(
-                              height: 3,
-                            ),
                             Text(
                               "from.$from",
                               style: TextStyle(
@@ -209,6 +189,41 @@ class _MailBoxState extends State<MailBox> {
             ),
           ),
         ),
+        !notMatch ? const SizedBox(
+          height: 14,
+        ) : Container(),
+        !notMatch
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    heart = !heart;
+                  });
+                  DatabaseService().clickHeart(id, heart, fromUid);
+                },
+                child: heart
+                    ? const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: HeroIcon(
+                          HeroIcons.heart,
+                          style: HeroIconStyle.solid,
+                          color: MyThemeColors.secondaryColor,
+                        ),
+                    )
+                    : Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: MyThemeColors.secondaryColor),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: HeroIcon(
+                            HeroIcons.heart,
+                            style: HeroIconStyle.outline,
+                            color: MyThemeColors.whiteColor,
+                          ),
+                        ),
+                      ),
+              )
+            : Container(),
         notMatch
             ? Column(
                 children: [
@@ -225,6 +240,8 @@ class _MailBoxState extends State<MailBox> {
                           builder: (BuildContext context) => Letter(
                             controller: widget.controller,
                             userName: widget.userName,
+                            situation: situation,
+                            emotion: emotion,
                           ),
                           animationType:
                               DialogTransitionType.slideFromBottomFade,
@@ -251,7 +268,7 @@ class _MailBoxState extends State<MailBox> {
               )
             : Container(),
         const SizedBox(
-          height: 15,
+          height: 12,
         ),
         Button(
           function: () {
@@ -265,7 +282,7 @@ class _MailBoxState extends State<MailBox> {
     );
 
     return Dialog(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: MyThemeColors.myGreyscale[25],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

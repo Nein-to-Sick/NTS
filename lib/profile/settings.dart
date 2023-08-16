@@ -10,6 +10,7 @@ import 'package:nts/component/confirm_dialog.dart';
 import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/component/settings_dialog.dart';
 import 'package:nts/component/suggestionsButton.dart';
+import 'package:nts/component/suggestions_button.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/component/delete_account.dart';
 import 'package:nts/oss_licenses.dart';
@@ -719,7 +720,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       },
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        foregroundColor: const Color(0xffFCE181),
+        foregroundColor: MyThemeColors.myGreyscale.shade100,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         padding: const EdgeInsets.all(20),
@@ -779,7 +780,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               onTap: () {
                 // NewNickName(context);
-                NickName().myNicknameSheet(context, widget.user, 1);
+                NickName().myNicknameSheet(context, widget.user, 1, null);
               },
               backgroundColor: Colors.white,
               inside: Row(children: [

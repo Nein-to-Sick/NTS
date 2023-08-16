@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:nts/home/mailBox.dart';
-import 'package:nts/onboarding.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/messageController.dart';
 import 'package:nts/provider/gpt_model.dart';
@@ -13,24 +13,30 @@ import 'diary.dart';
 import 'letter.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.player}) : super(key: key);
 
+  final AudioPlayer player;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   bool _isTextVisible = true;
+  bool speakerOn = true;
 
   void _toggleTextVisibility() {
-    setState(() {
-      _isTextVisible = false;
-    });
-    Future.delayed(const Duration(seconds: 3), () {
+    if (mounted) {
       setState(() {
-        _isTextVisible = true;
+        _isTextVisible = false;
       });
-    });
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          setState(() {
+            _isTextVisible = true;
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -47,6 +53,13 @@ class _HomePageState extends State<HomePage> {
           onTap: () {
             _toggleTextVisibility(); // Add this line
           },
+          onHorizontalDragEnd: (details) {
+            if (details.primaryVelocity!.isNegative) {
+              // 오른쪽에서 왼쪽으로 드래그
+              controller.movePage(855);
+              controller.changeColor(3);
+            }
+          },
           child: Container(
             color: Colors.transparent,
             child: Column(
@@ -55,25 +68,52 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        showAnimatedDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            barrierColor: Colors.transparent,
-                            builder: (BuildContext context) => const Help(),
-                            animationType:
-                                DialogTransitionType.slideFromBottomFade);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 20.0),
-                        child: Opacity(
-                            opacity: 0.4,
-                            child: HeroIcon(
-                              HeroIcons.questionMarkCircle,
-                              style: HeroIconStyle.solid,
-                              size: 25,
-                            )),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  speakerOn = !speakerOn;
+                                  if (speakerOn) {
+                                    widget.player.play();
+                                  } else {
+                                    widget.player.pause();
+                                  }
+                                });
+                              },
+                              child: Opacity(
+                                  opacity: 0.4,
+                                  child: HeroIcon(
+                                    speakerOn
+                                        ? HeroIcons.speakerWave
+                                        : HeroIcons.speakerXMark,
+                                    style: HeroIconStyle.solid,
+                                  ))),
+                          SizedBox(
+                            width: 13,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showAnimatedDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  barrierColor: Colors.transparent,
+                                  builder: (BuildContext context) =>
+                                      const Help(),
+                                  animationType:
+                                      DialogTransitionType.slideFromBottomFade);
+                            },
+                            child: const Opacity(
+                                opacity: 0.4,
+                                child: HeroIcon(
+                                  HeroIcons.questionMarkCircle,
+                                  style: HeroIconStyle.solid,
+                                  size: 25,
+                                )),
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
@@ -156,15 +196,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Onboarding(controller: controller)));
-                    },
-                    child: Text("온보딩")),
                 Column(
                   children: [
                     AnimatedOpacity(
@@ -224,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(
-                            height: 11,
+                            height: 15,
                           ),
                           GestureDetector(
                             onTap: _isTextVisible
@@ -266,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 100),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.08),
                       child: AnimatedOpacity(
                         opacity: _isTextVisible ? 1.0 : 0.0,
                         // 변경할 불투명도를 설정하세요.
@@ -274,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                             Duration(milliseconds: _isTextVisible ? 2000 : 300),
                         // 애니메이션 지속 시간 설정
                         child: Text(
-                          "화면 탭하여 글쓰기",
+                          "화면을 탭하여 글쓰기",
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,

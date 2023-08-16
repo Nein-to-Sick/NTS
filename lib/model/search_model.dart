@@ -178,10 +178,10 @@ class ProfileSearchModel with ChangeNotifier {
   }
 
   //  date format translate
-  String parseFormedTime(String timeString, String endValue) {
+  DateTime parseFormedTime(String timeString, String endValue) {
     String formattedTime =
-        "${timeString.substring(0, 4)}/${timeString.substring(5, 7)}/${timeString.substring(8, 10)} $endValue";
+        "${timeString.substring(0, 4)}-${timeString.substring(5, 7)}-${timeString.substring(8, 10)} $endValue";
 
-    return formattedTime;
+    return DateTime.parse(formattedTime);
   }
 }

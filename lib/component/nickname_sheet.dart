@@ -2,24 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/main.dart';
 import 'package:nts/model/user_info_model.dart';
-import 'package:nts/provider/backgroundController.dart';
-import 'package:provider/provider.dart';
 
 class NickName {
-  void myNicknameSheet(
-      BuildContext context, UserInfoValueModel userInfoProvider, int type) {
+  void myNicknameSheet(BuildContext context,
+      UserInfoValueModel userInfoProvider, int type, dynamic pageController) {
     String printitle = (type == 1) ? "새로운 닉네임을 입력해주세요" : "사용할 닉네임을 정해주세요";
     final userNickNameController = TextEditingController();
     userNickNameController.text = (userInfoProvider.userNickName.isEmpty)
         ? ""
         : userInfoProvider.userNickName;
+    int nickNameLength = userNickNameController.text.length;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       isDismissible: (type == 1) ? true : false,
+      barrierColor: Colors.transparent,
       enableDrag: (type == 1) ? true : false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -90,6 +89,20 @@ class NickName {
                   const SizedBox(
                     height: 35,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 50, bottom: 5),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        "$nickNameLength/12",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[200],
+                        ),
+                      ),
+                    ),
+                  ),
                   //  nickname textfield
                   Padding(
                     padding: const EdgeInsets.only(left: 45, right: 45),
@@ -100,10 +113,12 @@ class NickName {
                         keyboardType: TextInputType.multiline,
                         autocorrect: false,
                         maxLength: 12,
+
                         //  enter(엔터) 키 이벤트 처리 with onSubmitted
                         textInputAction: TextInputAction.go,
 
                         onChanged: (value) {
+                          nickNameLength = userNickNameController.text.length;
                           if (userNickNameController.text.trim().isNotEmpty) {
                             userInfoProvider.valueUpdate();
                           } else {
@@ -118,11 +133,12 @@ class NickName {
                         },
 
                         decoration: InputDecoration(
+                          counterText: "",
                           contentPadding: const EdgeInsets.only(
                               left: 15, right: 15, top: 10, bottom: 10),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: MyThemeColors.myGreyscale.shade600,
+                              color: MyThemeColors.myGreyscale.shade200,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -137,12 +153,13 @@ class NickName {
                           filled: true,
                           hintText: '최대 12글자',
                           hintStyle: TextStyle(
-                            color: MyThemeColors.myGreyscale.shade600,
+                            color: MyThemeColors.myGreyscale.shade200,
                           ),
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(
                     height: 10,
                   ),
@@ -154,22 +171,13 @@ class NickName {
                             userInfoProvider.userNickNameUpdate(
                                 userNickNameController.text.trim());
 
-                            (type == 1)
-                                ? Navigator.pop(context)
-                                : Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MultiProvider(
-                                        providers: [
-                                          ChangeNotifierProvider(
-                                            create: (context) =>
-                                                BackgroundController(),
-                                          ),
-                                        ],
-                                        child: const MyApp(),
-                                      ),
-                                    ),
-                                    (route) => false);
+                            if (type == 0) {
+                              pageController.animateToPage(4,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.ease);
+                            }
+
+                            Navigator.pop(context);
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -216,7 +224,6 @@ class NickName {
     await userCollection.doc(userId).update(
       {
         "nickname": newNickName,
-        "nicknameMade": true,
       },
     );
   }
