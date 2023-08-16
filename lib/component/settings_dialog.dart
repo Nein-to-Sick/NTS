@@ -7,15 +7,19 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
+import '../provider/gpt_model.dart';
+
 class SettingDialog extends StatefulWidget {
   final BackgroundController provider;
   final UserInfoValueModel user;
+  final GPTModel gptprovider;
   final int type;
 
   const SettingDialog(
       {Key? key,
       required this.provider,
       required this.user,
+      required this.gptprovider,
       required this.type})
       : super(key: key);
 
@@ -39,6 +43,7 @@ class _SettingDialogState extends State<SettingDialog> {
     Future<void> _deleteAccount() async {
       print("계정탈퇴");
       widget.user.userInfoClear();
+      widget.gptprovider.using = true;
       String? userId = FirebaseAuth.instance.currentUser?.uid;
       FirebaseFirestore.instance.collection("users").doc(userId).delete();
       await FirebaseAuth.instance.currentUser?.delete();

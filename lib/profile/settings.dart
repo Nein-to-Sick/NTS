@@ -10,6 +10,7 @@ import 'package:nts/component/suggestions_button.dart';
 import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
+import 'package:nts/provider/gpt_model.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
@@ -17,6 +18,7 @@ import '../provider/backgroundController.dart';
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
   final UserInfoValueModel user;
+  final GPTModel gptprovider;
   final bool alert;
 
   // final controller = Provider.of<BackgroundController>(context);
@@ -26,6 +28,7 @@ class ProfileSettings extends StatefulWidget {
       {Key? key,
       required this.provider,
       required this.user,
+      required this.gptprovider,
       required this.alert})
       : super(key: key);
 
@@ -475,26 +478,36 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 Expanded(
                     child: Container(
                         margin: const EdgeInsets.only(left: 20),
-                        child: const Text(
+                        child: Text(
                           "알림 설정",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: FlutterLocalNotification
+                                      .hasNotificationPermission
+                                  ? MyThemeColors.blackColor
+                                  : MyThemeColors.myGreyscale[200]!),
                         ))),
                 alarmButton(),
               ]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //알림설정
+            //인공지능설정
             buildCustomContainer(
               backgroundColor: Colors.white.withOpacity(0.9),
               inside: Row(children: [
                 Expanded(
                     child: Container(
                         margin: const EdgeInsets.only(left: 20),
-                        child: const Text(
+                        child: Text(
                           "AI 꺼짐",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: widget.gptprovider.using
+                                ? MyThemeColors.blackColor
+                                : MyThemeColors.myGreyscale[200]!,
+                          ),
                         ))),
-                alarmButton(),
+                AIButton(),
               ]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -657,15 +670,17 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         foregroundIndicatorBuilder: (context, global) {
           return SizedBox.fromSize(
             size: global.indicatorSize,
-            child: const DecoratedBox(
+            child: DecoratedBox(
               decoration: BoxDecoration(
-                // color: FlutterLocalNotification.hasNotificationPermission
-                //     ? Color(0xffFCE181)
-                //     : MyThemeColors.myGreyscale[50]!,
+                color: FlutterLocalNotification.hasNotificationPermission
+                    ? MyThemeColors.blackColor
+                    : MyThemeColors.myGreyscale[200]!,
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
-                      color: Color(0xffC6C6C6),
+                      color: FlutterLocalNotification.hasNotificationPermission
+                          ? MyThemeColors.blackColor
+                          : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,
                       blurRadius: 1.1,
                       offset: Offset(0.0, 0.8))
@@ -682,28 +697,20 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return Container(
       margin: const EdgeInsets.only(right: 15),
       child: CustomAnimatedToggleSwitch<bool>(
-        current: FlutterLocalNotification.hasNotificationPermission,
+        current: widget.gptprovider.using,
         values: [false, true],
         dif: 0.0,
         indicatorSize: const Size.square(30.0),
         animationDuration: const Duration(milliseconds: 200),
         animationCurve: Curves.linear,
-        onChanged: (b) => setState(
-            () => FlutterLocalNotification.hasNotificationPermission = b),
+        onChanged: (b) => setState(() => widget.gptprovider.using = b),
         iconBuilder: (context, local, global) {
           return const SizedBox();
         },
         defaultCursor: SystemMouseCursors.click,
         onTap: () {
-          setState(() => FlutterLocalNotification.hasNotificationPermission =
-              !FlutterLocalNotification.hasNotificationPermission);
-          print(FlutterLocalNotification.hasNotificationPermission);
-
-          if (FlutterLocalNotification.hasNotificationPermission) {
-            FlutterLocalNotification.showNotification();
-          } else {
-            print("notification is turned off");
-          }
+          setState(() => widget.gptprovider.using = !widget.gptprovider.using);
+          print(widget.gptprovider.using);
         },
         iconsTappable: false,
         wrapperBuilder: (context, global, child) {
@@ -716,18 +723,16 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   height: 20.0,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color:
-                            FlutterLocalNotification.hasNotificationPermission
-                                ? Color(0xffFCE181)
-                                : MyThemeColors.myGreyscale[50],
+                        color: widget.gptprovider.using
+                            ? MyThemeColors.secondaryColor
+                            : MyThemeColors.myGreyscale[50],
                         borderRadius:
                             const BorderRadius.all(Radius.circular(50.0)),
                         border: Border.all(
                           width: 3.0,
-                          color:
-                              FlutterLocalNotification.hasNotificationPermission
-                                  ? Color(0xffFCE181)
-                                  : MyThemeColors.myGreyscale[200]!,
+                          color: widget.gptprovider.using
+                              ? MyThemeColors.secondaryColor
+                              : MyThemeColors.myGreyscale[200]!,
                         )),
                   )),
               child,
@@ -737,15 +742,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         foregroundIndicatorBuilder: (context, global) {
           return SizedBox.fromSize(
             size: global.indicatorSize,
-            child: const DecoratedBox(
+            child: DecoratedBox(
               decoration: BoxDecoration(
-                // color: FlutterLocalNotification.hasNotificationPermission
-                //     ? Color(0xffFCE181)
-                //     : MyThemeColors.myGreyscale[50]!,
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
-                      color: Color(0xffC6C6C6),
+                      color: widget.gptprovider.using
+                          ? MyThemeColors.blackColor
+                          : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,
                       blurRadius: 1.1,
                       offset: Offset(0.0, 0.8))
@@ -898,6 +902,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     return SettingDialog(
                       provider: widget.provider,
                       user: widget.user,
+                      gptprovider: widget.gptprovider,
                       type: 0,
                     );
                   },
@@ -925,6 +930,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     return SettingDialog(
                       provider: widget.provider,
                       user: widget.user,
+                      gptprovider: widget.gptprovider,
                       type: 1,
                     );
                   },
