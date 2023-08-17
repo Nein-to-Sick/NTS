@@ -362,7 +362,7 @@ class _LetterState extends State<Letter> {
       child: Column(
         children: [
           Text(
-            "어떤 상황에 있는 사람한테 쓸까요?",
+            isSelfSelected ? "어떤 상황의 나에게 쓸까요?" : "어떤 상황에 있는 사람한테 쓸까요?",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -551,7 +551,7 @@ class _LetterState extends State<Letter> {
       child: Column(
         children: [
           Text(
-            "어떤 감정을 가진 사람한테 쓸까요?",
+            isSelfSelected ? "어떤 감정의 나에게 쓸까요?" : "어떤 감정을 가진 사람한테 쓸까요?",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
