@@ -31,7 +31,7 @@ class NickName {
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () {
-            return Future(() => false);
+            return (type != 1) ? Future(() => false) : Future(() => true);
           },
           child: Padding(
             padding: EdgeInsets.only(
