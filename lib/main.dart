@@ -44,6 +44,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          textScaler: const TextScaler.linear(1.0),
+        ),
+        child: child!,
+      ),
       theme: ThemeData(
         fontFamily: "SUITE",
         textSelectionTheme: TextSelectionThemeData(

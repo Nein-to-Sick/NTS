@@ -32,9 +32,9 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
   AnimationController? _spreadAnimationController;
   Animation<double>? _spreadAnimation;
 
-  late int greenFieldValue;
+  late int? greenFieldValue;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String userId = FirebaseAuth.instance.currentUser!.uid;
+  String? userId = FirebaseAuth.instance.currentUser?.uid;
   late Stream<DocumentSnapshot> _firestoreDocumentStream;
 
   @override
@@ -127,7 +127,11 @@ class FireFlyState extends State<FireFly> with TickerProviderStateMixin {
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             // get green value from Firestore document
-            greenFieldValue = snapshot.data!.get('green') as int;
+            try {
+              greenFieldValue = snapshot.data?.get('green') ?? 0;
+            } catch (e) {
+              greenFieldValue = 0;
+            }
             if (greenFieldValue == 1) {
               Future.delayed(const Duration(seconds: 20), () async {
                 await snapshot.data!.reference.update({'green': 0});

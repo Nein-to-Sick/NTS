@@ -1,7 +1,7 @@
 class CompanyInfo {
   String companyName = "Nein to Sick";
   String info =
-      "대표: 김형진\n주소: 경상북도 포항시 북구 흥해읍 한동로 558 (한동대학교)\n대표전화: 010-0000-000\n이메일: XXXX@email.com";
+      "대표: 김형진\n주소: 경상북도 포항시 북구 흥해읍 한동로 558 (한동대학교) SW라운지 201\n대표전화: 010-6889-9316\n이메일: neintosick96@gmail.com";
 
   List<List<String>> termsOfUse = [
     [

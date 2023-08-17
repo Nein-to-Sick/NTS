@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nts/component/confirm_dialog.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,12 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
+import '../component/PDFScreen.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
+import 'dart:async';
+import 'dart:io';
+
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
@@ -51,10 +54,41 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
   bool positive = false;
 
+  String servicePDF = "";
+  String personPDF = "";
+
   @override
   void initState() {
     positive = widget.alert;
+    fromAsset('assets/pdf/service.pdf', 'service.pdf').then((f) {
+      setState(() {
+        servicePDF = f.path;
+      });
+    });
+    fromAsset('assets/pdf/personal.pdf', 'personal.pdf').then((f) {
+      setState(() {
+        personPDF = f.path;
+      });
+    });
     super.initState();
+  }
+
+  Future<File> fromAsset(String asset, String filename) async {
+    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
+    Completer<File> completer = Completer();
+
+    try {
+      var dir = await getApplicationDocumentsDirectory();
+      File file = File("${dir.path}/$filename");
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
+
+    return completer.future;
   }
 
   @override
@@ -537,53 +571,43 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   child: const Text("오픈 라이센스",
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                 ),
-              ),
-              const HeroIcon(
-                HeroIcons.chevronRight,
-                color: Color(0xffBFBFBF),
-              ),
-            ]),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          //이용약관
-          buildCustomButton(
-            backgroundColor: Colors.white.withOpacity(0.9),
-            onTap: () {
-              setState(() {
-                index = 2;
-              });
-            },
-            inside: Row(children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    "이용약관",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: MyThemeColors.myGreyscale[900]),
+              ]),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            //이용약관
+            buildCustomButton(
+              backgroundColor: Colors.white.withOpacity(0.9),
+              onTap: () {
+                if (servicePDF.isNotEmpty) {
+                  showDialog(context: context, builder: (BuildContext context) {
+                    return PDFScreen(path: servicePDF);
+                  });
+                }
+              },
+              inside: Row(children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20),
+                    child: Text("이용약관",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
                   ),
                 ),
-              ),
-              const HeroIcon(
-                HeroIcons.chevronRight,
-                color: Color(0xffBFBFBF),
-              ),
-            ]),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          //개인정보 처리방침
-          buildCustomButton(
-            backgroundColor: Colors.white.withOpacity(0.9),
-            onTap: () {
-              setState(() {
-                index = 3;
-              });
-            },
-            inside: Row(children: [
-              Expanded(
-                child: Container(
+              ]),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            //개인정보 처리방침
+            buildCustomButton(
+              backgroundColor: Colors.white.withOpacity(0.9),
+              onTap: () {
+                if (personPDF.isNotEmpty) {
+                  showDialog(context: context, builder: (BuildContext context) {
+                    return PDFScreen(path: personPDF);
+                  });
+                }
+              },
+              inside: Row(children: [
+                Expanded(
+                  child: Container(
                     margin: const EdgeInsets.only(left: 20),
                     child: Text(
                       "개인정보 처리방침",
@@ -1074,13 +1098,48 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     Navigator.pop(context);
   }
 
+  // 컬렉션을 삭제하는 helper 함수
+  Future<void> _deleteAllCollectionsInUserDocument(String userId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference userDocRef = firestore.collection('users').doc(userId);
+    final DocumentSnapshot userDocSnapshot = await userDocRef.get();
+
+    Future<void> deleteCollection(String collectionPath) async {
+      final QuerySnapshot querySnapshot = await firestore.collection(collectionPath).get();
+      final WriteBatch batch = firestore.batch();
+
+      querySnapshot.docs.forEach((doc) {
+        batch.delete(doc.reference);
+      });
+
+      await batch.commit();
+    }
+
+    if (userDocSnapshot.exists) {
+      // 리스트에 하위 컬렉션의 이름을 추가합니다.
+      List<String> subcollections = ["mailBox", "diary"];
+
+      for (final subcollectionName in subcollections) {
+        String collectionPath = "users/$userId/$subcollectionName";
+        await deleteCollection(collectionPath);
+      }
+    } else {
+      print('해당하는 userId가 존재하지 않습니다.');
+    }
+  }
+
   Future<void> _deleteAccount() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     widget.user.userInfoClear();
     await prefs.clear();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
-    FirebaseFirestore.instance.collection("users").doc(userId).delete();
+    if (userId != null) {
+      await _deleteAllCollectionsInUserDocument(userId).then((value) {
+        FirebaseFirestore.instance.collection("users").doc(userId).delete();
+      });
+    }
+
     GoogleSignIn().disconnect();
     await FirebaseAuth.instance.currentUser?.delete();
     widget.provider.movePage(0);

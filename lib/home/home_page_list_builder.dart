@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/button.dart';
@@ -6,7 +10,10 @@ import 'package:nts/component/nickname_sheet.dart';
 import 'package:nts/home/home.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/backgroundController.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../component/PDFScreen.dart';
 
 class HomePageListViewBuilder extends StatefulWidget {
   final AudioPlayer player;
@@ -27,11 +34,43 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
   int currentPageIndex = 0;
   bool _isNicknameSheetVisible = false;
 
+  String servicePDF = "";
+  String personPDF = "";
+
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: widget.firstPageIndex);
     currentPageIndex = widget.firstPageIndex;
+    fromAsset('assets/pdf/service.pdf', 'service.pdf').then((f) {
+      setState(() {
+        servicePDF = f.path;
+      });
+    });
+    fromAsset('assets/pdf/personal.pdf', 'personal.pdf').then((f) {
+      setState(() {
+        personPDF = f.path;
+      });
+    });
+  }
+
+  Future<File> fromAsset(String asset, String filename) async {
+    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
+    Completer<File> completer = Completer();
+
+    try {
+      var dir = await getApplicationDocumentsDirectory();
+      File file = File("${dir.path}/$filename");
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
+
+    return completer.future;
   }
 
   @override
@@ -106,16 +145,47 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                       const EdgeInsets.only(bottom: 50.0, left: 20, right: 20),
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: Button(
-                      function: () {
-                        setState(() {
-                          currentPageIndex = _pageController.page!.toInt();
-                        });
-                        _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                      },
-                      title: (currentPageIndex != 1) ? '다음' : '시작하기',
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        currentPageIndex == 1 ? Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(onTap: (){
+                                  if (personPDF.isNotEmpty) {
+                                    showDialog(context: context, builder: (BuildContext context) {
+                                      return PDFScreen(path: personPDF);
+                                    });
+                                  }
+                                },child: const Text("개인정보처리동의서", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: MyThemeColors.primaryColor, decoration: TextDecoration.underline),)),
+                                const Text("와 ", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white),),
+                                GestureDetector(onTap: (){
+                                  if (servicePDF.isNotEmpty) {
+                                    showDialog(context: context, builder: (BuildContext context) {
+                                      return PDFScreen(path: servicePDF);
+                                    });
+                                  }
+                                },child: const Text("이용약관", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: MyThemeColors.primaryColor, decoration: TextDecoration.underline),)),
+                                const Text("에 동의하시나요?", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white),)
+                              ],
+                            ),
+                            const SizedBox(height: 10,)
+                          ],
+                        ) : Container(),
+                        Button(
+                          function: () {
+                            setState(() {
+                              currentPageIndex = _pageController.page!.toInt();
+                            });
+                            _pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.ease);
+                          },
+                          title: (currentPageIndex != 1) ? '다음' : '동의하고 시작하기',
+                        ),
+                      ],
                     ),
                   ),
                 )
