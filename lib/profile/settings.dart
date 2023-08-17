@@ -634,13 +634,29 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         onTap: () {
           setState(() => FlutterLocalNotification.hasNotificationPermission =
               !FlutterLocalNotification.hasNotificationPermission);
-          print(FlutterLocalNotification.hasNotificationPermission);
 
-          if (FlutterLocalNotification.hasNotificationPermission) {
-            FlutterLocalNotification.showNotification();
-          } else {
-            print("notification is turned off");
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.white,
+              content: const Text(
+                '알림이 설정되었습니다!',
+                style: TextStyle(color: Colors.black),
+              ),
+              duration: const Duration(seconds: 3),
+              //올라와있는 시간
+              action: SnackBarAction(
+                textColor: MyThemeColors.primaryColor,
+                //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                label: '취소하기',
+                //버튼이름
+                onPressed: () {
+                  FlutterLocalNotification.hasNotificationPermission =
+                      !FlutterLocalNotification.hasNotificationPermission;
+                },
+              ),
+            ),
+          );
         },
         iconsTappable: false,
         wrapperBuilder: (context, global, child) {
@@ -719,6 +735,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
           //  local variable update
           prefs.setBool('isAIUsing', widget.gptprovider.isAIUsing);
+          setState(() {});
         },
         iconsTappable: false,
         wrapperBuilder: (context, global, child) {
