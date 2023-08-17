@@ -84,33 +84,21 @@ class _MailBoxState extends State<MailBox> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(18.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "$year년 $month월 $day일 $hour시",
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: MyThemeColors.myGreyscale[200],
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                "from.${letter.from}",
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: "Dodam",
-                                    color: MyThemeColors.myGreyscale[200]),
-                              )
-                            ],
+                          Text(
+                            "$year년 $month월 $day일 $hour시",
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: MyThemeColors.myGreyscale[200],
+                                fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 15,
                           ),
                           Text(
                             letter.content,
@@ -121,6 +109,16 @@ class _MailBoxState extends State<MailBox> {
                                 color: MyThemeColors.myGreyscale[800],
                                 fontFamily: "Dodam"),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "from.${letter.from}",
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontFamily: "Dodam",
+                                color: MyThemeColors.myGreyscale[200]),
+                          )
                         ],
                       ),
                     ),

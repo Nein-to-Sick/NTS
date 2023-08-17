@@ -7,7 +7,7 @@ import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 import '../provider/backgroundController.dart';
 
-void DeleteAccount(BuildContext context, BackgroundController provider) {
+void z(BuildContext context, BackgroundController provider) {
   Future<void> _reauthenticateAndDelete() async {
     try {
       final providerData =
