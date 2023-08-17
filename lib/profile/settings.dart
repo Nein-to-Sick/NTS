@@ -1,8 +1,10 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nts/component/confirm_dialog.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +18,12 @@ import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
+import '../component/PDFScreen.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
+import 'dart:async';
+import 'dart:io';
+
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
@@ -45,10 +51,41 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
   bool positive = false;
 
+  String servicePDF = "";
+  String personPDF = "";
+
   @override
   void initState() {
     positive = widget.alert;
+    fromAsset('assets/pdf/service.pdf', 'service.pdf').then((f) {
+      setState(() {
+        servicePDF = f.path;
+      });
+    });
+    fromAsset('assets/pdf/personal.pdf', 'personal.pdf').then((f) {
+      setState(() {
+        personPDF = f.path;
+      });
+    });
     super.initState();
+  }
+
+  Future<File> fromAsset(String asset, String filename) async {
+    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
+    Completer<File> completer = Completer();
+
+    try {
+      var dir = await getApplicationDocumentsDirectory();
+      File file = File("${dir.path}/$filename");
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
+
+    return completer.future;
   }
 
   @override
@@ -546,9 +583,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white.withOpacity(0.9),
               onTap: () {
-                setState(() {
-                  index = 2;
-                });
+                if (servicePDF.isNotEmpty) {
+                  showDialog(context: context, builder: (BuildContext context) {
+                    return PDFScreen(path: servicePDF);
+                  });
+                }
               },
               inside: Row(children: [
                 Expanded(
@@ -569,9 +608,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomButton(
               backgroundColor: Colors.white.withOpacity(0.9),
               onTap: () {
-                setState(() {
-                  index = 3;
-                });
+                if (personPDF.isNotEmpty) {
+                  showDialog(context: context, builder: (BuildContext context) {
+                    return PDFScreen(path: personPDF);
+                  });
+                }
               },
               inside: Row(children: [
                 Expanded(
@@ -1091,8 +1132,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       print('해당하는 userId가 존재하지 않습니다.');
     }
   }
-
-
 
   Future<void> _deleteAccount() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
