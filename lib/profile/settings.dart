@@ -1062,13 +1062,50 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     Navigator.pop(context);
   }
 
+  // 컬렉션을 삭제하는 helper 함수
+  Future<void> _deleteAllCollectionsInUserDocument(String userId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference userDocRef = firestore.collection('users').doc(userId);
+    final DocumentSnapshot userDocSnapshot = await userDocRef.get();
+
+    Future<void> deleteCollection(String collectionPath) async {
+      final QuerySnapshot querySnapshot = await firestore.collection(collectionPath).get();
+      final WriteBatch batch = firestore.batch();
+
+      querySnapshot.docs.forEach((doc) {
+        batch.delete(doc.reference);
+      });
+
+      await batch.commit();
+    }
+
+    if (userDocSnapshot.exists) {
+      // 리스트에 하위 컬렉션의 이름을 추가합니다.
+      List<String> subcollections = ["mailBox", "diary"];
+
+      for (final subcollectionName in subcollections) {
+        String collectionPath = "users/$userId/$subcollectionName";
+        await deleteCollection(collectionPath);
+      }
+    } else {
+      print('해당하는 userId가 존재하지 않습니다.');
+    }
+  }
+
+
+
   Future<void> _deleteAccount() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     print("계정탈퇴");
     widget.user.userInfoClear();
     await prefs.clear();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
-    FirebaseFirestore.instance.collection("users").doc(userId).delete();
+    if (userId != null) {
+      await _deleteAllCollectionsInUserDocument(userId).then((value) {
+        FirebaseFirestore.instance.collection("users").doc(userId).delete();
+      });
+    }
+
     GoogleSignIn().disconnect();
     await FirebaseAuth.instance.currentUser?.delete();
     widget.provider.movePage(0);
