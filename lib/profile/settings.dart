@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nts/component/confirm_dialog.dart';
+import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +20,7 @@ import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/gpt_model.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
@@ -222,7 +228,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         children: [
           Text(
             "계정 관리",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Expanded(
@@ -244,7 +253,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         ],
       ),
     );
-    Widget oss_licenses = Padding(
+    Widget ossLicenses = Padding(
       padding: EdgeInsets.fromLTRB(
           MediaQuery.of(context).size.width * 0.045,
           MediaQuery.of(context).size.height * 0.03,
@@ -254,7 +263,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         children: [
           Text(
             "오픈 라이센스",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Expanded(
@@ -299,7 +311,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                   ? openLicense
                                   : index == 6
                                       ? manageAccount
-                                      : oss_licenses,
+                                      : ossLicenses,
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -372,249 +384,252 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   Widget termsOfUseText() {
     return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: [
-            for (int i = 0; i < CompanyInfo().termsOfUse.length; i++)
-              Container(
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: WrappedKoreanText(
-                        CompanyInfo().termsOfUse[i][0],
-                        style: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: WrappedKoreanText(
-                        CompanyInfo().termsOfUse[i][1],
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                  ],
+      child: Column(
+        children: [
+          for (int i = 0; i < CompanyInfo().termsOfUse.length; i++)
+            Column(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: WrappedKoreanText(
+                    CompanyInfo().termsOfUse[i][0],
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-          ],
-        ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: WrappedKoreanText(
+                    CompanyInfo().termsOfUse[i][1],
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }
 
   Widget privacyPolicyText() {
     return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: [
-            for (int i = 0; i < CompanyInfo().privacyPolicy.length; i++)
-              Container(
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: WrappedKoreanText(
-                        CompanyInfo().privacyPolicy[i][0],
-                        style: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: WrappedKoreanText(
-                        CompanyInfo().privacyPolicy[i][1],
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                  ],
+      child: Column(
+        children: [
+          for (int i = 0; i < CompanyInfo().privacyPolicy.length; i++)
+            Column(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: WrappedKoreanText(
+                    CompanyInfo().privacyPolicy[i][0],
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: WrappedKoreanText(
-                CompanyInfo().privacyPolicyExplain,
-                style: const TextStyle(
-                    fontSize: 10, fontWeight: FontWeight.normal),
-              ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: WrappedKoreanText(
+                    CompanyInfo().privacyPolicy[i][1],
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: WrappedKoreanText(
+              CompanyInfo().privacyPolicyExplain,
+              style:
+                  const TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget mainsettingView() {
     return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: [
-            //계정관리
-            buildCustomButton(
-              onTap: () {
-                setState(() {
-                  index = 6;
-                });
-              },
-              backgroundColor: Colors.white.withOpacity(0.9),
-              inside: Row(children: [
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20),
-                        child: const Text(
-                          "계정 관리",
-                          style: TextStyle(fontSize: 16),
-                        ))),
-                const HeroIcon(
-                  HeroIcons.chevronRight,
-                  color: Color(0xffBFBFBF),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //알림설정
-            buildCustomContainer(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              inside: Row(children: [
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          "알림 설정",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: FlutterLocalNotification
-                                      .hasNotificationPermission
-                                  ? MyThemeColors.blackColor
-                                  : MyThemeColors.myGreyscale[200]!),
-                        ))),
-                alarmButton(),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //인공지능설정
-            buildCustomContainer(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              inside: Row(children: [
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          "AI정리 사용",
-                          style: TextStyle(
+      child: Column(
+        children: [
+          //계정관리
+          buildCustomButton(
+            onTap: () {
+              setState(() {
+                index = 6;
+              });
+            },
+            backgroundColor: Colors.white.withOpacity(0.9),
+            inside: Row(children: [
+              Expanded(
+                  child: Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: const Text(
+                        "계정 관리",
+                        style: TextStyle(fontSize: 16),
+                      ))),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //알림설정
+          buildCustomContainer(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            inside: Row(children: [
+              Expanded(
+                  child: Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        "알림 설정",
+                        style: TextStyle(
                             fontSize: 16,
-                            color: widget.gptprovider.isAIUsing
+                            color: FlutterLocalNotification
+                                    .hasNotificationPermission
                                 ? MyThemeColors.blackColor
-                                : MyThemeColors.myGreyscale[200]!,
-                          ),
-                        ))),
-                AIButton(),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            //오픈 라이센스
-            buildCustomButton(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              onTap: () {
-                setState(() {
-                  index = 7;
-                });
-              },
-              inside: Row(children: [
-                Expanded(
+                                : MyThemeColors.myGreyscale[200]!),
+                      ))),
+              alarmButton(),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //인공지능설정
+          buildCustomContainer(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            inside: Row(children: [
+              Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    child: const Text("오픈 라이센스",
-                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                      margin: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        "AI정리 사용",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: widget.gptprovider.isAIUsing
+                              ? MyThemeColors.blackColor
+                              : MyThemeColors.myGreyscale[200]!,
+                        ),
+                      ))),
+              AIButton(),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          //오픈 라이센스
+          buildCustomButton(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            onTap: () {
+              setState(() {
+                index = 7;
+              });
+            },
+            inside: Row(children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: const Text("오픈 라이센스",
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                ),
+              ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //이용약관
+          buildCustomButton(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            onTap: () {
+              setState(() {
+                index = 2;
+              });
+            },
+            inside: Row(children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    "이용약관",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: MyThemeColors.myGreyscale[900]),
                   ),
                 ),
-                const HeroIcon(
-                  HeroIcons.chevronRight,
-                  color: Color(0xffBFBFBF),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //이용약관
-            buildCustomButton(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              onTap: () {
-                setState(() {
-                  index = 2;
-                });
-              },
-              inside: Row(children: [
-                Expanded(
-                  child: Container(
+              ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //개인정보 처리방침
+          buildCustomButton(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            onTap: () {
+              setState(() {
+                index = 3;
+              });
+            },
+            inside: Row(children: [
+              Expanded(
+                child: Container(
                     margin: const EdgeInsets.only(left: 20),
-                    child: Text("이용약관",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
-                  ),
-                ),),
-                const HeroIcon(
-                  HeroIcons.chevronRight,
-                  color: Color(0xffBFBFBF),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //개인정보 처리방침
-            buildCustomButton(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              onTap: () {
-                setState(() {
-                  index = 3;
-                });
-              },
-              inside: Row(children: [
-                Expanded(
-                  child: Container(
+                    child: Text(
+                      "개인정보 처리방침",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[900]),
+                    )),
+              ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //사업자 정보
+          buildCustomButton(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            onTap: () {
+              setState(() {
+                index = 4;
+              });
+            },
+            inside: Row(children: [
+              Expanded(
+                child: Container(
                     margin: const EdgeInsets.only(left: 20),
-                    child: Text("개인정보 처리방침",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),)
-                  ),
-                ),
-                const HeroIcon(
-                  HeroIcons.chevronRight,
-                  color: Color(0xffBFBFBF),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //사업자 정보
-            buildCustomButton(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              onTap: () {
-                setState(() {
-                  index = 4;
-                });
-              },
-              inside: Row(children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Text("사업자 정보",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),)
-                  ),
-                ),
-                const HeroIcon(
-                  HeroIcons.chevronRight,
-                  color: Color(0xffBFBFBF),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-            //건의함
-            suggestions(),
-          ],
-        ),
+                    child: Text(
+                      "사업자 정보",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[900]),
+                    )),
+              ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+          //건의함
+          suggestions(),
+        ],
       ),
     );
   }
@@ -675,7 +690,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     decoration: BoxDecoration(
                         color:
                             FlutterLocalNotification.hasNotificationPermission
-                                ? Color(0xffFCE181)
+                                ? MyThemeColors.secondaryColor
                                 : MyThemeColors.myGreyscale[50],
                         borderRadius:
                             const BorderRadius.all(Radius.circular(50.0)),
@@ -683,7 +698,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           width: 3.0,
                           color:
                               FlutterLocalNotification.hasNotificationPermission
-                                  ? Color(0xffFCE181)
+                                  ? MyThemeColors.secondaryColor
                                   : MyThemeColors.myGreyscale[200]!,
                         )),
                   )),
@@ -699,7 +714,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 color: FlutterLocalNotification.hasNotificationPermission
                     ? MyThemeColors.blackColor
                     : MyThemeColors.myGreyscale[200]!,
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
                       color: FlutterLocalNotification.hasNotificationPermission
@@ -707,7 +722,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,
                       blurRadius: 1.1,
-                      offset: Offset(0.0, 0.8))
+                      offset: const Offset(0.0, 0.8))
                 ],
               ),
             ),
@@ -773,7 +788,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             size: global.indicatorSize,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
                       color: widget.gptprovider.isAIUsing
@@ -781,7 +796,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,
                       blurRadius: 1.1,
-                      offset: Offset(0.0, 0.8))
+                      offset: const Offset(0.0, 0.8))
                 ],
               ),
             ),
@@ -792,31 +807,29 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Widget companyInfoView() {
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                CompanyInfo().companyName,
-                style: const TextStyle(fontSize: 16),
-              ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Text(
+              CompanyInfo().companyName,
+              style: const TextStyle(fontSize: 16),
             ),
-            const SizedBox(
-              height: 15,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: WrappedKoreanText(
+              CompanyInfo().info,
+              style: TextStyle(
+                  fontSize: 13, color: Colors.black.withOpacity(0.53)),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: WrappedKoreanText(
-                CompanyInfo().info,
-                style: TextStyle(
-                    fontSize: 13, color: Colors.black.withOpacity(0.53)),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -850,7 +863,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           ),
           Text(
             '건의함',
-            style: TextStyle(fontSize: 13, color: MyThemeColors.myGreyscale[900], fontWeight: FontWeight.w500),
+            style: TextStyle(
+                fontSize: 13,
+                color: MyThemeColors.myGreyscale[900],
+                fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -858,200 +874,196 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Widget manageAccountView() {
-    return Container(
-      child: Center(
-        child: Column(
-          children: [
-            buildCustomContainer(
-              backgroundColor: Colors.white,
-              inside: Row(children: [
-                Flexible(
-                    flex: 2,
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20),
-                        child: const Text(
-                          "이메일",
-                          style: TextStyle(fontSize: 16),
-                        ))),
-                Flexible(
-                  flex: 5,
-                  child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.50,
-                      child: AutoSizeText(
-                        widget.user.userEmail,
-                        textAlign: TextAlign.end,
+    return Center(
+      child: Column(
+        children: [
+          buildCustomContainer(
+            backgroundColor: Colors.white,
+            inside: Row(children: [
+              Flexible(
+                  flex: 2,
+                  child: Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: const Text(
+                        "이메일",
+                        style: TextStyle(fontSize: 16),
+                      ))),
+              Flexible(
+                flex: 5,
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.50,
+                    child: AutoSizeText(
+                      widget.user.userEmail,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: MyThemeColors.myGreyscale[500],
+                          fontWeight: FontWeight.w700),
+                    )),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          buildCustomButton(
+            onTap: () {
+              // NewNickName(context);
+              NickName().myNicknameSheet(context, widget.user, 1, null);
+            },
+            backgroundColor: Colors.white,
+            inside: Row(children: [
+              Expanded(
+                  child: Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: const Text(
+                        "닉네임 변경",
                         style: TextStyle(
-                            color: MyThemeColors.myGreyscale[500],
-                            fontWeight: FontWeight.w700),
-                      )),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            buildCustomButton(
-              onTap: () {
-                // NewNickName(context);
-                NickName().myNicknameSheet(context, widget.user, 1, null);
-              },
-              backgroundColor: Colors.white,
-              inside: Row(children: [
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20),
-                        child: const Text(
-                          "닉네임 변경",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff393939)),
-                        ))),
-                Text(
-                  widget.user.userNickName,
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: MyThemeColors.myGreyscale[500],
-                      fontWeight: FontWeight.w700),
-                ),
-                const HeroIcon(
-                  HeroIcons.chevronRight,
-                  color: Color(0xffBFBFBF),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
-                )
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            //로그아웃
-            Button(
-              function: () {
-                // widget.user.userInfoClear();
-                // FirebaseAuth.instance.signOut();
-                // widget.provider.movePage(0);
-                // widget.provider.fireFlyOff();
-                // Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return dialogWithYesOrNo(
-                      context,
-                      '로그아웃 하시겠나요?',
-                      '',
-                      '로그아웃',
-                      //  on Yes
-                      () {
-                        _logout();
-                      },
-                      //  on No
-                      () {
-                        Navigator.pop(context);
-                      },
-                    );
-
-                    /*
-                    SettingDialog(
-                      provider: widget.provider,
-                      user: widget.user,
-                      type: 0,
-                    );
-                    */
-                  },
-                );
-              },
-              title: "로그아웃",
-              color: MyThemeColors.teritaryColor,
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //계정탈퇴
-            TextButton(
-              onPressed: () {
-                // widget.user.userInfoClear();
-                // DeleteAccount(context, widget.provider);
-
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return dialogWithYesOrNo(
-                      context,
-                      '정말로 떠나시는 건가요?',
-                      '계정 탈퇴시 기존에 저장된 데이터는\n모두 삭제되고 복구가 불가능합니다.',
-                      '탈퇴하기',
-                      //  on Yes
-                      () {
-                        _deleteAccount();
-                      },
-                      //  on No
-                      () {
-                        Navigator.pop(context);
-                      },
-                    );
-
-                    /*
-                    SettingDialog(
-                      provider: widget.provider,
-                      user: widget.user,
-                      type: 1,
-                    );
-                    */
-                  },
-                );
-              },
-              child: const Text(
-                "계정탈퇴",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff393939)),
+                      ))),
+              Text(
+                widget.user.userNickName,
                 style: TextStyle(
                     fontSize: 16,
-                    color: MyThemeColors.teritaryColor,
+                    color: MyThemeColors.myGreyscale[500],
                     fontWeight: FontWeight.w700),
               ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              )
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          //로그아웃
+          Button(
+            function: () {
+              // widget.user.userInfoClear();
+              // FirebaseAuth.instance.signOut();
+              // widget.provider.movePage(0);
+              // widget.provider.fireFlyOff();
+              // Navigator.pop(context);
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return dialogWithYesOrNo(
+                    context,
+                    '로그아웃 하시겠나요?',
+                    '',
+                    '로그아웃',
+                    //  on Yes
+                    () {
+                      _logout();
+                    },
+                    //  on No
+                    () {
+                      Navigator.pop(context);
+                    },
+                  );
+
+                  /*
+                  SettingDialog(
+                    provider: widget.provider,
+                    user: widget.user,
+                    type: 0,
+                  );
+                  */
+                },
+              );
+            },
+            title: "로그아웃",
+            color: MyThemeColors.teritaryColor,
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //계정탈퇴
+          TextButton(
+            onPressed: () {
+              // widget.user.userInfoClear();
+              // DeleteAccount(context, widget.provider);
+
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return dialogWithYesOrNo(
+                    context,
+                    '정말로 떠나시는 건가요?',
+                    '계정 탈퇴시 기존에 저장된 데이터는\n모두 삭제되고 복구가 불가능합니다.',
+                    '탈퇴하기',
+                    //  on Yes
+                    () {
+                      _deleteAccount();
+                    },
+                    //  on No
+                    () {
+                      Navigator.pop(context);
+                    },
+                  );
+
+                  /*
+                  SettingDialog(
+                    provider: widget.provider,
+                    user: widget.user,
+                    type: 1,
+                  );
+                  */
+                },
+              );
+            },
+            child: const Text(
+              "계정탈퇴",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: MyThemeColors.teritaryColor,
+                  fontWeight: FontWeight.w700),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget ossLicensesView() {
-    return Container(
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: ossLicenses.length,
-        itemBuilder: (_, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ExpansionTile(
-              backgroundColor: MyThemeColors.whiteColor,
-              textColor: MyThemeColors.blackColor,
-              collapsedBackgroundColor: MyThemeColors.whiteColor,
-              collapsedShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              title: Text(ossLicenses[index].name[0].toUpperCase() +
-                  ossLicenses[index].name.substring(1)),
-              subtitle: Text(ossLicenses[index].description),
-              tilePadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              childrenPadding: EdgeInsets.all(10),
-              children: [
-                ListTile(
-                  title: Text(
-                    ossLicenses[index].license!,
-                    style: TextStyle(
-                        fontSize: 12, color: MyThemeColors.myGreyscale[600]),
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: ossLicenses.length,
+      itemBuilder: (_, index) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ExpansionTile(
+            backgroundColor: MyThemeColors.whiteColor,
+            textColor: MyThemeColors.blackColor,
+            collapsedBackgroundColor: MyThemeColors.whiteColor,
+            collapsedShape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            title: Text(ossLicenses[index].name[0].toUpperCase() +
+                ossLicenses[index].name.substring(1)),
+            subtitle: Text(ossLicenses[index].description),
+            tilePadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            childrenPadding: const EdgeInsets.all(10),
+            children: [
+              ListTile(
+                title: Text(
+                  ossLicenses[index].license!,
+                  style: TextStyle(
+                      fontSize: 12, color: MyThemeColors.myGreyscale[600]),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 
   void _logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("로그아웃");
+
     widget.user.userInfoClear();
     await prefs.clear();
     FirebaseAuth.instance.signOut();
@@ -1064,7 +1076,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   Future<void> _deleteAccount() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("계정탈퇴");
+
     widget.user.userInfoClear();
     await prefs.clear();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
