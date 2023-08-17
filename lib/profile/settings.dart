@@ -44,6 +44,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   int index =
       1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
   bool positive = false;
+
   @override
   void initState() {
     positive = widget.alert;
@@ -62,9 +63,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       child: Center(
         child: Column(
           children: [
-            const Text(
+            Text(
               "설정",
-              style: TextStyle(fontSize: 20, color: Color(0xff393939)),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: MyThemeColors.myGreyscale[900]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             // mainsettingView(),
@@ -216,9 +220,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           MediaQuery.of(context).size.height * 0.02),
       child: Column(
         children: [
-          const Text(
+          Text(
             "계정 관리",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Expanded(
@@ -248,9 +252,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           MediaQuery.of(context).size.height * 0.02),
       child: Column(
         children: [
-          const Text(
+          Text(
             "오픈 라이센스",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Expanded(
@@ -550,10 +554,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 20),
-                    child: const Text("이용약관",
-                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    child: Text("이용약관",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
                   ),
-                ),
+                ),),
                 const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
@@ -573,8 +577,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 20),
-                    child: const Text("개인정보 처리방침",
-                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    child: Text("개인정보 처리방침",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),)
                   ),
                 ),
                 const HeroIcon(
@@ -596,8 +600,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 20),
-                    child: const Text("사업자 정보",
-                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    child: Text("사업자 정보",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),)
                   ),
                 ),
                 const HeroIcon(
@@ -815,21 +819,21 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      child: const Column(
+      child: Column(
         children: [
-          HeroIcon(
+          const HeroIcon(
             HeroIcons.handRaised,
             // color: AppColors.blackColor,
             color: Colors.black,
             style: HeroIconStyle.mini,
           ),
-          SizedBox(
+          const SizedBox(
             height: 9,
             width: 50,
           ),
           Text(
             '건의함',
-            style: TextStyle(fontSize: 15, color: Colors.black),
+            style: TextStyle(fontSize: 13, color: MyThemeColors.myGreyscale[900], fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -844,23 +848,26 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             buildCustomContainer(
               backgroundColor: Colors.white,
               inside: Row(children: [
-                Expanded(
+                Flexible(
+                    flex: 2,
                     child: Container(
                         margin: const EdgeInsets.only(left: 20),
                         child: const Text(
                           "이메일",
                           style: TextStyle(fontSize: 16),
                         ))),
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    width: MediaQuery.of(context).size.width * 0.50,
-                    child: AutoSizeText(
-                      widget.user.userEmail,
-                      textAlign: TextAlign.end,
-                      maxLines: 1,
-                      style: const TextStyle(
-                          fontSize: 16, color: Color(0xff868686)),
-                    )),
+                Flexible(
+                  flex: 5,
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.50,
+                      child: AutoSizeText(
+                        widget.user.userEmail,
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            color: MyThemeColors.myGreyscale[500],
+                            fontWeight: FontWeight.w700),
+                      )),
+                ),
               ]),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
@@ -876,14 +883,18 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         margin: const EdgeInsets.only(left: 20),
                         child: const Text(
                           "닉네임 변경",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff393939)),
                         ))),
-                Container(
-                    child: Text(
+                Text(
                   widget.user.userNickName,
-                  style:
-                      const TextStyle(fontSize: 16, color: Color(0xff868686)),
-                )),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: MyThemeColors.myGreyscale[500],
+                      fontWeight: FontWeight.w700),
+                ),
                 const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
@@ -895,9 +906,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             //로그아웃
-            buildCustomButton(
-              backgroundColor: MyThemeColors.teritaryColor,
-              onTap: () {
+            Button(
+              function: () {
                 // widget.user.userInfoClear();
                 // FirebaseAuth.instance.signOut();
                 // widget.provider.movePage(0);
@@ -932,18 +942,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   },
                 );
               },
-              inside: const Center(
-                child: Text(
-                  "로그아웃",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
+              title: "로그아웃",
+              color: MyThemeColors.teritaryColor,
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             //계정탈퇴
-            buildCustomButton(
-              backgroundColor: Colors.white,
-              onTap: () {
+            TextButton(
+              onPressed: () {
                 // widget.user.userInfoClear();
                 // DeleteAccount(context, widget.provider);
 
@@ -976,12 +981,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   },
                 );
               },
-              inside: const Center(
-                child: Text(
-                  "계정탈퇴",
-                  style: TextStyle(
-                      fontSize: 16, color: MyThemeColors.teritaryColor),
-                ),
+              child: const Text(
+                "계정탈퇴",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: MyThemeColors.teritaryColor,
+                    fontWeight: FontWeight.w700),
               ),
             ),
           ],
