@@ -297,7 +297,8 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
-                                          duration: Duration(seconds: 5),
+                                          duration:
+                                              Duration(milliseconds: 2000),
                                         ),
                                       );
                                     }
