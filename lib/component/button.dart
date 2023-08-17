@@ -7,11 +7,13 @@ class Button extends StatelessWidget {
     required this.function,
     required this.title,
     this.condition = "not null",
+    this.color = MyThemeColors.primaryColor
   }) : super(key: key);
 
   final String title;
   final Function function;
   final String condition;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class Button extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               color: condition.contains("not null")
-                  ? MyThemeColors.primaryColor
+                  ? color
                   : MyThemeColors.myGreyscale[100],
               borderRadius: BorderRadius.circular(10)),
           child: Padding(
