@@ -166,7 +166,7 @@ class DiaryState extends State<Diary> {
                                             fontSize: 13,
                                           ),
                                         ),
-                                        duration: Duration(seconds: 2),
+                                        duration: Duration(milliseconds: 2000),
                                       ),
                                     );
 

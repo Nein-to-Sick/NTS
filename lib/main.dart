@@ -276,36 +276,40 @@ Future<int> _getUserDataFromFirebase(
     MessageController messageModel,
     AudioPlayer player) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  DateTime currentDateTime = DateTime.now();
 
-  DateTime currentDateTime = DateTime.parse(
-      prefs.getString('LoginedDate') ?? DateTime.now().toString());
-  DateTime now = DateTime.now();
-
-  //  When last login time was not today
-  if (currentDateTime.isBefore(DateTime(now.year, now.month, now.day))) {
-    //  local variable update
+  if (prefs.getString('LoginedDate') == null) {
     await prefs.setString('LoginedDate', DateTime.now().toString());
-    final userCollection = FirebaseFirestore.instance.collection("users");
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+  } else {
+    currentDateTime = DateTime.parse(prefs.getString('LoginedDate').toString());
+    DateTime now = DateTime.now();
 
-    DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
+    //  When last login time was not today
+    if (currentDateTime.isBefore(DateTime(now.year, now.month, now.day))) {
+      //  local variable update
+      await prefs.setString('LoginedDate', DateTime.now().toString());
+      final userCollection = FirebaseFirestore.instance.collection("users");
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
 
-    int currentYellowValue = userInfoModel.currentYellowValue;
-    userInfoModel.updateYellowValue(userSnapshot["yellow"]);
+      DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
 
-    //  max yellow value < 31
-    if (currentYellowValue + 1 < 31) {
-      userInfoModel.updateYellowValue(currentYellowValue++);
+      int currentYellowValue = userInfoModel.currentYellowValue;
+      userInfoModel.updateYellowValue(userSnapshot["yellow"]);
+
+      //  max yellow value < 31
+      if (currentYellowValue + 1 < 31) {
+        userInfoModel.updateYellowValue(++currentYellowValue);
+      }
+
+      //  when is the first day of month
+      if (now.day == 1) {
+        userInfoModel.updateYellowValue(1);
+      }
+
+      await userCollection.doc(userId).update({
+        "yellow": currentYellowValue,
+      });
     }
-
-    //  when is the first day of month
-    if (now.day == 1) {
-      userInfoModel.updateYellowValue(1);
-    }
-
-    await userCollection.doc(userId).update({
-      "yellow": currentYellowValue,
-    });
   }
 
   if (userInfoModel.userNickName.isEmpty) {
