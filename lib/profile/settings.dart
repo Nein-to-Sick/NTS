@@ -65,7 +65,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         servicePDF = f.path;
       });
     });
-    fromAsset('assets/pdf/personal.pdf', 'personal.pdf').then((f) {
+    fromAsset('assets/pdf/personalRule.pdf', 'personalRule.pdf').then((f) {
       setState(() {
         personPDF = f.path;
       });
