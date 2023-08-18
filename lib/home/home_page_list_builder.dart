@@ -37,7 +37,6 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
   String servicePDF = "";
   String personPDF = "";
 
-
   @override
   void initState() {
     super.initState();
@@ -148,32 +147,78 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        currentPageIndex == 1 ? Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(onTap: (){
-                                  if (personPDF.isNotEmpty) {
-                                    showDialog(context: context, builder: (BuildContext context) {
-                                      return PDFScreen(path: personPDF);
-                                    });
-                                  }
-                                },child: const Text("개인정보처리동의서", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: MyThemeColors.primaryColor, decoration: TextDecoration.underline),)),
-                                const Text("와 ", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white),),
-                                GestureDetector(onTap: (){
-                                  if (servicePDF.isNotEmpty) {
-                                    showDialog(context: context, builder: (BuildContext context) {
-                                      return PDFScreen(path: servicePDF);
-                                    });
-                                  }
-                                },child: const Text("이용약관", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: MyThemeColors.primaryColor, decoration: TextDecoration.underline),)),
-                                const Text("에 동의하시나요?", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white),)
-                              ],
-                            ),
-                            const SizedBox(height: 10,)
-                          ],
-                        ) : Container(),
+                        currentPageIndex == 1
+                            ? Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            if (personPDF.isNotEmpty) {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return PDFScreen(
+                                                        path: personPDF);
+                                                  });
+                                            }
+                                          },
+                                          child: const Text(
+                                            "개인정보처리동의서",
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                                color:
+                                                    MyThemeColors.primaryColor,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          )),
+                                      const Text(
+                                        "와 ",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            if (servicePDF.isNotEmpty) {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return PDFScreen(
+                                                        path: servicePDF);
+                                                  });
+                                            }
+                                          },
+                                          child: const Text(
+                                            "이용약관",
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                                color:
+                                                    MyThemeColors.primaryColor,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          )),
+                                      const Text(
+                                        "에 동의하시나요?",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              )
+                            : Container(),
                         Button(
                           function: () {
                             setState(() {
@@ -190,39 +235,39 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                   ),
                 )
               : Container(),
-          (currentPageIndex < 2)
-              ?
-              //  skip to nickname page
-              Positioned(
-                  right: 30,
-                  top: 50,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentPageIndex = 5;
-                      });
-                      _pageController.animateToPage(3,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Text(
-                          "skip",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: MyThemeColors.myGreyscale[400],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
+          // (currentPageIndex < 2)
+          //     ?
+          //     //  skip to nickname page
+          //     Positioned(
+          //         right: 30,
+          //         top: 50,
+          //         child: GestureDetector(
+          //           onTap: () {
+          //             setState(() {
+          //               currentPageIndex = 5;
+          //             });
+          //             _pageController.animateToPage(3,
+          //                 duration: const Duration(milliseconds: 300),
+          //                 curve: Curves.ease);
+          //           },
+          //           child: Container(
+          //             width: 40,
+          //             height: 40,
+          //             color: Colors.transparent,
+          //             child: Center(
+          //               child: Text(
+          //                 "skip",
+          //                 style: TextStyle(
+          //                   fontSize: 16,
+          //                   fontWeight: FontWeight.w700,
+          //                   color: MyThemeColors.myGreyscale[400],
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       )
+          //     : Container(),
         ],
       ),
     );
