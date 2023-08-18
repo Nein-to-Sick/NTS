@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(
-          textScaler: const TextScaler.linear(1.0),
+          textScaleFactor: 1.0,
         ),
         child: child!,
       ),

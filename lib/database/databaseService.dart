@@ -242,8 +242,11 @@ class DatabaseService {
       'from_uid': userId,
       'notMatch': false,
       'heart': false,
-      'heart_count': 0
+      'heart_count': 0,
     });
+
+    await docRef.update({'docId': docRef.id});
+
     return docRef.id;
   }
 

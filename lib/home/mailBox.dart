@@ -5,6 +5,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/model/letterModel.dart';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 import '../component/button.dart';
 import '../database/databaseService.dart';
@@ -151,7 +152,7 @@ class _MailBoxState extends State<MailBox> {
                   children: [
                     Expanded(
                       child: SingleChildScrollView(
-                        child: Text(
+                        child: WrappedKoreanText(
                           content,
                           style: TextStyle(
                               fontSize: 16,
@@ -189,9 +190,11 @@ class _MailBoxState extends State<MailBox> {
             ),
           ),
         ),
-        !notMatch ? const SizedBox(
-          height: 14,
-        ) : Container(),
+        !notMatch
+            ? const SizedBox(
+                height: 14,
+              )
+            : Container(),
         !notMatch
             ? GestureDetector(
                 onTap: () {
@@ -202,13 +205,13 @@ class _MailBoxState extends State<MailBox> {
                 },
                 child: heart
                     ? const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: HeroIcon(
+                        padding: EdgeInsets.all(10.0),
+                        child: HeroIcon(
                           HeroIcons.heart,
                           style: HeroIconStyle.solid,
                           color: MyThemeColors.secondaryColor,
                         ),
-                    )
+                      )
                     : Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
