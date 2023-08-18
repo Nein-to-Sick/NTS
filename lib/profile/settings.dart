@@ -23,7 +23,6 @@ import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/PDFScreen.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
-import 'dart:async';
 import 'dart:io';
 
 class ProfileSettings extends StatefulWidget {
@@ -562,15 +561,21 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 index = 7;
               });
             },
-            inside: Row(children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20),
-                  child: const Text("오픈 라이센스",
-                      style: TextStyle(fontSize: 16, color: Colors.black)),
+            inside: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20),
+                    child: const Text("오픈 라이센스",
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                  ),
                 ),
-              )
-            ]),
+                const HeroIcon(
+                  HeroIcons.chevronRight,
+                  color: Color(0xffBFBFBF),
+                ),
+              ],
+            ),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           //이용약관
@@ -597,7 +602,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         color: MyThemeColors.myGreyscale[900]),
                   ),
                 ),
-              )
+              ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
             ]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
@@ -896,9 +905,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           Text(
             '건의함',
             style: TextStyle(
-                fontSize: 13,
-                color: MyThemeColors.myGreyscale[900],
-                fontWeight: FontWeight.w500),
+              fontSize: 16,
+              color: MyThemeColors.myGreyscale[900],
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -1139,6 +1149,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Future<void> _deleteAccount() async {
+    Navigator.pop(context);
+    Navigator.pop(context);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     widget.user.userInfoClear();
@@ -1153,7 +1165,5 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     GoogleSignIn().disconnect();
     await FirebaseAuth.instance.currentUser?.delete();
     widget.provider.movePage(0);
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 }

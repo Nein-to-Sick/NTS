@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -118,7 +117,11 @@ class BackgroundState extends State<Background> {
     // 초기화
     FlutterLocalNotification.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
+      bool? tempAlert =
+          await FlutterLocalNotification.requestNotificationPermission();
+      if (tempAlert != null) {
+        alert = tempAlert;
+      }
     });
     playEffectAudio();
     super.initState();

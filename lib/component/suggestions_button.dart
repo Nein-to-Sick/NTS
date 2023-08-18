@@ -60,7 +60,7 @@ void myShowBottomSheet(BuildContext context) {
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white,
                         border: Border.all(
-                          color: MyThemeColors.myGreyscale.shade200,
+                          color: MyThemeColors.myGreyscale.shade100,
                           width: 1,
                         ),
                       ),

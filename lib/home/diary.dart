@@ -336,7 +336,9 @@ class DiaryState extends State<Diary> {
                                             hintText:
                                                 "ex. 오늘은 뭔가 우울한 감정이 드는 날이었다. 이유를 딱히 알 수 없지만, 마음이 무겁고 슬프다. 머릿속에는 수많은 생각들이 맴돌고, 감정의 파도가 찾아와서 나를 휩쓸어가는 기분이다. 왜 이런 감정이 드는지 정말 이해가 안 된다.\n\n\n\n\n\n\n\n\n"),
                                         maxLines: null,
-                                        maxLength: 300,
+                                        maxLength: widget.gptModel.isAIUsing
+                                            ? 300
+                                            : 2147483647,
                                         keyboardType: TextInputType.multiline,
                                       ),
                                     ),
@@ -381,7 +383,9 @@ class DiaryState extends State<Diary> {
                                                   alignment:
                                                       Alignment.bottomRight,
                                                   child: Text(
-                                                    "${contents.length}/300",
+                                                    widget.gptModel.isAIUsing
+                                                        ? "${contents.length}/300"
+                                                        : "AI를 활성화 해봐요!",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         fontWeight:

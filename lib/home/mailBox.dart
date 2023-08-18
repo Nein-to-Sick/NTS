@@ -6,6 +6,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/model/letterModel.dart';
 import 'dart:async';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/button.dart';
 import '../database/databaseService.dart';
 import 'letter.dart';
@@ -169,7 +170,7 @@ class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
                   children: [
                     Expanded(
                       child: SingleChildScrollView(
-                        child: Text(
+                        child: WrappedKoreanText(
                           content,
                           style: TextStyle(
                               fontSize: 16,

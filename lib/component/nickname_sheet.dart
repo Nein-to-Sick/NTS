@@ -56,7 +56,7 @@ class NickName {
                             ),
                             Container(
                                 height: 4,
-                                width: 61.86,
+                                width: 62,
                                 color: MyThemeColors.myGreyscale[50]),
                             const SizedBox(
                               height: 32,
@@ -143,7 +143,8 @@ class NickName {
                               left: 15, right: 15, top: 10, bottom: 10),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: MyThemeColors.myGreyscale.shade200,
+                              color: MyThemeColors.myGreyscale.shade100,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
