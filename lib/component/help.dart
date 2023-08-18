@@ -64,7 +64,7 @@ class Help extends StatelessWidget {
                                       ),
                                       Expanded(
                                           child: WrappedKoreanText(
-                                        "매일 앱에 들어올때마다 반딧불이가 하나씩 증가한다.",
+                                        "앱에 들어올 때마다 하루에 최대 1마리씩 반딧불이가 추가돼요.\n",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500),
@@ -89,7 +89,7 @@ class Help extends StatelessWidget {
                                       ),
                                       Expanded(
                                           child: WrappedKoreanText(
-                                        "최대 반딧불이의 갯수는 30개로 한달(1일) 기준으로 초기화된다.",
+                                        "반딧불이의 최대 30마리로 매달 1일에 초기화돼요.",
                                         style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500),
@@ -116,7 +116,7 @@ class Help extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   WrappedKoreanText(
-                                    "1. 편지를 누군가에게 정성껏 쓴다.",
+                                    "1. 누군가를 위해 마음을 담아 정성껏 편지를 작성해 봐요.",
                                     style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500),
@@ -124,7 +124,7 @@ class Help extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(left: 10.0),
                                     child: WrappedKoreanText(
-                                      "(많이 쓸수록 확률이 올라간다.)",
+                                      "(편지를 많이 적을 수록 반딧불이가 깜빡일 가능성이 올라가요.)\n",
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500),
@@ -148,7 +148,7 @@ class Help extends StatelessWidget {
                                       ),
                                       Expanded(
                                           child: WrappedKoreanText(
-                                        "편지를 누군가가 읽고 감사의 하트 버튼을 눌렀다면, 다음번에 앱에 들어왔을 때 밝게 깜박이는 모습을 3~5초간 볼 수 있다.",
+                                        "당신의 마음이 담긴 편지를 누군가가 읽고 감사의 하트 버튼을 누를 때:편지 작성자가 앱에 들어왔을 때 반딧불이들이 밝게 깜박이는 모습을 3~5초간 볼 수 있어요.",
                                         style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500),

@@ -19,14 +19,11 @@ import 'package:nts/model/settingsInfos.dart';
 import 'package:nts/oss_licenses.dart';
 import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/gpt_model.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/PDFScreen.dart';
 import '../component/notification.dart';
 import '../provider/backgroundController.dart';
-import 'dart:async';
 import 'dart:io';
-
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
@@ -564,50 +561,70 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 index = 7;
               });
             },
+            inside: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20),
+                    child: const Text("오픈 라이센스",
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                  ),
+                ),
+                const HeroIcon(
+                  HeroIcons.chevronRight,
+                  color: Color(0xffBFBFBF),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //이용약관
+          buildCustomButton(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            onTap: () {
+              if (servicePDF.isNotEmpty) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return PDFScreen(path: servicePDF);
+                    });
+              }
+            },
             inside: Row(children: [
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(left: 20),
-                  child: const Text("오픈 라이센스",
-                      style: TextStyle(fontSize: 16, color: Colors.black)),
-                ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //이용약관
-            buildCustomButton(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              onTap: () {
-                if (servicePDF.isNotEmpty) {
-                  showDialog(context: context, builder: (BuildContext context) {
-                    return PDFScreen(path: servicePDF);
-                  });
-                }
-              },
-              inside: Row(children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Text("이용약관",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
+                  child: Text(
+                    "이용약관",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: MyThemeColors.myGreyscale[900]),
                   ),
                 ),
-              ]),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            //개인정보 처리방침
-            buildCustomButton(
-              backgroundColor: Colors.white.withOpacity(0.9),
-              onTap: () {
-                if (personPDF.isNotEmpty) {
-                  showDialog(context: context, builder: (BuildContext context) {
-                    return PDFScreen(path: personPDF);
-                  });
-                }
-              },
-              inside: Row(children: [
-                Expanded(
-                  child: Container(
+              ),
+              const HeroIcon(
+                HeroIcons.chevronRight,
+                color: Color(0xffBFBFBF),
+              ),
+            ]),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          //개인정보 처리방침
+          buildCustomButton(
+            backgroundColor: Colors.white.withOpacity(0.9),
+            onTap: () {
+              if (personPDF.isNotEmpty) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return PDFScreen(path: personPDF);
+                    });
+              }
+            },
+            inside: Row(children: [
+              Expanded(
+                child: Container(
                     margin: const EdgeInsets.only(left: 20),
                     child: Text(
                       "개인정보 처리방침",
@@ -1101,11 +1118,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   // 컬렉션을 삭제하는 helper 함수
   Future<void> _deleteAllCollectionsInUserDocument(String userId) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final DocumentReference userDocRef = firestore.collection('users').doc(userId);
+    final DocumentReference userDocRef =
+        firestore.collection('users').doc(userId);
     final DocumentSnapshot userDocSnapshot = await userDocRef.get();
 
     Future<void> deleteCollection(String collectionPath) async {
-      final QuerySnapshot querySnapshot = await firestore.collection(collectionPath).get();
+      final QuerySnapshot querySnapshot =
+          await firestore.collection(collectionPath).get();
       final WriteBatch batch = firestore.batch();
 
       querySnapshot.docs.forEach((doc) {
@@ -1129,6 +1148,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Future<void> _deleteAccount() async {
+    Navigator.pop(context);
+    Navigator.pop(context);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     widget.user.userInfoClear();
@@ -1143,7 +1164,5 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     GoogleSignIn().disconnect();
     await FirebaseAuth.instance.currentUser?.delete();
     widget.provider.movePage(0);
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 }
