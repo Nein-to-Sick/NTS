@@ -905,9 +905,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           Text(
             '건의함',
             style: TextStyle(
-                fontSize: 13,
-                color: MyThemeColors.myGreyscale[900],
-                fontWeight: FontWeight.w500),
+              fontSize: 16,
+              color: MyThemeColors.myGreyscale[900],
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
