@@ -159,7 +159,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                                 ),
                                               ),
                                               maxLines: null,
-                                              maxLength: 300,
+                                              // maxLength: 300,
                                               keyboardType:
                                                   TextInputType.multiline,
                                             ),
@@ -172,7 +172,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                       child: Align(
                                         alignment: Alignment.bottomRight,
                                         child: Text(
-                                          "${diaryTextController.text.length}/300",
+                                          "${diaryTextController.text.length} 자",
                                           style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w500,
