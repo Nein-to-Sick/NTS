@@ -66,7 +66,7 @@ class Help extends StatelessWidget {
                                           child: WrappedKoreanText(
                                         "앱에 들어올 때마다 하루에 최대 1마리씩 반딧불이가 추가돼요.\n",
                                         style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.w500),
                                       )),
                                     ],

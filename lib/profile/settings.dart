@@ -948,7 +948,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           buildCustomButton(
             onTap: () {
               // NewNickName(context);
-              NickName().myNicknameSheet(context, widget.user, 1, null);
+              setState(() {
+                NickName().myNicknameSheet(context, widget.user, 1, null);
+              });
             },
             backgroundColor: Colors.white,
             inside: Row(children: [
