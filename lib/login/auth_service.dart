@@ -41,6 +41,8 @@ class AuthService {
         "created_at": FieldValue.serverTimestamp(),
         "green": 0,
         "yellow": 1,
+        "isAgreed": false,
+        "last_agreed_at": null,
       });
     }
 

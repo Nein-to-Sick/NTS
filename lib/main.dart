@@ -281,7 +281,7 @@ class BackgroundState extends State<Background> {
   }
 }
 
-//  0: OnBoarding, 4: HomePage
+//  0: Agreement 4: HomePage
 Future<int> _getUserDataFromFirebase(
     UserInfoValueModel userInfoModel,
     GPTModel gptModel,
@@ -383,6 +383,6 @@ Future<int> _getUserDataFromFirebase(
   if (userInfoModel.userNickName.isEmpty) {
     return 0;
   } else {
-    return 4;
+    return 5;
   }
 }
