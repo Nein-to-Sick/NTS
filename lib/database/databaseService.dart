@@ -66,8 +66,8 @@ class DatabaseService {
     int min = 5;
     int max = 10;
     int randomNumber = min + rand.nextInt(max - min + 1);
-    // await Future.delayed(Duration(minutes: randomNumber)); // 5~10분 랜덤 딜레이
-    await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
+    await Future.delayed(Duration(minutes: randomNumber)); // 5~10분 랜덤 딜레이
+    // await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
 
     await FirebaseFirestore.instance // 저장
         .collection('users')
@@ -174,8 +174,8 @@ class DatabaseService {
     int min = 5;
     int max = 10;
     int randomNumber = min + rand.nextInt(max - min + 1);
-    // await Future.delayed(Duration(minutes: randomNumber));
-    await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
+    await Future.delayed(Duration(minutes: randomNumber));
+    // await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
 
 
     DateTime now = DateTime.now();
