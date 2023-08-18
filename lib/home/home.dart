@@ -60,25 +60,25 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: GestureDetector(
-              onTap: () {
-                _toggleTextVisibility(); // Add this line
-              },
-              onHorizontalDragEnd: (details) {
-                if (details.primaryVelocity!.isNegative) {
-                  // 오른쪽에서 왼쪽으로 드래그
-                  controller.movePage(855);
-                  controller.changeColor(3);
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+          child: GestureDetector(
+            onTap: () {
+              _toggleTextVisibility(); // Add this line
+            },
+            onHorizontalDragEnd: (details) {
+              if (details.primaryVelocity!.isNegative) {
+                // 오른쪽에서 왼쪽으로 드래그
+                controller.movePage(855);
+                controller.changeColor(3);
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
@@ -214,124 +214,133 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    Column(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        AnimatedOpacity(
-                          opacity: _isTextVisible ? 0.0 : 1.0,
+                        HeroIcon(HeroIcons.chevronDoubleLeft, color: Colors.white.withOpacity(0.3), style: HeroIconStyle.mini,),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      AnimatedOpacity(
+                        opacity: _isTextVisible ? 0.0 : 1.0,
+                        // 변경할 불투명도를 설정하세요.
+                        duration: Duration(
+                            milliseconds: _isTextVisible ? 2000 : 300),
+                        // 애니메이션 지속 시간 설정
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: _isTextVisible
+                                  ? null
+                                  : () {
+                                      showAnimatedDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        barrierColor: Colors.transparent,
+                                        animationType: DialogTransitionType
+                                            .slideFromBottomFade,
+                                        builder: (BuildContext context) {
+                                          return ChangeNotifierProvider.value(
+                                            value: gptMdoel,
+                                            child: Consumer<GPTModel>(
+                                              builder:
+                                                  (context, model, child) =>
+                                                      Diary(
+                                                controller: controller,
+                                                messageController:
+                                                    messageController,
+                                                userInfo: userInfo,
+                                                gptModel: gptMdoel,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 9),
+                                  child: Text(
+                                    "일기 쓰기",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            GestureDetector(
+                              onTap: _isTextVisible
+                                  ? null
+                                  : () {
+                                      showAnimatedDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        barrierColor: Colors.transparent,
+                                        builder: (BuildContext context) =>
+                                            Letter(
+                                          controller: controller,
+                                          userName: userInfo.userNickName,
+                                        ),
+                                        animationType: DialogTransitionType
+                                            .slideFromBottomFade,
+                                      );
+                                    },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 9),
+                                  child: Text(
+                                    "편지 쓰기",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom:
+                                MediaQuery.of(context).size.height * 0.095),
+                        child: AnimatedOpacity(
+                          opacity: _isTextVisible ? 1.0 : 0.0,
                           // 변경할 불투명도를 설정하세요.
                           duration: Duration(
                               milliseconds: _isTextVisible ? 2000 : 300),
                           // 애니메이션 지속 시간 설정
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: _isTextVisible
-                                    ? null
-                                    : () {
-                                        showAnimatedDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          barrierColor: Colors.transparent,
-                                          animationType: DialogTransitionType
-                                              .slideFromBottomFade,
-                                          builder: (BuildContext context) {
-                                            return ChangeNotifierProvider.value(
-                                              value: gptMdoel,
-                                              child: Consumer<GPTModel>(
-                                                builder:
-                                                    (context, model, child) =>
-                                                        Diary(
-                                                  controller: controller,
-                                                  messageController:
-                                                      messageController,
-                                                  userInfo: userInfo,
-                                                  gptModel: gptMdoel,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 9),
-                                    child: Text(
-                                      "일기 쓰기",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              GestureDetector(
-                                onTap: _isTextVisible
-                                    ? null
-                                    : () {
-                                        showAnimatedDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          barrierColor: Colors.transparent,
-                                          builder: (BuildContext context) =>
-                                              Letter(
-                                            controller: controller,
-                                            userName: userInfo.userNickName,
-                                          ),
-                                          animationType: DialogTransitionType
-                                              .slideFromBottomFade,
-                                        );
-                                      },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 9),
-                                    child: Text(
-                                      "편지 쓰기",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            "화면을 탭하여 글쓰기",
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white.withOpacity(0.5)),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom:
-                                  MediaQuery.of(context).size.height * 0.095),
-                          child: AnimatedOpacity(
-                            opacity: _isTextVisible ? 1.0 : 0.0,
-                            // 변경할 불투명도를 설정하세요.
-                            duration: Duration(
-                                milliseconds: _isTextVisible ? 2000 : 300),
-                            // 애니메이션 지속 시간 설정
-                            child: Text(
-                              "화면을 탭하여 글쓰기",
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white.withOpacity(0.5)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
