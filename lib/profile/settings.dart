@@ -1104,17 +1104,20 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   void _logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    widget.user.userInfoClear();
-    await prefs.clear();
-    FirebaseAuth.instance.signOut();
-    GoogleSignIn().signOut();
-    widget.provider.movePage(0);
-    widget.provider.fireFlyOff();
-    Navigator.pop(context);
-    Navigator.pop(context);
+      widget.user.userInfoClear();
+      await prefs.clear();
+      FirebaseAuth.instance.signOut();
+      GoogleSignIn().signOut();
+      widget.provider.movePage(0);
+      widget.provider.fireFlyOff();
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
   }
+
 
   // 컬렉션을 삭제하는 helper 함수
   Future<void> _deleteAllCollectionsInUserDocument(String userId) async {
@@ -1163,7 +1166,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     }
 
     GoogleSignIn().disconnect();
-    await FirebaseAuth.instance.currentUser?.delete();
+    FirebaseAuth.instance.currentUser?.delete();
+    _logout();
     widget.provider.movePage(0);
   }
 }
