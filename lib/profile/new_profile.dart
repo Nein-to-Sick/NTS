@@ -61,12 +61,27 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return ProfileSettings(
+                                return ChangeNotifierProvider.value(
+                                  value: userInfo,
+                                  child: Consumer<UserInfoValueModel>(
+                                    builder: (context, model, child) =>
+                                        ProfileSettings(
+                                      provider: controller,
+                                      user: model,
+                                      gptprovider: gptModel,
+                                      alert: false,
+                                    ),
+                                  ),
+                                );
+
+                                /*
+                                ProfileSettings(
                                   provider: controller,
                                   user: userInfo,
                                   gptprovider: gptModel,
                                   alert: false,
                                 );
+                                */
                               },
                             );
                           },
