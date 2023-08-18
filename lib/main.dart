@@ -118,7 +118,11 @@ class BackgroundState extends State<Background> {
     // 초기화
     FlutterLocalNotification.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      alert = (await FlutterLocalNotification.requestNotificationPermission())!;
+      bool? tempAlert =
+          await FlutterLocalNotification.requestNotificationPermission();
+      if (tempAlert != null) {
+        alert = tempAlert;
+      }
     });
     playEffectAudio();
     super.initState();
