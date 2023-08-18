@@ -1168,6 +1168,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     GoogleSignIn().disconnect();
     FirebaseAuth.instance.currentUser?.delete();
     _logout();
+    widget.provider.fireFlyOff();
     widget.provider.movePage(0);
   }
 }
