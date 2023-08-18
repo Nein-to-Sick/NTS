@@ -5,8 +5,8 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/model/letterModel.dart';
+import 'dart:async';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
-
 import '../component/button.dart';
 import '../database/databaseService.dart';
 import 'letter.dart';
@@ -22,8 +22,10 @@ class MailBox extends StatefulWidget {
   State<MailBox> createState() => _MailBoxState();
 }
 
-class _MailBoxState extends State<MailBox> {
+class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
+  late AnimationController _animationController;
+  Timer _timer = Timer(Duration.zero, (){});
 
   late String time = "";
   late String from = "";
@@ -35,6 +37,22 @@ class _MailBoxState extends State<MailBox> {
   late String fromUid = "";
   late List<dynamic> situation = [];
   late List<dynamic> emotion = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,32 +218,50 @@ class _MailBoxState extends State<MailBox> {
                 onTap: () {
                   setState(() {
                     heart = !heart;
+                    if (heart) {
+                      _animationController.forward();
+                      _timer = Timer(const Duration(milliseconds: 300), () {
+                        _animationController.reverse();
+                      });
+                    } else {
+                      _timer?.cancel();
+                      _animationController.reset();
+                    }
                   });
                   DatabaseService().clickHeart(id, heart, fromUid);
                 },
-                child: heart
-                    ? const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: HeroIcon(
-                          HeroIcons.heart,
-                          style: HeroIconStyle.solid,
-                          color: MyThemeColors.secondaryColor,
-                        ),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: MyThemeColors.secondaryColor),
-                        child: const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: HeroIcon(
-                            HeroIcons.heart,
-                            style: HeroIconStyle.outline,
-                            color: MyThemeColors.whiteColor,
-                          ),
-                        ),
-                      ),
-              )
+                child: heart ? ScaleTransition(
+                  scale: _animationController.drive(
+                    Tween(begin: 1.0, end: 1.5).chain(
+                      CurveTween(curve: Curves.easeInOut),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: HeroIcon(
+                      HeroIcons.heart,
+                      style: heart
+                          ? HeroIconStyle.solid
+                          : HeroIconStyle.outline,
+                      color: heart
+                          ? MyThemeColors.secondaryColor
+                          : MyThemeColors.whiteColor,
+                    ),
+                  ),
+                ) : Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: MyThemeColors.secondaryColor),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: HeroIcon(
+                      HeroIcons.heart,
+                      style: HeroIconStyle.outline,
+                      color: MyThemeColors.whiteColor,
+                    ),
+                  ),
+                ),
+        )
             : Container(),
         notMatch
             ? Column(

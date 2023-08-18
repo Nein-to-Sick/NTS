@@ -204,7 +204,10 @@ class BackgroundState extends State<Background> {
                 if (scrollController.offset == 0 ||
                     scrollController.offset == 600 ||
                     scrollController.offset == 855) {
-                  return FireFly(userInfoController: userInfo);
+                  return FireFly(
+                      userInfoController: Provider.of<UserInfoValueModel>(
+                          context,
+                          listen: true));
                 } else {
                   return const SizedBox.shrink();
                 }
@@ -292,7 +295,6 @@ Future<int> _getUserDataFromFirebase(
   } else {
     currentDateTime = DateTime.parse(prefs.getString('LoginedDate').toString());
     DateTime now = DateTime.now();
-
     //  When last login time was not today
     if (currentDateTime.isBefore(DateTime(now.year, now.month, now.day))) {
       //  local variable update
