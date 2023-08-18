@@ -1120,7 +1120,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     }
   }
 
-
   // 컬렉션을 삭제하는 helper 함수
   Future<void> _deleteAllCollectionsInUserDocument(String userId) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -1167,8 +1166,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       });
     }
 
-    GoogleSignIn().disconnect();
-    FirebaseAuth.instance.currentUser?.delete();
+    await GoogleSignIn().disconnect();
+    await FirebaseAuth.instance.currentUser?.delete();
     _logout();
     widget.provider.movePage(0);
   }
