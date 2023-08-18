@@ -52,8 +52,9 @@ class _HomePageState extends State<HomePage> {
         Positioned.fill(
           child: AnimatedOpacity(
             opacity: _isTextVisible ? 0.0 : 0.45, // 변경할 불투명도를 설정하세요.
-            duration: Duration(milliseconds: !_isTextVisible ? 300 : 3000), // 애니메이션 지속 시간 설정
-            child: DecoratedBox(
+            duration: Duration(
+                milliseconds: !_isTextVisible ? 300 : 3000), // 애니메이션 지속 시간 설정
+            child: const DecoratedBox(
               decoration: BoxDecoration(color: Colors.black),
             ),
           ),
@@ -117,8 +118,8 @@ class _HomePageState extends State<HomePage> {
                                       barrierColor: Colors.transparent,
                                       builder: (BuildContext context) =>
                                           const Help(),
-                                      animationType:
-                                          DialogTransitionType.slideFromBottomFade);
+                                      animationType: DialogTransitionType
+                                          .slideFromBottomFade);
                                 },
                                 child: const Opacity(
                                     opacity: 0.4,
@@ -140,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                               child: GestureDetector(
                                 child: messageController.newMessage
                                     ? Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           const Text(
                                             "새로운 편지가 도착했어요",
@@ -175,8 +177,8 @@ class _HomePageState extends State<HomePage> {
                                                     height: 10,
                                                     decoration: BoxDecoration(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                20),
+                                                            BorderRadius
+                                                                .circular(20),
                                                         color: const Color(
                                                             0xffFCE181)),
                                                   ),
@@ -199,26 +201,26 @@ class _HomePageState extends State<HomePage> {
                                       context: context,
                                       barrierDismissible: false,
                                       barrierColor: Colors.transparent,
-                                      builder: (BuildContext context) => MailBox(
+                                      builder: (BuildContext context) =>
+                                          MailBox(
                                             controller: controller,
                                             userName: userInfo.userNickName,
                                           ),
-                                      animationType:
-                                          DialogTransitionType.slideFromTopFade);
+                                      animationType: DialogTransitionType
+                                          .slideFromTopFade);
                                   messageController.confirm();
                                 },
                               )),
                         ),
                       ],
                     ),
-
                     Column(
                       children: [
                         AnimatedOpacity(
                           opacity: _isTextVisible ? 0.0 : 1.0,
                           // 변경할 불투명도를 설정하세요.
-                          duration:
-                              Duration(milliseconds: _isTextVisible ? 2000 : 300),
+                          duration: Duration(
+                              milliseconds: _isTextVisible ? 2000 : 300),
                           // 애니메이션 지속 시간 설정
                           child: Column(
                             children: [
@@ -236,8 +238,9 @@ class _HomePageState extends State<HomePage> {
                                             return ChangeNotifierProvider.value(
                                               value: gptMdoel,
                                               child: Consumer<GPTModel>(
-                                                builder: (context, model, child) =>
-                                                    Diary(
+                                                builder:
+                                                    (context, model, child) =>
+                                                        Diary(
                                                   controller: controller,
                                                   messageController:
                                                       messageController,
@@ -277,7 +280,8 @@ class _HomePageState extends State<HomePage> {
                                           context: context,
                                           barrierDismissible: false,
                                           barrierColor: Colors.transparent,
-                                          builder: (BuildContext context) => Letter(
+                                          builder: (BuildContext context) =>
+                                              Letter(
                                             controller: controller,
                                             userName: userInfo.userNickName,
                                           ),
@@ -307,12 +311,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.095),
+                              bottom:
+                                  MediaQuery.of(context).size.height * 0.095),
                           child: AnimatedOpacity(
                             opacity: _isTextVisible ? 1.0 : 0.0,
                             // 변경할 불투명도를 설정하세요.
-                            duration:
-                                Duration(milliseconds: _isTextVisible ? 2000 : 300),
+                            duration: Duration(
+                                milliseconds: _isTextVisible ? 2000 : 300),
                             // 애니메이션 지속 시간 설정
                             child: Text(
                               "화면을 탭하여 글쓰기",
