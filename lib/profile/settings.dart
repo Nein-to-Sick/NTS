@@ -24,7 +24,6 @@ import '../provider/backgroundController.dart';
 import 'dart:async';
 import 'dart:io';
 
-
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
   final UserInfoValueModel user;
@@ -259,7 +258,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         children: [
           Text(
             "계정 관리",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Expanded(
@@ -291,7 +293,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         children: [
           Text(
             "오픈 라이센스",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: MyThemeColors.myGreyscale[900]),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           Expanded(
@@ -584,19 +589,26 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Colors.white.withOpacity(0.9),
               onTap: () {
                 if (servicePDF.isNotEmpty) {
-                  showDialog(context: context, builder: (BuildContext context) {
-                    return PDFScreen(path: servicePDF);
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PDFScreen(path: servicePDF);
+                      });
                 }
               },
               inside: Row(children: [
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 20),
-                    child: Text("이용약관",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),
+                    child: Text(
+                      "이용약관",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: MyThemeColors.myGreyscale[900]),
+                    ),
                   ),
-                ),),
+                ),
                 const HeroIcon(
                   HeroIcons.chevronRight,
                   color: Color(0xffBFBFBF),
@@ -609,18 +621,24 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               backgroundColor: Colors.white.withOpacity(0.9),
               onTap: () {
                 if (personPDF.isNotEmpty) {
-                  showDialog(context: context, builder: (BuildContext context) {
-                    return PDFScreen(path: personPDF);
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PDFScreen(path: personPDF);
+                      });
                 }
               },
               inside: Row(children: [
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Text("개인정보 처리방침",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),)
-                  ),
+                      margin: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        "개인정보 처리방침",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: MyThemeColors.myGreyscale[900]),
+                      )),
                 ),
                 const HeroIcon(
                   HeroIcons.chevronRight,
@@ -640,10 +658,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               inside: Row(children: [
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Text("사업자 정보",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,color: MyThemeColors.myGreyscale[900]),)
-                  ),
+                      margin: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        "사업자 정보",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: MyThemeColors.myGreyscale[900]),
+                      )),
                 ),
                 const HeroIcon(
                   HeroIcons.chevronRight,
@@ -891,7 +913,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           ),
           Text(
             '건의함',
-            style: TextStyle(fontSize: 13, color: MyThemeColors.myGreyscale[900], fontWeight: FontWeight.w500),
+            style: TextStyle(
+              fontSize: 16,
+              color: MyThemeColors.myGreyscale[900],
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -1106,11 +1132,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   // 컬렉션을 삭제하는 helper 함수
   Future<void> _deleteAllCollectionsInUserDocument(String userId) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final DocumentReference userDocRef = firestore.collection('users').doc(userId);
+    final DocumentReference userDocRef =
+        firestore.collection('users').doc(userId);
     final DocumentSnapshot userDocSnapshot = await userDocRef.get();
 
     Future<void> deleteCollection(String collectionPath) async {
-      final QuerySnapshot querySnapshot = await firestore.collection(collectionPath).get();
+      final QuerySnapshot querySnapshot =
+          await firestore.collection(collectionPath).get();
       final WriteBatch batch = firestore.batch();
 
       querySnapshot.docs.forEach((doc) {
