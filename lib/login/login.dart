@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/login/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -22,12 +23,22 @@ class _LoginPageState extends State<LoginPage>
   //error message popup
   void showErrorMessage(String message) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(message),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: MyThemeColors.whiteColor,
+          title: Center(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
