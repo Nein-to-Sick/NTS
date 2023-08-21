@@ -1107,6 +1107,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   void _logout() async {
     if (mounted) {
+      Navigator.pop(context);
+      Navigator.pop(context);
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
       widget.user.userInfoClear();
@@ -1115,8 +1117,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       GoogleSignIn().signOut();
       widget.provider.movePage(0);
       widget.provider.fireFlyOff();
-      Navigator.pop(context);
-      Navigator.pop(context);
     }
   }
 
@@ -1160,16 +1160,19 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     widget.user.userInfoClear();
     await prefs.clear();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
+
     if (userId != null) {
       await _deleteAllCollectionsInUserDocument(userId).then((value) {
         FirebaseFirestore.instance.collection("users").doc(userId).delete();
       });
     }
 
-    await GoogleSignIn().disconnect();
-    await FirebaseAuth.instance.currentUser?.delete();
-    _logout();
-    widget.provider.fireFlyOff();
-    widget.provider.movePage(0);
+    await GoogleSignIn().disconnect().then((value) async {
+      await FirebaseAuth.instance.currentUser?.delete().then((value) {
+        _logout();
+        widget.provider.fireFlyOff();
+        widget.provider.movePage(0);
+      });
+    });
   }
 }

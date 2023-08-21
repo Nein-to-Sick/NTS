@@ -170,6 +170,7 @@ class BackgroundState extends State<Background> {
       controller.movePage(600);
       controller.changeColor(2);
     }
+
     return WillPopScope(
       //뒤로가기 막음
       onWillPop: () {
