@@ -124,14 +124,14 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                     alignment: Alignment.bottomCenter,
                     child: Button(
                       function: () {
-                        setState(() {
-                          currentPageIndex = _pageController.page!.toInt();
-                        });
                         _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.ease);
+                        setState(() {
+                          currentPageIndex = _pageController.page!.toInt();
+                        });
                       },
-                      title: (currentPageIndex != 1) ? '다음' : '시작하기',
+                      title: (currentPageIndex != 2) ? '다음' : '시작하기',
                     ),
                   ),
                 )

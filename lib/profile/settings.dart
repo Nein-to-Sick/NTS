@@ -1156,7 +1156,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     Navigator.pop(context);
     Navigator.pop(context);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    widget.provider.fireFlyOff();
     widget.user.userInfoClear();
     await prefs.clear();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
