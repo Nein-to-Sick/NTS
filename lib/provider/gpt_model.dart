@@ -76,7 +76,7 @@ class GPTModel with ChangeNotifier {
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
               content:
-                  "너는 전문 상황 분석가로 요구에따라 핵심 상황을 파악해야해. 다음으로 오는 일기에서 파악되는 상황을 <가족, 연애, 친구관계, 직장, 학교, 군대, 진로, 일상생활, 공부, 일, 건강, 종교, 운동, 취미생활, 돈, 불면, 자존감, 날씨> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+                  "너는 전문 상황 분석가로 요구에따라 핵심 상황을 파악해야해. 다음의 일기에서 파악되는 상황을 <가족, 연애, 친구관계, 직장, 학교, 군대, 진로, 일상생활, 공부, 일, 건강, 종교, 운동, 취미생활, 돈, 불면, 자존감, 날씨> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
@@ -98,7 +98,7 @@ class GPTModel with ChangeNotifier {
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
               content:
-                  "너는 전문 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음으로 오는 일기에서 파악되는 감정을 <기쁨, 감사함, 기대됨, 설렘, 놀람, 지루함, 피곤함, 답답함, 짜증남, 무기력함, 우울함, 슬픔, 화남, 걱정, 두려움> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+                  "너는 전문 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음의 일기에서 파악되는 감정을 <기쁨, 감사함, 기대됨, 설렘, 놀람, 지루함, 피곤함, 답답함, 짜증남, 무기력함, 우울함, 슬픔, 화남, 걱정, 두려움> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
@@ -119,8 +119,7 @@ class GPTModel with ChangeNotifier {
           presencePenalty: 0,
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
-              content:
-                  "너는 글요약 전문가야. 다음 일기의 내용을 잘 요약해서 한 줄의 제목을 만들어줘. <$prompt>",
+              content: "글의 내용을 15자 이내의 한 구절로 요약해줘. <$prompt>",
               role: OpenAIChatMessageRole.system,
             ),
           ],
