@@ -9,6 +9,7 @@ import 'package:nts/model/user_info_model.dart';
 import 'package:nts/provider/backgroundController.dart';
 import 'package:nts/provider/gpt_model.dart';
 import 'package:nts/provider/messageController.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 import '../model/preset.dart';
@@ -768,7 +769,9 @@ class DiaryState extends State<Diary> {
               Flexible(
                 flex: 1,
                 child: Button(
-                  function: () {
+                  function: () async {
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     List<String> sit = [];
                     for (int i = 0; i < Preset().situation.length; i++) {
                       for (int j = 0; j < Preset().situation[i].length; j++) {
@@ -800,7 +803,9 @@ class DiaryState extends State<Diary> {
                     );
 
                     widget.userInfo.userDiaryExist(true);
+                    await prefs.setBool('diaryExist', true);
 
+                    if (!mounted) return;
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

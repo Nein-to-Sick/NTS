@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:nts/component/agree_condition.dart';
@@ -27,12 +29,19 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
   int currentPageIndex = 0;
   bool _isNicknameSheetVisible = false;
   bool _isAgreementSheetVisible = false;
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: widget.firstPageIndex);
     currentPageIndex = widget.firstPageIndex;
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -124,11 +133,16 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                     alignment: Alignment.bottomCenter,
                     child: Button(
                       function: () {
-                        _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                        setState(() {
-                          currentPageIndex = _pageController.page!.toInt();
+                        _debounce?.cancel();
+
+                        _debounce =
+                            Timer(const Duration(milliseconds: 250), () {
+                          _pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease);
+                          setState(() {
+                            currentPageIndex = _pageController.page!.toInt();
+                          });
                         });
                       },
                       title: (currentPageIndex != 2) ? '다음' : '시작하기',
