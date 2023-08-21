@@ -155,24 +155,46 @@ class DiaryState extends State<Diary> {
                                   widget.gptModel.whileLoadingDone();
 
                                   if (widget.gptModel.isAIUsing) {
-                                    //  ai analyze snackbar
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: Colors.white,
-                                        content: Text(
-                                          '일기를 키워드로 정리했어요!',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 13,
+                                    if (!widget.gptModel.situationSummerization
+                                        .contains('error')) {
+                                      //  ai analyze snackbar
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.white,
+                                          content: Text(
+                                            '일기를 키워드로 정리했어요!',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                            ),
                                           ),
+                                          duration:
+                                              Duration(milliseconds: 2000),
                                         ),
-                                        duration: Duration(milliseconds: 2000),
-                                      ),
-                                    );
+                                      );
 
-                                    updateIsSelectedSituation();
-                                    updateIsSelectedEmotion();
+                                      updateIsSelectedSituation();
+                                      updateIsSelectedEmotion();
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.white,
+                                          content: Text(
+                                            '정리 중 오류가 발생했어요',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 2000),
+                                        ),
+                                      );
+                                    }
                                   }
                                 });
                               }

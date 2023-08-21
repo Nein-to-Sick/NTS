@@ -152,14 +152,14 @@ class GPTModel with ChangeNotifier {
         }
         */
         startAnalyzeDiary();
-      } catch (e) {
+      } on RequestFailedException catch (e) {
+        debugPrint(e.message);
         situationSummerization.add('error');
         emotionSummerization.add('error');
         diaryTitle =
             "${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}의 일기";
+        startAnalyzeDiary();
       }
-
-      notifyListeners();
     }
     //  when Ai setting off
     else {
@@ -169,6 +169,7 @@ class GPTModel with ChangeNotifier {
           "${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}의 일기";
       startAnalyzeDiary();
     }
+    notifyListeners();
     //return chatCompletion.choices.first.message.content;
   }
 
