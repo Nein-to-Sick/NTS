@@ -35,7 +35,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    namespace "com.example.nts"
+    namespace "com.nts.bandi"
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
