@@ -1153,8 +1153,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Future<void> _deleteAccount() async {
-    Navigator.pop(context);
-    Navigator.pop(context);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     widget.provider.fireFlyOff();
     widget.user.userInfoClear();
@@ -1169,6 +1167,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
     await GoogleSignIn().disconnect().then((value) async {
       await FirebaseAuth.instance.currentUser?.delete().then((value) {
+        Navigator.pop(context);
+        Navigator.pop(context);
         _logout();
         widget.provider.fireFlyOff();
         widget.provider.movePage(0);
