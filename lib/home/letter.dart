@@ -323,7 +323,7 @@ class _LetterState extends State<Letter> {
               ),
               isSelfSelected
                   ? Text(
-                      "주의사항: 나에게 보내면 최소 한달 뒤에 확인 가능합니다.",
+                      "주의사항: 나에게 보내면 최소 한 달 뒤에 확인할 수 있습니다.",
                       style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
@@ -362,7 +362,7 @@ class _LetterState extends State<Letter> {
       child: Column(
         children: [
           Text(
-            isSelfSelected ? "어떤 상황의 나에게 쓸까요?" : "어떤 상황에 있는 사람한테 쓸까요?",
+            isSelfSelected ? "어떤 상황의 나에게 쓸까요?" : "누구를 위한 편지인가요?",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -372,7 +372,7 @@ class _LetterState extends State<Letter> {
             height: 6,
           ),
           Text(
-            "키워드를 모두 골라주세요.",
+            "상황 키워드를 모두 골라주세요.",
             style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -551,7 +551,7 @@ class _LetterState extends State<Letter> {
       child: Column(
         children: [
           Text(
-            isSelfSelected ? "어떤 감정의 나에게 쓸까요?" : "어떤 감정을 가진 사람한테 쓸까요?",
+            isSelfSelected ? "어떤 감정의 나에게 쓸까요?" : "누구를 위한 편지인가요?",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -561,7 +561,7 @@ class _LetterState extends State<Letter> {
             height: 6,
           ),
           Text(
-            "키워드를 모두 골라주세요.",
+            "감정 키워드를 모두 골라주세요.",
             style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -711,7 +711,7 @@ class _LetterState extends State<Letter> {
             height: 6,
           ),
           Text(
-            "응원/지지/격려하는 글을 써주세요.",
+            "마음을 담을수록 전달될 가능성이 커져요",
             style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,

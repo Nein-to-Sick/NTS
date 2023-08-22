@@ -47,6 +47,7 @@ class Help extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "반딧불이를 얻는 법",
@@ -100,7 +101,7 @@ class Help extends StatelessWidget {
                                 ),
                                 Expanded(
                                     child: WrappedKoreanText(
-                                  "반딧불이의 최대 30마리로 매달 1일에 초기화돼요.",
+                                  "반딧불이는 한 달에 최대 30마리로 매달 1일에 초기화돼요.",
                                   style: const TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
