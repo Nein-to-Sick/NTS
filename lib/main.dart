@@ -153,6 +153,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
       case AppLifecycleState.detached:
         player.pause();
         break;
@@ -194,7 +195,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
     }
 
     return AbsorbPointer(
-      absorbing: Provider.of<UserInfoValueModel>(context).disAllowToTouch,
+      absorbing: userInfo.disAllowToTouch,
       child: WillPopScope(
         //뒤로가기 막음
         onWillPop: () {
