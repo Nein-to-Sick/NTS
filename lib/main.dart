@@ -332,12 +332,11 @@ Future<int> _getUserDataFromFirebase(
 
       DocumentSnapshot userSnapshot = await userCollection.doc(userId).get();
 
-      int currentYellowValue = userInfoModel.currentYellowValue;
       userInfoModel.updateYellowValue(userSnapshot["yellow"]);
 
       //  max yellow value < 31
-      if (currentYellowValue + 1 < 31) {
-        userInfoModel.updateYellowValue(++currentYellowValue);
+      if (userInfoModel.currentYellowValue + 1 < 31) {
+        userInfoModel.updateYellowValue(userInfoModel.currentYellowValue + 1);
       }
 
       //  when is the first day of month
@@ -346,7 +345,7 @@ Future<int> _getUserDataFromFirebase(
       }
 
       await userCollection.doc(userId).update({
-        "yellow": currentYellowValue,
+        "yellow": userInfoModel.currentYellowValue,
       });
     }
   }
