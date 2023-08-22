@@ -1,4 +1,4 @@
-package com.example.nts
+package com.nts.bandi
 
 import io.flutter.embedding.android.FlutterActivity
 
