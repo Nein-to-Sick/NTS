@@ -150,6 +150,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         playEffectAudio();
+        player.play();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
