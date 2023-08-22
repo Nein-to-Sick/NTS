@@ -102,7 +102,7 @@ class Background extends StatefulWidget {
   BackgroundState createState() => BackgroundState();
 }
 
-class BackgroundState extends State<Background> {
+class BackgroundState extends State<Background> with WidgetsBindingObserver {
   bool alert = false;
   final player = AudioPlayer();
 
@@ -115,6 +115,8 @@ class BackgroundState extends State<Background> {
   @override
   void initState() {
     // 초기화
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
     FlutterLocalNotification.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bool? tempAlert =
@@ -124,7 +126,6 @@ class BackgroundState extends State<Background> {
       }
     });
     playEffectAudio();
-    super.initState();
 
     //  when android
     if (Platform.isAndroid) {
@@ -134,6 +135,27 @@ class BackgroundState extends State<Background> {
           systemNavigationBarIconBrightness: Brightness.dark,
         ),
       );
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    player.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        playEffectAudio();
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        player.pause();
+        break;
     }
   }
 
