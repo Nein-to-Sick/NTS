@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/component/agree_condition.dart';
 import 'package:nts/component/button.dart';
 import 'package:nts/component/nickname_sheet.dart';
@@ -75,21 +77,24 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                   return _buildOnboardingPage(
                     context,
                     imagePath: "./assets/onboard/1.png",
-                    text: "일기를 쓰고",
+                    text: "먼저, 일기를 써보세요",
+                    subTitle: "본인의 감정과 상황을 파악하는데 도움을 줄거에요",
                   );
                 case 2:
                   //  OnBoarding page 2
                   return _buildOnboardingPage(
                     context,
                     imagePath: "./assets/onboard/2.png",
-                    text: "위로의 편지를 받고",
+                    text: "그럼, 편지를 받을수 있을거에요",
+                    subTitle: "본인의 감정과 상황에 공감해주는 느낌을 받을수 있을거예요.",
                   );
                 case 3:
                   //  OnBoarding page 2
                   return _buildOnboardingPage(
                     context,
                     imagePath: "./assets/onboard/3.png",
-                    text: "감사의 마음을 전해보세요",
+                    text: "그리고, 감사의 마음을 전해보세요",
+                    subTitle: "상대방도 본인이 보낸 편지에 보람을 느낄수 있을거예요.",
                   );
                 case 4:
                   //  NickName input page
@@ -195,6 +200,7 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
     BuildContext context, {
     required String imagePath,
     required String text,
+    required String subTitle,
   }) {
     return Center(
       child: Stack(
@@ -205,13 +211,32 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                 child: Image.asset(imagePath)),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 130.0),
+            padding: const EdgeInsets.only(top: 120.0),
             child: Align(
               alignment: Alignment.topCenter,
-              child: Text(
+              child: AutoSizeText(
                 text,
+                maxLines: 1,
                 style: const TextStyle(
-                    fontSize: 25, fontFamily: "Dodam", color: Colors.white),
+                  fontSize: 25,
+                  fontFamily: "Dodam",
+                  color: MyThemeColors.whiteColor,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 160.0),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: AutoSizeText(
+                subTitle,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: "Dodam",
+                  color: MyThemeColors.myGreyscale.shade400,
+                ),
               ),
             ),
           ),
