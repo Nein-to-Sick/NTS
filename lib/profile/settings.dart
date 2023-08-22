@@ -166,7 +166,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         child: Column(
           children: [
             const Text(
-              "개인정보 처리방침",
+              "개인정보처리방침",
               style: TextStyle(fontSize: 20),
             ),
             Expanded(child: privacyPolicyText()),
@@ -627,7 +627,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 child: Container(
                     margin: const EdgeInsets.only(left: 20),
                     child: Text(
-                      "개인정보 처리방침",
+                      "개인정보처리방침",
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

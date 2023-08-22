@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage>
                                 )),
                             const Expanded(
                               child: Text(
-                                "Google로 시작하기",
+                                "Google로 로그인",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,
@@ -247,7 +247,7 @@ class _LoginPageState extends State<LoginPage>
                                 )),
                             const Expanded(
                               child: Text(
-                                "Apple로 시작하기",
+                                "Apple로 로그인",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,

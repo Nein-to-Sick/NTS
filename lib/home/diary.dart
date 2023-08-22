@@ -478,7 +478,7 @@ class DiaryState extends State<Diary> {
             height: 6,
           ),
           Text(
-            "키워드를 모두 골라주세요.",
+            "상황 키워드를 모두 골라주세요.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13,
@@ -670,7 +670,7 @@ class DiaryState extends State<Diary> {
             height: 6,
           ),
           Text(
-            "키워드를 모두 골라주세요.",
+            "감정 키워드를 모두 골라주세요.",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 13,
