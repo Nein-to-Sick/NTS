@@ -1148,11 +1148,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         await deleteCollection(collectionPath);
       }
     } else {
-      print('해당하는 userId가 존재하지 않습니다.');
+      debugPrint('해당하는 userId가 존재하지 않습니다.');
     }
   }
 
   Future<void> _deleteAccount() async {
+    widget.user.updateAbsorbToTouch(true);
     Navigator.pop(context);
     Navigator.pop(context);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1170,9 +1171,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     await GoogleSignIn().disconnect().then((value) async {
       await FirebaseAuth.instance.currentUser?.delete().then((value) {
         _logout();
-        widget.provider.fireFlyOff();
         widget.provider.movePage(0);
       });
     });
+    widget.user.updateAbsorbToTouch(false);
   }
 }
