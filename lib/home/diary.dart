@@ -408,13 +408,14 @@ class DiaryState extends State<Diary> {
                                                   child: Text(
                                                     widget.gptModel.isAIUsing
                                                         ? "${contents.length}/300"
-                                                        : "AI를 활성화 해봐요!",
+                                                        : "무제한",
                                                     style: TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: MyThemeColors
-                                                            .myGreyscale[200]),
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: MyThemeColors
+                                                          .myGreyscale[200],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
