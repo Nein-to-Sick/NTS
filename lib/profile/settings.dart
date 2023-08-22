@@ -1165,14 +1165,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       });
     }
 
-    await GoogleSignIn().disconnect().then((value) async {
-      await FirebaseAuth.instance.currentUser?.delete().then((value) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        _logout();
-        widget.provider.fireFlyOff();
-        widget.provider.movePage(0);
-      });
+    await GoogleSignIn().disconnect();
+
+    await FirebaseAuth.instance.currentUser?.delete().then((value) {
+      _logout();
     });
   }
 }
