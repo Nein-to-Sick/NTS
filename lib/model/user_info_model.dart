@@ -5,6 +5,7 @@ class UserInfoValueModel with ChangeNotifier {
   String userEmail = '';
   bool isValueEntered = false;
   bool isDiaryExist = false;
+  bool disAllowToTouch = false;
   int currentYellowValue = 1;
 
   void userNickNameUpdate(value) {
@@ -42,6 +43,11 @@ class UserInfoValueModel with ChangeNotifier {
 
   void updateYellowValue(value) {
     currentYellowValue = value;
+    notifyListeners();
+  }
+
+  void updateAbsorbToTouch(value) {
+    disAllowToTouch = value;
     notifyListeners();
   }
 }

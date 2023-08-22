@@ -193,111 +193,115 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
       controller.changeColor(2);
     }
 
-    return WillPopScope(
-      //뒤로가기 막음
-      onWillPop: () {
-        if (scrollController.offset == 600 || scrollController.offset == 0) {
-          onBackKeyCallOnMain();
-        } else if (scrollController.offset == 855) {
-          onBackKeyCallOnMyPage();
-        }
-        return Future(() => false);
-      },
-      child: Stack(
-        children: [
-          ListView(
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            controller: scrollController,
-            children: [
-              SizedBox(
-                width: 1300,
-                child: Image.asset(
-                  'assets/background.png',
-                  fit: BoxFit.cover,
+    return AbsorbPointer(
+      absorbing: Provider.of<UserInfoValueModel>(context).disAllowToTouch,
+      child: WillPopScope(
+        //뒤로가기 막음
+        onWillPop: () {
+          if (scrollController.offset == 600 || scrollController.offset == 0) {
+            onBackKeyCallOnMain();
+          } else if (scrollController.offset == 855) {
+            onBackKeyCallOnMyPage();
+          }
+          return Future(() => false);
+        },
+        child: Stack(
+          children: [
+            ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              controller: scrollController,
+              children: [
+                SizedBox(
+                  width: 1300,
+                  child: Image.asset(
+                    'assets/background.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          AnimatedBuilder(
-            animation: scrollController,
-            builder: (context, child) {
-              if (controller.fireFly) {
-                if (scrollController.offset == 0 ||
-                    scrollController.offset == 600 ||
-                    scrollController.offset == 855) {
-                  return FireFly(
-                      userInfoController: Provider.of<UserInfoValueModel>(
-                          context,
-                          listen: true));
+              ],
+            ),
+            AnimatedBuilder(
+              animation: scrollController,
+              builder: (context, child) {
+                if (controller.fireFly) {
+                  if (scrollController.offset == 0 ||
+                      scrollController.offset == 600 ||
+                      scrollController.offset == 855) {
+                    return FireFly(
+                        userInfoController: Provider.of<UserInfoValueModel>(
+                            context,
+                            listen: true));
+                  } else {
+                    return const SizedBox.shrink();
+                  }
                 } else {
                   return const SizedBox.shrink();
                 }
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-          AnimatedBuilder(
-            animation: scrollController,
-            builder: (context, child) {
-              if (scrollController.offset == 0) {
-                return const LoginPage();
-              } else if (scrollController.offset == 600) {
-                return FutureBuilder<int>(
-                  future: _getUserDataFromFirebase(
-                      userInfo, gptModel, messageModel, player),
-                  builder: (context, snapshot) {
-                    //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
-                    if (userInfo.userNickName.isEmpty &&
-                        snapshot.connectionState == ConnectionState.waiting) {
-                      return const MyFireFlyProgressbar(
-                        loadingText: '로그인하는 중...',
-                        textColor: MyThemeColors.whiteColor,
-                      );
-                    }
-                    //  로그인 성공 후
-                    else if (snapshot.hasData) {
-                      return HomePageListViewBuilder(
-                        player: player,
-                        firstPageIndex: snapshot.data!,
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                );
-              } else if (scrollController.offset == 855) {
-                return MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider(
-                        create: (BuildContext context) => ProfileSearchModel()),
-                  ],
-                  child: MyProfilePage(
-                    alert: alert,
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-          controller.fireFly
-              ? SafeArea(
-                  child: AnimatedBuilder(
-                    animation: scrollController,
-                    builder: (context, child) {
-                      if (scrollController.offset == 600 ||
-                          scrollController.offset == 855) {
-                        return const NavigationToggle();
+              },
+            ),
+            AnimatedBuilder(
+              animation: scrollController,
+              builder: (context, child) {
+                if (scrollController.offset == 0) {
+                  return const LoginPage();
+                } else if (scrollController.offset == 600) {
+                  return FutureBuilder<int>(
+                    future: _getUserDataFromFirebase(
+                        userInfo, gptModel, messageModel, player),
+                    builder: (context, snapshot) {
+                      //  최초 로그인의 경우 (로그 아웃 및 계정 탈퇴 후도 포함)
+                      if (userInfo.userNickName.isEmpty &&
+                          snapshot.connectionState == ConnectionState.waiting) {
+                        return const MyFireFlyProgressbar(
+                          loadingText: '로그인하는 중...',
+                          textColor: MyThemeColors.whiteColor,
+                        );
+                      }
+                      //  로그인 성공 후
+                      else if (snapshot.hasData) {
+                        return HomePageListViewBuilder(
+                          player: player,
+                          firstPageIndex: snapshot.data!,
+                        );
                       } else {
-                        return const SizedBox.shrink();
+                        return Container();
                       }
                     },
-                  ),
-                )
-              : Container(),
-        ],
+                  );
+                } else if (scrollController.offset == 855) {
+                  return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              ProfileSearchModel()),
+                    ],
+                    child: MyProfilePage(
+                      alert: alert,
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            controller.fireFly
+                ? SafeArea(
+                    child: AnimatedBuilder(
+                      animation: scrollController,
+                      builder: (context, child) {
+                        if (scrollController.offset == 600 ||
+                            scrollController.offset == 855) {
+                          return const NavigationToggle();
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }
