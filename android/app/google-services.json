@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:92614011032:android:c9602a42d59e48985348ed",
+        "mobilesdk_app_id": "1:92614011032:android:e71adef1481a326f5348ed",
         "android_client_info": {
-          "package_name": "com.example.nts"
+          "package_name": "com.example.developer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "92614011032-v3k5hkn4gvt1vkrf7gcfk08a42lrcsle.apps.googleusercontent.com",
+          "client_id": "92614011032-0ufrgngacvgsbks298iu1qqn3pbe89tr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +27,111 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "92614011032-v3k5hkn4gvt1vkrf7gcfk08a42lrcsle.apps.googleusercontent.com",
+              "client_id": "92614011032-0ufrgngacvgsbks298iu1qqn3pbe89tr.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "92614011032-93iqnhvvofeataheftk6l9nmpenn8k9b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.developer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92614011032:android:c9602a42d59e48985348ed",
+        "android_client_info": {
+          "package_name": "com.example.nts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92614011032-pt6nrm18e949457ji70qu9kc78i9tj8g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nts",
+            "certificate_hash": "796d9522911cd2061d6fe7502de2e9ead84c21b4"
+          }
+        },
+        {
+          "client_id": "92614011032-sfalnosoet9hcr6irll3o3703hhsl0qr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nts",
+            "certificate_hash": "082a96cd4ccc51c45d99a3f4f989da48ab937131"
+          }
+        },
+        {
+          "client_id": "92614011032-0ufrgngacvgsbks298iu1qqn3pbe89tr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYOmvbpqZ3qkkxtNFez5H1YLoqKyFtLHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92614011032-0ufrgngacvgsbks298iu1qqn3pbe89tr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "92614011032-93iqnhvvofeataheftk6l9nmpenn8k9b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.developer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92614011032:android:5ed2e2901436b57f5348ed",
+        "android_client_info": {
+          "package_name": "com.nts.bandi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92614011032-8ennt5moqin6leb3pi8c9bs61oabbvj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nts.bandi",
+            "certificate_hash": "796d9522911cd2061d6fe7502de2e9ead84c21b4"
+          }
+        },
+        {
+          "client_id": "92614011032-0ufrgngacvgsbks298iu1qqn3pbe89tr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYOmvbpqZ3qkkxtNFez5H1YLoqKyFtLHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92614011032-0ufrgngacvgsbks298iu1qqn3pbe89tr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "92614011032-93iqnhvvofeataheftk6l9nmpenn8k9b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.developer"
+              }
             }
           ]
         }
