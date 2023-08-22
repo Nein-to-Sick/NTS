@@ -762,7 +762,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           ? MyThemeColors.blackColor
                           : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,
-                      blurRadius: 1.1,
+                      blurRadius: 0,
                       offset: const Offset(0.0, 0.8))
                 ],
               ),
@@ -836,7 +836,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           ? MyThemeColors.blackColor
                           : MyThemeColors.myGreyscale[200]!,
                       spreadRadius: 0.05,
-                      blurRadius: 1.1,
+                      blurRadius: 0,
                       offset: const Offset(0.0, 0.8))
                 ],
               ),

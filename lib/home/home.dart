@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isTextVisible = false;
       });
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         if (mounted) {
           setState(() {
             _isTextVisible = true;
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
           child: AnimatedOpacity(
             opacity: _isTextVisible ? 0.0 : 0.45, // 변경할 불투명도를 설정하세요.
             duration: Duration(
-                milliseconds: !_isTextVisible ? 300 : 3000), // 애니메이션 지속 시간 설정
+                milliseconds: !_isTextVisible ? 300 : 1000), // 애니메이션 지속 시간 설정
             child: const DecoratedBox(
               decoration: BoxDecoration(color: Colors.black),
             ),
@@ -220,7 +220,11 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        HeroIcon(HeroIcons.chevronDoubleLeft, color: Colors.white.withOpacity(0.3), style: HeroIconStyle.mini,),
+                        HeroIcon(
+                          HeroIcons.chevronDoubleLeft,
+                          color: Colors.white.withOpacity(0.3),
+                          style: HeroIconStyle.mini,
+                        ),
                       ],
                     ),
                   ),
@@ -229,8 +233,8 @@ class _HomePageState extends State<HomePage> {
                       AnimatedOpacity(
                         opacity: _isTextVisible ? 0.0 : 1.0,
                         // 변경할 불투명도를 설정하세요.
-                        duration: Duration(
-                            milliseconds: _isTextVisible ? 2000 : 300),
+                        duration:
+                            Duration(milliseconds: _isTextVisible ? 1000 : 300),
                         // 애니메이션 지속 시간 설정
                         child: Column(
                           children: [
@@ -321,19 +325,18 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            bottom:
-                                MediaQuery.of(context).size.height * 0.095),
+                            bottom: MediaQuery.of(context).size.height * 0.102),
                         child: AnimatedOpacity(
                           opacity: _isTextVisible ? 1.0 : 0.0,
                           // 변경할 불투명도를 설정하세요.
                           duration: Duration(
-                              milliseconds: _isTextVisible ? 2000 : 300),
+                              milliseconds: _isTextVisible ? 1000 : 300),
                           // 애니메이션 지속 시간 설정
                           child: Text(
                             "화면을 탭하여 글쓰기",
                             style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
                                 color: Colors.white.withOpacity(0.5)),
                           ),
                         ),

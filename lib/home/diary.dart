@@ -566,7 +566,9 @@ class DiaryState extends State<Diary> {
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors.myGreyscale.shade100,
+                                      color: isSelected2[index1][index2]
+                                          ? Colors.transparent
+                                          : MyThemeColors.myGreyscale.shade100,
                                     ),
                                   ),
                                   child: Padding(
@@ -720,7 +722,9 @@ class DiaryState extends State<Diary> {
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors.myGreyscale.shade100,
+                                      color: isSelected3[index1][index2]
+                                          ? Colors.transparent
+                                          : MyThemeColors.myGreyscale.shade100,
                                     ),
                                   ),
                                   child: Padding(

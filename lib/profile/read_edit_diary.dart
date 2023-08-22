@@ -110,13 +110,18 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: MyThemeColors.myGreyscale.shade200,
+                                    color: (!editMode)
+                                        ? Colors.transparent
+                                        : MyThemeColors.myGreyscale.shade200,
                                     width: 1,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: MyThemeColors.myGreyscale.shade100,
-                                      blurRadius: 0.5, // 그림자의 흐림 정도
+                                      color: (!editMode)
+                                          ? Colors.transparent
+                                          : MyThemeColors.myGreyscale.shade100,
+                                      blurRadius:
+                                          (!editMode) ? 0 : 0.5, // 그림자의 흐림 정도
                                       spreadRadius: 0.25, // 그림자의 확장 정도
                                       offset: const Offset(0, 1), // 그림자의 위치
                                     ),
@@ -146,8 +151,10 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                               onChanged: (value) {},
                                               readOnly: !editMode,
                                               controller: diaryTextController,
-                                              style:
-                                                  const TextStyle(fontSize: 16),
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: 'Dodam',
+                                              ),
                                               decoration: InputDecoration(
                                                 counterText: "",
                                                 border: InputBorder.none,
