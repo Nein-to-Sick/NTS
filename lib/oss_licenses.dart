@@ -59,6 +59,46 @@ const ossLicenses = <Package>[
     isDirectDependency: false,
   ),
   Package(
+    name: '미술-실루엣-풍경-곰-숲-3525344',
+    description: '미술, 대자연, 네이처 이미지. 사용 무료.',
+    repository: 'https://pixabay.com/ko/illustrations/미술-실루엣-풍경-곰-숲-3525344/',
+    authors: ["leohtt"],
+    version: '1.0.0',
+    license: '''Content License Summary
+
+Welcome to Pixabay! Pixabay is a vibrant community of authors, artists and creators sharing royalty-free images, video, audio and other media. We refer to this collectively as “Content”. By accessing and using Content, or by contributing Content, you agree to comply with our Content License. 
+
+At Pixabay, we like to keep things as simple as possible. For this reason, we have created this short summary of our Content License which is available in full here. Please keep in mind that only the full Content License is legally binding.
+
+
+What are you allowed to do with Content?
+
+Subject to the Prohibited Uses (see below), the Content License allows users to:
+O Use Content for free
+
+O Use Content without having to attribute the author (although giving credit is always appreciated by our community!)
+
+O Modify or adapt Content into new works
+
+
+What are you not allowed to do with Content?
+
+We refer to these as Prohibited Uses which include:
+
+X You cannot sell or distribute Content (either in digital or physical form) on a Standalone basis. Standalone means where no creative effort has been applied to the Content and it remains in substantially the same form as it exists on our website.
+
+X If Content contains any recognisable trademarks, logos or brands, you cannot use that Content for commercial purposes in relation to goods and services. In particular, you cannot print that Content on merchandise or other physical products for sale.
+
+X You cannot use Content in any immoral or illegal way, especially Content which features recognisable people.
+
+X You cannot use Content in a misleading or deceptive way.
+
+Please be aware that certain Content may be subject to additional intellectual property rights (such as copyrights, trademarks, design rights), moral rights, proprietary rights, property rights, privacy rights or similar. It is your responsibility ''',
+    isMarkdown: false,
+    isSdk: false,
+    isDirectDependency: false,
+  ),
+  Package(
     name: '_flutterfire_internals',
     description:
         'A package hosting Dart code shared between FlutterFire plugins.',
@@ -3456,6 +3496,38 @@ SOFTWARE.''',
     isDirectDependency: false,
   ),
   Package(
+    name: 'flutter_pdfview',
+    description:
+        'A Flutter plugin that provides a PDFView widget on Android and iOS.',
+    homepage: 'https://github.com/endigo/flutter_pdfview',
+    authors: [],
+    version: '1.3.1',
+    license: '''MIT License
+
+Copyright (c) 2019 endigo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.''',
+    isMarkdown: false,
+    isSdk: false,
+    isDirectDependency: true,
+  ),
+  Package(
     name: 'flutter_spinkit',
     description:
         'A collection of loading indicators animated with flutter. Heavily inspired by @tobiasahlin\'s SpinKit.',
@@ -4820,7 +4892,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     isMarkdown: false,
     isSdk: false,
-    isDirectDependency: false,
+    isDirectDependency: true,
   ),
   Package(
     name: 'path_provider_android',
@@ -5442,7 +5514,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     isMarkdown: false,
     isSdk: false,
-    isDirectDependency: false,
+    isDirectDependency: true,
   ),
   Package(
     name: 'shared_preferences_android',
