@@ -219,47 +219,48 @@ class _LoginPageState extends State<LoginPage>
                   const SizedBox(
                     height: 16,
                   ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: 60,
-                      width: 335,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(
-                                const Color.fromARGB(14, 255, 255, 255)),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.black),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ))),
-                        onPressed: () {
-                          showErrorMessage("V.1.0.0에 구현될 예정입니다.");
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                                margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
-                                child: const Image(
-                                  image: AssetImage("assets/applelogo.png"),
-                                )),
-                            const Expanded(
-                              child: Text(
-                                "Apple로 로그인",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  //  apple login button
+                  // GestureDetector(
+                  //   child: SizedBox(
+                  //     height: 60,
+                  //     width: 335,
+                  //     child: ElevatedButton(
+                  //       style: ButtonStyle(
+                  //           overlayColor: MaterialStateProperty.all(
+                  //               const Color.fromARGB(14, 255, 255, 255)),
+                  //           backgroundColor:
+                  //               MaterialStateProperty.all(Colors.black),
+                  //           shadowColor:
+                  //               MaterialStateProperty.all(Colors.transparent),
+                  //           shape: MaterialStateProperty.all<
+                  //               RoundedRectangleBorder>(RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(18.0),
+                  //           ))),
+                  //       onPressed: () {
+                  //         showErrorMessage("V.1.0.0에 구현될 예정입니다.");
+                  //       },
+                  //       child: Row(
+                  //         children: [
+                  //           Container(
+                  //               margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
+                  //               child: const Image(
+                  //                 image: AssetImage("assets/applelogo.png"),
+                  //               )),
+                  //           const Expanded(
+                  //             child: Text(
+                  //               "Apple로 로그인",
+                  //               style: TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontWeight: FontWeight.w500,
+                  //                 fontSize: 16,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
