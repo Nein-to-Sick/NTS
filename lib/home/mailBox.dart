@@ -25,7 +25,7 @@ class MailBox extends StatefulWidget {
 class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
   late AnimationController _animationController;
-  Timer _timer = Timer(Duration.zero, (){});
+  Timer _timer = Timer(Duration.zero, () {});
 
   late String time = "";
   late String from = "";
@@ -98,7 +98,7 @@ class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
                   });
                 },
                 child: Card(
-                  elevation: 0.7,
+                  elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -157,7 +157,7 @@ class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
         ),
         Expanded(
           child: Card(
-            elevation: 2,
+            elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -179,29 +179,32 @@ class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          children: [
-                            Text(
-                              "from.$from",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontFamily: "Dodam",
-                                  color: MyThemeColors.myGreyscale[200]),
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              time,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                  color: MyThemeColors.myGreyscale[200]),
-                            ),
-                          ],
-                        ))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            children: [
+                              Text(
+                                "from.$from",
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Dodam",
+                                    color: MyThemeColors.myGreyscale[200]),
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                time,
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                    color: MyThemeColors.myGreyscale[200]),
+                              ),
+                            ],
+                          )),
+                    )
                   ],
                 ),
               ),
@@ -230,38 +233,40 @@ class _MailBoxState extends State<MailBox> with TickerProviderStateMixin {
                   });
                   DatabaseService().clickHeart(id, heart, fromUid);
                 },
-                child: heart ? ScaleTransition(
-                  scale: _animationController.drive(
-                    Tween(begin: 1.0, end: 1.5).chain(
-                      CurveTween(curve: Curves.easeInOut),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: HeroIcon(
-                      HeroIcons.heart,
-                      style: heart
-                          ? HeroIconStyle.solid
-                          : HeroIconStyle.outline,
-                      color: heart
-                          ? MyThemeColors.secondaryColor
-                          : MyThemeColors.whiteColor,
-                    ),
-                  ),
-                ) : Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: MyThemeColors.secondaryColor),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: HeroIcon(
-                      HeroIcons.heart,
-                      style: HeroIconStyle.outline,
-                      color: MyThemeColors.whiteColor,
-                    ),
-                  ),
-                ),
-        )
+                child: heart
+                    ? ScaleTransition(
+                        scale: _animationController.drive(
+                          Tween(begin: 1.0, end: 1.5).chain(
+                            CurveTween(curve: Curves.easeInOut),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: HeroIcon(
+                            HeroIcons.heart,
+                            style: heart
+                                ? HeroIconStyle.solid
+                                : HeroIconStyle.outline,
+                            color: heart
+                                ? MyThemeColors.secondaryColor
+                                : MyThemeColors.whiteColor,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: MyThemeColors.secondaryColor),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: HeroIcon(
+                            HeroIcons.heart,
+                            style: HeroIconStyle.outline,
+                            color: MyThemeColors.whiteColor,
+                          ),
+                        ),
+                      ),
+              )
             : Container(),
         notMatch
             ? Column(

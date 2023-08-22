@@ -80,7 +80,7 @@ void myShowBottomSheet(BuildContext context) {
                                   hintText:
                                       "궁금하거나 불편하거나 제안하고 싶은 점이 있다면 얘기해주세요!",
                                   hintStyle: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w500,
                                     // color: AppColors.haruGreyscale.shade300,
                                     color: Color(0xffB0B0B0),

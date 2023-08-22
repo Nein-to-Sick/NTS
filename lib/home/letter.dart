@@ -232,7 +232,9 @@ class _LetterState extends State<Letter> {
                                     : Colors.white, // 수정
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: MyThemeColors.myGreyscale.shade100,
+                                  color: isSelfSelected
+                                      ? Colors.transparent
+                                      : MyThemeColors.myGreyscale.shade100,
                                 ),
                               ),
                               // 수정
@@ -283,7 +285,9 @@ class _LetterState extends State<Letter> {
                                     : Colors.white, // 수정
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: MyThemeColors.myGreyscale.shade100,
+                                  color: isSomeoneSelected
+                                      ? Colors.transparent
+                                      : MyThemeColors.myGreyscale.shade100,
                                 ),
                               ),
                               // 수정
@@ -458,7 +462,9 @@ class _LetterState extends State<Letter> {
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors.myGreyscale.shade100,
+                                      color: isSelected2[index1][index2]
+                                          ? Colors.transparent
+                                          : MyThemeColors.myGreyscale.shade100,
                                     ), // 수정
                                   ),
                                   child: Padding(
@@ -610,7 +616,9 @@ class _LetterState extends State<Letter> {
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: MyThemeColors.myGreyscale.shade100,
+                                      color: isSelected3[index1][index2]
+                                          ? Colors.transparent
+                                          : MyThemeColors.myGreyscale.shade100,
                                     ), // 수정
                                   ),
                                   child: Padding(
