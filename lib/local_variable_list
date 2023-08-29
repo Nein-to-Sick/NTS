@@ -10,3 +10,5 @@ Bool isAIUsing
 Bool speakerSetting
 //  The last logined time
 String LoginedDate
+//  number of yellow count
+int yellowCount
