@@ -344,6 +344,9 @@ Future<int> _getUserDataFromFirebase(
         userInfoModel.updateYellowValue(1);
       }
 
+      //  local variable update
+      await prefs.setInt('yellowCount', userInfoModel.currentYellowValue);
+
       await userCollection.doc(userId).update({
         "yellow": userInfoModel.currentYellowValue,
       });
@@ -355,6 +358,7 @@ Future<int> _getUserDataFromFirebase(
     userInfoModel.userNickNameUpdate(prefs.getString('nickname') ?? '');
     userInfoModel.userEmailUpdate(prefs.getString('email') ?? '');
     userInfoModel.userDiaryExist(prefs.getBool('diaryExist') ?? false);
+    userInfoModel.updateYellowValue(prefs.getInt('yellowCount') ?? 1);
     gptModel.updateAIUsingSetting(prefs.getBool('isAIUsing') ?? true);
     messageModel.setSpeaker(prefs.getBool('speakerSetting') ?? true);
 
@@ -378,6 +382,7 @@ Future<int> _getUserDataFromFirebase(
               userData.containsKey('email')) {
             userInfoModel.userNickNameUpdate(userData['nickname']);
             userInfoModel.userEmailUpdate(userData['email']);
+            userInfoModel.updateYellowValue(userData['yellow']);
           } else {
             debugPrint('No field');
             return 0;
@@ -398,6 +403,7 @@ Future<int> _getUserDataFromFirebase(
           //  local variable update
           await prefs.setString('nickname', userData['nickname']);
           await prefs.setString('email', userData['email']);
+          await prefs.setInt('yellowCount', userData['yellow']);
         } else {
           debugPrint('No document');
         }
