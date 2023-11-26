@@ -114,26 +114,26 @@ class _LoginPageState extends State<LoginPage>
                             child: flickerText(_showAnimatedText, "반"),
                           ),
                           const SizedBox(
-                            width: 50,
+                            width: 30,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
-                            child: flickerText(_showAnimatedText, "딧"),
+                            child: flickerText(_showAnimatedText, "디"),
                           ),
-                          const SizedBox(
-                            width: 50,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 15.0),
-                            child: flickerText(_showAnimatedText, "불"),
-                          ),
-                          const SizedBox(
-                            width: 50,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: flickerText(_showAnimatedText, "이"),
-                          ),
+                          // const SizedBox(
+                          //   width: 50,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(bottom: 15.0),
+                          //   child: flickerText(_showAnimatedText, "불"),
+                          // ),
+                          // const SizedBox(
+                          //   width: 50,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 5.0),
+                          //   child: flickerText(_showAnimatedText, "이"),
+                          // ),
                         ],
                       ),
                     ),
@@ -276,7 +276,7 @@ Widget flickerText(showAnimatedText, text) {
     visible: showAnimatedText,
     replacement: Text(
       text,
-      style: const TextStyle(fontSize: 50, fontFamily: "Dodam"),
+      style: const TextStyle(fontSize: 70, fontFamily: "Dodam"),
     ),
     child: AnimatedTextKit(
       totalRepeatCount: 1,
