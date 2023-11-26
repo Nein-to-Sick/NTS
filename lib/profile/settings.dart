@@ -1165,12 +1165,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     if (userId != null) {
       await _deleteAllCollectionsInUserDocument(userId).then((value) {
         FirebaseFirestore.instance.collection("users").doc(userId).delete();
-      });
+      }).then((value) => {
+            GoogleSignIn().disconnect().then((value) => null).then((value) => {
+                  FirebaseAuth.instance.currentUser?.delete().then((value) => {
+                        widget.provider.movePage(0),
+                        widget.user.updateAbsorbToTouch(false),
+                      })
+                })
+          });
     }
-
-    await GoogleSignIn().disconnect();
-    await FirebaseAuth.instance.currentUser?.delete();
-    widget.provider.movePage(0);
-    widget.user.updateAbsorbToTouch(false);
   }
 }
