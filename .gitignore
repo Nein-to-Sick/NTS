@@ -87,6 +87,7 @@ unlinked_spec.ds
 **/ios/**/.vagrant/
 **/ios/**/DerivedData/
 **/ios/**/Icon?
+**/ios/**/Pods/
 **/ios/**/.symlinks/
 **/ios/**/profile
 **/ios/**/xcuserdata
@@ -95,6 +96,7 @@ unlinked_spec.ds
 **/ios/Flutter/App.framework
 **/ios/Flutter/Flutter.framework
 **/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/ephemeral
 **/ios/Flutter/app.flx
 **/ios/Flutter/app.zip
@@ -105,6 +107,7 @@ unlinked_spec.ds
 
 # macOS
 **/Flutter/ephemeral/
+**/Pods/
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 **/xcuserdata/
