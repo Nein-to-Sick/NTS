@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="반딧불이"
+        android:label="반디"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
