@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nts/Theme/theme_colors.dart';
 import 'package:nts/login/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../provider/backgroundController.dart';
 
@@ -40,6 +41,8 @@ class _LoginPageState extends State<LoginPage>
       },
     );
   }
+
+
 
   @override
   void initState() {
@@ -219,48 +222,62 @@ class _LoginPageState extends State<LoginPage>
                   const SizedBox(
                     height: 16,
                   ),
-                  //  apple login button
-                  // GestureDetector(
-                  //   child: SizedBox(
-                  //     height: 60,
-                  //     width: 335,
-                  //     child: ElevatedButton(
-                  //       style: ButtonStyle(
-                  //           overlayColor: MaterialStateProperty.all(
-                  //               const Color.fromARGB(14, 255, 255, 255)),
-                  //           backgroundColor:
-                  //               MaterialStateProperty.all(Colors.black),
-                  //           shadowColor:
-                  //               MaterialStateProperty.all(Colors.transparent),
-                  //           shape: MaterialStateProperty.all<
-                  //               RoundedRectangleBorder>(RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(18.0),
-                  //           ))),
-                  //       onPressed: () {
-                  //         showErrorMessage("V.1.0.0에 구현될 예정입니다.");
-                  //       },
-                  //       child: Row(
-                  //         children: [
-                  //           Container(
-                  //               margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
-                  //               child: const Image(
-                  //                 image: AssetImage("assets/applelogo.png"),
-                  //               )),
-                  //           const Expanded(
-                  //             child: Text(
-                  //               "Apple로 로그인",
-                  //               style: TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.w500,
-                  //                 fontSize: 16,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  // apple login button
+                  GestureDetector(
+                    child: SizedBox(
+                      height: 60,
+                      width: 335,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(
+                                const Color.fromARGB(14, 255, 255, 255)),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.black),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ))),
+                        onPressed: () {
+                          // showErrorMessage("V.1.0.0에 구현될 예정입니다.");
+                          AuthService().signInWithApple().then((value) async {
+                            setState(() {
+                              user = value;
+                            });
+
+                            if (user != null) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (controller.scrollController.hasClients) {
+                                  controller.movePage(600);
+                                  controller.changeColor(2);
+                                }
+                              });
+                            }
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
+                                child: const Image(
+                                  image: AssetImage("assets/applelogo.png"),
+                                )),
+                            const Expanded(
+                              child: Text(
+                                "Apple로 로그인",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
