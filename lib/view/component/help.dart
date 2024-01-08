@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/component/button.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/component/button.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 class Help extends StatelessWidget {

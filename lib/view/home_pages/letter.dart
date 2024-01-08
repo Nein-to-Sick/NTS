@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/component/confirm_dialog.dart';
-import 'package:nts/model/user_info_model.dart';
-import 'package:nts/provider/backgroundController.dart';
-
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/model/database_model.dart';
+import 'package:nts/model/preset_model.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/component/confirm_dialog.dart';
 import '../component/button.dart';
-import '../database/databaseService.dart';
-import '../model/preset.dart';
 
 class Letter extends StatefulWidget {
   const Letter(

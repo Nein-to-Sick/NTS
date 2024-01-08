@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
 
 int selectedIcon = 0;
 

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
-import 'package:nts/component/confirm_dialog.dart';
-import 'package:nts/database/databaseService.dart';
-import 'package:nts/loading/loading_page.dart';
-import 'package:nts/model/user_info_model.dart';
-import 'package:nts/provider/backgroundController.dart';
-import 'package:nts/provider/gpt_model.dart';
-import 'package:nts/provider/messageController.dart';
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/controller/gpt_controller.dart';
+import 'package:nts/controller/message_controller.dart';
+import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/model/database_model.dart';
+import 'package:nts/model/preset_model.dart';
+import 'package:nts/view/component/confirm_dialog.dart';
+import 'package:nts/view/loading_pages/loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
-import '../model/preset.dart';
 
 class Diary extends StatefulWidget {
   final GPTModel gptModel;

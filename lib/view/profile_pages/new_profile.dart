@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/search_model.dart';
-import 'package:nts/model/user_info_model.dart';
-import 'package:nts/profile/profile_search_page.dart';
-import 'package:nts/profile/settings.dart';
-import 'package:nts/provider/backgroundController.dart';
-import 'package:nts/provider/gpt_model.dart';
-import 'package:nts/provider/messageController.dart';
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/controller/gpt_controller.dart';
+import 'package:nts/controller/message_controller.dart';
+import 'package:nts/controller/search_controller.dart';
+import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/home_pages/diary.dart';
+import 'package:nts/view/profile_pages/profile_search_page.dart';
+import 'package:nts/view/profile_pages/settings.dart';
 import 'package:provider/provider.dart';
-import 'package:nts/home/diary.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.alert});
