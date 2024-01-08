@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/user_info_model.dart';
+import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
 
 class FireFly extends StatefulWidget {
   const FireFly({super.key, required this.userInfoController});

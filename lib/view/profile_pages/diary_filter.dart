@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/preset.dart';
-import 'package:nts/model/search_model.dart';
-import 'package:nts/profile/new_calendar.dart';
+import 'package:nts/controller/search_controller.dart';
+import 'package:nts/model/preset_model.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/profile_pages/new_calendar.dart';
 import 'package:provider/provider.dart';
 
 class SearchFilterDialog extends StatefulWidget {
