@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/component/agree_condition.dart';
-import 'package:nts/component/button.dart';
-import 'package:nts/component/nickname_sheet.dart';
-import 'package:nts/home/home.dart';
-import 'package:nts/model/user_info_model.dart';
-import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/component/agree_condition.dart';
+import 'package:nts/view/component/button.dart';
+import 'package:nts/view/component/nickname_sheet.dart';
+import 'package:nts/view/home_pages/home.dart';
 import 'package:provider/provider.dart';
 
 class HomePageListViewBuilder extends StatefulWidget {
@@ -76,7 +76,7 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                   //  OnBoarding page 1
                   return _buildOnboardingPage(
                     context,
-                    imagePath: "./assets/onboard/1.png",
+                    imagePath: "./assets/images/onboarding/1.png",
                     text: "먼저, 일기를 써보세요",
                     subTitle: "본인의 감정과 상황을 파악하는데 도움을 줄거에요",
                   );
@@ -84,7 +84,7 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                   //  OnBoarding page 2
                   return _buildOnboardingPage(
                     context,
-                    imagePath: "./assets/onboard/2.png",
+                    imagePath: "./assets/images/onboarding/2.png",
                     text: "그럼, 편지를 받을수 있을거에요",
                     subTitle: "본인의 감정과 상황에 공감해주는 느낌을 받을수 있을거예요.",
                   );
@@ -92,7 +92,7 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                   //  OnBoarding page 2
                   return _buildOnboardingPage(
                     context,
-                    imagePath: "./assets/onboard/3.png",
+                    imagePath: "./assets/images/onboarding/3.png",
                     text: "그리고, 감사의 마음을 전해보세요",
                     subTitle: "상대방도 본인이 보낸 편지에 보람을 느낄수 있을거예요.",
                   );

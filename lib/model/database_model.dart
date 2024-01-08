@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import '../component/notification.dart';
-import '../model/preset.dart';
+import 'package:nts/model/preset_model.dart';
+import 'package:nts/view/component/notification.dart';
 
 String userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -38,13 +38,13 @@ class DatabaseService {
     // 내가 보낸 일기에서 찾기
     final documents = await getSelfMailBox(situation, selectedEmotion);
 
-    if(documents.isNotEmpty) {
+    if (documents.isNotEmpty) {
       sendAlert(documents, messageController);
     } else {
       // 내가 보낸 일기에서 없을때 filterMail에서 찾기
       final matchingDocuments =
-      await getDocumentsWithMatchingSituationsAndEmotions(
-          situation, selectedEmotion);
+          await getDocumentsWithMatchingSituationsAndEmotions(
+              situation, selectedEmotion);
 
       if (matchingDocuments.isEmpty) {
         notMatch(messageController, situation, emotion);
@@ -86,17 +86,16 @@ class DatabaseService {
     DateFormat formatter = DateFormat('yyyy/MM/dd HH:mm');
     String formattedNow = formatter.format(now);
 
-    doc.update({
-      'date': formattedNow,
-      'docId': doc.id
-    });
+    doc.update({'date': formattedNow, 'docId': doc.id});
 
     messageController.getMessage();
     FlutterLocalNotification.showNotification(); // 알림
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('selfMailBox').doc(randomDoc.id).delete();
+        .collection('selfMailBox')
+        .doc(randomDoc.id)
+        .delete();
   }
 
   Future<List<DocumentSnapshot>> getDocumentsWithMatchingSituationsAndEmotions(
@@ -136,8 +135,8 @@ class DatabaseService {
     return filteredDocuments;
   }
 
-  Future<List<DocumentSnapshot>> getSelfMailBox(List<dynamic> situations,
-      List<String> selectedEmotion) async {
+  Future<List<DocumentSnapshot>> getSelfMailBox(
+      List<dynamic> situations, List<String> selectedEmotion) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -177,7 +176,6 @@ class DatabaseService {
     await Future.delayed(Duration(minutes: randomNumber));
     // await Future.delayed(Duration(seconds: 30)); // 5~10분 랜덤 딜레이
 
-
     DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('yyyy/MM/dd HH:mm');
     String formattedNow = formatter.format(now);
@@ -202,8 +200,8 @@ class DatabaseService {
   }
 
   // 수정된 selfMessage
-  Future<String> selfMessage(String content, List<String> situation, List<String> emotion,
-      String time, String userName) async {
+  Future<String> selfMessage(String content, List<String> situation,
+      List<String> emotion, String time, String userName) async {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -250,38 +248,37 @@ class DatabaseService {
     return docRef.id;
   }
 
-
   Future<void> clickHeart(String id, bool heart, String fromUid) async {
     DocumentReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('mailBox').doc(id);
+        .collection('mailBox')
+        .doc(id);
 
     var data = await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('mailBox').doc(id).get();
+        .collection('mailBox')
+        .doc(id)
+        .get();
     int heartCount = data['heart_count'];
     heartCount++;
-    dr.update({
-      'heart': heart,
-      'heart_count': heartCount
-    });
+    dr.update({'heart': heart, 'heart_count': heartCount});
 
     greenFireFly(heartCount, fromUid);
   }
 
   Future<void> greenFireFly(int heartCount, String fromUid) async {
     if (heartCount == 1) {
-      DocumentReference data = FirebaseFirestore.instance.collection('users')
-          .doc(fromUid);
-      var doc = await FirebaseFirestore.instance.collection('users').doc(
-          fromUid).get();
+      DocumentReference data =
+          FirebaseFirestore.instance.collection('users').doc(fromUid);
+      var doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(fromUid)
+          .get();
       int green = doc['green'];
       green++;
-      data.update({
-        'green': green
-      });
+      data.update({'green': green});
     }
   }
 }

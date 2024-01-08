@@ -1,12 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/login/auth_service.dart';
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/auth_page/auth_service.dart';
 import 'package:provider/provider.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import '../provider/backgroundController.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -41,8 +39,6 @@ class _LoginPageState extends State<LoginPage>
       },
     );
   }
-
-
 
   @override
   void initState() {
@@ -202,7 +198,7 @@ class _LoginPageState extends State<LoginPage>
                             Container(
                                 margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
                                 child: const Image(
-                                  image: AssetImage("assets/googlelogo.png"),
+                                  image: AssetImage("assets/images/icons/googlelogo.png"),
                                 )),
                             const Expanded(
                               child: Text(
@@ -261,7 +257,7 @@ class _LoginPageState extends State<LoginPage>
                             Container(
                                 margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
                                 child: const Image(
-                                  image: AssetImage("assets/applelogo.png"),
+                                  image: AssetImage("assets/images/icons/applelogo.png"),
                                 )),
                             const Expanded(
                               child: Text(

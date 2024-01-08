@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/search_model.dart';
+import 'package:nts/controller/search_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
 
 class MyNewCalendar extends StatefulWidget {
   final ProfileSearchModel searchModel;

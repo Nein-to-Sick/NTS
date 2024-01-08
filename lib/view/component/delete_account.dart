@@ -2,10 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nts/Theme/theme_colors.dart';
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
-
-import '../provider/backgroundController.dart';
 
 void z(BuildContext context, BackgroundController provider) {
   Future<void> _reauthenticateAndDelete() async {

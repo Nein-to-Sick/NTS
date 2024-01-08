@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/loading/loading_page.dart';
-import 'package:nts/model/diaryModel.dart';
-import 'package:nts/model/search_model.dart';
-import 'package:nts/profile/diary_filter.dart';
-import 'package:nts/profile/read_edit_diary.dart';
+import 'package:nts/controller/diary_controller.dart';
+import 'package:nts/controller/search_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/loading_pages/loading_page.dart';
+import 'package:nts/view/profile_pages/diary_filter.dart';
+import 'package:nts/view/profile_pages/read_edit_diary.dart';
 
 class MyProfileSearchPage extends StatefulWidget {
   final ProfileSearchModel searchModel;
