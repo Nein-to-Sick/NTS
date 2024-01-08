@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/letterModel.dart';
+import 'package:nts/model/database_model.dart';
+import 'package:nts/model/letter_model.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
 import 'dart:async';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 import '../component/button.dart';
-import '../database/databaseService.dart';
 import 'letter.dart';
 
 class MailBox extends StatefulWidget {

@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/component/agree_condition.dart';
-import 'package:nts/component/button.dart';
-import 'package:nts/component/nickname_sheet.dart';
-import 'package:nts/home/home.dart';
-import 'package:nts/model/user_info_model.dart';
-import 'package:nts/provider/backgroundController.dart';
+import 'package:nts/controller/background_controller.dart';
+import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/component/agree_condition.dart';
+import 'package:nts/view/component/button.dart';
+import 'package:nts/view/component/nickname_sheet.dart';
+import 'package:nts/view/home_pages/home.dart';
 import 'package:provider/provider.dart';
 
 class HomePageListViewBuilder extends StatefulWidget {

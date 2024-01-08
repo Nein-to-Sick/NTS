@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/model/diaryModel.dart';
-import 'package:nts/model/search_model.dart';
+import 'package:nts/controller/diary_controller.dart';
+import 'package:nts/controller/search_controller.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
 
 class ReadDiaryDialog extends StatefulWidget {
   final DiaryModel diaryContent;

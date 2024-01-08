@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nts/Theme/theme_colors.dart';
-import 'package:nts/component/PDFScreen.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/component/PDFScreen.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AgreementSheet {
