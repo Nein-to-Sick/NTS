@@ -108,7 +108,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
 
   //간단히 함수로 처리
   Future playEffectAudio() async {
-    await player.setAsset("assets/bgm/bgm1.mp3");
+    await player.setAsset("assets/bgm/bgm.mp3");
     await player.setLoopMode(LoopMode.one);
   }
 
@@ -217,7 +217,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
                 SizedBox(
                   width: 1300,
                   child: Image.asset(
-                    'assets/background.png',
+                    'assets/back_dark.png',
                     fit: BoxFit.cover,
                   ),
                 ),
