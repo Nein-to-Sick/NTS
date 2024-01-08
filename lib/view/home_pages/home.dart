@@ -4,7 +4,7 @@ import 'package:nts/controller/background_controller.dart';
 import 'package:nts/controller/gpt_controller.dart';
 import 'package:nts/controller/message_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
-import 'package:nts/view/home_page/mailBox.dart';
+import 'package:nts/view/home_pages/mailBox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:just_audio/just_audio.dart';

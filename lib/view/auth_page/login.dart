@@ -198,7 +198,7 @@ class _LoginPageState extends State<LoginPage>
                             Container(
                                 margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
                                 child: const Image(
-                                  image: AssetImage("assets/googlelogo.png"),
+                                  image: AssetImage("assets/images/icons/googlelogo.png"),
                                 )),
                             const Expanded(
                               child: Text(
@@ -257,7 +257,7 @@ class _LoginPageState extends State<LoginPage>
                             Container(
                                 margin: const EdgeInsets.fromLTRB(5, 0, 12, 0),
                                 child: const Image(
-                                  image: AssetImage("assets/applelogo.png"),
+                                  image: AssetImage("assets/images/icons/applelogo.png"),
                                 )),
                             const Expanded(
                               child: Text(

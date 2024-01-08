@@ -217,7 +217,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
                 SizedBox(
                   width: 1300,
                   child: Image.asset(
-                    'assets/back_dark.png',
+                    'assets/images/background/back_dark.png',
                     fit: BoxFit.cover,
                   ),
                 ),
