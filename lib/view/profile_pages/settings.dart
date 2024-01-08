@@ -21,9 +21,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
-import '../component/PDFScreen.dart';
 import '../component/notification.dart';
 import 'dart:io';
+
+import '../component/webView.dart';
 
 class ProfileSettings extends StatefulWidget {
   final BackgroundController provider;
@@ -51,41 +52,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       1; //1==메인설정, 2== 이용약관, 3==개인정보 처리방침, 4==사업자 정보, 5==라이센스, 6==프로필편집, 7==oss
   bool positive = false;
 
-  String servicePDF = "";
-  String personPDF = "";
-
   @override
   void initState() {
     positive = widget.alert;
-    fromAsset('assets/pdf/service.pdf', 'service.pdf').then((f) {
-      setState(() {
-        servicePDF = f.path;
-      });
-    });
-    fromAsset('assets/pdf/personalRule.pdf', 'personalRule.pdf').then((f) {
-      setState(() {
-        personPDF = f.path;
-      });
-    });
     super.initState();
-  }
-
-  Future<File> fromAsset(String asset, String filename) async {
-    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
-    Completer<File> completer = Completer();
-
-    try {
-      var dir = await getApplicationDocumentsDirectory();
-      File file = File("${dir.path}/$filename");
-      var data = await rootBundle.load(asset);
-      var bytes = data.buffer.asUint8List();
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      throw Exception('Error parsing asset file!');
-    }
-
-    return completer.future;
   }
 
   @override
@@ -582,13 +552,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           buildCustomButton(
             backgroundColor: Colors.white.withOpacity(0.9),
             onTap: () {
-              if (servicePDF.isNotEmpty) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return PDFScreen(path: servicePDF);
-                    });
-              }
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WebView(
+                            title: "service",
+                          )));
             },
             inside: Row(children: [
               Expanded(
@@ -614,13 +583,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           buildCustomButton(
             backgroundColor: Colors.white.withOpacity(0.9),
             onTap: () {
-              if (personPDF.isNotEmpty) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return PDFScreen(path: personPDF);
-                    });
-              }
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WebView(
+                            title: "personalRule",
+                          )));
             },
             inside: Row(children: [
               Expanded(
