@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:nts/controller/diary_controller.dart';
 import 'package:nts/model/ai_chat_model.dart';
 
 //  나와 대화하기 기능
@@ -29,6 +30,7 @@ class AIChatController with ChangeNotifier {
     'unkown'
   ];
   String emotionState = 'joy';
+  List<DiaryModel> diaries = [];
 
   /*
   system: 사전 설정, 역할 부여 등
@@ -50,11 +52,11 @@ class AIChatController with ChangeNotifier {
         messages: chatMemory, //  출력의 최대 토큰 수 (기본값; 50)
         maxTokens: 350,
         //  창의성, 수치와 비례함 (기본값: 0.5)
-        temperature: 0,
+        temperature: 0.5,
         //  답변의 확률 분포 상위 p%, 단어의 다양성 (기본값: 1)
         topP: 1,
         //  중복되는 구문 생성 방지 (기본값: 0)
-        frequencyPenalty: 0,
+        frequencyPenalty: 1,
         //  답변의 특정 키워드 제거 (기본값: 0)
         presencePenalty: 0,
       );
@@ -108,13 +110,30 @@ class AIChatController with ChangeNotifier {
       }
     }
 
+    // 유저 기록 학습
+    for (int i = 0; i < diaries.length; i++) {
+      //  최대 10개 이전의 일기를 기억
+      if (i == 10) {
+        break;
+      }
+      chatMemory.add(
+        OpenAIChatCompletionChoiceMessageModel(
+          role: OpenAIChatMessageRole.system,
+          content: [
+            OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "${i + 1}번째 일기-{상황:[${diaries[i].situation}] 감정:[${diaries[i].emotion}] 내용:[${diaries[i].content}]}\n")
+          ],
+        ),
+      );
+    }
+
     // 시스템 설정 (역할 부여)
     final systemMessage = OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.system,
         content: [
           OpenAIChatCompletionChoiceMessageContentItemModel.text(
-              //'gpt 너는 유저의 분신이야. 너는 너가 인공지능이라는 것을 절대 들켜선 안돼! 답장은 최대 3줄로 답해주고, 친근한 말투와 반말로 해야만 해. 이후에 일기를 보고 유저에게 맞는 답장을 해줘. 일기와 관련없는 이야기가 나오면 그냥 \"모르겠어\"식으로 정중히 거절해.')
-              "You're the user's alter ego. Never get caught revealing you're an AI! Respond in max 3 lines, using a friendly, informal tone. Later, read the chat log and give a suitable response to the user. Do not repeating similar questions. Politely decline unrelated topics with 'I don't know.' All responses must be in Korean.")
+              //'gpt 너는 유저의 분신이야. 너는 너가 인공지능이라는 것을 절대 들켜선 안돼! 답장은 최대 3줄로 답해주고, 친근한 말투와 반말로 해야만 해. 이후에 일기들을 보고 유저에게 맞는 답장을 해줘. 일기와 관련없는 이야기가 나오면 그냥 \"모르겠어\"식으로 정중히 거절해.')
+              "You're the user's alter ego. Never get caught revealing you're an AI! Respond in max 3 lines, using a friendly, informal tone. Later, review the diary entries and offer the user appropriate reflections and words of encouragement. When reviewing the diary, politely decline to speculate on things you cannot infer by saying 'I don't know'. All responses must be in Korean.")
         ]);
 
     chatMemory.add(systemMessage);
@@ -162,6 +181,11 @@ class AIChatController with ChangeNotifier {
   void updateEmotion() {
     int result = Random().nextInt(6);
     emotionState = emotions[result];
+    notifyListeners();
+  }
+
+  void updateUserDiary(List<DiaryModel> diariesInput) {
+    diaries = diariesInput;
     notifyListeners();
   }
 }

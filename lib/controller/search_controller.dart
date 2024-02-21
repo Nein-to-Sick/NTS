@@ -19,6 +19,15 @@ class ProfileSearchModel with ChangeNotifier {
       .orderBy("date", descending: true)
       .get());
 
+  //  최신 10개의 일기까지만 기억
+  Future<QuerySnapshot> aiChatSearchResults = (FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection("diary")
+      .orderBy("date", descending: true)
+      .limit(10)
+      .get());
+
   //  필터 적용 여부 확인
   bool isFiltered() {
     if (timeResult.isNotEmpty ||

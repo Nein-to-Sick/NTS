@@ -4,9 +4,11 @@ import 'package:nts/controller/ai_chat_controller.dart';
 import 'package:nts/controller/background_controller.dart';
 import 'package:nts/controller/gpt_controller.dart';
 import 'package:nts/controller/message_controller.dart';
+import 'package:nts/controller/search_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
 import 'package:nts/view/ai_chat_pages/ai_chat.dart';
 import 'package:nts/view/home_pages/mailBox.dart';
+import 'package:nts/view/survey_pages/survey_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:just_audio/just_audio.dart';
@@ -276,7 +278,7 @@ class _HomePageState extends State<HomePage> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 9),
                                   child: Text(
-                                    "일기 쓰기",
+                                    "📖 일기 쓰기",
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
@@ -313,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 9),
                                   child: Text(
-                                    "편지 쓰기",
+                                    "💌 편지 쓰기",
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
@@ -339,6 +341,11 @@ class _HomePageState extends State<HomePage> {
                                                 create: (context) =>
                                                     AIChatController(),
                                               ),
+                                              ChangeNotifierProvider(
+                                                create:
+                                                    (BuildContext context) =>
+                                                        ProfileSearchModel(),
+                                              ),
                                             ], child: const AIChatPage()),
                                           ));
                                     },
@@ -350,7 +357,40 @@ class _HomePageState extends State<HomePage> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 9),
                                   child: Text(
-                                    "과거의 나와 대화하기",
+                                    "🛠️ 과거의 나와 대화하기",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            GestureDetector(
+                              onTap: _isTextVisible
+                                  ? null
+                                  : () {
+                                      // 과거의 나와 대화하기 창
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SurveyPage(),
+                                        ),
+                                      );
+                                    },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 9),
+                                  child: Text(
+                                    "📝 만족도 기록",
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
