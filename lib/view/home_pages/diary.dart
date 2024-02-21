@@ -35,6 +35,8 @@ class Diary extends StatefulWidget {
 class DiaryState extends State<Diary> {
   int index = 0;
   TextEditingController textEditingController = TextEditingController();
+  TextEditingController todayDiaryController = TextEditingController();
+
   late List<List<bool>> isSelected2 = [];
   late List<List<bool>> isSelected3 = [];
   int count2 = 0;
@@ -51,6 +53,15 @@ class DiaryState extends State<Diary> {
     isSelected3 = List.generate(Preset().emotion.length,
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
     _pageController = PageController(initialPage: 0);
+    getTodayDiary();
+  }
+
+  void getTodayDiary() {
+    DatabaseService().getTodayDiary().then((value) {
+      setState(() {
+        todayDiaryController.text = value;
+      });
+    });
   }
 
   @override
@@ -205,9 +216,9 @@ class DiaryState extends State<Diary> {
                           },
                         );
 
-                      // case 2:
-                      //   //  감정 분석
-                      //   return _buildPageThird();
+                      case 2:
+                        //  감정 분석
+                        return _buildPageTodayDiary();
                     }
                     return null;
                   },
@@ -833,29 +844,12 @@ class DiaryState extends State<Diary> {
                     await prefs.setBool('diaryExist', true);
 
                     if (!mounted) return;
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.white,
-                        content: const Text(
-                          '내 일기가 저장되었습니다!',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        duration: const Duration(seconds: 5),
-                        //올라와있는 시간
-                        action: SnackBarAction(
-                          textColor: MyThemeColors.primaryColor,
-                          //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                          label: '보러가기',
-                          //버튼이름
-                          onPressed: () {
-                            widget.controller.movePage(855.0);
-                            widget.controller.changeColor(3);
-                          },
-                        ),
-                      ),
+                    //Navigator.pop(context);
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
                     );
+
                     widget.gptModel.endAnalyzeDiary();
                   },
                   title: '저장',
@@ -867,6 +861,150 @@ class DiaryState extends State<Diary> {
         ],
       ),
     );
+  }
+
+  _buildPageTodayDiary() {
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 24.0, top: 50),
+        child: Column(
+          children: [
+            //  title
+            Text(
+              "오늘의 일기",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: MyThemeColors.myGreyscale[900]),
+            ),
+            const SizedBox(
+              height: 6,
+            ),
+            Text(
+              "당신과 비슷한 하루에게 공감을 전달해주세요.",
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: MyThemeColors.myGreyscale[400]),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            bottom:
+                                MediaQuery.of(context).viewInsets.bottom * 0.4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: MyThemeColors.myGreyscale.shade50,
+                          ),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 60),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: TextField(
+                                    focusNode: _focusNode,
+                                    controller: todayDiaryController,
+                                    readOnly: true,
+                                    style: const TextStyle(
+                                        fontSize: 16, height: 1.6),
+                                    decoration: InputDecoration(
+                                      counterText: "",
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: "Dodam",
+                                          color: MyThemeColors.myGreyscale[300],
+                                          height: 1.6),
+                                    ),
+                                    maxLines: null,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15,),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.black,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
+                        child: Column(
+                          children: [
+                            HeroIcon(
+                              HeroIcons.heart,
+                              style: HeroIconStyle.solid,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            SizedBox(height: 1,),
+                            Text(
+                              "반응하기",
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.white),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: 13,
+            ),
+
+            //  next button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Button(
+                function: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.white,
+                      content: const Text(
+                        '내 일기가 저장되었습니다!',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      duration: const Duration(seconds: 5),
+                      //올라와있는 시간
+                      action: SnackBarAction(
+                        textColor: MyThemeColors.primaryColor,
+                        //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                        label: '보러가기',
+                        //버튼이름
+                        onPressed: () {
+                          widget.controller.movePage(855.0);
+                          widget.controller.changeColor(3);
+                        },
+                      ),
+                    ),
+                  );
+                },
+                title: '건너뛰기',
+                condition: contents.isNotEmpty ? 'not null' : "null",
+              ),
+            )
+          ],
+        ));
   }
 
   void updateIsSelectedSituation() {
