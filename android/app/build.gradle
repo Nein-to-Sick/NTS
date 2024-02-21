@@ -64,7 +64,7 @@ android {
         versionName "4.0.1"
         multiDexEnabled true
     }
-
+/*
     signingConfigs {
        release {
            keyAlias keystoreProperties['keyAlias']
@@ -78,6 +78,7 @@ android {
            signingConfig signingConfigs.release
        }
    }
+   */
    packagingOptions {
         pickFirst 'lib/x86/libc++_shared.so'
         pickFirst 'lib/x86_64/libc++_shared.so'

@@ -14,6 +14,9 @@ class GPTModel with ChangeNotifier {
   String diaryTitle = '';
   List<String> situationSummerization = List<String>.empty(growable: true);
   List<String> emotionSummerization = List<String>.empty(growable: true);
+  List<OpenAIChatCompletionChoiceMessageModel> situationMemory = [];
+  List<OpenAIChatCompletionChoiceMessageModel> emotionMemory = [];
+  List<OpenAIChatCompletionChoiceMessageModel> titleMemory = [];
 
   //  일기 내용 저장
   void updateDiaryMainText(value) {
@@ -54,6 +57,17 @@ class GPTModel with ChangeNotifier {
   }
 
   void tryAnalyzeDiary(String prompt) async {
+    // 시스템 설정 (역할 부여)
+    final situationMessage = OpenAIChatCompletionChoiceMessageModel(
+        role: OpenAIChatMessageRole.system,
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "너는 전문 상황 분석가로 요구에따라 핵심 상황을 파악해야해. 다음의 일기에서 파악되는 상황을 <가족, 연애, 친구관계, 직장, 학교, 군대, 진로, 일상생활, 공부, 일, 건강, 종교, 운동, 취미생활, 돈, 불면, 자존감, 날씨> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+          )
+        ]);
+    situationMemory.clear();
+    situationMemory.add(situationMessage);
+
     if (isAIUsing == true && isAnalyzed == false) {
       String emotionsTemp = '';
       String situationTemp = '';
@@ -73,14 +87,27 @@ class GPTModel with ChangeNotifier {
           frequencyPenalty: 0,
           //  답변의 특정 키워드 제거 (기본값: 0)
           presencePenalty: 0,
-          messages: [
+          messages: situationMemory,
+          /*
             OpenAIChatCompletionChoiceMessageModel(
               content:
                   "너는 전문 상황 분석가로 요구에따라 핵심 상황을 파악해야해. 다음의 일기에서 파악되는 상황을 <가족, 연애, 친구관계, 직장, 학교, 군대, 진로, 일상생활, 공부, 일, 건강, 종교, 운동, 취미생활, 돈, 불면, 자존감, 날씨> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
               role: OpenAIChatMessageRole.system,
             ),
-          ],
+            */
         );
+
+        // 시스템 설정 (역할 부여)
+        final emotionMessage = OpenAIChatCompletionChoiceMessageModel(
+            role: OpenAIChatMessageRole.system,
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "너는 전문 상황 분석가로 요구에따라 핵심 상황을 파악해야해. 다음의 일기에서 파악되는 상황을 <가족, 연애, 친구관계, 직장, 학교, 군대, 진로, 일상생활, 공부, 일, 건강, 종교, 운동, 취미생활, 돈, 불면, 자존감, 날씨> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+              )
+            ]);
+        emotionMemory.clear();
+        emotionMemory.add(emotionMessage);
+
         //  emotion analysis
         final emotionGPT = await OpenAI.instance.chat.create(
           //  사용하는 모델
@@ -95,14 +122,27 @@ class GPTModel with ChangeNotifier {
           frequencyPenalty: 0,
           //  답변의 특정 키워드 제거 (기본값: 0)
           presencePenalty: 0,
-          messages: [
+          messages: emotionMemory,
+          /*
             OpenAIChatCompletionChoiceMessageModel(
               content:
                   "너는 전문 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음의 일기에서 파악되는 감정을 <기쁨, 감사함, 기대됨, 설렘, 놀람, 지루함, 피곤함, 답답함, 짜증남, 무기력함, 우울함, 슬픔, 화남, 걱정, 두려움> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
               role: OpenAIChatMessageRole.system,
             ),
-          ],
+            */
         );
+
+        // 시스템 설정 (역할 부여)
+        final titleMessage = OpenAIChatCompletionChoiceMessageModel(
+            role: OpenAIChatMessageRole.system,
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "너는 전문 상황 분석가로 요구에따라 핵심 상황을 파악해야해. 다음의 일기에서 파악되는 상황을 <가족, 연애, 친구관계, 직장, 학교, 군대, 진로, 일상생활, 공부, 일, 건강, 종교, 운동, 취미생활, 돈, 불면, 자존감, 날씨> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+              )
+            ]);
+        titleMemory.clear();
+        titleMemory.add(titleMessage);
+
         // diary title
         final titleGPT = await OpenAI.instance.chat.create(
           //  사용하는 모델
@@ -117,18 +157,19 @@ class GPTModel with ChangeNotifier {
           frequencyPenalty: 0,
           //  답변의 특정 키워드 제거 (기본값: 0)
           presencePenalty: 0,
-          messages: [
+          messages: titleMemory,
+          /*
             OpenAIChatCompletionChoiceMessageModel(
               content: "글의 내용을 15자 이내의 한 구절로 요약해줘. <$prompt>",
               role: OpenAIChatMessageRole.system,
             ),
-          ],
+          */
         );
 
         //  result to variables
-        situationTemp = situationGPT.choices.first.message.content;
-        emotionsTemp = emotionGPT.choices.first.message.content;
-        diaryTitle = titleGPT.choices.first.message.content;
+        situationTemp = situationGPT.choices.first.message.content!.first.text!;
+        emotionsTemp = emotionGPT.choices.first.message.content!.first.text!;
+        diaryTitle = titleGPT.choices.first.message.content!.first.text!;
 
         //  split emotions into List<String>
         emotionSummerization = emotionsTemp

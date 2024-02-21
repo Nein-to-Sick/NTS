@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:nts/controller/ai_chat_controller.dart';
 import 'package:nts/controller/background_controller.dart';
 import 'package:nts/controller/gpt_controller.dart';
 import 'package:nts/controller/message_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/view/ai_chat_pages/ai_chat.dart';
 import 'package:nts/view/home_pages/mailBox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:heroicons/heroicons.dart';
@@ -327,8 +329,19 @@ class _HomePageState extends State<HomePage> {
                               onTap: _isTextVisible
                                   ? null
                                   : () {
-                                // 과거의 나와 대화하기 창
-                              },
+                                      // 과거의 나와 대화하기 창
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                MultiProvider(providers: [
+                                              ChangeNotifierProvider(
+                                                create: (context) =>
+                                                    AIChatController(),
+                                              ),
+                                            ], child: const AIChatPage()),
+                                          ));
+                                    },
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: Colors.white,
