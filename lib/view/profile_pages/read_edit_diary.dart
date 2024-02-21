@@ -21,6 +21,7 @@ class ReadDiaryDialog extends StatefulWidget {
 
 class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
   TextEditingController diaryTextController = TextEditingController();
+  TextEditingController diaryTitleController = TextEditingController();
   bool editMode = false;
   final FocusNode _focusNode = FocusNode();
 
@@ -28,6 +29,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
   void initState() {
     super.initState();
     diaryTextController.text = widget.diaryContent.content;
+    diaryTitleController.text = widget.diaryContent.title;
   }
 
   @override
@@ -97,6 +99,64 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: (!editMode)
+                                  ? Colors.transparent
+                                  : MyThemeColors.myGreyscale.shade200,
+                              width: 1,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: (!editMode)
+                                    ? Colors.transparent
+                                    : MyThemeColors.myGreyscale.shade100,
+                                blurRadius:
+                                (!editMode) ? 0 : 0.5, // 그림자의 흐림 정도
+                                spreadRadius: 0.25, // 그림자의 확장 정도
+                                offset: const Offset(0, 1), // 그림자의 위치
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                            color: MyThemeColors.myGreyscale.shade50,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: TextField(
+                              focusNode: _focusNode,
+                              onSubmitted: (value) {
+                                FocusScope.of(context)
+                                    .unfocus();
+                              },
+                              onTapOutside: (p) {
+                                FocusScope.of(context)
+                                    .unfocus();
+                              },
+                              readOnly: !editMode,
+                              controller: diaryTitleController,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Dodam',
+                              ),
+                              decoration: InputDecoration(
+                                counterText: "",
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: "Dodam",
+                                  color: MyThemeColors
+                                      .myGreyscale[300],
+                                ),
+                              ),
+                              maxLines: null,
+                              // maxLength: 300,
+                              keyboardType:
+                              TextInputType.multiline,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15,),
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(
@@ -284,6 +344,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                             .collection("diary")
                                             .doc(widget.diaryContent.path)
                                             .update({
+                                          "title": diaryTitleController.text,
                                           "content":
                                               diaryTextController.text.trim()
                                         });

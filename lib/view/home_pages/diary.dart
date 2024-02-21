@@ -145,7 +145,7 @@ class DiaryState extends State<Diary> {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 widget.gptModel.whileLoadingDone();
                               });
-                              return _buildPageSecond();
+                              return _buildPageThird();
                             }
                             //  분석 완료
                             else {
@@ -200,14 +200,14 @@ class DiaryState extends State<Diary> {
                               }
 
                               //  상황 분석
-                              return _buildPageSecond();
+                              return _buildPageThird();
                             }
                           },
                         );
 
-                      case 2:
-                        //  감정 분석
-                        return _buildPageThird();
+                      // case 2:
+                      //   //  감정 분석
+                      //   return _buildPageThird();
                     }
                     return null;
                   },
