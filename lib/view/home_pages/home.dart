@@ -320,6 +320,32 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            GestureDetector(
+                              onTap: _isTextVisible
+                                  ? null
+                                  : () {
+                                // 과거의 나와 대화하기 창
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 9),
+                                  child: Text(
+                                    "과거의 나와 대화하기",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
