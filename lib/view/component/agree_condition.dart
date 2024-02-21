@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
-import 'package:nts/view/component/PDFScreen.dart';
+import 'package:nts/view/component/webView.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AgreementSheet {
@@ -34,6 +34,7 @@ class AgreementSheet {
 
 class AgreementStatful extends StatefulWidget {
   final dynamic pageController;
+
   const AgreementStatful({super.key, this.pageController});
 
   @override
@@ -45,41 +46,6 @@ class _AgreementStatfulState extends State<AgreementStatful> {
   bool option1Selected = false;
   bool option2Selected = false;
   bool option3Selected = false;
-  String servicePDF = "";
-  String personPDF = "";
-
-  @override
-  void initState() {
-    super.initState();
-    fromAsset('assets/pdf/service.pdf', 'service.pdf').then((f) {
-      setState(() {
-        servicePDF = f.path;
-      });
-    });
-    fromAsset('assets/pdf/personal.pdf', 'personal.pdf').then((f) {
-      setState(() {
-        personPDF = f.path;
-      });
-    });
-  }
-
-  Future<File> fromAsset(String asset, String filename) async {
-    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
-    Completer<File> completer = Completer();
-
-    try {
-      var dir = await getApplicationDocumentsDirectory();
-      File file = File("${dir.path}/$filename");
-      var data = await rootBundle.load(asset);
-      var bytes = data.buffer.asUint8List();
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      throw Exception('Error parsing asset file!');
-    }
-
-    return completer.future;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +129,12 @@ class _AgreementStatfulState extends State<AgreementStatful> {
                   contentPadding: EdgeInsets.zero,
                   title: GestureDetector(
                     onTap: () {
-                      if (personPDF.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PDFScreen(path: personPDF);
-                            });
-                      }
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WebView(
+                                    title: "person",
+                                  )));
                     },
                     child: RichText(
                       text: const TextSpan(
@@ -204,13 +169,12 @@ class _AgreementStatfulState extends State<AgreementStatful> {
                   contentPadding: EdgeInsets.zero,
                   title: GestureDetector(
                     onTap: () {
-                      if (servicePDF.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PDFScreen(path: servicePDF);
-                            });
-                      }
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WebView(
+                                    title: "service",
+                                  )));
                     },
                     child: RichText(
                       text: const TextSpan(
