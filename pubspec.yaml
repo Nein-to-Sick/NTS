@@ -52,7 +52,6 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_local_notifications: ^15.1.0+1
   expansion_tile_card: ^3.0.0
-  dart_openai: ^4.0.0
   shimmer: ^3.0.0
   calendar_date_picker2: ^0.5.2
   flutter_localization: ^0.1.13
@@ -66,6 +65,7 @@ dependencies:
   # flutter_launcher_icons: ^0.13.1
   sign_in_with_apple: ^5.0.0
   webview_flutter: ^4.4.3
+  dart_openai: ^5.0.0
 
 
 
@@ -94,12 +94,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
-    - assets/images/background/
-    - assets/images/icons/
-    - assets/images/onboarding/
-    - assets/images/splash/
-    - assets/bgm/
+    - ./assets/
+    - ./assets/images/background/
+    - ./assets/images/icons/
+    - ./assets/images/onboarding/
+    - ./assets/images/splash/
+    - ./assets/bgm/
+    - ./assets/emo_icons/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -133,5 +134,26 @@ flutter:
           weight: 400
         - asset: assets/fonts/SUITE-otf/SUITE-Light.otf
           weight: 300
+    - family: IBMPlexSansBold
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-Bold.ttf
+    - family: IBMPlexSansExtraLight
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-ExtraLight.ttf
+    - family: IBMPlexSansLight
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-Light.ttf
+    - family: IBMPlexSansMedium
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-Medium.ttf
+    - family: IBMPlexSansRegular
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-Regular.ttf
+    - family: IBMPlexSansSemiBold
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-SemiBold.ttf
+    - family: IBMPlexSansThin
+      fonts:
+        - asset: assets/fonts/IBMPlexSansKR-Thin.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

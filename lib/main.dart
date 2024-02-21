@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nts/controller/ai_chat_controller.dart';
 import 'package:nts/controller/alert_controller.dart';
 import 'package:nts/controller/background_controller.dart';
 import 'package:nts/controller/gpt_controller.dart';
 import 'package:nts/controller/message_controller.dart';
 import 'package:nts/controller/search_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/theme/custom_theme_data.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
 import 'package:nts/view/auth_page/login.dart';
 import 'package:nts/view/component/confirm_dialog.dart';
@@ -49,7 +51,9 @@ class MyApp extends StatelessWidget {
         ),
         child: child!,
       ),
-      theme: ThemeData(
+      theme: CustomThemeData.light,
+      /*
+      ThemeData(
         fontFamily: "SUITE",
         textSelectionTheme: TextSelectionThemeData(
           //  커서 색상 수정
@@ -58,6 +62,7 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: MyThemeColors.primaryColor.withOpacity(0.6),
         ),
       ),
+      */
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
