@@ -281,4 +281,15 @@ class DatabaseService {
       data.update({'green': green});
     }
   }
+
+  Future<String> getTodayDiary() async {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    var data = await FirebaseFirestore.instance
+        .collection('todayDiary')
+        .doc(formattedDate)
+        .get();
+    String todayDiaryContents = data['contents'];
+    print(todayDiaryContents);
+    return todayDiaryContents;
+  }
 }
