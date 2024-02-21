@@ -8,11 +8,14 @@ import 'package:nts/controller/message_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
 import 'package:nts/model/database_model.dart';
 import 'package:nts/model/preset_model.dart';
+import 'package:nts/theme/custom_theme_data.dart';
 import 'package:nts/view/component/confirm_dialog.dart';
 import 'package:nts/view/loading_pages/loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Theme/theme_colors.dart';
 import '../component/button.dart';
+
+bool react = true;
 
 class Diary extends StatefulWidget {
   final GPTModel gptModel;
@@ -247,7 +250,7 @@ class DiaryState extends State<Diary> {
                       )
                     : Container(),
 
-                // 로딩 중에는 버튼 비활성화
+                // 로딩 중에는 버튼 비활성화 - 에러
                 (widget.gptModel.isOnLoading)
                     ? Container()
                     : GestureDetector(
@@ -895,70 +898,263 @@ class DiaryState extends State<Diary> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            bottom:
-                                MediaQuery.of(context).viewInsets.bottom * 0.4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: MyThemeColors.myGreyscale.shade50,
-                          ),
-                          child: Stack(
+                      child: Stack(
+                        children: [
+                          Column(
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 5, 15, 60),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: TextField(
-                                    focusNode: _focusNode,
-                                    controller: todayDiaryController,
-                                    readOnly: true,
-                                    style: const TextStyle(
-                                        fontSize: 16, height: 1.6),
-                                    decoration: InputDecoration(
-                                      counterText: "",
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: "Dodam",
-                                          color: MyThemeColors.myGreyscale[300],
-                                          height: 1.6),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(context)
+                                          .viewInsets
+                                          .bottom *
+                                          0.4),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: MyThemeColors.myGreyscale.shade50,
                                     ),
-                                    maxLines: null,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 5, 15, 60),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: TextField(
+                                          focusNode: _focusNode,
+                                          controller: todayDiaryController,
+                                          readOnly: true,
+                                          style: const TextStyle(
+                                              fontSize: 16, height: 1.6),
+                                          decoration: InputDecoration(
+                                            counterText: "",
+                                            border: InputBorder.none,
+                                            hintStyle: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Dodam",
+                                                color: MyThemeColors
+                                                    .myGreyscale[300],
+                                                height: 1.6),
+                                          ),
+                                          maxLines: null,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
+                          !react
+                              ? Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.black,
+                              ),
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 11.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      width: 26,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          react = true;
+                                        });
+                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor: Colors.white,
+                                            content: const Text(
+                                              '내 일기가 저장되었습니다!',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                            duration: const Duration(seconds: 5),
+                                            //올라와있는 시간
+                                            action: SnackBarAction(
+                                              textColor: MyThemeColors.primaryColor,
+                                              //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                              label: '보러가기',
+                                              //버튼이름
+                                              onPressed: () {
+                                                widget.controller.movePage(855.0);
+                                                widget.controller.changeColor(3);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const HeroIcon(
+                                            HeroIcons.gift,
+                                            style: HeroIconStyle.solid,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            "응원해요",
+                                            style: BandiFont.small2(context)
+                                                ?.copyWith(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          react = true;
+                                        });
+                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor: Colors.white,
+                                            content: const Text(
+                                              '내 일기가 저장되었습니다!',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                            duration: const Duration(seconds: 5),
+                                            //올라와있는 시간
+                                            action: SnackBarAction(
+                                              textColor: MyThemeColors.primaryColor,
+                                              //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                              label: '보러가기',
+                                              //버튼이름
+                                              onPressed: () {
+                                                widget.controller.movePage(855.0);
+                                                widget.controller.changeColor(3);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const HeroIcon(
+                                            HeroIcons.heart,
+                                            style: HeroIconStyle.solid,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            "공감해요",
+                                            style: BandiFont.small2(context)
+                                                ?.copyWith(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          react = true;
+                                        });
+                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor: Colors.white,
+                                            content: const Text(
+                                              '내 일기가 저장되었습니다!',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                            duration: const Duration(seconds: 5),
+                                            //올라와있는 시간
+                                            action: SnackBarAction(
+                                              textColor: MyThemeColors.primaryColor,
+                                              //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                              label: '보러가기',
+                                              //버튼이름
+                                              onPressed: () {
+                                                widget.controller.movePage(855.0);
+                                                widget.controller.changeColor(3);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            "./assets/emo_icons/together.png",
+                                            scale: 2,
+                                          ),
+                                          SizedBox(
+                                            height: 1.5,
+                                          ),
+                                          Text(
+                                            "함께해요",
+                                            style: BandiFont.small2(context)
+                                                ?.copyWith(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 26,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                              : Container(),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 15,),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.black,
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
-                        child: Column(
-                          children: [
-                            HeroIcon(
-                              HeroIcons.heart,
-                              style: HeroIconStyle.solid,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            SizedBox(height: 1,),
-                            Text(
-                              "반응하기",
-                              style:
-                                  TextStyle(fontSize: 11, color: Colors.white),
-                            )
-                          ],
+
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          react = !react;
+                        });
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 66,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.black,
                         ),
+                        child: react
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const HeroIcon(
+                                    HeroIcons.heart,
+                                    style: HeroIconStyle.solid,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  Text("반응하기",
+                                      style: BandiFont.small2(context)
+                                          ?.copyWith(color: Colors.white))
+                                ],
+                              )
+                            : const HeroIcon(
+                                HeroIcons.xMark,
+                                style: HeroIconStyle.solid,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                       ),
                     ),
                   ],
@@ -975,6 +1171,9 @@ class DiaryState extends State<Diary> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Button(
                 function: () {
+                  setState(() {
+                    react = true;
+                  });
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
