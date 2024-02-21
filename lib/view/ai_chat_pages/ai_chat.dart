@@ -6,8 +6,12 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/components/emoticon.dart';
 import 'package:nts/components/icon_buttons.dart';
 import 'package:nts/controller/ai_chat_controller.dart';
+import 'package:nts/controller/diary_controller.dart';
+import 'package:nts/controller/search_controller.dart';
 import 'package:nts/model/ai_chat_model.dart';
 import 'package:nts/theme/custom_theme_data.dart';
+import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:nts/view/loading_pages/loading_page.dart';
 import 'package:provider/provider.dart';
 
 class AIChatPage extends StatefulWidget {
@@ -30,6 +34,8 @@ class _AIChatPageState extends State<AIChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final searchModel = Provider.of<ProfileSearchModel>(context);
+
     AIChatController aiChatControllerState =
         Provider.of<AIChatController>(context);
     return Scaffold(
@@ -50,26 +56,68 @@ class _AIChatPageState extends State<AIChatPage> {
           disabled: false,
         ),
       ),
-      body: GestureDetector(
-        onTap: () {
-          if (focusNode.hasFocus) {
-            focusNode.unfocus();
+      // DB서 일기 기록을 가져옴
+      body: FutureBuilder(
+        future: searchModel.aiChatSearchResults,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final List<DiaryModel> diaries = snapshot.data!.docs
+                .map((DocumentSnapshot doc) => DiaryModel.fromSnapshot(doc))
+                .toList();
+            return GestureDetector(
+              onTap: () {
+                if (focusNode.hasFocus) {
+                  focusNode.unfocus();
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: BandiColor.primaryColor(context),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        height: 40,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              '개발 버전으로 최대 10개의 최근 기록만을 불러옵니다!',
+                              textAlign: TextAlign.center,
+                              style: BandiFont.body3(context)?.copyWith(
+                                color: BandiColor.backgroundColor(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                        child: chatBubbleUI(
+                            aiChatControllerState.chatLog, context)),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    messageBarUI(aiChatControllerState.chatLog, context,
+                        textController, focusNode, diaries),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: MyFireFlyProgressbar(
+                loadingText: '일기 불러오는 중...',
+                textColor: MyThemeColors.blackColor,
+              ),
+            );
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              Expanded(
-                  child: chatBubbleUI(aiChatControllerState.chatLog, context)),
-              const SizedBox(
-                height: 20,
-              ),
-              messageBarUI(aiChatControllerState.chatLog, context,
-                  textController, focusNode),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -200,8 +248,12 @@ class _AIChatPageState extends State<AIChatPage> {
     );
   }
 
-  Widget messageBarUI(List<MessageModel> chatLog, BuildContext context,
-      TextEditingController textController, FocusNode focusNode) {
+  Widget messageBarUI(
+      List<MessageModel> chatLog,
+      BuildContext context,
+      TextEditingController textController,
+      FocusNode focusNode,
+      List<DiaryModel> diaries) {
     AIChatController aiChatControllerState =
         Provider.of<AIChatController>(context);
 
@@ -285,6 +337,7 @@ class _AIChatPageState extends State<AIChatPage> {
                 ),
                 onTap: () {
                   if (!aiChatControllerState.isloading) {
+                    aiChatControllerState.updateUserDiary(diaries);
                     aiChatControllerState.textSubmit(textController.text.trim(),
                         aiChatControllerState, chatLog);
                     textController.clear();

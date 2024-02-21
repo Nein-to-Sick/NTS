@@ -280,8 +280,8 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
                   return MultiProvider(
                     providers: [
                       ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              ProfileSearchModel()),
+                        create: (BuildContext context) => ProfileSearchModel(),
+                      ),
                     ],
                     child: MyProfilePage(
                       alert: alert,
