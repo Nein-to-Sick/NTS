@@ -61,6 +61,55 @@ class _AIChatPageState extends State<AIChatPage> {
         future: searchModel.aiChatSearchResults,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              final List<DiaryModel> diaries = [];
+              return GestureDetector(
+                onTap: () {
+                  if (focusNode.hasFocus) {
+                    focusNode.unfocus();
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: BandiColor.primaryColor(context),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          width: MediaQuery.sizeOf(context).width * 0.5,
+                          height: 40,
+                          child: Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                '🚨 데이터 베이스에서 \n정보를 가져오지 못했습니다!',
+                                textAlign: TextAlign.center,
+                                style: BandiFont.body3(context)?.copyWith(
+                                  color: BandiColor.backgroundColor(context),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                          child: chatBubbleUI(
+                              aiChatControllerState.chatLog, context)),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      messageBarUI(aiChatControllerState.chatLog, context,
+                          textController, focusNode, diaries),
+                    ],
+                  ),
+                ),
+              );
+            }
             final List<DiaryModel> diaries = snapshot.data!.docs
                 .map((DocumentSnapshot doc) => DiaryModel.fromSnapshot(doc))
                 .toList();
