@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:nts/controller/ai_chat_controller.dart';
@@ -5,13 +9,16 @@ import 'package:nts/controller/background_controller.dart';
 import 'package:nts/controller/gpt_controller.dart';
 import 'package:nts/controller/message_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
+import 'package:nts/model/database_model.dart';
 import 'package:nts/view/ai_chat_pages/ai_chat.dart';
-import 'package:nts/view/home_pages/mailBox.dart';
+import 'package:nts/view/home_pages/alarm_box.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
+import '../../controller/search_controller.dart';
 import '../component/help.dart';
+import '../component/notification.dart';
 import 'diary.dart';
 import 'letter.dart';
 
@@ -19,12 +26,20 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.player}) : super(key: key);
 
   final AudioPlayer player;
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   bool _isTextVisible = true;
+  bool onOff = false;
+  int giftCount = 0;
+  int heartCount = 0;
+  int togetherCount = 0;
+  Map<String, Map<String, int>> prevValuesMap = {};
+  late Timer timer;
+
 
   void _toggleTextVisibility() {
     if (mounted) {
@@ -42,13 +57,62 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(minutes: 1), (Timer t) => fetchData());
+  }
+
+  void fetchData() {
+    FirebaseFirestore.instance.collection('users').doc(userId).collection("diary").get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((doc) {
+        String docId = doc.id;
+
+        if (prevValuesMap.containsKey(docId) &&
+            (prevValuesMap[docId]!['gift'] != doc['gift'] ||
+                prevValuesMap[docId]!['heart'] != doc['heart'] ||
+                prevValuesMap[docId]!['together'] != doc['together'])) {
+
+          String type;
+          if (prevValuesMap[docId]!['gift'] != doc['gift']) {
+            type = "gift";
+          } else if (prevValuesMap[docId]!['heart'] != doc['heart']) {
+            type = "heart";
+          } else {
+            type = "together";
+          }
+
+          DatabaseService().saveAlarm(type, DateTime.now().toString(), docId);
+          FlutterLocalNotification.showNotification();
+          setState(() {
+            onOff = true;
+          });
+        }
+
+        prevValuesMap[docId] = {
+          'gift': doc['gift'],
+          'heart': doc['heart'],
+          'together': doc['together'],
+        };
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BackgroundController>(context);
+    final searchModel = Provider.of<ProfileSearchModel>(context);
+
     final userInfo = Provider.of<UserInfoValueModel>(context);
     final messageController = Provider.of<MessageController>(context);
     final gptMdoel = Provider.of<GPTModel>(context);
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
 
-    // print(userInfo.currentYellowValue);
     return Stack(
       children: [
         Positioned.fill(
@@ -81,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
@@ -139,80 +204,84 @@ class _HomePageState extends State<HomePage> {
                               ? const EdgeInsets.only(top: 17, left: 7)
                               : const EdgeInsets.only(top: 20),
                           child: Align(
-                              alignment: Alignment.topRight,
-                              child: GestureDetector(
-                                child: messageController.newMessage
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          const Text(
-                                            "새로운 편지가 도착했어요",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 13,
-                                                color: Colors.white),
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              child: onOff
+                                  ? Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.end,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        margin:
+                                        const EdgeInsets.all(3),
+                                        child: const Align(
+                                          alignment:
+                                          Alignment.topRight,
+                                          child: HeroIcon(
+                                            HeroIcons.envelope,
+                                            color: Colors.white,
+                                            style:
+                                            HeroIconStyle.solid,
                                           ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Stack(
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.all(3),
-                                                child: const Align(
-                                                  alignment: Alignment.topRight,
-                                                  child: HeroIcon(
-                                                    HeroIcons.envelope,
-                                                    color: Colors.white,
-                                                    style: HeroIconStyle.solid,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 2, left: 20),
-                                                child: Align(
-                                                  alignment: Alignment.topRight,
-                                                  child: Container(
-                                                    width: 10,
-                                                    height: 10,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        color: const Color(
-                                                            0xffFCE181)),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      )
-                                    : const Opacity(
-                                        opacity: 0.4,
-                                        child: HeroIcon(
-                                          HeroIcons.envelope,
-                                          color: Colors.white,
-                                          style: HeroIconStyle.solid,
                                         ),
                                       ),
-                                onTap: () {
-                                  showAnimatedDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      barrierColor: Colors.transparent,
-                                      builder: (BuildContext context) =>
-                                          MailBox(
-                                            controller: controller,
-                                            userName: userInfo.userNickName,
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(
+                                            top: 2, left: 20),
+                                        child: Align(
+                                          alignment:
+                                          Alignment.topRight,
+                                          child: Container(
+                                            width: 10,
+                                            height: 10,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(20),
+                                              color: const Color(
+                                                  0xffFCE181),
+                                            ),
                                           ),
-                                      animationType: DialogTransitionType
-                                          .slideFromTopFade);
-                                  messageController.confirm();
-                                },
-                              )),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  const Text(
+                                    "누군가 내가 쓴 기록에 공감했어요!",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              )
+                                  : const Opacity(
+                                opacity: 0.4,
+                                child: HeroIcon(
+                                  HeroIcons.envelope,
+                                  color: Colors.white,
+                                  style: HeroIconStyle.solid,
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  onOff = false;
+                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AlarmBox(
+                                        controller: controller,
+                                        searchModel: searchModel,
+                                      )),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
