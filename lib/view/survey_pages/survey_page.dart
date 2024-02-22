@@ -5,9 +5,12 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/theme/custom_theme_data.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
 
-int selectedIcon = 0;
-double emotionValue = 5.0; // 초기값 설정
-List<String> sliderList = ["나쁨", "좋음"];
+import '../component/button.dart';
+import '../component/suggestions_button.dart';
+
+double emotionValue = 1.0; // 초기값 설정
+List<double> emotionList = [];
+int index = 0;
 
 class SurveyPage extends StatefulWidget {
   const SurveyPage({super.key});
@@ -17,10 +20,25 @@ class SurveyPage extends StatefulWidget {
 }
 
 class _SurveyPageState extends State<SurveyPage> {
+  int selectedIcon = 0;
+  List<String> sliderList = ["전혀\n그렇지 않다.", "매우\n그렇다"];
+  List<String> contentList = [
+    '나는 내 삶의 개인적 측면에 대해서 만족한다.\n* 개인적 측면: 개인적 성취, 성격, 건강 등',
+    '나는 내 삶의 관계적 측면에 대해서 만족한다.\n* 관계적 측면: 주위 사람들과의 관계 등',
+    '나는 내가 속한 집단에 대해서 만족한다.\n* 직단적 측면: 직장, 지역사회 등',
+    '앱 사용 후 즐거움을 느꼈다.',
+    '앱 사용 후 편안함을 느꼈다.',
+    '앱 사용 후 부정적 감정을 느꼈다.',
+    '앱 사용 후 행복함을 느꼈다.',
+    '앱 사용 후 짜증남을 느꼈다.',
+    '앱 사용 후 무기력함을 느꼈다.',
+    '앱 사용 후 무기력함을 느꼈다.'
+  ];
   final opinionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -33,7 +51,7 @@ class _SurveyPageState extends State<SurveyPage> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.1),
+                horizontal: MediaQuery.of(context).size.width * 0.08),
             child: Column(
               children: [
                 const SizedBox(
@@ -49,28 +67,41 @@ class _SurveyPageState extends State<SurveyPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
 
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    '어플리케이션 사용 후\n감정 개선 정도를 기록해주세요!',
-                    style: BandiFont.body2(context)?.copyWith(
+                    '다음 질문에 답해주세요.',
+                    style: BandiFont.small(context)?.copyWith(
+                      color: BandiColor.primaryColor(context),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    contentList[index],
+                    style: BandiFont.headline3(context)?.copyWith(
                       color: BandiColor.primaryColor(context),
                     ),
                   ),
                 ),
 
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
 
                 Slider(
                   value: emotionValue,
                   min: 1,
-                  max: 10,
-                  divisions: 9, // 슬라이더를 1부터 10까지 총 10등분으로 나눔
+                  max: 7,
+                  divisions: 6,
+                  // 슬라이더를 1부터 10까지 총 10등분으로 나눔
                   activeColor: MyThemeColors.primaryColor,
                   onChanged: (newValue) {
                     setState(() {
@@ -86,12 +117,14 @@ class _SurveyPageState extends State<SurveyPage> {
                       style: BandiFont.headline3(context)?.copyWith(
                         color: BandiColor.primaryColor(context),
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     Text(
                       sliderList[1],
                       style: BandiFont.headline3(context)?.copyWith(
                         color: BandiColor.primaryColor(context),
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -109,7 +142,7 @@ class _SurveyPageState extends State<SurveyPage> {
                     children: [
                       TextSpan(
                         text:
-                            '${emotionValue.toInt() == 1 ? sliderList[0] : emotionValue.toInt() == 10 ? sliderList[1] : emotionValue.toInt()}',
+                            '${emotionValue.toInt() == 1 ? "전혀 그렇지 않다" : emotionValue.toInt() == 7 ? "매우 그렇다" : emotionValue.toInt()}',
                         style: BandiFont.headline1(context)?.copyWith(
                           color: BandiColor.primaryColor(context),
                         ),
@@ -117,9 +150,23 @@ class _SurveyPageState extends State<SurveyPage> {
                     ],
                   ),
                 ),
-
                 const SizedBox(
-                  height: 40,
+                  height: 10,
+                ),
+                SizedBox(
+                    width: 100,
+                    child: Button(
+                      title: index >= 8 ? "완료" :"다음",
+                      condition: index == 9 ? "null" : "not null",
+                      function: () {
+                        emotionList.add(emotionValue);
+                        setState(() {
+                          index++;
+                        });
+                      },
+                    )),
+                const SizedBox(
+                  height: 20,
                 ),
                 Align(
                   alignment: Alignment.topLeft,
@@ -217,7 +264,7 @@ Widget submitButton(
     width: MediaQuery.of(context).size.width * 0.8,
     height: 60,
     child: ElevatedButton(
-      onPressed: (opinionController.text.trim().isNotEmpty)
+      onPressed: (opinionController.text.trim().isNotEmpty && index ==9)
           ? () async {
               await threeButtonDataupdate(
                       context, opinionController.text.trim())
@@ -411,7 +458,8 @@ Future<void> threeButtonDataupdate(BuildContext context, String opinion) async {
       "date": DateTime.now(),
       "opinion": opinion,
       "type": threeButtonData,
-      "emotion_value": emotionValue,
+      "emotionList": emotionList,
+      "emotion_value": emotionList[0]+emotionList[1]+emotionList[2]+emotionList[3]+emotionList[4]+emotionList[5]-(emotionList[6]+emotionList[7]+emotionList[8]),
     },
   );
 }
