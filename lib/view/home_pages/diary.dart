@@ -16,6 +16,10 @@ import '../Theme/theme_colors.dart';
 import '../component/button.dart';
 
 bool react = true;
+// 감정 키워드 갯수 세기
+int count3 = 0;
+List<String> emotionCart = [];
+late List<List<bool>> isSelected3 = [];
 
 class Diary extends StatefulWidget {
   final GPTModel gptModel;
@@ -39,11 +43,12 @@ class DiaryState extends State<Diary> {
   int index = 0;
   TextEditingController textEditingController = TextEditingController();
   TextEditingController todayDiaryController = TextEditingController();
+  bool isPageLoading = false;
 
   late List<List<bool>> isSelected2 = [];
-  late List<List<bool>> isSelected3 = [];
+
   int count2 = 0;
-  int count3 = 0;
+
   late PageController _pageController;
   String contents = "";
   final FocusNode _focusNode = FocusNode();
@@ -142,6 +147,9 @@ class DiaryState extends State<Diary> {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 widget.gptModel.whileLoadingStart();
                               });
+
+                              isPageLoading = true;
+
                               return const MyFireFlyProgressbar(
                                 loadingText: '정리 중...',
                                 textColor: MyThemeColors.blackColor,
@@ -149,6 +157,8 @@ class DiaryState extends State<Diary> {
                             }
                             //  Future 데이터 가져오기
                             else if (snapshot.data == false) {
+                              isPageLoading = true;
+
                               return const MyFireFlyProgressbar(
                                 loadingText: '정리 중...',
                                 textColor: MyThemeColors.blackColor,
@@ -159,7 +169,7 @@ class DiaryState extends State<Diary> {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 widget.gptModel.whileLoadingDone();
                               });
-                              return _buildPageThird();
+                              return BuildPageThird_1();
                             }
                             //  분석 완료
                             else {
@@ -167,6 +177,8 @@ class DiaryState extends State<Diary> {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
                                   widget.gptModel.whileLoadingDone();
+
+                                  isPageLoading = false;
 
                                   if (widget.gptModel.isAIUsing) {
                                     if (!widget.gptModel.situationSummerization
@@ -192,6 +204,8 @@ class DiaryState extends State<Diary> {
                                       updateIsSelectedSituation();
                                       updateIsSelectedEmotion();
                                     } else {
+                                      isPageLoading = false;
+
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
@@ -214,7 +228,7 @@ class DiaryState extends State<Diary> {
                               }
 
                               //  상황 분석
-                              return _buildPageThird();
+                              return BuildPageThird_1();
                             }
                           },
                         );
@@ -231,8 +245,9 @@ class DiaryState extends State<Diary> {
                     });
                   },
                 ),
-                !widget.gptModel.isOnLoading
-                    ? Padding(
+                (isPageLoading)
+                    ? Container()
+                    : Padding(
                         padding: const EdgeInsets.only(top: 20.0),
                         child: Align(
                           alignment: Alignment.topCenter,
@@ -247,11 +262,10 @@ class DiaryState extends State<Diary> {
                             dotsSpacing: const EdgeInsets.only(right: 8),
                           ),
                         ),
-                      )
-                    : Container(),
+                      ),
 
                 // 로딩 중에는 버튼 비활성화 - 에러
-                (widget.gptModel.isOnLoading)
+                (isPageLoading)
                     ? Container()
                     : GestureDetector(
                         onTap: () {
@@ -669,195 +683,187 @@ class DiaryState extends State<Diary> {
     );
   }
 
-  _buildPageThird() {
-    double maxWidth = MediaQuery.of(context).size.width * 0.85;
+  BuildPageThird_1() {
     return Padding(
       padding:
           const EdgeInsets.only(bottom: 24.0, top: 50, left: 24, right: 24),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "어떤 감정인가요?",
+            "다음과 같은 감정이 파악돼요",
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
                 color: MyThemeColors.myGreyscale[900]),
           ),
-          const SizedBox(
-            height: 6,
-          ),
-          Text(
-            "감정 키워드를 모두 골라주세요.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: MyThemeColors.myGreyscale[400]),
-          ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.08),
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: Preset().emotion.length,
-                itemBuilder: (BuildContext context, int index1) {
-                  double itemExtentValue =
-                      (maxWidth - 48) / Preset().emotion[index1].length;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: SizedBox(
-                      height: 30,
-                      child: Center(
-                        child: ListView.builder(
-                          //shrinkWrap: true,
-                          itemExtent: itemExtentValue,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: Preset().emotion[index1].length,
-                          itemBuilder: (BuildContext context, int index2) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isSelected3[index1][index2] =
-                                      !isSelected3[index1][index2];
-                                  if (isSelected3[index1][index2]) {
-                                    count3++;
-                                  } else {
-                                    count3--;
-                                  }
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 7.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: isSelected3[index1][index2]
-                                        ? Colors.black
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: isSelected3[index1][index2]
-                                          ? Colors.transparent
-                                          : MyThemeColors.myGreyscale.shade100,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                                    child: Center(
-                                      child: FittedBox(
-                                        fit: BoxFit.fitWidth,
-                                        child: Text(
-                                          Preset().emotion[index1][index2],
-                                          style: TextStyle(
-                                              //fontSize: 16,
-                                              color: isSelected3[index1][index2]
-                                                  ? Colors.white
-                                                  : MyThemeColors
-                                                      .myGreyscale.shade600,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical, // 수직 스크롤
+              itemCount: (emotionCart.length / 3).ceil(), // 리스트를 n개씩 묶어서 계산
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: SizedBox(
+                    height: 30, // 각 줄의 높이
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal, // 수평 스크롤
+                      itemCount: 3,
+                      itemBuilder: (BuildContext context, int index2) {
+                        int realIndex = index * 3 + index2;
+                        if (realIndex >= emotionCart.length) {
+                          return const SizedBox
+                              .shrink(); // 만약 인덱스가 리스트 길이를 넘어가면 빈 SizedBox 반환
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 7.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: MyThemeColors.primaryColor,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              child: Center(
+                                child: Text(
+                                  emotionCart[realIndex],
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: MyThemeColors.primaryColor,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              Flexible(
-                flex: 1,
-                child: GestureDetector(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: MyThemeColors.myGreyscale.shade200,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: const Padding(
-                      padding: EdgeInsets.all(13.0),
-                      child: Text(
-                        "이전",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: MyThemeColors.primaryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  onTap: () {
-                    _pageController.previousPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  },
+                );
+              },
+            ),
+          ),
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: MyThemeColors.whiteColor,
+                    builder: (BuildContext context) {
+                      return const BuildPageThird();
+                    },
+                  );
+                },
+                child: Text(
+                  "제가 느낀 감정이 아니에요",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: MyThemeColors.myGreyscale[400]),
                 ),
               ),
               const SizedBox(
-                width: 10,
+                height: 20,
               ),
-              Flexible(
-                flex: 1,
-                child: Button(
-                  function: () async {
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    List<String> sit = [];
-                    for (int i = 0; i < Preset().situation.length; i++) {
-                      for (int j = 0; j < Preset().situation[i].length; j++) {
-                        if (isSelected2[i][j] == true) {
-                          sit.add(Preset().situation[i][j]);
+              Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: GestureDetector(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: MyThemeColors.myGreyscale.shade200,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(13.0),
+                          child: Text(
+                            "이전",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: MyThemeColors.primaryColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Button(
+                      function: () async {
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        List<String> sit = [];
+                        for (int i = 0; i < Preset().situation.length; i++) {
+                          for (int j = 0;
+                              j < Preset().situation[i].length;
+                              j++) {
+                            if (isSelected2[i][j] == true) {
+                              sit.add(Preset().situation[i][j]);
+                            }
+                          }
                         }
-                      }
-                    }
-                    List<String> emo = [];
-                    for (int i = 0; i < Preset().emotion.length; i++) {
-                      for (int j = 0; j < Preset().emotion[i].length; j++) {
-                        if (isSelected3[i][j] == true) {
-                          emo.add(Preset().emotion[i][j]);
+                        List<String> emo = [];
+                        for (int i = 0; i < Preset().emotion.length; i++) {
+                          for (int j = 0; j < Preset().emotion[i].length; j++) {
+                            if (isSelected3[i][j] == true) {
+                              emo.add(Preset().emotion[i][j]);
+                            }
+                          }
                         }
-                      }
-                    }
 
-                    DateTime now = DateTime.now();
-                    String time = DateFormat('yyyy/MM/dd HH:mm').format(now);
+                        DateTime now = DateTime.now();
+                        String time =
+                            DateFormat('yyyy/MM/dd HH:mm').format(now);
 
-                    //  diray firebase upload
-                    DatabaseService().writeDiary(
-                      widget.gptModel.diaryTitle,
-                      textEditingController.text.trim(),
-                      sit,
-                      emo,
-                      widget.messageController,
-                      time,
-                    );
+                        //  diray firebase upload
+                        DatabaseService().writeDiary(
+                          widget.gptModel.diaryTitle,
+                          textEditingController.text.trim(),
+                          sit,
+                          emo,
+                          widget.messageController,
+                          time,
+                        );
 
-                    widget.userInfo.userDiaryExist(true);
-                    await prefs.setBool('diaryExist', true);
+                        widget.userInfo.userDiaryExist(true);
+                        await prefs.setBool('diaryExist', true);
 
-                    if (!mounted) return;
-                    //Navigator.pop(context);
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
+                        if (!mounted) return;
+                        //Navigator.pop(context);
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
 
-                    widget.gptModel.endAnalyzeDiary();
-                  },
-                  title: '저장',
-                  condition: count3 > 0 ? 'not null' : 'null',
-                ),
+                        widget.gptModel.endAnalyzeDiary();
+                      },
+                      title: '저장',
+                      condition: count3 > 0 ? 'not null' : 'null',
+                    ),
+                  ),
+                ],
               ),
             ],
           )
@@ -906,8 +912,8 @@ class DiaryState extends State<Diary> {
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                       bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom *
+                                              .viewInsets
+                                              .bottom *
                                           0.4),
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -946,178 +952,208 @@ class DiaryState extends State<Diary> {
                           ),
                           !react
                               ? Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.black,
-                              ),
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(vertical: 11.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(
-                                      width: 26,
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.black,
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          react = true;
-                                        });
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            backgroundColor: Colors.white,
-                                            content: const Text(
-                                              '내 일기가 저장되었습니다!',
-                                              style: TextStyle(color: Colors.black),
-                                            ),
-                                            duration: const Duration(seconds: 5),
-                                            //올라와있는 시간
-                                            action: SnackBarAction(
-                                              textColor: MyThemeColors.primaryColor,
-                                              //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                                              label: '보러가기',
-                                              //버튼이름
-                                              onPressed: () {
-                                                widget.controller.movePage(855.0);
-                                                widget.controller.changeColor(3);
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Column(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 11.0),
+                                      child: Row(
                                         mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          const HeroIcon(
-                                            HeroIcons.gift,
-                                            style: HeroIconStyle.solid,
-                                            color: Colors.white,
+                                          const SizedBox(
+                                            width: 26,
                                           ),
-                                          Text(
-                                            "응원해요",
-                                            style: BandiFont.small2(context)
-                                                ?.copyWith(color: Colors.white),
-                                          )
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                react = true;
+                                              });
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  backgroundColor: Colors.white,
+                                                  content: const Text(
+                                                    '내 일기가 저장되었습니다!',
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                  duration: const Duration(
+                                                      seconds: 5),
+                                                  //올라와있는 시간
+                                                  action: SnackBarAction(
+                                                    textColor: MyThemeColors
+                                                        .primaryColor,
+                                                    //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                                    label: '보러가기',
+                                                    //버튼이름
+                                                    onPressed: () {
+                                                      widget.controller
+                                                          .movePage(855.0);
+                                                      widget.controller
+                                                          .changeColor(3);
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const HeroIcon(
+                                                  HeroIcons.gift,
+                                                  style: HeroIconStyle.solid,
+                                                  color: Colors.white,
+                                                ),
+                                                Text(
+                                                  "응원해요",
+                                                  style:
+                                                      BandiFont.small2(context)
+                                                          ?.copyWith(
+                                                              color:
+                                                                  Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 30,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                react = true;
+                                              });
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  backgroundColor: Colors.white,
+                                                  content: const Text(
+                                                    '내 일기가 저장되었습니다!',
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                  duration: const Duration(
+                                                      seconds: 5),
+                                                  //올라와있는 시간
+                                                  action: SnackBarAction(
+                                                    textColor: MyThemeColors
+                                                        .primaryColor,
+                                                    //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                                    label: '보러가기',
+                                                    //버튼이름
+                                                    onPressed: () {
+                                                      widget.controller
+                                                          .movePage(855.0);
+                                                      widget.controller
+                                                          .changeColor(3);
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const HeroIcon(
+                                                  HeroIcons.heart,
+                                                  style: HeroIconStyle.solid,
+                                                  color: Colors.white,
+                                                ),
+                                                Text(
+                                                  "공감해요",
+                                                  style:
+                                                      BandiFont.small2(context)
+                                                          ?.copyWith(
+                                                              color:
+                                                                  Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 30,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                react = true;
+                                              });
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  backgroundColor: Colors.white,
+                                                  content: const Text(
+                                                    '내 일기가 저장되었습니다!',
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                  duration: const Duration(
+                                                      seconds: 5),
+                                                  //올라와있는 시간
+                                                  action: SnackBarAction(
+                                                    textColor: MyThemeColors
+                                                        .primaryColor,
+                                                    //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                                    label: '보러가기',
+                                                    //버튼이름
+                                                    onPressed: () {
+                                                      widget.controller
+                                                          .movePage(855.0);
+                                                      widget.controller
+                                                          .changeColor(3);
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Image.asset(
+                                                  "./assets/emo_icons/together.png",
+                                                  scale: 2,
+                                                ),
+                                                const SizedBox(
+                                                  height: 1.5,
+                                                ),
+                                                Text(
+                                                  "함께해요",
+                                                  style:
+                                                      BandiFont.small2(context)
+                                                          ?.copyWith(
+                                                              color:
+                                                                  Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 26,
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          react = true;
-                                        });
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            backgroundColor: Colors.white,
-                                            content: const Text(
-                                              '내 일기가 저장되었습니다!',
-                                              style: TextStyle(color: Colors.black),
-                                            ),
-                                            duration: const Duration(seconds: 5),
-                                            //올라와있는 시간
-                                            action: SnackBarAction(
-                                              textColor: MyThemeColors.primaryColor,
-                                              //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                                              label: '보러가기',
-                                              //버튼이름
-                                              onPressed: () {
-                                                widget.controller.movePage(855.0);
-                                                widget.controller.changeColor(3);
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const HeroIcon(
-                                            HeroIcons.heart,
-                                            style: HeroIconStyle.solid,
-                                            color: Colors.white,
-                                          ),
-                                          Text(
-                                            "공감해요",
-                                            style: BandiFont.small2(context)
-                                                ?.copyWith(color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          react = true;
-                                        });
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            backgroundColor: Colors.white,
-                                            content: const Text(
-                                              '내 일기가 저장되었습니다!',
-                                              style: TextStyle(color: Colors.black),
-                                            ),
-                                            duration: const Duration(seconds: 5),
-                                            //올라와있는 시간
-                                            action: SnackBarAction(
-                                              textColor: MyThemeColors.primaryColor,
-                                              //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                                              label: '보러가기',
-                                              //버튼이름
-                                              onPressed: () {
-                                                widget.controller.movePage(855.0);
-                                                widget.controller.changeColor(3);
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Image.asset(
-                                            "./assets/emo_icons/together.png",
-                                            scale: 2,
-                                          ),
-                                          SizedBox(
-                                            height: 1.5,
-                                          ),
-                                          Text(
-                                            "함께해요",
-                                            style: BandiFont.small2(context)
-                                                ?.copyWith(color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 26,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
+                                  ),
+                                )
                               : Container(),
                         ],
                       ),
                     ),
-
                     const SizedBox(
                       height: 15,
                     ),
@@ -1219,14 +1255,190 @@ class DiaryState extends State<Diary> {
   }
 
   void updateIsSelectedEmotion() {
+    emotionCart.clear();
     for (var value in widget.gptModel.emotionSummerization) {
       for (int i = 0; i < Preset().emotion.length; i++) {
         if (Preset().emotion[i].contains(value)) {
+          emotionCart.add(value);
           int indexInInnerList = Preset().emotion[i].indexOf(value);
           isSelected3[i][indexInInnerList] = true;
           count3++;
         }
       }
     }
+  }
+}
+
+class BuildPageThird extends StatefulWidget {
+  const BuildPageThird({super.key});
+
+  @override
+  State<BuildPageThird> createState() => _BuildPageThirdState();
+}
+
+class _BuildPageThirdState extends State<BuildPageThird> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(bottom: 24.0, top: 40, left: 24, right: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "감정 수정하기",
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: MyThemeColors.myGreyscale[900]),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: List.generate(
+                  Preset().emotion.length,
+                  (index1) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Preset().largeCategories[index1],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: MyThemeColors.myGreyscale[600],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 30 *
+                              ((Preset().emotion[index1].length / 2).ceil())
+                                  .toDouble(),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            itemCount:
+                                (Preset().emotion[index1].length / 3).ceil(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: SizedBox(
+                                  height: 30,
+                                  child: ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 3,
+                                    itemBuilder:
+                                        (BuildContext context, int index2) {
+                                      int realIndex = index * 3 + index2;
+                                      if (realIndex >=
+                                          Preset().emotion[index1].length) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (emotionCart.contains(Preset()
+                                              .emotion[index1][realIndex])) {
+                                            emotionCart.remove(Preset()
+                                                .emotion[index1][realIndex]);
+                                          } else {
+                                            emotionCart.add(Preset()
+                                                .emotion[index1][realIndex]);
+                                          }
+                                          setState(() {
+                                            isSelected3[index1][realIndex] =
+                                                !isSelected3[index1][realIndex];
+                                            if (isSelected3[index1]
+                                                [realIndex]) {
+                                              count3++;
+                                            } else {
+                                              count3--;
+                                            }
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 7.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: isSelected3[index1]
+                                                        [realIndex]
+                                                    ? MyThemeColors.primaryColor
+                                                    : MyThemeColors
+                                                        .myGreyscale.shade100,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      8, 0, 8, 0),
+                                              child: Center(
+                                                child: FittedBox(
+                                                  fit: BoxFit.fitWidth,
+                                                  child: Text(
+                                                    Preset().emotion[index1]
+                                                        [realIndex],
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: isSelected3[index1]
+                                                              [realIndex]
+                                                          ? MyThemeColors
+                                                              .primaryColor
+                                                          : MyThemeColors
+                                                              .myGreyscale
+                                                              .shade600,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Button(
+                function: () async {
+                  Navigator.pop(context);
+                },
+                title: '저장',
+                condition: count3 > 0 ? 'not null' : 'null',
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

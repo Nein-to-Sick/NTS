@@ -2,6 +2,7 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:nts/model/preset_model.dart';
 
 class GPTModel with ChangeNotifier {
   //  while diary anlyzing
@@ -57,6 +58,18 @@ class GPTModel with ChangeNotifier {
   }
 
   void tryAnalyzeDiary(String prompt) async {
+    List<String> randomEmotionList = [];
+
+    // 각각의 List에서 5개씩 랜덤으로 선택하여 새로운 List에 추가
+    for (List<String> subList in Preset().emotion) {
+      subList.shuffle(); // 각 List를 섞음
+      randomEmotionList
+          .addAll(subList.take(5)); // 각 List에서 5개씩 선택하여 새로운 List에 추가
+    }
+
+    String selectedEmotionsString = randomEmotionList.join(', ');
+    print(selectedEmotionsString);
+
     // 시스템 설정 (역할 부여)
     final situationMessage = OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.system,
@@ -102,7 +115,7 @@ class GPTModel with ChangeNotifier {
             role: OpenAIChatMessageRole.system,
             content: [
               OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                "너는 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음의 일기에서 파악되는 감정을 <기쁨, 감사함, 기대됨, 설렘, 놀람, 지루함, 피곤함, 답답함, 짜증남, 무기력함, 우울함, 슬픔, 화남, 걱정, 두려움> 중에서만 최대 3개를 선택해서 정리해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
+                "너는 감정 분석가로 요구에따라 핵심 감정을 파악해야해. 다음의 일기에서 파악되는 감정을 <$selectedEmotionsString> 중에서 최대한 유사한 것을 5개 선택해. <$prompt>, 정리한 내용은 반드시 다음 형식으로 만들어 <[단어, 단어, ...]>",
               )
             ]);
         emotionMemory.clear();
@@ -113,9 +126,9 @@ class GPTModel with ChangeNotifier {
           //  사용하는 모델
           model: 'gpt-3.5-turbo',
           //  출력의 최대 토큰 수 (기본값; 50)
-          maxTokens: 50,
+          maxTokens: 100,
           //  창의성, 수치와 비례함 (기본값: 0.5)
-          temperature: 0,
+          temperature: 0.5,
           //  답변의 확률 분포 상위 p%, 단어의 다양성 (기본값: 1)
           topP: 1,
           //  중복되는 구문 생성 방지 (기본값: 0)
