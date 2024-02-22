@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 String userId = FirebaseAuth.instance.currentUser!.uid;
 
 class DatabaseService {
-
   saveAlarm(String type, String time, String docId) async {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
@@ -23,7 +22,7 @@ class DatabaseService {
   }
 
   Future<void> writeDiary(String title, String content, List<String> situation,
-      List<String> emotion, messageController, String time) async {
+      List<String> emotion, messageController, String time, bool isOpen) async {
     CollectionReference dr = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -37,10 +36,9 @@ class DatabaseService {
       'date': time,
       'gift': 0,
       'heart': 0,
-      'together': 0
+      'together': 0,
+      'isDiaryOpen': isOpen,
     });
-
-
 
     // List<String> selectedEmotion = [];
     //

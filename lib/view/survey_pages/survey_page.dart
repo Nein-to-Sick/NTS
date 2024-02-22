@@ -5,7 +5,6 @@ import 'package:heroicons/heroicons.dart';
 import 'package:nts/theme/custom_theme_data.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
 
-import '../component/button.dart';
 import '../component/suggestions_button.dart';
 
 double emotionValue = 1.0; // 초기값 설정
@@ -25,20 +24,25 @@ class _SurveyPageState extends State<SurveyPage> {
   List<String> contentList = [
     '나는 내 삶의 개인적 측면에 대해서 만족한다.\n* 개인적 측면: 개인적 성취, 성격, 건강 등',
     '나는 내 삶의 관계적 측면에 대해서 만족한다.\n* 관계적 측면: 주위 사람들과의 관계 등',
-    '나는 내가 속한 집단에 대해서 만족한다.\n* 직단적 측면: 직장, 지역사회 등',
-    '앱 사용 후 즐거움을 느꼈다.',
-    '앱 사용 후 편안함을 느꼈다.',
-    '앱 사용 후 부정적 감정을 느꼈다.',
-    '앱 사용 후 행복함을 느꼈다.',
-    '앱 사용 후 짜증남을 느꼈다.',
-    '앱 사용 후 무기력함을 느꼈다.',
-    '앱 사용 후 무기력함을 느꼈다.'
+    '나는 내가 속한 집단에 대해서 만족한다.\n* 집단적 측면: 직장, 지역사회 등',
+    '지난 일주일간 즐거움을 느꼈다.',
+    '지난 일주일간 편안함을 느꼈다.',
+    '지난 일주일간 부정적 감정을 느꼈다.',
+    '지난 일주일간 행복함을 느꼈다.',
+    '지난 일주일간 짜증남을 느꼈다.',
+    '지난 일주일간 무기력함을 느꼈다.',
+    '지난 일주일간 무기력함을 느꼈다.'
   ];
   final opinionController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    emotionList = List.filled(10, 4);
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -79,92 +83,143 @@ class _SurveyPageState extends State<SurveyPage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    contentList[index],
-                    style: BandiFont.headline3(context)?.copyWith(
-                      color: BandiColor.primaryColor(context),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Slider(
-                  value: emotionValue,
-                  min: 1,
-                  max: 7,
-                  divisions: 6,
-                  // 슬라이더를 1부터 10까지 총 10등분으로 나눔
-                  activeColor: MyThemeColors.primaryColor,
-                  onChanged: (newValue) {
-                    setState(() {
-                      emotionValue = newValue;
-                    });
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      sliderList[0],
-                      style: BandiFont.headline3(context)?.copyWith(
-                        color: BandiColor.primaryColor(context),
+                for (int i = 0; i < contentList.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: MyThemeColors.myGreyscale,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5), // 그림자 색상 및 투명도
+                            spreadRadius: 1, // 그림자의 확산 범위
+                            blurRadius: 1, // 그림자의 흐림 정도
+                            offset: const Offset(0, 3), // 그림자의 위치 (가로, 세로)
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      sliderList[1],
-                      style: BandiFont.headline3(context)?.copyWith(
-                        color: BandiColor.primaryColor(context),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-                RichText(
-                  text: TextSpan(
-                    text: '설정 값: ',
-                    style: BandiFont.headline3(context)?.copyWith(
-                      color: BandiColor.primaryColor(context),
-                    ),
-                    children: [
-                      TextSpan(
-                        text:
-                            '${emotionValue.toInt() == 1 ? "전혀 그렇지 않다" : emotionValue.toInt() == 7 ? "매우 그렇다" : emotionValue.toInt()}',
-                        style: BandiFont.headline1(context)?.copyWith(
-                          color: BandiColor.primaryColor(context),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: MyThemeColors.primaryColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: Center(
+                                  child: Text(
+                                    '${i + 1}번 ${contentList[i]}',
+                                    style: const TextStyle(
+                                      color: MyThemeColors.whiteColor,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Slider(
+                              value: emotionList[i],
+                              min: 1,
+                              max: 7,
+                              divisions: 6,
+                              // 슬라이더를 1부터 10까지 총 10등분으로 나눔
+                              activeColor: MyThemeColors.primaryColor,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  emotionList[i] = newValue;
+                                });
+                              },
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  sliderList[0],
+                                  style: BandiFont.headline4(context)?.copyWith(
+                                    color: BandiColor.primaryColor(context),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  sliderList[1],
+                                  style: BandiFont.headline4(context)?.copyWith(
+                                    color: BandiColor.primaryColor(context),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '설정 값: ',
+                                style: BandiFont.headline3(context)?.copyWith(
+                                  color: BandiColor.primaryColor(context),
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '${emotionList[i] == 1 ? "전혀 그렇지 않다" : emotionList[i] == 7 ? "매우 그렇다" : emotionList[i].toInt()}',
+                                    style:
+                                        BandiFont.headline2(context)?.copyWith(
+                                      color: BandiColor.primaryColor(context),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+
                 const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
-                    width: 100,
-                    child: Button(
-                      title: index >= 8 ? "완료" :"다음",
-                      condition: index == 9 ? "null" : "not null",
-                      function: () {
-                        emotionList.add(emotionValue);
-                        setState(() {
-                          index++;
-                        });
-                      },
-                    )),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SizedBox(
+                //         width: 100,
+                //         child: Button(
+                //           title: "이전",
+                //           condition: index == 0 ? "null" : "not null",
+                //           function: () {
+                //             setState(() {
+                //               index--;
+                //               emotionValue = emotionList[index];
+                //             });
+                //           },
+                //         )),
+                //     const SizedBox(
+                //       width: 10,
+                //     ),
+                //     SizedBox(
+                //         width: 100,
+                //         child: Button(
+                //           title: index >= 8 ? "완료" : "다음",
+                //           condition: index == 9 ? "null" : "not null",
+                //           function: () {
+                //             setState(() {
+                //               emotionList[index] = emotionValue;
+                //               index++;
+                //             });
+                //           },
+                //         )),
+                //   ],
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -232,7 +287,7 @@ Widget opinionTextfiled(
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintMaxLines: 5,
-                hintText: "궁금하거나 불편하거나 제안하고 싶은 점이 있다면 작성해주세요. 감사합니다!",
+                hintText: "서비스 사용에 있어서 의견이 있다면 작성해주세요! 감사합니다.",
                 hintStyle: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -264,7 +319,7 @@ Widget submitButton(
     width: MediaQuery.of(context).size.width * 0.8,
     height: 60,
     child: ElevatedButton(
-      onPressed: (opinionController.text.trim().isNotEmpty && index ==9)
+      onPressed: (/*opinionController.text.trim().isNotEmpty &&*/ index == 9)
           ? () async {
               await threeButtonDataupdate(
                       context, opinionController.text.trim())
@@ -284,12 +339,14 @@ Widget submitButton(
           : null,
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        foregroundColor: (opinionController.text.trim().isNotEmpty)
-            ? MyThemeColors.whiteColor
-            : MyThemeColors.myGreyscale.shade900,
-        backgroundColor: (opinionController.text.trim().isNotEmpty)
-            ? MyThemeColors.primaryColor
-            : MyThemeColors.myGreyscale.shade100,
+        foregroundColor:
+            (/*opinionController.text.trim().isNotEmpty &&*/ index == 9)
+                ? MyThemeColors.whiteColor
+                : MyThemeColors.myGreyscale.shade900,
+        backgroundColor:
+            (/*opinionController.text.trim().isNotEmpty &&*/ index == 9)
+                ? MyThemeColors.primaryColor
+                : MyThemeColors.myGreyscale.shade100,
         surfaceTintColor: MyThemeColors.myGreyscale.shade100,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -459,7 +516,13 @@ Future<void> threeButtonDataupdate(BuildContext context, String opinion) async {
       "opinion": opinion,
       "type": threeButtonData,
       "emotionList": emotionList,
-      "emotion_value": emotionList[0]+emotionList[1]+emotionList[2]+emotionList[3]+emotionList[4]+emotionList[5]-(emotionList[6]+emotionList[7]+emotionList[8]),
+      "emotion_value": emotionList[0] +
+          emotionList[1] +
+          emotionList[2] +
+          emotionList[3] +
+          emotionList[4] +
+          emotionList[5] -
+          (emotionList[6] + emotionList[7] + emotionList[8]),
     },
   );
 }

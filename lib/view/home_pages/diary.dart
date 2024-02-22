@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,8 @@ int count3 = 0;
 List<String> emotionCart = [];
 List<List<bool>> isSelected3 = [];
 bool isNoEmotion = false;
+// 일기 공개 여부
+bool isOpen = false;
 
 class Diary extends StatefulWidget {
   final GPTModel gptModel;
@@ -471,6 +474,36 @@ class DiaryState extends State<Diary> {
               height: 13,
             ),
 
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '일기 공개 여부',
+                    style: BandiFont.body3(context)?.copyWith(
+                      color: BandiColor.primaryColor(context),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  CupertinoSwitch(
+                      value: isOpen,
+                      activeColor: MyThemeColors.primaryColor,
+                      onChanged: (value) {
+                        setState(() {
+                          isOpen = value;
+                        });
+                      }),
+                ],
+              ),
+            ),
+
+            const SizedBox(
+              height: 13,
+            ),
+
             //  next button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -879,6 +912,7 @@ class DiaryState extends State<Diary> {
                           emo,
                           widget.messageController,
                           time,
+                          isOpen,
                         );
 
                         widget.userInfo.userDiaryExist(true);
