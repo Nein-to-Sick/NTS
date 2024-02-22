@@ -19,7 +19,8 @@ bool react = true;
 // 감정 키워드 갯수 세기
 int count3 = 0;
 List<String> emotionCart = [];
-late List<List<bool>> isSelected3 = [];
+List<List<bool>> isSelected3 = [];
+bool isNoEmotion = false;
 
 class Diary extends StatefulWidget {
   final GPTModel gptModel;
@@ -62,6 +63,7 @@ class DiaryState extends State<Diary> {
         (i) => List.generate(Preset().emotion[i].length, (j) => false));
     _pageController = PageController(initialPage: 0);
     getTodayDiary();
+    isNoEmotion = false;
   }
 
   void getTodayDiary() {
@@ -698,56 +700,88 @@ class DiaryState extends State<Diary> {
                 color: MyThemeColors.myGreyscale[900]),
           ),
           Expanded(
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical, // 수직 스크롤
-              itemCount: (emotionCart.length / 3).ceil(), // 리스트를 n개씩 묶어서 계산
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: SizedBox(
-                    height: 30, // 각 줄의 높이
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal, // 수평 스크롤
-                      itemCount: 3,
-                      itemBuilder: (BuildContext context, int index2) {
-                        int realIndex = index * 3 + index2;
-                        if (realIndex >= emotionCart.length) {
-                          return const SizedBox
-                              .shrink(); // 만약 인덱스가 리스트 길이를 넘어가면 빈 SizedBox 반환
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 7.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
+            child: (isNoEmotion)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: MyThemeColors.primaryColor,
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Center(
+                            child: Text(
+                              '감정 없음',
+                              style: TextStyle(
+                                fontSize: 15,
                                 color: MyThemeColors.primaryColor,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Center(
-                                child: Text(
-                                  emotionCart[realIndex],
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: MyThemeColors.primaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    ],
+                  )
+                : ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical, // 수직 스크롤
+                    itemCount:
+                        (emotionCart.length / 3).ceil(), // 리스트를 n개씩 묶어서 계산
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: SizedBox(
+                          height: 30, // 각 줄의 높이
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.horizontal, // 수평 스크롤
+                            itemCount: 3,
+                            itemBuilder: (BuildContext context, int index2) {
+                              int realIndex = index * 3 + index2;
+                              if (realIndex >= emotionCart.length) {
+                                return const SizedBox
+                                    .shrink(); // 만약 인덱스가 리스트 길이를 넘어가면 빈 SizedBox 반환
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 7.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      width: 1.5,
+                                      color: MyThemeColors.primaryColor,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    child: Center(
+                                      child: Text(
+                                        emotionCart[realIndex],
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: MyThemeColors.primaryColor,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
           Column(
             children: [
@@ -1298,6 +1332,55 @@ class _BuildPageThirdState extends State<BuildPageThird> {
           const SizedBox(
             height: 20,
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isNoEmotion = !isNoEmotion;
+                  emotionCart.clear();
+                  isSelected3 = List.generate(
+                      Preset().emotion.length,
+                      (i) => List.generate(
+                          Preset().emotion[i].length, (j) => false));
+                });
+              },
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    width: 3,
+                    color: isNoEmotion
+                        ? MyThemeColors.primaryColor
+                        : MyThemeColors.myGreyscale.shade100,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        '🤔 감정이 없거나 모르겠어요',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isNoEmotion
+                              ? MyThemeColors.primaryColor
+                              : MyThemeColors.myGreyscale.shade600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -1344,6 +1427,7 @@ class _BuildPageThirdState extends State<BuildPageThird> {
                                       }
                                       return GestureDetector(
                                         onTap: () {
+                                          isNoEmotion = false;
                                           if (emotionCart.contains(Preset()
                                               .emotion[index1][realIndex])) {
                                             emotionCart.remove(Preset()
@@ -1372,6 +1456,7 @@ class _BuildPageThirdState extends State<BuildPageThird> {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                               border: Border.all(
+                                                width: 1.5,
                                                 color: isSelected3[index1]
                                                         [realIndex]
                                                     ? MyThemeColors.primaryColor
