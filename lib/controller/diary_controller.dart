@@ -8,6 +8,9 @@ class DiaryModel with ChangeNotifier {
   final List<dynamic> emotion;
   final String date;
   final String path;
+  final int gift;
+  final int heart;
+  final int together;
 
   DiaryModel({
     required this.title,
@@ -16,6 +19,9 @@ class DiaryModel with ChangeNotifier {
     required this.emotion,
     required this.date,
     required this.path,
+    required this.gift,
+    required this.heart,
+    required this.together,
   });
 
   static DiaryModel fromSnapshot(DocumentSnapshot snap) {
@@ -26,6 +32,9 @@ class DiaryModel with ChangeNotifier {
       emotion: snap['emotion'],
       date: snap['date'],
       path: snap.id,
+      gift: snap['gift'],
+      heart: snap['heart'],
+      together: snap['together'],
     );
     return diaryModel;
   }

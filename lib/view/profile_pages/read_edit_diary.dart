@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/controller/diary_controller.dart';
 import 'package:nts/controller/search_controller.dart';
+import 'package:nts/theme/custom_theme_data.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
 
 class ReadDiaryDialog extends StatefulWidget {
@@ -255,10 +256,61 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 25,
+                        SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(color: MyThemeColors.myGreyscale.shade50, borderRadius: BorderRadius.circular(8)),
+                              child:
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    const HeroIcon(HeroIcons.gift, style: HeroIconStyle.solid, size: 15,),
+                                    const SizedBox(width: 3,),
+                                    Text("응원해요", style: BandiFont.text2(context),),
+                                    const SizedBox(width: 4,),
+                                    Text(widget.diaryContent.gift.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
+                                  ],
+                                ),
+                              )
+                            ),
+                            Container(
+                                decoration: BoxDecoration(color: MyThemeColors.myGreyscale.shade50, borderRadius: BorderRadius.circular(8)),
+                                child:
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      const HeroIcon(HeroIcons.heart, style: HeroIconStyle.solid, size: 15,),
+                                      const SizedBox(width: 3,),
+                                      Text("공감해요", style: BandiFont.text2(context),),
+                                      const SizedBox(width: 4,),
+                                      Text(widget.diaryContent.heart.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
+                                    ],
+                                  ),
+                                )
+                            ),
+                            Container(
+                                decoration: BoxDecoration(color: MyThemeColors.myGreyscale.shade50, borderRadius: BorderRadius.circular(8)),
+                                child:
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Image.asset("./assets/emo_icons/together_small.png", scale: 2,),
+                                      const SizedBox(width: 3,),
+                                      Text("함께해요", style: BandiFont.text2(context),),
+                                      const SizedBox(width: 4,),
+                                      Text(widget.diaryContent.together.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
+                                    ],
+                                  ),
+                                )
+                            ),
+                          ],
                         ),
-
+                        SizedBox(height: 10,),
                         //  close button
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),

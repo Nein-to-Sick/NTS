@@ -12,6 +12,8 @@ import 'package:nts/view/component/nickname_sheet.dart';
 import 'package:nts/view/home_pages/home.dart';
 import 'package:provider/provider.dart';
 
+import '../../controller/search_controller.dart';
+
 class HomePageListViewBuilder extends StatefulWidget {
   final AudioPlayer player;
   final int firstPageIndex;
@@ -122,7 +124,15 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                     Provider.of<BackgroundController>(context, listen: false)
                         .fireFlyOn();
                   });
-                  return HomePage(player: widget.player);
+                  return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              ProfileSearchModel()),
+                    ],
+                    child: HomePage(player: widget.player)
+                  );
+
                 default:
                   return Container();
               }

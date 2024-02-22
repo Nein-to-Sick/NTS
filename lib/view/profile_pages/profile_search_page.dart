@@ -4,6 +4,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:nts/controller/diary_controller.dart';
 import 'package:nts/controller/search_controller.dart';
+import 'package:nts/theme/custom_theme_data.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
 import 'package:nts/view/loading_pages/loading_page.dart';
 import 'package:nts/view/profile_pages/diary_filter.dart';
@@ -158,46 +159,69 @@ class _MyProfileSearchPageState extends State<MyProfileSearchPage> {
                                     },
                                   );
                                 },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: MyThemeColors.whiteColor
-                                        .withOpacity(0.9),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          convertDateFormat(diary.date),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color:
-                                                MyThemeColors.myGreyscale[400],
-                                          ),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: MyThemeColors.whiteColor.withOpacity(0.9),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              convertDateFormat(diary.date),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                                color: MyThemeColors.myGreyscale[400],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              diary.title,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Dodam",
+                                                color: MyThemeColors.myGreyscale[800],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          diary.title,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: "Dodam",
-                                            color:
-                                                MyThemeColors.myGreyscale[800],
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 5,
+                                      right: 10,
+                                      child: Container(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const HeroIcon(HeroIcons.gift, style: HeroIconStyle.solid, size: 15,),
+                                            const SizedBox(width: 5,),
+                                            Text(diary.gift.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),),
+                                            const SizedBox(width: 5,),
+                                            const HeroIcon(HeroIcons.heart, style: HeroIconStyle.solid, size: 15,),
+                                            const SizedBox(width: 5,),
+                                            Text(diary.heart.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),),
+                                            const SizedBox(width: 5,),
+                                            Image.asset("./assets/emo_icons/together_small.png", scale: 2,),
+                                            const SizedBox(width: 5,),
+                                            Text(diary.together.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
+
                               ),
                             );
                           },
