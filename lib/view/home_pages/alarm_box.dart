@@ -91,6 +91,15 @@ class _AlarmBoxState extends State<AlarmBox> {
     data.update({'new': true});
   }
 
+  Future<void> deleteData(String docId) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('alarm')
+        .doc(docId)
+        .delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,92 +109,146 @@ class _AlarmBoxState extends State<AlarmBox> {
           style: BandiFont.headline3(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 29.0),
-        child: ListView.builder(
-          itemCount: alarmDocuments.length,
-          itemBuilder: (BuildContext context, int index) {
-            var document = alarmDocuments[index];
-            return GestureDetector(
-              onTap: () {
-                turnOffAlarm(document['id']);
-                Navigator.pop(context);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  widget.controller.movePage(855.0);
-                  widget.controller.changeColor(3);
-                });
-                _fetchDiaryData(document['docId']).then((_) {
-                  // Modify here
-                  showAnimatedDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    barrierColor: Colors.transparent,
-                    animationType: DialogTransitionType.slideFromBottomFade,
-                    builder: (BuildContext context) {
-                      return ReadDiaryDialog(
-                        diaryContent: diary, // Modify here
-                        searchModel: widget.searchModel,
-                      );
-                    },
-                  );
-                });
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          document['type'] == 'heart'
-                              ? const HeroIcon(
-                                  HeroIcons.heart,
-                                  style: HeroIconStyle.solid,
-                                )
-                              : document['type'] == 'gift'
-                                  ? const HeroIcon(
-                                      HeroIcons.gift,
-                                      style: HeroIconStyle.solid,
-                                    )
-                                  : Image.asset(
-                                      "./assets/emo_icons/together_small.png"),
-                          const SizedBox(width: 7),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "나의 기록에 공감이 달렸어요.",
-                                style: BandiFont.body2(context),
-                              ),
-                              Text(
-                                formatTimestamp(
-                                    DateTime.parse(document['time'])),
-                                style: BandiFont.text2(context)?.copyWith(
-                                    color: BandiColor.gray004Color(context)),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    !document['new']
-                        ? const Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: CircleAvatar(
-                              backgroundColor: Color(0xffFFC341),
-                              radius: 4.5,
-                            ),
-                          )
-                        : Container()
-                  ],
+      body: (alarmDocuments.isEmpty)
+          ? Center(
+              child: Text(
+                '알람이 없습니다',
+                style: BandiFont.headline3(context)?.copyWith(
+                  color: BandiColor.primaryColor(context),
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            )
+          : Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 29.0),
+              child: ListView.builder(
+                itemCount: alarmDocuments.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var document = alarmDocuments[index];
+                  return Dismissible(
+                    key: Key(document['id']),
+                    direction:
+                        DismissDirection.horizontal, // 좌우로만 슬라이드 가능하도록 설정
+                    onDismissed: (direction) {
+                      // 알림 삭제 로직
+                      deleteData(document['id']);
+                      turnOffAlarm(document['id']);
+                      // 알림 목록에서 해당 알림을 제거합니다.
+                      setState(() {
+                        alarmDocuments.removeAt(index);
+                      });
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerLeft,
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        turnOffAlarm(document['id']);
+                        Navigator.pop(context);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          widget.controller.movePage(855.0);
+                          widget.controller.changeColor(3);
+                        });
+                        _fetchDiaryData(document['docId']).then((_) {
+                          // Modify here
+                          showAnimatedDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            barrierColor: Colors.transparent,
+                            animationType:
+                                DialogTransitionType.slideFromBottomFade,
+                            builder: (BuildContext context) {
+                              return ReadDiaryDialog(
+                                diaryContent: diary, // Modify here
+                                searchModel: widget.searchModel,
+                              );
+                            },
+                          );
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    document['type'] == 'heart'
+                                        ? const HeroIcon(
+                                            HeroIcons.heart,
+                                            style: HeroIconStyle.solid,
+                                          )
+                                        : document['type'] == 'gift'
+                                            ? const HeroIcon(
+                                                HeroIcons.gift,
+                                                style: HeroIconStyle.solid,
+                                              )
+                                            : Image.asset(
+                                                "./assets/emo_icons/together_small.png"),
+                                    const SizedBox(width: 7),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "나의 기록에 공감이 달렸어요.",
+                                          style: BandiFont.body2(context),
+                                        ),
+                                        Text(
+                                          formatTimestamp(
+                                              DateTime.parse(document['time'])),
+                                          style: BandiFont.text2(context)
+                                              ?.copyWith(
+                                                  color:
+                                                      BandiColor.gray004Color(
+                                                          context)),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              !document['new']
+                                  ? const Padding(
+                                      padding: EdgeInsets.only(bottom: 10.0),
+                                      child: CircleAvatar(
+                                        backgroundColor: Color(0xffFFC341),
+                                        radius: 4.5,
+                                      ),
+                                    )
+                                  : Container()
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 }

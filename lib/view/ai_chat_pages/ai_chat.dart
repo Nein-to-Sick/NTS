@@ -15,7 +15,8 @@ import 'package:nts/view/loading_pages/loading_page.dart';
 import 'package:provider/provider.dart';
 
 class AIChatPage extends StatefulWidget {
-  const AIChatPage({super.key});
+  const AIChatPage({super.key, required this.searchModel2});
+  final ProfileSearchModel searchModel2;
 
   @override
   State<AIChatPage> createState() => _AIChatPageState();
@@ -24,6 +25,14 @@ class AIChatPage extends StatefulWidget {
 class _AIChatPageState extends State<AIChatPage> {
   final TextEditingController textController = TextEditingController();
   FocusNode focusNode = FocusNode();
+  late Future<QuerySnapshot<Object?>> _aiChatFuture;
+
+  @override
+  void initState() {
+    _aiChatFuture = widget.searchModel2.aiChatSearchResults;
+
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -34,7 +43,7 @@ class _AIChatPageState extends State<AIChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final searchModel = Provider.of<ProfileSearchModel>(context);
+    //final searchModel = Provider.of<ProfileSearchModel>(context);
 
     AIChatController aiChatControllerState =
         Provider.of<AIChatController>(context);
@@ -58,7 +67,7 @@ class _AIChatPageState extends State<AIChatPage> {
       ),
       // DB서 일기 기록을 가져옴
       body: FutureBuilder(
-        future: searchModel.aiChatSearchResults,
+        future: _aiChatFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:nts/controller/ai_chat_controller.dart';
 import 'package:nts/controller/background_controller.dart';
 import 'package:nts/controller/user_info_controller.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
@@ -124,14 +125,10 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                     Provider.of<BackgroundController>(context, listen: false)
                         .fireFlyOn();
                   });
-                  return MultiProvider(
-                    providers: [
-                      ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              ProfileSearchModel()),
-                    ],
-                    child: HomePage(player: widget.player)
-                  );
+                  return MultiProvider(providers: [
+                    ChangeNotifierProvider(
+                        create: (BuildContext context) => ProfileSearchModel()),
+                  ], child: HomePage(player: widget.player));
 
                 default:
                   return Container();

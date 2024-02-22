@@ -210,7 +210,7 @@ class _SurveyPageState extends State<SurveyPage> {
                 //         width: 100,
                 //         child: Button(
                 //           title: index >= 8 ? "완료" : "다음",
-                //           condition: index == 9 ? "null" : "not null",
+                //           condition: emotionList.isNotEmpty ? "null" : "not null",
                 //           function: () {
                 //             setState(() {
                 //               emotionList[index] = emotionValue;
@@ -319,7 +319,8 @@ Widget submitButton(
     width: MediaQuery.of(context).size.width * 0.8,
     height: 60,
     child: ElevatedButton(
-      onPressed: (/*opinionController.text.trim().isNotEmpty &&*/ index == 9)
+      onPressed: (/*opinionController.text.trim().isNotEmpty &&*/ emotionList
+              .isNotEmpty)
           ? () async {
               await threeButtonDataupdate(
                       context, opinionController.text.trim())
@@ -340,11 +341,13 @@ Widget submitButton(
       style: ElevatedButton.styleFrom(
         elevation: 0,
         foregroundColor:
-            (/*opinionController.text.trim().isNotEmpty &&*/ index == 9)
+            (/*opinionController.text.trim().isNotEmpty &&*/ emotionList
+                    .isNotEmpty)
                 ? MyThemeColors.whiteColor
                 : MyThemeColors.myGreyscale.shade900,
         backgroundColor:
-            (/*opinionController.text.trim().isNotEmpty &&*/ index == 9)
+            (/*opinionController.text.trim().isNotEmpty &&*/ emotionList
+                    .isNotEmpty)
                 ? MyThemeColors.primaryColor
                 : MyThemeColors.myGreyscale.shade100,
         surfaceTintColor: MyThemeColors.myGreyscale.shade100,

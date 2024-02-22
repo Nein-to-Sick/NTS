@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   Map<String, Map<String, int>> prevValuesMap = {};
   late Timer timer;
 
-
   void _toggleTextVisibility() {
     if (mounted) {
       setState(() {
@@ -66,7 +65,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchData() {
-    FirebaseFirestore.instance.collection('users').doc(userId).collection("diary").get().then((QuerySnapshot snapshot) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection("diary")
+        .get()
+        .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((doc) {
         String docId = doc.id;
 
@@ -74,7 +78,6 @@ class _HomePageState extends State<HomePage> {
             (prevValuesMap[docId]!['gift'] != doc['gift'] ||
                 prevValuesMap[docId]!['heart'] != doc['heart'] ||
                 prevValuesMap[docId]!['together'] != doc['together'])) {
-
           String type;
           if (prevValuesMap[docId]!['gift'] != doc['gift']) {
             type = "gift";
@@ -211,65 +214,60 @@ class _HomePageState extends State<HomePage> {
                             child: GestureDetector(
                               child: onOff
                                   ? Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.end,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        margin:
-                                        const EdgeInsets.all(3),
-                                        child: const Align(
-                                          alignment:
-                                          Alignment.topRight,
-                                          child: HeroIcon(
-                                            HeroIcons.envelope,
-                                            color: Colors.white,
-                                            style:
-                                            HeroIconStyle.solid,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(
-                                            top: 2, left: 20),
-                                        child: Align(
-                                          alignment:
-                                          Alignment.topRight,
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius
-                                                  .circular(20),
-                                              color: const Color(
-                                                  0xffFCE181),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(3),
+                                              child: const Align(
+                                                alignment: Alignment.topRight,
+                                                child: HeroIcon(
+                                                  HeroIcons.envelope,
+                                                  color: Colors.white,
+                                                  style: HeroIconStyle.solid,
+                                                ),
+                                              ),
                                             ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 2, left: 20),
+                                              child: Align(
+                                                alignment: Alignment.topRight,
+                                                child: Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    color:
+                                                        const Color(0xffFCE181),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const Text(
+                                          "누군가 내가 쓴 기록에 공감했어요!",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: Colors.white,
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  const Text(
-                                    "누군가 내가 쓴 기록에 공감했어요!",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
+                                      ],
+                                    )
                                   : const Opacity(
-                                opacity: 0.4,
-                                child: HeroIcon(
-                                  HeroIcons.envelope,
-                                  color: Colors.white,
-                                  style: HeroIconStyle.solid,
-                                ),
-                              ),
+                                      opacity: 0.4,
+                                      child: HeroIcon(
+                                        HeroIcons.envelope,
+                                        color: Colors.white,
+                                        style: HeroIconStyle.solid,
+                                      ),
+                                    ),
                               onTap: () {
                                 setState(() {
                                   onOff = false;
@@ -278,9 +276,9 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => AlarmBox(
-                                        controller: controller,
-                                        searchModel: searchModel,
-                                      )),
+                                            controller: controller,
+                                            searchModel: searchModel,
+                                          )),
                                 );
                               },
                             ),
@@ -405,18 +403,16 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                MultiProvider(providers: [
-                                              ChangeNotifierProvider(
-                                                create: (context) =>
-                                                    AIChatController(),
-                                              ),
-                                              ChangeNotifierProvider(
-                                                create:
-                                                    (BuildContext context) =>
-                                                        ProfileSearchModel(),
-                                              ),
-                                            ], child: const AIChatPage()),
+                                            builder: (context) => MultiProvider(
+                                                providers: [
+                                                  ChangeNotifierProvider(
+                                                    create: (context) =>
+                                                        AIChatController(),
+                                                  ),
+                                                ],
+                                                child: AIChatPage(
+                                                  searchModel2: searchModel,
+                                                )),
                                           ));
                                     },
                               child: Container(

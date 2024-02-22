@@ -20,6 +20,18 @@ class ProfileSearchModel with ChangeNotifier {
       .get());
 
   //  최신 10개의 일기까지만 기억
+  // Future<QuerySnapshot> TempTemp() {
+  //   print(
+  //       "wowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowowwowoowowowowowoowowow");
+  //   return (FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .collection("diary")
+  //       .orderBy("date", descending: true)
+  //       .limit(10)
+  //       .get());
+  // }
+
   Future<QuerySnapshot> aiChatSearchResults = (FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)

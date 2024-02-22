@@ -113,8 +113,7 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                 color: (!editMode)
                                     ? Colors.transparent
                                     : MyThemeColors.myGreyscale.shade100,
-                                blurRadius:
-                                (!editMode) ? 0 : 0.5, // 그림자의 흐림 정도
+                                blurRadius: (!editMode) ? 0 : 0.5, // 그림자의 흐림 정도
                                 spreadRadius: 0.25, // 그림자의 확장 정도
                                 offset: const Offset(0, 1), // 그림자의 위치
                               ),
@@ -127,12 +126,10 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                             child: TextField(
                               focusNode: _focusNode,
                               onSubmitted: (value) {
-                                FocusScope.of(context)
-                                    .unfocus();
+                                FocusScope.of(context).unfocus();
                               },
                               onTapOutside: (p) {
-                                FocusScope.of(context)
-                                    .unfocus();
+                                FocusScope.of(context).unfocus();
                               },
                               readOnly: !editMode,
                               controller: diaryTitleController,
@@ -146,18 +143,18 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                                 hintStyle: TextStyle(
                                   fontSize: 16,
                                   fontFamily: "Dodam",
-                                  color: MyThemeColors
-                                      .myGreyscale[300],
+                                  color: MyThemeColors.myGreyscale[300],
                                 ),
                               ),
                               maxLines: null,
                               // maxLength: 300,
-                              keyboardType:
-                              TextInputType.multiline,
+                              keyboardType: TextInputType.multiline,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 15,),
+                        const SizedBox(
+                          height: 15,
+                        ),
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(
@@ -256,61 +253,134 @@ class _ReadDiaryDialogState extends State<ReadDiaryDialog> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Column(
                           children: [
-                            Container(
-                              decoration: BoxDecoration(color: MyThemeColors.myGreyscale.shade50, borderRadius: BorderRadius.circular(8)),
-                              child:
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    const HeroIcon(HeroIcons.gift, style: HeroIconStyle.solid, size: 15,),
-                                    const SizedBox(width: 3,),
-                                    Text("응원해요", style: BandiFont.text2(context),),
-                                    const SizedBox(width: 4,),
-                                    Text(widget.diaryContent.gift.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
-                                  ],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          color:
+                                              MyThemeColors.myGreyscale.shade50,
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const HeroIcon(
+                                              HeroIcons.gift,
+                                              style: HeroIconStyle.solid,
+                                              size: 15,
+                                            ),
+                                            const SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text(
+                                              "응원해요",
+                                              style: BandiFont.text2(context),
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text(
+                                              widget.diaryContent.gift
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        ),
+                                      )),
                                 ),
-                              )
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          color:
+                                              MyThemeColors.myGreyscale.shade50,
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const HeroIcon(
+                                              HeroIcons.heart,
+                                              style: HeroIconStyle.solid,
+                                              size: 15,
+                                            ),
+                                            const SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text(
+                                              "공감해요",
+                                              style: BandiFont.text2(context),
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text(
+                                              widget.diaryContent.heart
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
                             ),
                             Container(
-                                decoration: BoxDecoration(color: MyThemeColors.myGreyscale.shade50, borderRadius: BorderRadius.circular(8)),
-                                child:
-                                Padding(
+                                decoration: BoxDecoration(
+                                    color: MyThemeColors.myGreyscale.shade50,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      const HeroIcon(HeroIcons.heart, style: HeroIconStyle.solid, size: 15,),
-                                      const SizedBox(width: 3,),
-                                      Text("공감해요", style: BandiFont.text2(context),),
-                                      const SizedBox(width: 4,),
-                                      Text(widget.diaryContent.heart.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
+                                      Image.asset(
+                                        "./assets/emo_icons/together_small.png",
+                                        scale: 2,
+                                      ),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        "함께해요",
+                                        style: BandiFont.text2(context),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        widget.diaryContent.together.toString(),
+                                        style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold),
+                                      )
                                     ],
                                   ),
-                                )
-                            ),
-                            Container(
-                                decoration: BoxDecoration(color: MyThemeColors.myGreyscale.shade50, borderRadius: BorderRadius.circular(8)),
-                                child:
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Image.asset("./assets/emo_icons/together_small.png", scale: 2,),
-                                      const SizedBox(width: 3,),
-                                      Text("함께해요", style: BandiFont.text2(context),),
-                                      const SizedBox(width: 4,),
-                                      Text(widget.diaryContent.together.toString(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),)
-                                    ],
-                                  ),
-                                )
-                            ),
+                                )),
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         //  close button
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),

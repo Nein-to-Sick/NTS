@@ -320,6 +320,10 @@ Future<int> _getUserDataFromFirebase(
     GPTModel gptModel,
     MessageController messageModel,
     AudioPlayer player) async {
+  if (userInfoModel.userNickName.isNotEmpty) {
+    return 5;
+  }
+
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   DateTime currentDateTime = DateTime.now();
 
@@ -329,8 +333,10 @@ Future<int> _getUserDataFromFirebase(
     currentDateTime = DateTime.parse(prefs.getString('LoginedDate').toString());
     DateTime now = DateTime.now();
     //  When last login time was not today
+
     if (currentDateTime.isBefore(DateTime(now.year, now.month, now.day))) {
       //  local variable update
+
       await prefs.setString('LoginedDate', DateTime.now().toString());
       final userCollection = FirebaseFirestore.instance.collection("users");
       String? userId = FirebaseAuth.instance.currentUser?.uid;
