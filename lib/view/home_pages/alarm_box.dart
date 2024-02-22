@@ -112,7 +112,7 @@ class _AlarmBoxState extends State<AlarmBox> {
       body: (alarmDocuments.isEmpty)
           ? Center(
               child: Text(
-                '알람이 없습니다',
+                '알림이 없습니다',
                 style: BandiFont.headline3(context)?.copyWith(
                   color: BandiColor.primaryColor(context),
                 ),
