@@ -2,8 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nts/controller/background_controller.dart';
 import 'package:nts/view/Theme/theme_colors.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 void z(BuildContext context, BackgroundController provider) {
@@ -24,24 +26,66 @@ void z(BuildContext context, BackgroundController provider) {
       String? userId = FirebaseAuth.instance.currentUser?.uid;
       FirebaseFirestore.instance.collection("users").doc(userId).delete();
 
-      await FirebaseAuth.instance.currentUser?.delete();
-
       provider.movePage(0);
-      Navigator.pop(context);
-      Navigator.pop(context);
-    } catch (e) {
-      // Handle exceptions
-      Navigator.pop(context);
-      //로그아웃 실패시 실패했다는 알림을 보여줘야함.Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text('소중한 의견 감사드립니다!'),
-          dismissDirection: DismissDirection.vertical,
-        ),
-      );
+      AuthCredential credential;
+      UserCredential? temp;
+
+      for (UserInfo userInfo
+          in FirebaseAuth.instance.currentUser!.providerData) {
+        // providerId가 "google.com"이면 구글 로그인
+        if (userInfo.providerId == 'google.com') {
+          GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+          GoogleSignInAuthentication googleAuth =
+              await googleUser!.authentication;
+          credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          );
+
+          temp = await FirebaseAuth.instance.currentUser
+              ?.reauthenticateWithCredential(credential);
+        }
+        // providerId가 "apple.com"이면 애플 로그인
+        else if (userInfo.providerId == 'apple.com') {
+          final AuthorizationCredentialAppleID appleCredential =
+              await SignInWithApple.getAppleIDCredential(
+            scopes: [
+              AppleIDAuthorizationScopes.email,
+              AppleIDAuthorizationScopes.fullName,
+            ],
+          );
+          final OAuthProvider oAuthProvider = OAuthProvider("apple.com");
+
+          credential = oAuthProvider.credential(
+            idToken: appleCredential.identityToken,
+            accessToken: appleCredential.authorizationCode,
+          );
+
+          temp = await FirebaseAuth.instance.currentUser
+              ?.reauthenticateWithCredential(credential);
+        }
+      }
+
+      await temp!.user!.delete().then((value) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      });
+    } catch (e) {
+      await Future.delayed(Duration.zero).then((value) {
+        // Handle exceptions
+        Navigator.pop(context);
+        // 계정 탈퇴 실패시 실패했다는 알림을 보여줘야함.Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text('계정 탈퇴중 오류가 발생하였습니다.'),
+            dismissDirection: DismissDirection.vertical,
+          ),
+        );
+      });
     }
   }
 
@@ -68,7 +112,7 @@ void z(BuildContext context, BackgroundController provider) {
   }
 
   showModalBottomSheet(
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20))),
     context: context,
@@ -95,7 +139,7 @@ void z(BuildContext context, BackgroundController provider) {
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                AutoSizeText(
+                const AutoSizeText(
                   "정말로 떠나시는 건가요?",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
