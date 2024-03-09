@@ -69,10 +69,9 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                         context,
                         _pageController,
                       );
-                      _isAgreementSheetVisible = true;
-                      // setState(() {
-                      //   _isAgreementSheetVisible = true;
-                      // });
+                      setState(() {
+                        _isAgreementSheetVisible = true;
+                      });
                     });
                   }
                   return Container();
@@ -114,10 +113,9 @@ class _HomePageListViewBuilderState extends State<HomePageListViewBuilder> {
                         0,
                         _pageController,
                       );
-                      _isNicknameSheetVisible = true;
-                      // setState(() {
-                      //   _isNicknameSheetVisible = true;
-                      // });
+                      setState(() {
+                        _isNicknameSheetVisible = true;
+                      });
                     });
                   }
                   return Container();
