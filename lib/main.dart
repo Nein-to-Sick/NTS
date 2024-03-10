@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nts/controller/ai_chat_controller.dart';
 import 'package:nts/controller/alert_controller.dart';
@@ -14,6 +15,7 @@ import 'package:nts/view/component/confirm_dialog.dart';
 import 'package:nts/view/component/firefly.dart';
 import 'package:nts/view/component/navigationToggle.dart';
 import 'package:nts/view/component/notification.dart';
+import 'package:nts/view/home_pages/home.dart';
 import 'package:nts/view/home_pages/home_page_list_builder.dart';
 import 'package:nts/view/loading_pages/loading_page.dart';
 import 'package:nts/view/profile_pages/new_profile.dart';
@@ -38,6 +40,7 @@ void main() async {
   await dotenv.load(fileName: "assets/.env");
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -110,6 +113,7 @@ class Background extends StatefulWidget {
 class BackgroundState extends State<Background> with WidgetsBindingObserver {
   bool alert = false;
   final player = AudioPlayer();
+  bool iPad = false;
 
   //간단히 함수로 처리
   Future playEffectAudio() async {
@@ -129,6 +133,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
       if (tempAlert != null) {
         alert = tempAlert;
       }
+      iPad = await checkDevice();
     });
     playEffectAudio();
 
@@ -163,6 +168,17 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         player.pause();
         break;
+    }
+  }
+
+  Future<bool> checkDevice() async {
+    // iPad 여부 확인
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+    if(iosDeviceInfo.model == "iPad") {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -252,7 +268,16 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
               builder: (context, child) {
                 if (scrollController.offset == 0) {
                   return const LoginPage();
-                } else if (scrollController.offset == 600 || MediaQuery.of(context).size.width >= 800) {
+                } else if (iPad) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Provider.of<BackgroundController>(context, listen: false)
+                        .fireFlyOn();
+                  });
+                  return MultiProvider(providers: [
+                    ChangeNotifierProvider(
+                        create: (BuildContext context) => ProfileSearchModel()),
+                  ], child: HomePage(player: player));
+                } else if (scrollController.offset == 600) {
                   return FutureBuilder<int>(
                     future: _getUserDataFromFirebase(
                         userInfo, gptModel, messageModel, player),

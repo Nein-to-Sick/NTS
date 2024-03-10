@@ -66,6 +66,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   webview_flutter: ^4.4.3
   dart_openai: ^5.0.0
+  device_info_plus: ^9.1.2
 
 
 
