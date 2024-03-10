@@ -252,7 +252,7 @@ class BackgroundState extends State<Background> with WidgetsBindingObserver {
               builder: (context, child) {
                 if (scrollController.offset == 0) {
                   return const LoginPage();
-                } else if (scrollController.offset == 600) {
+                } else if (scrollController.offset == 600 || MediaQuery.of(context).size.width >= 800) {
                   return FutureBuilder<int>(
                     future: _getUserDataFromFirebase(
                         userInfo, gptModel, messageModel, player),
